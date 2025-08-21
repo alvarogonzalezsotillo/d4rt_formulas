@@ -2,8 +2,12 @@
 
 A comprehensive command-line application for managing and computing mathematical formulas across various disciplines including mathematics, physics, medicine, and engineering.
 
+This project uses dart language, and flutter framework. It leverages d4rt library to execute formulas.
+
+
+
 # Development guidelines
-If you are a contributor or an agent, please follow [CLAUDE.md](./CLAUDE.md) for development guidelines
+If you are a contributor or an agent, please follow [CLAUDE.md](./CLAUDE.md) for development guidelines.
 
 # Formula file description
 
@@ -15,7 +19,7 @@ The file is a json array of formulas.
         "name": "Newton's second law (scalar)",
         "input": {
             "m" : {
-               "magitude": "mass"
+               "magnitude": "mass"
             },
             "a" : {
                "magnitude": "acceleration"
