@@ -2,6 +2,39 @@
 
 A comprehensive command-line application for managing and computing mathematical formulas across various disciplines including mathematics, physics, medicine, and engineering.
 
+# Development guidelines
+If you are a contributor or an agent, please follow [CLAUDE.md](./CLAUDE.md) for development guidelines
+
+# Formula file description
+
+The file is a json array of formulas.
+
+```json
+[
+    {
+        "name": "Newton's second law (scalar)",
+        "input": {
+            "m" : {
+               "magitude": "mass"
+            },
+            "a" : {
+               "magnitude": "acceleration"
+            }
+        },
+        "output": {
+            "F" : {
+                "magnitude" : "Force"
+            }
+        },
+        "d4rt_code":{
+            "return m*a;"
+        }
+    }
+
+]
+
+```
+
 ## Features
 
 ### Formula Search and Computation
