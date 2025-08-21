@@ -1,0 +1,16 @@
+name: d4rt_formulas
+description: A command-line application for executing formulas using the d4rt interpreter.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.8.1
+
+# Add regular dependencies here.
+dependencies:
+  # path: ^1.8.0
+  d4rt: 
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.24.0
