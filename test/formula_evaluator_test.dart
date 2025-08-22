@@ -18,9 +18,7 @@ void main() {
             'm': VariableSpec(magnitude: 'mass'),
             'a': VariableSpec(magnitude: 'acceleration'),
           },
-          output: {
-            'F': VariableSpec(magnitude: 'force'),
-          },
+          output: {'F': VariableSpec(magnitude: 'force')},
           d4rtCode: '''
             main() {
               return a * m;
@@ -29,8 +27,8 @@ void main() {
         );
 
         final result = evaluator.evaluate(formula, {
-          'm': 10.0,  // 10 kg
-          'a': 9.8,   // 9.8 m/s²
+          'm': 10.0, // 10 kg
+          'a': 9.8, // 9.8 m/s²
         });
 
         expect(result, 98.0); // F = m * a = 10 * 9.8 = 98 N
@@ -43,9 +41,7 @@ void main() {
             'x': VariableSpec(magnitude: 'scalar'),
             'y': VariableSpec(magnitude: 'scalar'),
           },
-          output: {
-            'result': VariableSpec(magnitude: 'scalar'),
-          },
+          output: {'result': VariableSpec(magnitude: 'scalar')},
           d4rtCode: '''
             main() {
               return x + y;
@@ -53,10 +49,7 @@ void main() {
           ''',
         );
 
-        final result = evaluator.evaluate(formula, {
-          'x': 5,
-          'y': 3,
-        });
+        final result = evaluator.evaluate(formula, {'x': 5, 'y': 3});
 
         expect(result, 8);
       });
@@ -64,12 +57,8 @@ void main() {
       test('handles single input variable', () {
         final formula = Formula(
           name: 'Square function',
-          input: {
-            'n': VariableSpec(magnitude: 'scalar'),
-          },
-          output: {
-            'result': VariableSpec(magnitude: 'scalar'),
-          },
+          input: {'n': VariableSpec(magnitude: 'scalar')},
+          output: {'result': VariableSpec(magnitude: 'scalar')},
           d4rtCode: '''
             main() {
               return n * n;
@@ -89,9 +78,7 @@ void main() {
             'b': VariableSpec(magnitude: 'scalar'),
             'c': VariableSpec(magnitude: 'scalar'),
           },
-          output: {
-            'discriminant': VariableSpec(magnitude: 'scalar'),
-          },
+          output: {'discriminant': VariableSpec(magnitude: 'scalar')},
           d4rtCode: '''
             main() {
               return b * b - 4 * a * c;
@@ -99,11 +86,7 @@ void main() {
           ''',
         );
 
-        final result = evaluator.evaluate(formula, {
-          'a': 1,
-          'b': 5,
-          'c': 6,
-        });
+        final result = evaluator.evaluate(formula, {'a': 1, 'b': 5, 'c': 6});
 
         expect(result, 1); // b² - 4ac = 25 - 24 = 1
       });
@@ -118,9 +101,7 @@ void main() {
             'a': VariableSpec(magnitude: 'scalar'),
             'b': VariableSpec(magnitude: 'scalar'),
           },
-          output: {
-            'result': VariableSpec(magnitude: 'scalar'),
-          },
+          output: {'result': VariableSpec(magnitude: 'scalar')},
           d4rtCode: 'main() { return a + b + z; }',
         );
 
@@ -136,9 +117,7 @@ void main() {
             'a': VariableSpec(magnitude: 'scalar'),
             'y': VariableSpec(magnitude: 'scalar'),
           },
-          output: {
-            'result': VariableSpec(magnitude: 'scalar'),
-          },
+          output: {'result': VariableSpec(magnitude: 'scalar')},
           d4rtCode: '''
             main() {
               // Variables: a=1, y=2, z=3
@@ -147,47 +126,44 @@ void main() {
           ''',
         );
 
-        final result = evaluator.evaluate(formula, {
-          'z': 3,
-          'a': 1,
-          'y': 2,
-        });
+        final result = evaluator.evaluate(formula, {'z': 3, 'a': 1, 'y': 2});
 
         expect(result, 123); // 1*100 + 2*10 + 3 = 123
       });
     });
 
     group('Error handling', () {
-      test('throws exception for formula with no output variables', () {
-        final formula = Formula(
-          name: 'Invalid formula',
-          input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {}, // No output variables
-          d4rtCode: 'main() { return x; }',
-        );
+      test(
+        'throws exception for formula with no output variables during construction',
+        () {
+          expect(() {
+            return Formula(
+              name: 'Invalid formula',
+              input: {'x': VariableSpec(magnitude: 'scalar')},
+              output: {}, // No output variables
+              d4rtCode: 'main() { return x; }',
+            );
+          }, throwsA(isA<ArgumentError>()));
+        },
+      );
 
-        expect(
-          () => evaluator.evaluate(formula, {'x': 1}),
-          throwsA(isA<FormulaEvaluationException>()),
-        );
-      });
-
-      test('throws exception for formula with multiple output variables', () {
-        final formula = Formula(
-          name: 'Invalid formula',
-          input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {
-            'y': VariableSpec(magnitude: 'scalar'),
-            'z': VariableSpec(magnitude: 'scalar'),
-          },
-          d4rtCode: 'main(x) { return x; }',
-        );
-
-        expect(
-          () => evaluator.evaluate(formula, {'x': 1}),
-          throwsA(isA<FormulaEvaluationException>()),
-        );
-      });
+      test(
+        'throws exception for formula with multiple output variables during construction',
+        () {
+          expect(
+            () => Formula(
+              name: 'Invalid formula',
+              input: {'x': VariableSpec(magnitude: 'scalar')},
+              output: {
+                'y': VariableSpec(magnitude: 'scalar'),
+                'z': VariableSpec(magnitude: 'scalar'),
+              },
+              d4rtCode: 'main() { return x; }',
+            ),
+            throwsA(isA<ArgumentError>()),
+          );
+        },
+      );
 
       test('throws exception for missing input variables', () {
         final formula = Formula(
@@ -233,33 +209,55 @@ void main() {
         expect(evaluator.getOutputVariableName(formula), 'force');
       });
 
-      test('getOutputVariableMagnitude returns the output variable magnitude', () {
-        final formula = Formula(
-          name: 'Test',
+      test(
+        'getOutputVariableMagnitude returns the output variable magnitude',
+        () {
+          final formula = Formula(
+            name: 'Test',
+            input: {'x': VariableSpec(magnitude: 'scalar')},
+            output: {'force': VariableSpec(magnitude: 'Newton')},
+            d4rtCode: 'main() { return x; }',
+          );
+
+          expect(evaluator.getOutputVariableMagnitude(formula), 'Newton');
+        },
+      );
+
+      test('utility methods work correctly with valid formulas', () {
+        final validFormula = Formula(
+          name: 'Valid Formula',
           input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {'force': VariableSpec(magnitude: 'Newton')},
+          output: {'result': VariableSpec(magnitude: 'Newton')},
           d4rtCode: 'main() { return x; }',
         );
 
-        expect(evaluator.getOutputVariableMagnitude(formula), 'Newton');
+        expect(evaluator.getOutputVariableName(validFormula), 'result');
+        expect(evaluator.getOutputVariableMagnitude(validFormula), 'Newton');
       });
 
-      test('utility methods throw exception for invalid formulas', () {
-        final invalidFormula = Formula(
-          name: 'Invalid',
-          input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {}, // No output variables
-          d4rtCode: 'main() { return x; }',
+      test('validates formula construction with factory method', () {
+        // Test the factory method validation
+        expect(
+          () => Formula(
+            name: 'Invalid',
+            input: {'x': VariableSpec(magnitude: 'scalar')},
+            output: {}, // No output variables
+            d4rtCode: 'main() { return x; }',
+          ),
+          throwsA(isA<ArgumentError>()),
         );
 
         expect(
-          () => evaluator.getOutputVariableName(invalidFormula),
-          throwsA(isA<FormulaEvaluationException>()),
-        );
-
-        expect(
-          () => evaluator.getOutputVariableMagnitude(invalidFormula),
-          throwsA(isA<FormulaEvaluationException>()),
+          () => Formula(
+            name: 'Invalid',
+            input: {'x': VariableSpec(magnitude: 'scalar')},
+            output: {
+              'y': VariableSpec(magnitude: 'scalar'),
+              'z': VariableSpec(magnitude: 'scalar'),
+            },
+            d4rtCode: 'main() { return x; }',
+          ),
+          throwsA(isA<ArgumentError>()),
         );
       });
     });

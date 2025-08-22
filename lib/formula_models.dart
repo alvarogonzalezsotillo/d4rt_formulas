@@ -46,12 +46,26 @@ class Formula {
   final Map<String, VariableSpec> output; // Supports multiple output variables
   final String d4rtCode;
 
-  const Formula({
+  Formula({
     required this.name,
     required this.input,
     required this.output,
     required this.d4rtCode,
-  });
+  }){
+    validate();
+  }
+
+  validate() {
+    if (name.trim().isEmpty) {
+      throw ArgumentError('Formula name cannot be empty');
+    }
+    if (output.length != 1) {
+      throw ArgumentError(
+        'Formula "$name" must have exactly one output variable, '
+        'but has ${output.length}',
+      );
+    }
+  }
 
   factory Formula.fromJson(Map<String, dynamic> json) {
     final name = json['name'];
