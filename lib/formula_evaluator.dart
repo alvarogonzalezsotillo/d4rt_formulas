@@ -32,7 +32,7 @@ class FormulaEvaluator {
 
   /// Evaluates a formula with the given input values.
   /// 
-  /// The [formula] must have exactly one output variable.
+  /// The [formula] must have exactly one output variable (validated during construction).
   /// The [inputValues] map must contain values for all input variables defined
   /// in the formula.
   /// 
@@ -48,11 +48,9 @@ class FormulaEvaluator {
   /// Returns the computed value of the single output variable.
   /// 
   /// Throws [FormulaEvaluationException] if:
-  /// - The formula has zero or more than one output variable
   /// - Required input variables are missing
   /// - The d4rt code execution fails
   dynamic evaluate(Formula formula, Map<String, dynamic> inputValues) {
-    _validateFormula(formula);
     _validateInputValues(formula, inputValues);
 
     try {
@@ -67,16 +65,6 @@ class FormulaEvaluator {
       throw FormulaEvaluationException(
         'Failed to execute formula "${formula.name}"',
         e,
-      );
-    }
-  }
-
-  /// Validates that the formula has exactly one output variable
-  void _validateFormula(Formula formula) {
-    if (formula.output.length != 1) {
-      throw FormulaEvaluationException(
-        'Formula "${formula.name}" must have exactly one output variable, '
-        'but has ${formula.output.length}',
       );
     }
   }
@@ -101,13 +89,13 @@ class FormulaEvaluator {
 
   /// Gets the name of the single output variable from the formula
   String getOutputVariableName(Formula formula) {
-    _validateFormula(formula);
+    // Formula construction already ensures exactly one output variable
     return formula.output.keys.first;
   }
 
   /// Gets the magnitude of the single output variable from the formula
   String getOutputVariableMagnitude(Formula formula) {
-    _validateFormula(formula);
+    // Formula construction already ensures exactly one output variable
     return formula.output.values.first.magnitude;
   }
 

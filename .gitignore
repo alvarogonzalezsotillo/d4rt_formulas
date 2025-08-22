@@ -11,3 +11,5 @@
 .local/
 .zcompdump
 .zshrc
+.idea
+/d4rt-formulas.iml
