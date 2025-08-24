@@ -48,6 +48,8 @@ class FormulaEvaluator {
     try {
       // Build the complete d4rt source code with variable declarations
       final completeSource = _buildCompleteSource(formula, inputValues);
+      //print( "$formula");
+      //print( "$completeSource" );
       
       // Execute the code using d4rt (no args needed since variables are in source)
       final result = _interpreter.execute(source: completeSource);
@@ -99,7 +101,9 @@ class FormulaEvaluator {
   /// before the formula's d4rt code
   String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
     final buffer = StringBuffer();
-    
+
+    buffer.writeln("main(){");
+
     // Add variable declarations for all input variables
     for (final entry in inputValues.entries) {
       final varName = entry.key;
@@ -121,6 +125,7 @@ class FormulaEvaluator {
     
     // Add the formula's d4rt code
     buffer.write(formula.d4rtCode);
+    buffer.write("}");
     
     return buffer.toString();
   }

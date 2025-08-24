@@ -20,9 +20,7 @@ void main() {
           ],
           output: VariableSpec(name: 'F', magnitude: 'force'),
           d4rtCode: '''
-            main() {
               return a * m;
-            }
           ''',
         );
 
@@ -43,9 +41,7 @@ void main() {
           ],
           output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: '''
-            main() {
               return x + y;
-            }
           ''',
         );
 
@@ -60,9 +56,7 @@ void main() {
           input: [VariableSpec(name: 'n', magnitude: 'scalar')],
           output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: '''
-            main() {
               return n * n;
-            }
           ''',
         );
 
@@ -80,9 +74,7 @@ void main() {
           ],
           output: VariableSpec(name: 'discriminant', magnitude: 'scalar'),
           d4rtCode: '''
-            main() {
               return b * b - 4 * a * c;
-            }
           ''',
         );
 
@@ -102,7 +94,7 @@ void main() {
             VariableSpec(name: 'b', magnitude: 'scalar'),
           ],
           output: VariableSpec(name: 'result', magnitude: 'scalar'),
-          d4rtCode: 'main() { return a + b + z; }',
+          d4rtCode: 'return a + b + z;',
         );
 
         final order = evaluator.getInputVariableOrder(formula);
@@ -119,10 +111,8 @@ void main() {
           ],
           output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: '''
-            main() {
               // Variables: a=1, y=2, z=3
               return a * 100 + y * 10 + z;
-            }
           ''',
         );
 
@@ -142,7 +132,7 @@ void main() {
             VariableSpec(name: 'y', magnitude: 'scalar'),
           ],
           output: VariableSpec(name: 'result', magnitude: 'scalar'),
-          d4rtCode: 'main() { return x + y; }',
+          d4rtCode: 'return x + y;',
         );
 
         expect(
@@ -172,7 +162,7 @@ void main() {
           name: 'Test',
           input: [VariableSpec(name: 'x', magnitude: 'scalar')],
           output: VariableSpec(name: 'force', magnitude: 'Newton'),
-          d4rtCode: 'main() { return x; }',
+          d4rtCode: 'return x;',
         );
 
         expect(evaluator.getOutputVariableName(formula), 'force');
@@ -185,7 +175,7 @@ void main() {
             name: 'Test',
             input: [VariableSpec(name: 'x', magnitude: 'scalar')],
             output: VariableSpec(name: 'force', magnitude: 'Newton'),
-            d4rtCode: 'main() { return x; }',
+            d4rtCode: 'return x;',
           );
 
           expect(evaluator.getOutputVariableMagnitude(formula), 'Newton');
@@ -197,7 +187,7 @@ void main() {
           name: 'Valid Formula',
           input: [VariableSpec(name: 'x', magnitude: 'scalar')],
           output: VariableSpec(name: 'result', magnitude: 'Newton'),
-          d4rtCode: 'main() { return x; }',
+          d4rtCode: 'return x;',
         );
 
         expect(evaluator.getOutputVariableName(validFormula), 'result');
@@ -212,7 +202,7 @@ void main() {
           name: 'Integer test',
           input: [VariableSpec(name: 'n', magnitude: 'count')],
           output: VariableSpec(name: 'result', magnitude: 'count'),
-          d4rtCode: 'main() { return n + 1; }',
+          d4rtCode: 'return n + 1;',
         );
 
         final result = evaluator.evaluate(formula, {'n': 42});
@@ -224,7 +214,7 @@ void main() {
           name: 'Double test',
           input: [VariableSpec(name: 'x', magnitude: 'length')],
           output: VariableSpec(name: 'result', magnitude: 'area'),
-          d4rtCode: 'main() { return x * x; }',
+          d4rtCode: 'return x * x;',
         );
 
         final result = evaluator.evaluate(formula, {'x': 3.14});

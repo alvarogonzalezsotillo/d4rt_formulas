@@ -23,9 +23,7 @@ void main() {
     ],
     output:  VariableSpec(name: 'F', magnitude: 'force'),
     d4rtCode: '''
-      main() {
         return m * a;
-      }
     ''',
   );
   
@@ -57,9 +55,7 @@ void main() {
     ],
     output : VariableSpec(name: 'discriminant', magnitude: 'scalar'),
     d4rtCode: '''
-      main() {
         return b * b - 4 * a * c;
-      }
     ''',
   );
   
@@ -97,10 +93,8 @@ void main() {
     output: VariableSpec(name: 'A', magnitude: 'area'),
 
     d4rtCode: '''
-      main() {
         var pi = 3.14159265359;
         return pi * r * r;
-      }
     ''',
   );
   
@@ -144,7 +138,6 @@ void main() {
     ],
     output: VariableSpec(name: 'A', magnitude: 'currency'),      // Final amount
     d4rtCode: '''
-      main() {
         // A = P * (1 + r/n)^(n*t)
         var rate_per_period = r / n;
         var base = 1 + rate_per_period;
@@ -158,7 +151,6 @@ void main() {
         }
         
         return result;
-      }
     ''',
   );
   
