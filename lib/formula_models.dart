@@ -65,5 +65,24 @@ class Formula {
       Object.hash(name, ListEquality().hash(input), output, d4rtCode);
 
   List<String> inputVarNames() => input.map( (v) => v.name ).toList(growable: false);
+
+  factory Formula.fromSetLiteral(Map<String, Object> set ) {
+
+      VariableSpec parseVar(Map<String, String> varSpec ){
+        String name = varSpec.get("name");
+        String magnitude = varSpec.get("magnitude");
+        return VariableSpec(name: name, magnitude: magnitude);
+      }
+
+      String name = set.get("name");
+      List<Map<String,String>> inputSet = set.get("input");
+      List<VariableSpec> input = inputSet.map(parseVar).toList(growable:false);
+      Map<String,String> outputSet = set.get("output");
+      VariableSpec output = parseVar(outputSet);
+      String d4rtCode = set.get("d4rtCode");
+
+      return new Formula(name:name, input:input, output:output, d4rtCode:d4rtCode );
+
+  }
 }
 
