@@ -14,11 +14,11 @@ void main() {
       test('evaluates Newton\'s second law formula', () {
         final formula = Formula(
           name: "Newton's second law",
-          input: {
-            'm': VariableSpec(magnitude: 'mass'),
-            'a': VariableSpec(magnitude: 'acceleration'),
-          },
-          output: {'F': VariableSpec(magnitude: 'force')},
+          input: [
+            VariableSpec(name: 'm', magnitude: 'mass'),
+            VariableSpec(name: 'a', magnitude: 'acceleration'),
+          ],
+          output: VariableSpec(name: 'F', magnitude: 'force'),
           d4rtCode: '''
             main() {
               return a * m;
@@ -37,11 +37,11 @@ void main() {
       test('evaluates simple arithmetic formula', () {
         final formula = Formula(
           name: 'Simple addition',
-          input: {
-            'x': VariableSpec(magnitude: 'scalar'),
-            'y': VariableSpec(magnitude: 'scalar'),
-          },
-          output: {'result': VariableSpec(magnitude: 'scalar')},
+          input: [
+            VariableSpec(name: 'x', magnitude: 'scalar'),
+            VariableSpec(name: 'y', magnitude: 'scalar'),
+          ],
+          output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: '''
             main() {
               return x + y;
@@ -57,8 +57,8 @@ void main() {
       test('handles single input variable', () {
         final formula = Formula(
           name: 'Square function',
-          input: {'n': VariableSpec(magnitude: 'scalar')},
-          output: {'result': VariableSpec(magnitude: 'scalar')},
+          input: [VariableSpec(name: 'n', magnitude: 'scalar')],
+          output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: '''
             main() {
               return n * n;
@@ -73,12 +73,12 @@ void main() {
       test('handles complex mathematical operations', () {
         final formula = Formula(
           name: 'Quadratic formula discriminant',
-          input: {
-            'a': VariableSpec(magnitude: 'scalar'),
-            'b': VariableSpec(magnitude: 'scalar'),
-            'c': VariableSpec(magnitude: 'scalar'),
-          },
-          output: {'discriminant': VariableSpec(magnitude: 'scalar')},
+          input: [
+            VariableSpec(name: 'a', magnitude: 'scalar'),
+            VariableSpec(name: 'b', magnitude: 'scalar'),
+            VariableSpec(name: 'c', magnitude: 'scalar'),
+          ],
+          output: VariableSpec(name: 'discriminant', magnitude: 'scalar'),
           d4rtCode: '''
             main() {
               return b * b - 4 * a * c;
@@ -96,12 +96,12 @@ void main() {
       test('maintains consistent alphabetical order for input variables', () {
         final formula = Formula(
           name: 'Test order',
-          input: {
-            'z': VariableSpec(magnitude: 'scalar'),
-            'a': VariableSpec(magnitude: 'scalar'),
-            'b': VariableSpec(magnitude: 'scalar'),
-          },
-          output: {'result': VariableSpec(magnitude: 'scalar')},
+          input: [
+            VariableSpec(name: 'z', magnitude: 'scalar'),
+            VariableSpec(name: 'a', magnitude: 'scalar'),
+            VariableSpec(name: 'b', magnitude: 'scalar'),
+          ],
+          output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: 'main() { return a + b + z; }',
         );
 
@@ -112,12 +112,12 @@ void main() {
       test('passes arguments in correct alphabetical order', () {
         final formula = Formula(
           name: 'Test argument order',
-          input: {
-            'z': VariableSpec(magnitude: 'scalar'),
-            'a': VariableSpec(magnitude: 'scalar'),
-            'y': VariableSpec(magnitude: 'scalar'),
-          },
-          output: {'result': VariableSpec(magnitude: 'scalar')},
+          input: [
+            VariableSpec(name: 'z', magnitude: 'scalar'),
+            VariableSpec(name: 'a', magnitude: 'scalar'),
+            VariableSpec(name: 'y', magnitude: 'scalar'),
+          ],
+          output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: '''
             main() {
               // Variables: a=1, y=2, z=3
@@ -133,46 +133,15 @@ void main() {
     });
 
     group('Error handling', () {
-      test(
-        'throws exception for formula with no output variables during construction',
-        () {
-          expect(() {
-            return Formula(
-              name: 'Invalid formula',
-              input: {'x': VariableSpec(magnitude: 'scalar')},
-              output: {}, // No output variables
-              d4rtCode: 'main() { return x; }',
-            );
-          }, throwsA(isA<ArgumentError>()));
-        },
-      );
-
-      test(
-        'throws exception for formula with multiple output variables during construction',
-        () {
-          expect(
-            () => Formula(
-              name: 'Invalid formula',
-              input: {'x': VariableSpec(magnitude: 'scalar')},
-              output: {
-                'y': VariableSpec(magnitude: 'scalar'),
-                'z': VariableSpec(magnitude: 'scalar'),
-              },
-              d4rtCode: 'main() { return x; }',
-            ),
-            throwsA(isA<ArgumentError>()),
-          );
-        },
-      );
 
       test('throws exception for missing input variables', () {
         final formula = Formula(
           name: 'Test formula',
-          input: {
-            'x': VariableSpec(magnitude: 'scalar'),
-            'y': VariableSpec(magnitude: 'scalar'),
-          },
-          output: {'result': VariableSpec(magnitude: 'scalar')},
+          input: [
+            VariableSpec(name: 'x', magnitude: 'scalar'),
+            VariableSpec(name: 'y', magnitude: 'scalar'),
+          ],
+          output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: 'main() { return x + y; }',
         );
 
@@ -185,8 +154,8 @@ void main() {
       test('throws exception for invalid d4rt code', () {
         final formula = Formula(
           name: 'Invalid code formula',
-          input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {'result': VariableSpec(magnitude: 'scalar')},
+          input: [VariableSpec(name: 'x', magnitude: 'scalar')],
+          output: VariableSpec(name: 'result', magnitude: 'scalar'),
           d4rtCode: 'invalid dart code here!',
         );
 
@@ -201,8 +170,8 @@ void main() {
       test('getOutputVariableName returns the single output variable name', () {
         final formula = Formula(
           name: 'Test',
-          input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {'force': VariableSpec(magnitude: 'Newton')},
+          input: [VariableSpec(name: 'x', magnitude: 'scalar')],
+          output: VariableSpec(name: 'force', magnitude: 'Newton'),
           d4rtCode: 'main() { return x; }',
         );
 
@@ -214,8 +183,8 @@ void main() {
         () {
           final formula = Formula(
             name: 'Test',
-            input: {'x': VariableSpec(magnitude: 'scalar')},
-            output: {'force': VariableSpec(magnitude: 'Newton')},
+            input: [VariableSpec(name: 'x', magnitude: 'scalar')],
+            output: VariableSpec(name: 'force', magnitude: 'Newton'),
             d4rtCode: 'main() { return x; }',
           );
 
@@ -226,8 +195,8 @@ void main() {
       test('utility methods work correctly with valid formulas', () {
         final validFormula = Formula(
           name: 'Valid Formula',
-          input: {'x': VariableSpec(magnitude: 'scalar')},
-          output: {'result': VariableSpec(magnitude: 'Newton')},
+          input: [VariableSpec(name: 'x', magnitude: 'scalar')],
+          output: VariableSpec(name: 'result', magnitude: 'Newton'),
           d4rtCode: 'main() { return x; }',
         );
 
@@ -235,39 +204,14 @@ void main() {
         expect(evaluator.getOutputVariableMagnitude(validFormula), 'Newton');
       });
 
-      test('validates formula construction with factory method', () {
-        // Test the factory method validation
-        expect(
-          () => Formula(
-            name: 'Invalid',
-            input: {'x': VariableSpec(magnitude: 'scalar')},
-            output: {}, // No output variables
-            d4rtCode: 'main() { return x; }',
-          ),
-          throwsA(isA<ArgumentError>()),
-        );
-
-        expect(
-          () => Formula(
-            name: 'Invalid',
-            input: {'x': VariableSpec(magnitude: 'scalar')},
-            output: {
-              'y': VariableSpec(magnitude: 'scalar'),
-              'z': VariableSpec(magnitude: 'scalar'),
-            },
-            d4rtCode: 'main() { return x; }',
-          ),
-          throwsA(isA<ArgumentError>()),
-        );
-      });
     });
 
     group('Data types', () {
       test('handles integer values', () {
         final formula = Formula(
           name: 'Integer test',
-          input: {'n': VariableSpec(magnitude: 'count')},
-          output: {'result': VariableSpec(magnitude: 'count')},
+          input: [VariableSpec(name: 'n', magnitude: 'count')],
+          output: VariableSpec(name: 'result', magnitude: 'count'),
           d4rtCode: 'main() { return n + 1; }',
         );
 
@@ -278,8 +222,8 @@ void main() {
       test('handles double values', () {
         final formula = Formula(
           name: 'Double test',
-          input: {'x': VariableSpec(magnitude: 'length')},
-          output: {'result': VariableSpec(magnitude: 'area')},
+          input: [VariableSpec(name: 'x', magnitude: 'length')],
+          output: VariableSpec(name: 'result', magnitude: 'area'),
           d4rtCode: 'main() { return x * x; }',
         );
 

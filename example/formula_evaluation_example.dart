@@ -17,13 +17,11 @@ void main() {
   print('1. Newton\'s Second Law of Motion');
   final newtonFormula = Formula(
     name: "Newton's Second Law",
-    input: {
-      'm': VariableSpec(magnitude: 'mass'),
-      'a': VariableSpec(magnitude: 'acceleration'),
-    },
-    output: {
-      'F': VariableSpec(magnitude: 'force'),
-    },
+    input: [
+      VariableSpec(name: 'm', magnitude: 'mass'),
+      VariableSpec(name: 'a', magnitude: 'acceleration'),
+    ],
+    output:  VariableSpec(name: 'F', magnitude: 'force'),
     d4rtCode: '''
       main() {
         return m * a;
@@ -52,14 +50,12 @@ void main() {
   print('2. Quadratic Formula Discriminant (Δ = b² - 4ac)');
   final discriminantFormula = Formula(
     name: 'Quadratic Discriminant',
-    input: {
-      'a': VariableSpec(magnitude: 'coefficient'),
-      'b': VariableSpec(magnitude: 'coefficient'),
-      'c': VariableSpec(magnitude: 'coefficient'),
-    },
-    output: {
-      'discriminant': VariableSpec(magnitude: 'scalar'),
-    },
+    input: [
+      VariableSpec(name: 'a', magnitude: 'coefficient'),
+      VariableSpec(name: 'b', magnitude: 'coefficient'),
+      VariableSpec(name: 'c', magnitude: 'coefficient'),
+    ],
+    output : VariableSpec(name: 'discriminant', magnitude: 'scalar'),
     d4rtCode: '''
       main() {
         return b * b - 4 * a * c;
@@ -95,12 +91,11 @@ void main() {
   print('3. Circle Area (A = π * r²)');
   final circleAreaFormula = Formula(
     name: 'Circle Area',
-    input: {
-      'r': VariableSpec(magnitude: 'length'),
-    },
-    output: {
-      'A': VariableSpec(magnitude: 'area'),
-    },
+    input: [
+      VariableSpec(name: 'r', magnitude: 'length'),
+    ],
+    output: VariableSpec(name: 'A', magnitude: 'area'),
+
     d4rtCode: '''
       main() {
         var pi = 3.14159265359;
@@ -141,15 +136,13 @@ void main() {
   print('5. Compound Interest Formula');
   final compoundInterestFormula = Formula(
     name: 'Compound Interest',
-    input: {
-      'P': VariableSpec(magnitude: 'currency'),      // Principal
-      'r': VariableSpec(magnitude: 'rate'),          // Annual interest rate
-      'n': VariableSpec(magnitude: 'count'),         // Times compounded per year
-      't': VariableSpec(magnitude: 'time'),          // Time in years
-    },
-    output: {
-      'A': VariableSpec(magnitude: 'currency'),      // Final amount
-    },
+    input: [
+      VariableSpec(name: 'P', magnitude: 'currency'),      // Principal
+      VariableSpec(name: 'r', magnitude: 'rate'),          // Annual interest rate
+      VariableSpec(name: 'n', magnitude: 'count'),         // Times compounded per year
+      VariableSpec(name: 't', magnitude: 'time'),          // Time in years
+    ],
+    output: VariableSpec(name: 'A', magnitude: 'currency'),      // Final amount
     d4rtCode: '''
       main() {
         // A = P * (1 + r/n)^(n*t)

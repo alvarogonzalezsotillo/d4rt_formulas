@@ -29,9 +29,8 @@ The file is a json array of formulas.
                 "magnitude" : "Force"
             }
         },
-        "d4rt_code":{
-            "return m*a;"
-        }
+        "d4rt_code": "return m*a;"
+        
     }
 
 ]

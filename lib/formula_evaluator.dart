@@ -1,11 +1,3 @@
-/// Formula evaluator that executes d4rt code with input variables and
-/// returns the value of the single output variable.
-///
-/// The evaluator assumes that:
-/// - A formula has exactly one output variable
-/// - The d4rt code defines a main function with parameters matching input variables
-/// - The d4rt code when executed returns the value of that output variable
-/// - Input variables are provided as a Map<String, dynamic>
 
 import 'package:d4rt/d4rt.dart';
 import 'formula_models.dart';
@@ -73,7 +65,7 @@ class FormulaEvaluator {
   void _validateInputValues(Formula formula, Map<String, dynamic> inputValues) {
     final missingVars = <String>[];
     
-    for (final inputVar in formula.input.keys) {
+    for (final inputVar in formula.inputVarNames()) {
       if (!inputValues.containsKey(inputVar)) {
         missingVars.add(inputVar);
       }
@@ -89,19 +81,18 @@ class FormulaEvaluator {
 
   /// Gets the name of the single output variable from the formula
   String getOutputVariableName(Formula formula) {
-    // Formula construction already ensures exactly one output variable
-    return formula.output.keys.first;
+    return formula.output.name;
   }
 
   /// Gets the magnitude of the single output variable from the formula
   String getOutputVariableMagnitude(Formula formula) {
     // Formula construction already ensures exactly one output variable
-    return formula.output.values.first.magnitude;
+    return formula.output.magnitude;
   }
 
   /// Gets the ordered list of input variable names (alphabetically sorted)
   List<String> getInputVariableOrder(Formula formula) {
-    return formula.input.keys.toList()..sort();
+    return formula.inputVarNames()..sort();
   }
 
   /// Builds the complete d4rt source code by injecting variable declarations
