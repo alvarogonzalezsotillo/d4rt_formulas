@@ -46,14 +46,7 @@ void main() {
     }    
     """;
 
-    var d4rt = D4rt();
-    final buffer = StringBuffer();
-    buffer.write( "main(){ return $literal; }");
-    final code = buffer.toString();
-
-    final Map<Object?, Object?> setLiteral = d4rt.execute(source: code);
-
-    final formula = Formula.fromSet(setLiteral);
+    final formula = Formula.fromStringLiteral(literal);
     final evaluator = FormulaEvaluator();
 
     final result = evaluator.evaluate(formula, {

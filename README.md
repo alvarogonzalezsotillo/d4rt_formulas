@@ -10,9 +10,9 @@ If you are a contributor or an agent, please follow [CLAUDE.md](./CLAUDE.md) for
 
 # Formula file description
 
-The file is a json array of formulas.
+The file is a dart array of formulas. Each formula is a dart set literal
 
-```json
+```dart
 [
     {
         "name": "Newton's second law (scalar)",
@@ -29,10 +29,9 @@ The file is a json array of formulas.
                 "magnitude" : "Force"
             }
         },
-        "d4rt_code": "return m*a;"
+        "d4rt_code": "F = m*a;"
         
     }
-
 ]
 
 ```

@@ -49,7 +49,7 @@ class FormulaEvaluator {
       // Build the complete d4rt source code with variable declarations
       final completeSource = _buildCompleteSource(formula, inputValues);
       //print( "$formula");
-      //print( "$completeSource" );
+      print( "$completeSource" );
       
       // Execute the code using d4rt (no args needed since variables are in source)
       final result = _interpreter.execute(source: completeSource);
@@ -119,13 +119,12 @@ class FormulaEvaluator {
         buffer.writeln('var $varName = $value;');
       }
     }
-    
-    // Add a blank line for readability
-    buffer.writeln();
+    buffer.writeln("late var ${getOutputVariableName(formula)};");
     
     // Add the formula's d4rt code
-    buffer.write(formula.d4rtCode);
-    buffer.write("}");
+    buffer.writeln(formula.d4rtCode);
+    buffer.writeln("return ${getOutputVariableName(formula)};");
+    buffer.writeln("}");
     
     return buffer.toString();
   }

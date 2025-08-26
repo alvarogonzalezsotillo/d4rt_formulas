@@ -64,6 +64,17 @@ class Formula {
   List<String> inputVarNames() =>
       input.map((v) => v.name).toList(growable: false);
 
+  factory Formula.fromStringLiteral( String setStringLiteral ){
+    var d4rt = D4rt();
+    final buffer = StringBuffer();
+    buffer.write( "main(){ return $setStringLiteral; }");
+    final code = buffer.toString();
+
+    final Map<Object?, Object?> setLiteral = d4rt.execute(source: code);
+
+    return Formula.fromSet(setLiteral);
+  }
+
   factory Formula.fromSet(Map<Object?, Object?> theSet) {
 
     Object safeGet(Map<Object?, Object?> map, String key){
