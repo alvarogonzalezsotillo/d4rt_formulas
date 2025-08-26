@@ -75,6 +75,19 @@ class Formula {
     return Formula.fromSet(setLiteral);
   }
 
+  static List<Formula> fromArrayStringLiteral( String arrayStringLiteral ){
+    var d4rt = D4rt();
+    final buffer = StringBuffer();
+    buffer.write( "main(){ return $arrayStringLiteral; }");
+    final code = buffer.toString();
+
+    final List<Object?> list = d4rt.execute(source: code);
+
+    final formulas = list.map( (set) => Formula.fromSet(set as Map) );
+
+    return formulas.toList(growable: false) as List<Formula>;
+  }
+
   factory Formula.fromSet(Map<Object?, Object?> theSet) {
 
     Object safeGet(Map<Object?, Object?> map, String key){
@@ -90,10 +103,6 @@ class Formula {
 
     List<Object?> listValue(Map<Object?, Object?> map, String key){
       return safeGet(map,key) as List<Object?>;
-    }
-
-    Map<String, Object?> mapValue(Map<Object?, Object?> map, String key){
-      return safeGet(map,key) as Map<String, Object?>;
     }
 
     VariableSpec parseVar(Map<Object?, Object?> varSpec) {

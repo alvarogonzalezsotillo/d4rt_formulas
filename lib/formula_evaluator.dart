@@ -48,9 +48,7 @@ class FormulaEvaluator {
     try {
       // Build the complete d4rt source code with variable declarations
       final completeSource = _buildCompleteSource(formula, inputValues);
-      //print( "$formula");
-      print( "$completeSource" );
-      
+
       // Execute the code using d4rt (no args needed since variables are in source)
       final result = _interpreter.execute(source: completeSource);
       

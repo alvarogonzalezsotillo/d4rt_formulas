@@ -33,7 +33,6 @@ The file is a dart array of formulas. Each formula is a dart set literal
         
     }
 ]
-
 ```
 
 ## Features
