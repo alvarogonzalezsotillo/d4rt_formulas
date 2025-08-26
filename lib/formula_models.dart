@@ -1,8 +1,6 @@
-
 import 'package:d4rt/d4rt.dart';
 
 class VariableSpec {
-
   final String name;
   final String magnitude;
   static final MAGNITUDELESS = "magnitudeless";
@@ -35,7 +33,7 @@ class Formula {
     required this.input,
     required this.output,
     required this.d4rtCode,
-  }){
+  }) {
     validate();
   }
 
@@ -44,7 +42,6 @@ class Formula {
       throw ArgumentError('Formula name cannot be empty');
     }
   }
-
 
   @override
   String toString() =>
@@ -64,25 +61,48 @@ class Formula {
   int get hashCode =>
       Object.hash(name, ListEquality().hash(input), output, d4rtCode);
 
-  List<String> inputVarNames() => input.map( (v) => v.name ).toList(growable: false);
+  List<String> inputVarNames() =>
+      input.map((v) => v.name).toList(growable: false);
 
-  factory Formula.fromSetLiteral(Map<String, Object> set ) {
+  factory Formula.fromSet(Map<Object?, Object?> theSet) {
 
-      VariableSpec parseVar(Map<String, String> varSpec ){
-        String name = varSpec.get("name");
-        String magnitude = varSpec.get("magnitude");
-        return VariableSpec(name: name, magnitude: magnitude);
+    Object safeGet(Map<Object?, Object?> map, String key){
+      if( !map.containsKey(key) ){
+        throw ArgumentError( "Key not found: $key -- $map" );
       }
+      return map[key] ?? "Not possible!!!";
+    }
 
-      String name = set.get("name");
-      List<Map<String,String>> inputSet = set.get("input");
-      List<VariableSpec> input = inputSet.map(parseVar).toList(growable:false);
-      Map<String,String> outputSet = set.get("output");
-      VariableSpec output = parseVar(outputSet);
-      String d4rtCode = set.get("d4rtCode");
+    String stringValue(Map<Object?, Object?> map, String key){
+      return safeGet(map, key).toString();
+    }
 
-      return new Formula(name:name, input:input, output:output, d4rtCode:d4rtCode );
+    List<Object?> listValue(Map<Object?, Object?> map, String key){
+      return safeGet(map,key) as List<Object?>;
+    }
 
+    Map<String, Object?> mapValue(Map<Object?, Object?> map, String key){
+      return safeGet(map,key) as Map<String, Object?>;
+    }
+
+    VariableSpec parseVar(Map<Object?, Object?> varSpec) {
+      String name = stringValue(varSpec, "name");
+      String magnitude = stringValue(varSpec, "magnitude");
+      return VariableSpec(name: name, magnitude: magnitude);
+    }
+
+    String name = stringValue( theSet, "name" );
+    final List<Object?> inputSet = listValue( theSet, "input");
+    List<VariableSpec> input = inputSet.map( (v) => parseVar(v as Map)).toList(growable: false);
+    Map<Object?, Object?> outputSet = theSet.get("output");
+    VariableSpec output = parseVar(outputSet);
+    String d4rtCode = theSet.get("d4rtCode");
+
+    return new Formula(
+      name: name,
+      input: input,
+      output: output,
+      d4rtCode: d4rtCode,
+    );
   }
 }
-
