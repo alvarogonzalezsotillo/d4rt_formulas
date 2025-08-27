@@ -13,3 +13,5 @@
 .zshrc
 .idea
 /d4rt-formulas.iml
+/build/
+/d4rt_formulas.iml
