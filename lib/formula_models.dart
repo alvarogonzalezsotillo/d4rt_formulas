@@ -1,4 +1,5 @@
 import 'package:d4rt/d4rt.dart';
+import 'package:collection/collection.dart';
 
 class VariableSpec {
   final String name;
