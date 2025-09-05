@@ -86,7 +86,7 @@ class Formula {
 
     final formulas = list.map( (set) => Formula.fromSet(set as Map) );
 
-    return formulas.toList(growable: false) as List<Formula>;
+    return formulas.toList(growable: false);
   }
 
   factory Formula.fromSet(Map<Object?, Object?> theSet) {
@@ -119,7 +119,7 @@ class Formula {
     VariableSpec output = parseVar(outputSet);
     String d4rtCode = theSet.get("d4rtCode");
 
-    return new Formula(
+    return Formula(
       name: name,
       input: input,
       output: output,

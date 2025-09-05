@@ -1,40 +1,7 @@
 import 'package:flutter/material.dart';
 
-class VariableSpec {
-  final String name;
-  final String magnitude;
-  static final MAGNITUDELESS = "magnitudeless";
+import '../formula_models.dart';
 
-  VariableSpec({required this.name, required this.magnitude});
-
-  @override
-  String toString() => 'var($name: $magnitude)';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is VariableSpec &&
-              runtimeType == other.runtimeType &&
-              magnitude == other.magnitude &&
-              name == other.name;
-
-  @override
-  int get hashCode => Object.hash(magnitude, name);
-}
-
-class Formula {
-  final String name;
-  final List<VariableSpec> input;
-  final VariableSpec output;
-  final String d4rtCode;
-
-  Formula({
-    required this.name,
-    required this.input,
-    required this.output,
-    required this.d4rtCode,
-  });
-}
 
 class FormulaWidget extends StatelessWidget {
   final Formula formula;
@@ -46,7 +13,7 @@ class FormulaWidget extends StatelessWidget {
   final bool showCode;
 
   const FormulaWidget({
-    Key? key,
+    super.key,
     required this.formula,
     this.fontSize = 16.0,
     this.textColor,
@@ -54,7 +21,7 @@ class FormulaWidget extends StatelessWidget {
     this.padding = const EdgeInsets.all(16.0),
     this.showMagnitudes = true,
     this.showCode = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +66,7 @@ class FormulaWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: Theme.of(context).dividerColor,
@@ -291,7 +258,7 @@ class FormulaWidget extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.5),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(

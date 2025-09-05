@@ -1,7 +1,30 @@
+import 'package:d4rt_formulas/ai/FormulaWidget.dart';
+import 'package:d4rt_formulas/formula_models.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  //runApp(const MyApp());
+  Formula formula = sampleFormula();
+  runApp( MaterialApp( home: FormulaWidget(formula: formula)) );
+}
+
+Formula sampleFormula(){
+  final literal = """
+    {
+      "name": "Newton's second law",
+      "input": [
+        { "name": 'm', "magnitude": 'mass'},
+        { "name": 'a', "magnitude": 'acceleration'}
+      ],
+      "output": { "name": 'F', "magnitude": 'force'},
+      "d4rtCode": '''
+              F = a * m;
+          '''
+    }    
+    """;
+
+  final formula = Formula.fromStringLiteral(literal);
+  return formula;
 }
 
 class MyApp extends StatelessWidget {

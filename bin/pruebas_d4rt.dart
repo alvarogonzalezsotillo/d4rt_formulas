@@ -1,4 +1,3 @@
-import 'package:d4rt_formulas/d4rt_formulas.dart' as pruebas_d4rt;
 import 'package:d4rt/d4rt.dart';
 
 void main() {

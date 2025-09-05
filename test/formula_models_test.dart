@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:d4rt/d4rt.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:test/test.dart';
 import 'package:d4rt_formulas/formula_models.dart';
@@ -16,7 +14,7 @@ void main() {
       ],
       "output": { "name": 'F', "magnitude": 'force'},
       "d4rtCode": '''
-              return a * m;
+              F = a * m;
           '''
     };
 
@@ -41,7 +39,7 @@ void main() {
       ],
       "output": { "name": 'F', "magnitude": 'force'},
       "d4rtCode": '''
-              return a * m;
+              F = a * m;
           '''
     }    
     """;

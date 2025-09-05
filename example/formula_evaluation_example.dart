@@ -4,6 +4,7 @@
 /// 1. Create formulas with input/output specifications
 /// 2. Evaluate formulas with different input values
 /// 3. Handle evaluation errors
+library;
 
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 
