@@ -5,6 +5,45 @@ import 'package:d4rt_formulas/formula_models.dart';
 
 void main() {
 
+  Future<UnitCorpus> createTestCorpus() async {
+    final resource = Resource("lib/units/distance.d4rt.units");
+    final literal = await resource.readAsString(encoding: utf8);
+    final units = UnitSpec.fromArrayStringLiteral(literal);
+    final corpus = UnitCorpus();
+    corpus.loadUnits(units);
+    return corpus;
+  }
+
+  test("Parses unit", () {
+    final setLiteral = {"name": "kilometer", "symbol": "km", "baseUnit": "meter", "factor": 1000};
+    final unit = UnitSpec.fromSet(setLiteral);
+    expect(unit.name, "kilometer");
+    expect(unit.symbol, "km");
+    expect(unit.baseUnit, "meter");
+    expect(unit.factorFromUnitToBase, 1000);
+    expect(unit.codeFromUnitToBase, null);
+    expect(unit.codeFromBaseToUnit, null);
+  });
+
+  test("From km to in", () async {
+    final corpus = await createTestCorpus();
+    final inches = corpus.convert(1, "kilometer", "inch");
+    expect( inches, closeTo(39370.078,0.001) );
+  });
+
+  test("From furlong to base", () async {
+    final corpus = await createTestCorpus();
+    final m = corpus.convert(1, "furlong", "meter");
+    expect(m,closeTo(201.168,0.001));
+  });
+
+  test("From base to furlong", () async {
+    final corpus = await createTestCorpus();
+    final m = corpus.convert(201.168, "meter", "furlong");
+    expect(m,closeTo(1,0.001));
+  });
+
+
   test('Parses Newton\'s second law formula from set literal', () {
     final setLiteral = {
       "name": "Newton's second law",
