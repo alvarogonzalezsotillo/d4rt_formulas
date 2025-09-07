@@ -1,0 +1,13 @@
+
+[
+  {"name": "pascal", "symbol": "Pa", "baseUnit": "pascal", "factor": 1},
+  {"name": "kilopascal", "symbol": "kPa", "baseUnit": "pascal", "factor": 1000},
+  {"name": "megapascal", "symbol": "MPa", "baseUnit": "pascal", "factor": 1000000},
+  {"name": "bar", "symbol": "bar", "baseUnit": "pascal", "factor": 100000},
+  {"name": "millibar", "symbol": "mbar", "baseUnit": "pascal", "factor": 100},
+  {"name": "atmosphere", "symbol": "atm", "baseUnit": "pascal", "factor": 101325},
+  {"name": "pound per square inch", "symbol": "psi", "baseUnit": "pascal", "factor": 6894.757},
+  {"name": "torr", "symbol": "Torr", "baseUnit": "pascal", "factor": 133.322},
+  {"name": "millimeter of mercury", "symbol": "mmHg", "baseUnit": "pascal", "factor": 133.322},
+  {"name": "kilograms per square meter", "symbol": "kg/m²", "baseUnit": "pascal", "factor": 9.80665}
+]

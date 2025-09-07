@@ -1,0 +1,12 @@
+[
+  {"name": "square meter", "symbol": "m²", "baseUnit": "square meter", "factor": 1},
+  {"name": "square kilometer", "symbol": "km²", "baseUnit": "square meter", "factor": 1000000},
+  {"name": "square centimeter", "symbol": "cm²", "baseUnit": "square meter", "factor": 0.0001},
+  {"name": "square millimeter", "symbol": "mm²", "baseUnit": "square meter", "factor": 0.000001},
+  {"name": "hectare", "symbol": "ha", "baseUnit": "square meter", "factor": 10000},
+  {"name": "acre", "symbol": "ac", "baseUnit": "square meter", "factor": 4046.8564224},
+  {"name": "square inch", "symbol": "in²", "baseUnit": "square meter", "factor": 0.00064516},
+  {"name": "square foot", "symbol": "ft²", "baseUnit": "square meter", "factor": 0.09290304},
+  {"name": "square yard", "symbol": "yd²", "baseUnit": "square meter", "factor": 0.83612736},
+  {"name": "square mile", "symbol": "mi²", "baseUnit": "square meter", "factor": 2589988.110336}
+]
