@@ -6,11 +6,14 @@ import 'package:d4rt_formulas/formula_models.dart';
 void main() {
 
   Future<UnitCorpus> createTestCorpus() async {
-    final resource = Resource("lib/units/distance.d4rt.units");
-    final literal = await resource.readAsString(encoding: utf8);
-    final units = UnitSpec.fromArrayStringLiteral(literal);
     final corpus = UnitCorpus();
-    corpus.loadUnits(units);
+    final resources = ["lib/units/distance.d4rt.units", "lib/units/temperature.d4rt.units"];
+    for( final r in resources ) {
+      final resource = Resource(r);
+      final literal = await resource.readAsString(encoding: utf8);
+      final units = UnitSpec.fromArrayStringLiteral(literal);
+      corpus.loadUnits(units);
+    }
     return corpus;
   }
 
@@ -43,6 +46,23 @@ void main() {
     expect(m,closeTo(1,0.001));
   });
 
+  test("From C to F", () async {
+    final corpus = await createTestCorpus();
+    final m = corpus.convert(37, "Celsius", "Fahrenheit");
+    expect(m,closeTo(98.6,0.001));
+  });
+
+  test("From K to F", () async {
+    final corpus = await createTestCorpus();
+    final m = corpus.convert(37, "Kelvin", "Fahrenheit");
+    expect(m,closeTo(-393.07,0.001));
+  });
+
+  test("From C to K", () async {
+    final corpus = await createTestCorpus();
+    final m = corpus.convert(100, "Celsius", "Kelvin");
+    expect(m,closeTo(373.15,0.001));
+  });
 
   test('Parses Newton\'s second law formula from set literal', () {
     final setLiteral = {
