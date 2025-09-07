@@ -33,15 +33,14 @@ The file is a dart array of formulas. Each formula is a dart set literal
         
     },
     {
-        "name": 'Test argument order',
+        "name": 'Triangle rectangle',
         "input": [
-          'z':{ "magnitude": 'scalar'},
-          'a':{ "magnitude": 'scalar'},
-          'y':{ "magnitude": 'scalar'},
+          'b':{ "magnitude": 'meter'},
+          'c':{ "magnitude": 'meter'},
         ],
-        "output": { 'result', "magnitude": 'scalar' },
+        "output": { 'a': { "magnitude": 'meter' } },
         "d4rtCode": '''
-              result = a * 100 + y * 10 + z;
+              a = Math.sqrt(b*b + c*c);
           ''',
     }
 ]

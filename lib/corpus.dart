@@ -29,7 +29,7 @@ class UnitCorpus {
   void loadUnits(List<UnitSpec> units, [bool replaceOnDuplicates = false]) {
     for (final unit in units) {
       if (!replaceOnDuplicates && _allUnits.containsKey(unit.name)) {
-        throw ArgumentError("Duplicate unit:${unit}");
+        throw ArgumentError("Duplicate unit:$unit");
       }
       _allUnits[unit.name] = unit;
       _baseToUnits[unit.baseUnit]?.add(unit.name);
@@ -38,7 +38,7 @@ class UnitCorpus {
 
   UnitSpec operator [](String unit) {
     if (!_allUnits.containsKey(unit)) {
-      throw ArgumentError("Unit not found:${unit}");
+      throw ArgumentError("Unit not found:$unit");
     }
     return _allUnits.get(unit);
   }

@@ -33,8 +33,6 @@ class UnitSpec {
   final String? codeFromUnitToBase;
   final String? codeFromBaseToUnit;
 
-  static final BASEUNIT="BASEUNIT";
-
   UnitSpec({
     required this.name,
     required this.baseUnit,
@@ -49,7 +47,7 @@ class UnitSpec {
     String symbol = SetUtils.stringValue(theSet, "symbol");
 
     if( theSet.containsKey("isBase") ){
-      return UnitSpec(name: name, baseUnit: BASEUNIT, symbol: symbol, factorFromUnitToBase: 1);
+      return UnitSpec(name: name, baseUnit: name, symbol: symbol, factorFromUnitToBase: 1);
     }
 
     String baseUnit = SetUtils.stringValue(theSet, "baseUnit");
