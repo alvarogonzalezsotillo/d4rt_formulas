@@ -31,7 +31,62 @@ The file is a dart array of formulas. Each formula is a dart set literal
         },
         "d4rt_code": "F = m*a;"
         
+    },
+    {
+        "name": 'Test argument order',
+        "input": [
+          'z':{ "magnitude": 'scalar'},
+          'a':{ "magnitude": 'scalar'},
+          'y':{ "magnitude": 'scalar'},
+        ],
+        "output": { 'result', "magnitude": 'scalar' },
+        "d4rtCode": '''
+              result = a * 100 + y * 10 + z;
+          ''',
     }
+]
+```
+
+# Unit file description
+
+```dart
+[
+  {
+    "name": 'meter',
+    "symbol": 'm',
+    "isBase": true
+  },
+  {
+    "name": 'inch',
+    "symbol" 'in',
+    "baseUnit": 'meter',
+    "factor": 0.0254
+  },
+  {
+    "name": 'nautical mile',
+    "symbol": 'Nm',
+    "baseUnit": 'meter',
+    "factor": 1852
+  },
+  {
+    "name": 'Kelvin',
+    "symbol": "Kº",
+    "isBase": true,
+  },
+  {
+    "name": 'Celsius',
+    "symbol": "Cº",
+    "baseUnit" : "Kelvin",
+    "toBase": "x + 273.15",
+    "fromBase": "x - 273.15"
+  },
+  {
+    "name": 'Fahrenheit',
+    "symbol": "Fº",
+    "baseUnit" : "Kelvin",
+    "toBase": "(x - 32) × 5/9 + 273.15",
+    "fromBase": "x - 273.15) * 9/5 + 32"
+  }
 ]
 ```
 

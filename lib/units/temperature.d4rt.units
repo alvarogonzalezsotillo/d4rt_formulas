@@ -1,0 +1,74 @@
+[
+  {"name": "Kelvin", "symbol": "K", "isBase": true},
+  {
+    "name": "Celsius",
+    "symbol": "°C",
+    "baseUnit": "Kelvin",
+    "toBase": "x + 273.15",
+    "fromBase": "x - 273.15",
+  },
+  {
+    "name": "Fahrenheit",
+    "symbol": "°F",
+    "baseUnit": "Kelvin",
+    "toBase": "(x - 32) * 5/9 + 273.15",
+    "fromBase": "(x - 273.15) * 9/5 + 32",
+  },
+  {
+    "name": "Rankine",
+    "symbol": "°R",
+    "baseUnit": "Kelvin",
+    "toBase": "x * 5/9",
+    "fromBase": "x * 9/5",
+  },
+  {
+    "name": "Réaumur",
+    "symbol": "°Ré",
+    "baseUnit": "Kelvin",
+    "toBase": "x * 5/4 + 273.15",
+    "fromBase": "(x - 273.15) * 4/5",
+  },
+  {
+    "name": "Delisle",
+    "symbol": "°D",
+    "baseUnit": "Kelvin",
+    "toBase": "373.15 - x * 2/3",
+    "fromBase": "(373.15 - x) * 3/2",
+  },
+  {
+    "name": "Rømer",
+    "symbol": "°Rø",
+    "baseUnit": "Kelvin",
+    "toBase": "(x - 7.5) * 40/21 + 273.15",
+    "fromBase": "(x - 273.15) * 21/40 + 7.5",
+  },
+  {
+    "name": "Gas Mark",
+    "symbol": "GM",
+    "baseUnit": "Kelvin",
+    "toBase": """
+      if (x < 1) {
+        double celsius = (243 - 25 * (log(1 / x) / log(2))) / 1.8;
+        return celsius + 273.15; // convert Celsius to Kelvin
+      } else {
+        double celsius = x * 14 + 121;
+        return celsius + 273.15;
+      }
+    """,
+    "fromBase": """
+      double celsius = x - 273.15; // convert Kelvin to Celsius
+      if (celsius < 135) { // corresponds to G < 1
+        return pow(2, (1.8 * celsius - 243) / 25);
+      } else {
+        return (celsius - 121) / 14;
+      }
+    """
+  },
+  {
+    "name": "Solar Temperature",
+    "symbol": "°Sol",
+    "baseUnit": "Kelvin",
+    "toBase": "x * 1000000",
+    "fromBase": "x / 1000000",
+  }
+]
