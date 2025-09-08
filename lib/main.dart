@@ -2,29 +2,41 @@ import 'package:d4rt_formulas/ai/FormulaWidget.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:flutter/material.dart';
 
+import 'package:resource/resource.dart';
+import 'dart:convert';
+
 void main() {
-  //runApp(const MyApp());
-  Formula formula = sampleFormula();
-  runApp( MaterialApp( home: FormulaWidget(formula: formula)) );
+  runApp(MaterialApp(
+    home: FutureBuilder<UnitCorpus>(
+      future: createTestCorpus(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error loading units: ${snapshot.error}'));
+          }
+          return UnitList(corpus: snapshot.data!);
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+    ),
+  ));
 }
 
-Formula sampleFormula(){
-  final literal = """
-    {
-      "name": "Newton's second law",
-      "input": [
-        { "name": 'm', "magnitude": 'mass'},
-        { "name": 'a', "magnitude": 'acceleration'}
-      ],
-      "output": { "name": 'F', "magnitude": 'force'},
-      "d4rtCode": '''
-              F = a * m;
-          '''
-    }    
-    """;
-
-  final formula = Formula.fromStringLiteral(literal);
-  return formula;
+Future<UnitCorpus> createTestCorpus() async {
+  final corpus = UnitCorpus();
+  final resources = ["lib/units/temperature.d4rt.units"];
+  
+  for (final resourcePath in resources) {
+    try {
+      final resource = Resource(resourcePath);
+      final literal = await resource.readAsString(encoding: utf8);
+      final units = UnitSpec.fromArrayStringLiteral(literal);
+      corpus.loadUnits(units);
+    } catch (e) {
+      print('Error loading $resourcePath: $e');
+    }
+  }
+  return corpus;
 }
 
 class MyApp extends StatelessWidget {
