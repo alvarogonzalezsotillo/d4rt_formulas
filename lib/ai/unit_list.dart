@@ -60,17 +60,53 @@ class _UnitListState extends State<UnitList> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: _filteredUnits.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.search_off, size: 40, color: Theme.of(context).colorScheme.outline),
+                        const SizedBox(height: 16),
+                        Text('No matching units found', 
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: Theme.of(context).colorScheme.outline
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
               itemCount: _filteredUnits.length,
               itemBuilder: (context, index) {
                 final unit = _filteredUnits[index];
                 return ListTile(
                   title: Text(unit.name),
-                  subtitle: Text('Symbol: ${unit.symbol} • Base unit: ${unit.baseUnit}'),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Symbol: ${unit.symbol}'),
+                      Text('Base: ${unit.baseUnit}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant
+                        ),
+                      ),
+                      if (unit.factorFromUnitToBase != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text('1 ${unit.name} = ${unit.factorFromUnitToBase} ${unit.baseUnit}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontFeatures: [const FontFeature.tabularFigures()],
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   tileColor: index.isEven
-                      ? Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3)
+                      ? Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.2)
                       : null,
+                  visualDensity: VisualDensity.compact,
                 );
               },
             ),
