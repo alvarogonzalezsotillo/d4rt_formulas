@@ -38,7 +38,6 @@ class _UnitListState extends State<UnitList> {
     return widget.corpus.allUnits().where(filter).toList();
   }
 
-  // Add unit conversion to base unit to the unit widget AI!
   @override
   Widget build(BuildContext context) {
     return Scaffold(
