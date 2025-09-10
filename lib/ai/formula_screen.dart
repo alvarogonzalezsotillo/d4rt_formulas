@@ -82,11 +82,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       setState(() {});
-    } catch (e) {
-      e
+    } catch (e, stack) {
+      debugPrint('Formula evaluation error: $e');
+      debugPrint('Stack trace: $stack');
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Evaluation error: ${e.toString()}'),
+          content: Text('Error: ${e.toString()}\n${stack.toString()}'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
