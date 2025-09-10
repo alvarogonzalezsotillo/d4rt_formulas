@@ -43,6 +43,32 @@ class _UnitListState extends State<UnitList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Units List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.functions),
+            onPressed: () {
+              final sampleFormula = Formula(
+                name: "Kinetic Energy",
+                input: [
+                  VariableSpec(name: 'mass', magnitude: 'kilograms'),
+                  VariableSpec(name: 'velocity', magnitude: 'meters_per_second'),
+                ],
+                output: VariableSpec(name: 'energy', magnitude: 'joules'),
+                d4rtCode: "main() {\n  return 0.5 * mass * velocity * velocity;\n}",
+              );
+              
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FormulaScreen(
+                    formula: sampleFormula,
+                    corpus: widget.corpus,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
