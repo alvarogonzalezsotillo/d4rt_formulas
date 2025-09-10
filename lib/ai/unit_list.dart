@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../corpus.dart';
 import '../formula_models.dart';
+import 'formula_screen.dart';
 
 class UnitList extends StatefulWidget {
   final UnitCorpus corpus;
@@ -54,7 +55,7 @@ class _UnitListState extends State<UnitList> {
                   VariableSpec(name: 'velocity', magnitude: 'meters_per_second'),
                 ],
                 output: VariableSpec(name: 'energy', magnitude: 'joules'),
-                d4rtCode: "main() {\n  return 0.5 * mass * velocity * velocity;\n}",
+                d4rtCode: "energy = 0.5 * mass * velocity * velocity;",
               );
               
               Navigator.push(

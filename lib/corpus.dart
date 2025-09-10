@@ -93,4 +93,6 @@ class UnitCorpus {
 
     return xTo;
   }
+
+  Iterable<UnitSpec> allUnits() => _allUnits.values;
 }

@@ -2,8 +2,11 @@ import 'package:d4rt_formulas/ai/FormulaWidget.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:flutter/material.dart';
 
-import 'package:resource/resource.dart';
+import 'package:resource_portable/resource.dart' show Resource;
 import 'dart:convert';
+
+import 'ai/unit_list.dart';
+import 'corpus.dart';
 
 void main() {
   runApp(MaterialApp(
