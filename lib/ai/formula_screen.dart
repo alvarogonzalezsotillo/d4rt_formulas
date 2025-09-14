@@ -154,9 +154,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
               width: 100,
               child: TextFormField(
                 readOnly: true,
+                enabled: false,
                 controller: TextEditingController(text: _result),
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
+                  filled: true,
                 ),
               ),
             ),
