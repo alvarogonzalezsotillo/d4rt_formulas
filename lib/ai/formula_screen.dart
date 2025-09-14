@@ -211,6 +211,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
               setState(() {
                 _selectedUnits[variable.name] = unit;
               });
+              _evaluateFormula();
             },
           ),
         ],
