@@ -18,11 +18,11 @@ class UnitDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unitNames = corpus.unitsOfSameMagnitude(variable.magnitude);
+    final unitNames = corpus.unitsOfSameMagnitude(variable.unit);
     final availableUnits = unitNames.map((name) => corpus.get(name)).toList();
 
     return DropdownButton<String>(
-      value: selectedUnit ?? variable.magnitude,
+      value: selectedUnit ?? variable.unit,
       icon: const Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14),
