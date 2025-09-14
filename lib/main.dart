@@ -28,8 +28,12 @@ void main() {
 Future<UnitCorpus> createTestCorpus() async {
   final corpus = UnitCorpus();
   final resources = [
-    "lib/units/temperature.d4rt.units",
+    "lib/units/area.d4rt.units",
+    "lib/units/distance.d4rt.units",
+    "lib/units/pressure.d4rt.units",
+    "lib/units/termperature.d4rt.units",
     "lib/units/velocity.d4rt.units"
+    
   ];
   
   for (final resourcePath in resources) {
