@@ -21,9 +21,16 @@ class UnitDropdown extends StatelessWidget {
     final unitNames = corpus.unitsOfSameMagnitude(variable.unit);
     final availableUnits = unitNames.map((name) => corpus.get(name)).toList();
 
-    return DropdownButton<String>(
+    return SizedBox(
+      width: 200, // Constrain dropdown width
+      child: DropdownButton<String>(
       value: selectedUnit ?? variable.unit,
-      selectedItemBuilder: (context) => availableUnits.map((unit) => Text(unit.symbol)).toList(),
+      selectedItemBuilder: (context) => availableUnits.map((unit) => 
+        SizedBox(
+          width: 200,
+          child: Text(unit.symbol, overflow: TextOverflow.ellipsis),
+        )
+      ).toList(),
       icon: const Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14),
@@ -32,9 +39,18 @@ class UnitDropdown extends StatelessWidget {
       items: availableUnits.map<DropdownMenuItem<String>>((UnitSpec unit) {
         return DropdownMenuItem<String>(
           value: unit.name,
-          child: Text("${unit.symbol} - ${unit.name}", style: const TextStyle(fontSize: 14)),
+          child: SizedBox(
+            width: 200, // Fixed width for all items
+            child: Text("${unit.symbol} - ${unit.name}", 
+              style: const TextStyle(fontSize: 14),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         );
       }).toList(),
+      dropdownPadding: const EdgeInsets.symmetric(vertical: 8),
+      menuMaxHeight: 400,
+      isExpanded: true,
     );
   }
 }
