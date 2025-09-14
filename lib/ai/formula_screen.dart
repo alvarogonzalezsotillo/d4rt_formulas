@@ -30,18 +30,20 @@ class _FormulaScreenState extends State<FormulaScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers and units
+    // Initialize controllers and units with listeners
     for (final input in widget.formula.input) {
       _inputControllers[input.name] = TextEditingController();
       _selectedUnits[input.name] = input.magnitude;
+      _inputControllers[input.name]!.addListener(_evaluateFormula);
     }
     _selectedOutputUnit = widget.formula.output.magnitude;
   }
 
   @override
   void dispose() {
-    // Clean up controllers
+    // Clean up controllers and listeners
     for (final controller in _inputControllers.values) {
+      controller.removeListener(_evaluateFormula);
       controller.dispose();
     }
     super.dispose();
@@ -105,21 +107,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: ListView(
             children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    _buildInputSection(),
-                    const SizedBox(height: 24),
-                    _buildOutputSection(),
-                  ],
-                ),
-              ),
-              ElevatedButton(
-                onPressed: _evaluateFormula,
-                child: const Text('Calculate'),
-              ),
+              _buildInputSection(),
+              const SizedBox(height: 24),
+              _buildOutputSection(),
             ],
           ),
         ),
