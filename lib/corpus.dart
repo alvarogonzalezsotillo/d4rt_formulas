@@ -36,6 +36,11 @@ class UnitCorpus {
     }
   }
 
+  List<String> unitsOfSameMagnitude(String unit){
+    final base = this[unit].baseUnit;
+    return _baseToUnits[base] as List<String>;
+  }
+
   UnitSpec operator [](String unit) {
     if (!_allUnits.containsKey(unit)) {
       throw ArgumentError("Unit not found:$unit");

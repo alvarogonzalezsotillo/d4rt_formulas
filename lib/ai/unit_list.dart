@@ -51,10 +51,10 @@ class _UnitListState extends State<UnitList> {
               final sampleFormula = Formula(
                 name: "Kinetic Energy",
                 input: [
-                  VariableSpec(name: 'mass', magnitude: 'kilograms'),
+                  VariableSpec(name: 'mass', magnitude: 'kilogram'),
                   VariableSpec(name: 'velocity', magnitude: 'meters_per_second'),
                 ],
-                output: VariableSpec(name: 'energy', magnitude: 'joules'),
+                output: VariableSpec(name: 'energy', magnitude: 'joule'),
                 d4rtCode: "energy = 0.5 * mass * velocity * velocity;",
               );
               

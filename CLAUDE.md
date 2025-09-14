@@ -143,7 +143,7 @@ When multiple valid approaches exist, choose based on:
 **NEVER**:
 - Use `--no-verify` to bypass commit hooks
 - Disable tests instead of fixing them
-- Commit code that doesn't compile
+- *Commit code yourself*
 - Make assumptions - verify with existing code
 
 **ALWAYS**:
@@ -151,3 +151,4 @@ When multiple valid approaches exist, choose based on:
 - Update plan documentation as you go
 - Learn from existing implementations
 - Stop after 3 failed attempts and reassess
+- *Let the user commit changes*
