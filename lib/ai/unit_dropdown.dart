@@ -23,6 +23,7 @@ class UnitDropdown extends StatelessWidget {
 
     return DropdownButton<String>(
       value: selectedUnit ?? variable.unit,
+      selectedItemBuilder: (context) => availableUnits.map((unit) => Text(unit.symbol)).toList(),
       icon: const Icon(Icons.arrow_drop_down),
       elevation: 16,
       style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14),
@@ -31,7 +32,7 @@ class UnitDropdown extends StatelessWidget {
       items: availableUnits.map<DropdownMenuItem<String>>((UnitSpec unit) {
         return DropdownMenuItem<String>(
           value: unit.name,
-          child: Text(unit.symbol, style: const TextStyle(fontSize: 14)),
+          child: Text("${unit.symbol} - ${unit.name}", style: const TextStyle(fontSize: 14)),
         );
       }).toList(),
     );
