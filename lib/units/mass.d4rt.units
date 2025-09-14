@@ -1,0 +1,13 @@
+[
+  {"name": "kilogram", "symbol": "kg", "isBase": true},
+  {"name": "gram", "symbol": "g", "baseUnit": "kilogram", "factor": 0.001},
+  {"name": "milligram", "symbol": "mg", "baseUnit": "kilogram", "factor": 0.000001},
+  {"name": "metric ton", "symbol": "t", "baseUnit": "kilogram", "factor": 1000},
+  {"name": "pound", "symbol": "lb", "baseUnit": "kilogram", "factor": 0.453592},
+  {"name": "ounce", "symbol": "oz", "baseUnit": "kilogram", "factor": 0.0283495},
+  {"name": "stone", "symbol": "st", "baseUnit": "kilogram", "factor": 6.35029},
+  {"name": "short ton", "symbol": "ton (US)", "baseUnit": "kilogram", "factor": 907.185},
+  {"name": "long ton", "symbol": "ton (UK)", "baseUnit": "kilogram", "factor": 1016.05},
+  {"name": "carat", "symbol": "ct", "baseUnit": "kilogram", "factor": 0.0002},
+  {"name": "atomic mass unit", "symbol": "u", "baseUnit": "kilogram", "factor": 1.660539e-27}
+]

@@ -31,8 +31,9 @@ Future<UnitCorpus> createTestCorpus() async {
     "lib/units/area.d4rt.units",
     "lib/units/distance.d4rt.units",
     "lib/units/pressure.d4rt.units",
-    "lib/units/termperature.d4rt.units",
-    "lib/units/velocity.d4rt.units"
+    "lib/units/temperature.d4rt.units",
+    "lib/units/velocity.d4rt.units",
+    "lib/units/mass.d4rt.units"
     
   ];
   
