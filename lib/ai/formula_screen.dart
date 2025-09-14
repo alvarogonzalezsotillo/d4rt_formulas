@@ -33,10 +33,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
     // Initialize controllers and units with listeners
     for (final input in widget.formula.input) {
       _inputControllers[input.name] = TextEditingController();
-      _selectedUnits[input.name] = input.magnitude;
+      _selectedUnits[input.name] = input.unit;
       _inputControllers[input.name]!.addListener(_evaluateFormula);
     }
-    _selectedOutputUnit = widget.formula.output.magnitude;
+    _selectedOutputUnit = widget.formula.output.unit;
   }
 
   @override
@@ -62,7 +62,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         inputValues[input.name] = widget.corpus.convert(
           value,
           _selectedUnits[input.name]!,
-          input.magnitude,
+          input.unit,
         );
       }
 
@@ -70,10 +70,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
       final result = evaluator.evaluate(widget.formula, inputValues);
 
       // Convert output to selected unit if needed
-      if (_selectedOutputUnit != widget.formula.output.magnitude) {
+      if (_selectedOutputUnit != widget.formula.output.unit) {
         _result = widget.corpus.convert(
           result,
-          widget.formula.output.magnitude,
+          widget.formula.output.unit,
           _selectedOutputUnit!,
         ).toStringAsFixed(2);
       } else {
