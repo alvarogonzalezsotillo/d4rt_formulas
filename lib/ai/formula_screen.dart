@@ -58,15 +58,12 @@ class _FormulaScreenState extends State<FormulaScreen> {
         final value = double.tryParse(_inputControllers[input.name]!.text) ?? 0.0;
 
         // Convert input to base unit if needed
-        if (_selectedUnits[input.name] != input.magnitude) {
-          inputValues[input.name] = widget.corpus.convert(
-            value,
-            _selectedUnits[input.name]!,
-            input.magnitude,
-          );
-        } else {
-          inputValues[input.name] = value;
-        }
+        // Always convert from dropdown unit to variable's base unit
+        inputValues[input.name] = widget.corpus.convert(
+          value,
+          _selectedUnits[input.name]!,
+          input.magnitude,
+        );
       }
 
       final evaluator = FormulaEvaluator();
