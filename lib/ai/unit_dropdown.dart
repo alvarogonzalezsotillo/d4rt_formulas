@@ -24,7 +24,7 @@ class UnitDropdown extends StatelessWidget {
     return SizedBox(
       width: 200, // Constrain dropdown width
       child: DropdownButton<String>(
-      value: selectedUnit ?? variable.unit,
+        value: selectedUnit ?? variable.unit,
       selectedItemBuilder: (context) => availableUnits.map((unit) => 
         SizedBox(
           width: 200,
@@ -51,6 +51,7 @@ class UnitDropdown extends StatelessWidget {
       dropdownPadding: const EdgeInsets.symmetric(vertical: 8),
       menuMaxHeight: 400,
       isExpanded: true,
+      ),
     );
   }
 }
