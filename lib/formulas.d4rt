@@ -1,0 +1,46 @@
+[
+  // Free fall distance (vertical)
+  {
+    name: "Free Fall Distance",
+    input: [
+      {name: "t", magnitude: "s"},  // Time in seconds
+      {name: "g", magnitude: "m/s²"}  // Gravitational acceleration
+    ],
+    output: {name: "h", magnitude: "m"},  // Height in meters
+    d4rtCode: "0.5 * g * pow(t, 2)"
+  },
+  
+  // Newton's Law of Universal Gravitation
+  {
+    name: "Gravitational Force",
+    input: [
+      {name: "m1", magnitude: "kg"},  // Mass 1
+      {name: "m2", magnitude: "kg"},  // Mass 2
+      {name: "r", magnitude: "m"}     // Distance between masses
+    ],
+    output: {name: "F", magnitude: "N"},  // Force in newtons
+    d4rtCode: "(6.67430e-11 * m1 * m2) / pow(r, 2)"
+  },
+  
+  // Kinetic Energy
+  {
+    name: "Kinetic Energy",
+    input: [
+      {name: "m", magnitude: "kg"},  // Mass
+      {name: "v", magnitude: "m/s"}  // Velocity
+    ],
+    output: {name: "KE", magnitude: "J"},  // Energy in joules
+    d4rtCode: "0.5 * m * pow(v, 2)"
+  },
+  
+  // Projectile Motion Range
+  {
+    name: "Projectile Range",
+    input: [
+      {name: "v", magnitude: "m/s"},  // Initial velocity
+      {name: "θ", magnitude: "deg"}   // Launch angle
+    ],
+    output: {name: "R", magnitude: "m"},  // Horizontal distance
+    d4rtCode: "(pow(v, 2) * sin(2 * radians(θ))) / 9.80665"
+  }
+]

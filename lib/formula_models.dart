@@ -123,12 +123,14 @@ class VariableSpec {
 
 class Formula {
   final String name;
+  final String? description;
   final List<VariableSpec> input;
   final VariableSpec output;
   final String d4rtCode;
 
   Formula({
     required this.name,
+    this.description,
     required this.input,
     required this.output,
     required this.d4rtCode,
@@ -144,7 +146,7 @@ class Formula {
 
   @override
   String toString() =>
-      'Formula(name: $name, input: $input, output: $output, d4rtCode: $d4rtCode)';
+      'Formula(name: $name, description: $description, input: $input, output: $output, d4rtCode: $d4rtCode)';
 
   @override
   bool operator ==(Object other) =>
@@ -152,13 +154,14 @@ class Formula {
       other is Formula &&
           runtimeType == other.runtimeType &&
           name == other.name &&
+          description == other.description &&
           output == other.output &&
           ListEquality().equals(input, other.input) &&
           d4rtCode == other.d4rtCode;
 
   @override
   int get hashCode =>
-      Object.hash(name, ListEquality().hash(input), output, d4rtCode);
+      Object.hash(name, description, ListEquality().hash(input), output, d4rtCode);
 
   List<String> inputVarNames() =>
       input.map((v) => v.name).toList(growable: false);
@@ -195,6 +198,7 @@ class Formula {
     }
 
     String name = SetUtils.stringValue(theSet, "name");
+    String? description = theSet ["description"] as String?;
     final List<Object?> inputSet = SetUtils.listValue(theSet, "input");
     List<VariableSpec> input = inputSet
         .map((v) => parseVar(v as Map))
@@ -205,6 +209,7 @@ class Formula {
 
     return Formula(
       name: name,
+      description: description,
       input: input,
       output: output,
       d4rtCode: d4rtCode,
