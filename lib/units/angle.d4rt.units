@@ -1,0 +1,12 @@
+[
+  {"name": "radian", "symbol": "rad", "isBase": true},
+  {"name": "degree", "symbol": "°", "baseUnit": "radian", "factor": 0.017453292519943295},
+  {"name": "gradian", "symbol": "gon", "baseUnit": "radian", "factor": 0.015707963267948967},
+  {"name": "revolution", "symbol": "rev", "baseUnit": "radian", "factor": 6.283185307179586},
+  {"name": "arcminute", "symbol": "'", "baseUnit": "radian", "factor": 0.0002908882086657216},
+  {"name": "arcsecond", "symbol": "\"", "baseUnit": "radian", "factor": 0.00000484813681109536},
+  {"name": "binary degree", "symbol": "brad", "baseUnit": "radian", "factor": 0.02454369260617026},
+  {"name": "quadrant", "symbol": "quad", "baseUnit": "radian", "factor": 1.5707963267948966},
+  {"name": "sextant", "symbol": "sextant", "baseUnit": "radian", "factor": 1.0471975511965976},
+  {"name": "octant", "symbol": "octant", "baseUnit": "radian", "factor": 0.7853981633974483}
+]

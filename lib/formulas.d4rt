@@ -2,6 +2,16 @@
   // Free fall distance (vertical)
   {
     name: "Free Fall Distance",
+    description: '''
+Calculates vertical displacement under constant gravity
+
+`h = ½gt²`
+
+Where:
+- `g` = Gravitational acceleration (9.81 m/s² on Earth)
+- `t` = Time in free fall (seconds)
+
+![Free Fall Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Free-fall.svg/1200px-Free-fall.svg.png)''',
     input: [
       {name: "t", magnitude: "s"},  // Time in seconds
       {name: "g", magnitude: "m/s²"}  // Gravitational acceleration
@@ -13,6 +23,17 @@
   // Newton's Law of Universal Gravitation
   {
     name: "Gravitational Force",
+    description: '''
+Newton's law of universal gravitation
+
+`F = G(m₁m₂)/r²`
+
+Where:
+- `G` = Gravitational constant (6.674×10⁻¹¹ N·m²/kg²)
+- `m₁`, `m₂` = Masses of two objects
+- `r` = Distance between centers of masses
+
+![Gravitation](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NewtonsLawOfUniversalGravitation.svg/1200px-NewtonsLawOfUniversalGravitation.svg.png)''',
     input: [
       {name: "m1", magnitude: "kg"},  // Mass 1
       {name: "m2", magnitude: "kg"},  // Mass 2
@@ -25,6 +46,16 @@
   // Kinetic Energy
   {
     name: "Kinetic Energy",
+    description: '''
+Energy possessed by a moving object
+
+`KE = ½mv²`
+
+Where:
+- `m` = Mass of object
+- `v` = Velocity of object
+
+![Kinetic Energy](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kinetic_energy.svg/1200px-Kinetic_energy.svg.png)''',
     input: [
       {name: "m", magnitude: "kg"},  // Mass
       {name: "v", magnitude: "m/s"}  // Velocity
@@ -36,6 +67,13 @@
   // Projectile Motion Range
   {
     name: "Projectile Range",
+    description: "Calculates horizontal distance of projectile motion\n\n"
+                 "`R = (v² sin(2θ))/g`\n\n"
+                 "Where:\n"
+                 "- `v` = Initial velocity\n"
+                 "- `θ` = Launch angle\n"
+                 "- `g` = Gravitational acceleration\n\n"
+                 "![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)",
     input: [
       {name: "v", magnitude: "m/s"},  // Initial velocity
       {name: "θ", magnitude: "deg"}   // Launch angle
