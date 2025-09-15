@@ -15,10 +15,10 @@ void main() {
         final formula = Formula(
           name: "Newton's second law",
           input: [
-            VariableSpec(name: 'm', magnitude: 'mass'),
-            VariableSpec(name: 'a', magnitude: 'acceleration'),
+            VariableSpec(name: 'm', unit: 'mass'),
+            VariableSpec(name: 'a', unit: 'acceleration'),
           ],
-          output: VariableSpec(name: 'F', magnitude: 'force'),
+          output: VariableSpec(name: 'F', unit: 'force'),
           d4rtCode: '''
               F = a * m;
           ''',
@@ -36,10 +36,10 @@ void main() {
         final formula = Formula(
           name: 'Simple addition',
           input: [
-            VariableSpec(name: 'x', magnitude: 'scalar'),
-            VariableSpec(name: 'y', magnitude: 'scalar'),
+            VariableSpec(name: 'x', unit: 'scalar'),
+            VariableSpec(name: 'y', unit: 'scalar'),
           ],
-          output: VariableSpec(name: 'result', magnitude: 'scalar'),
+          output: VariableSpec(name: 'result', unit: 'scalar'),
           d4rtCode: '''
               result = x + y;
           ''',
@@ -53,8 +53,8 @@ void main() {
       test('handles single input variable', () {
         final formula = Formula(
           name: 'Square function',
-          input: [VariableSpec(name: 'n', magnitude: 'scalar')],
-          output: VariableSpec(name: 'result', magnitude: 'scalar'),
+          input: [VariableSpec(name: 'n', unit: 'scalar')],
+          output: VariableSpec(name: 'result', unit: 'scalar'),
           d4rtCode: '''
               result = n * n;
           ''',
@@ -68,11 +68,11 @@ void main() {
         final formula = Formula(
           name: 'Quadratic formula discriminant',
           input: [
-            VariableSpec(name: 'a', magnitude: 'scalar'),
-            VariableSpec(name: 'b', magnitude: 'scalar'),
-            VariableSpec(name: 'c', magnitude: 'scalar'),
+            VariableSpec(name: 'a', unit: 'scalar'),
+            VariableSpec(name: 'b', unit: 'scalar'),
+            VariableSpec(name: 'c', unit: 'scalar'),
           ],
-          output: VariableSpec(name: 'discriminant', magnitude: 'scalar'),
+          output: VariableSpec(name: 'discriminant', unit: 'scalar'),
           d4rtCode: '''
               discriminant = b * b - 4 * a * c;
           ''',
@@ -89,11 +89,11 @@ void main() {
         final formula = Formula(
           name: 'Test order',
           input: [
-            VariableSpec(name: 'z', magnitude: 'scalar'),
-            VariableSpec(name: 'a', magnitude: 'scalar'),
-            VariableSpec(name: 'b', magnitude: 'scalar'),
+            VariableSpec(name: 'z', unit: 'scalar'),
+            VariableSpec(name: 'a', unit: 'scalar'),
+            VariableSpec(name: 'b', unit: 'scalar'),
           ],
-          output: VariableSpec(name: 'result', magnitude: 'scalar'),
+          output: VariableSpec(name: 'result', unit: 'scalar'),
           d4rtCode: 'result = a + b + z;',
         );
 
@@ -105,11 +105,11 @@ void main() {
         final formula = Formula(
           name: 'Test argument order',
           input: [
-            VariableSpec(name: 'z', magnitude: 'scalar'),
-            VariableSpec(name: 'a', magnitude: 'scalar'),
-            VariableSpec(name: 'y', magnitude: 'scalar'),
+            VariableSpec(name: 'z', unit: 'scalar'),
+            VariableSpec(name: 'a', unit: 'scalar'),
+            VariableSpec(name: 'y', unit: 'scalar'),
           ],
-          output: VariableSpec(name: 'result', magnitude: 'scalar'),
+          output: VariableSpec(name: 'result', unit: 'scalar'),
           d4rtCode: '''
               // Variables: a=1, y=2, z=3
               result = a * 100 + y * 10 + z;
@@ -128,10 +128,10 @@ void main() {
         final formula = Formula(
           name: 'Test formula',
           input: [
-            VariableSpec(name: 'x', magnitude: 'scalar'),
-            VariableSpec(name: 'y', magnitude: 'scalar'),
+            VariableSpec(name: 'x', unit: 'scalar'),
+            VariableSpec(name: 'y', unit: 'scalar'),
           ],
-          output: VariableSpec(name: 'result', magnitude: 'scalar'),
+          output: VariableSpec(name: 'result', unit: 'scalar'),
           d4rtCode: 'result = x + y;',
         );
 
@@ -144,8 +144,8 @@ void main() {
       test('throws exception for invalid d4rt code', () {
         final formula = Formula(
           name: 'Invalid code formula',
-          input: [VariableSpec(name: 'x', magnitude: 'scalar')],
-          output: VariableSpec(name: 'result', magnitude: 'scalar'),
+          input: [VariableSpec(name: 'x', unit: 'scalar')],
+          output: VariableSpec(name: 'result', unit: 'scalar'),
           d4rtCode: 'invalid dart code here!',
         );
 
@@ -160,8 +160,8 @@ void main() {
       test('getOutputVariableName returns the single output variable name', () {
         final formula = Formula(
           name: 'Test',
-          input: [VariableSpec(name: 'x', magnitude: 'scalar')],
-          output: VariableSpec(name: 'force', magnitude: 'Newton'),
+          input: [VariableSpec(name: 'x', unit: 'scalar')],
+          output: VariableSpec(name: 'force', unit: 'Newton'),
           d4rtCode: 'force = x;',
         );
 
@@ -173,8 +173,8 @@ void main() {
         () {
           final formula = Formula(
             name: 'Test',
-            input: [VariableSpec(name: 'x', magnitude: 'scalar')],
-            output: VariableSpec(name: 'force', magnitude: 'Newton'),
+            input: [VariableSpec(name: 'x', unit: 'scalar')],
+            output: VariableSpec(name: 'force', unit: 'Newton'),
             d4rtCode: 'force = x;',
           );
 
@@ -185,8 +185,8 @@ void main() {
       test('utility methods work correctly with valid formulas', () {
         final validFormula = Formula(
           name: 'Valid Formula',
-          input: [VariableSpec(name: 'x', magnitude: 'scalar')],
-          output: VariableSpec(name: 'result', magnitude: 'Newton'),
+          input: [VariableSpec(name: 'x', unit: 'scalar')],
+          output: VariableSpec(name: 'result', unit: 'Newton'),
           d4rtCode: 'result = x;',
         );
 
@@ -200,8 +200,8 @@ void main() {
       test('handles integer values', () {
         final formula = Formula(
           name: 'Integer test',
-          input: [VariableSpec(name: 'n', magnitude: 'count')],
-          output: VariableSpec(name: 'result', magnitude: 'count'),
+          input: [VariableSpec(name: 'n', unit: 'count')],
+          output: VariableSpec(name: 'result', unit: 'count'),
           d4rtCode: 'result = n + 1;',
         );
 
@@ -212,8 +212,8 @@ void main() {
       test('handles double values', () {
         final formula = Formula(
           name: 'Double test',
-          input: [VariableSpec(name: 'x', magnitude: 'length')],
-          output: VariableSpec(name: 'result', magnitude: 'area'),
+          input: [VariableSpec(name: 'x', unit: 'length')],
+          output: VariableSpec(name: 'result', unit: 'area'),
           d4rtCode: 'result = x * x;',
         );
 

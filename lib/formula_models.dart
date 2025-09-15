@@ -101,24 +101,24 @@ class UnitSpec {
 
 class VariableSpec {
   final String name;
-  final String magnitude;
+  final String unit;
   static final MAGNITUDELESS = "magnitudeless";
 
-  VariableSpec({required this.name, required this.magnitude});
+  VariableSpec({required this.name, required this.unit});
 
   @override
-  String toString() => 'var($name: $magnitude)';
+  String toString() => 'var($name: $unit)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is VariableSpec &&
           runtimeType == other.runtimeType &&
-          magnitude == other.magnitude &&
+          unit == other.unit &&
           name == other.name;
 
   @override
-  int get hashCode => Object.hash(magnitude, name);
+  int get hashCode => Object.hash(unit, name);
 }
 
 class Formula {
@@ -191,7 +191,7 @@ class Formula {
     VariableSpec parseVar(Map<Object?, Object?> varSpec) {
       String name = SetUtils.stringValue(varSpec, "name");
       String magnitude = SetUtils.stringValue(varSpec, "magnitude");
-      return VariableSpec(name: name, magnitude: magnitude);
+      return VariableSpec(name: name, unit: magnitude);
     }
 
     String name = SetUtils.stringValue(theSet, "name");

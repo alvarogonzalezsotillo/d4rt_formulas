@@ -87,7 +87,7 @@ class FormulaEvaluator {
   /// Gets the magnitude of the single output variable from the formula
   String getOutputVariableMagnitude(Formula formula) {
     // Formula construction already ensures exactly one output variable
-    return formula.output.magnitude;
+    return formula.output.unit;
   }
 
   /// Gets the ordered list of input variable names (alphabetically sorted)

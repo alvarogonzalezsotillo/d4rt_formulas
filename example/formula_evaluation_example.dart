@@ -19,10 +19,10 @@ void main() {
   final newtonFormula = Formula(
     name: "Newton's Second Law",
     input: [
-      VariableSpec(name: 'm', magnitude: 'mass'),
-      VariableSpec(name: 'a', magnitude: 'acceleration'),
+      VariableSpec(name: 'm', unit: 'mass'),
+      VariableSpec(name: 'a', unit: 'acceleration'),
     ],
-    output:  VariableSpec(name: 'F', magnitude: 'force'),
+    output:  VariableSpec(name: 'F', unit: 'force'),
     d4rtCode: '''
         return m * a;
     ''',
@@ -50,11 +50,11 @@ void main() {
   final discriminantFormula = Formula(
     name: 'Quadratic Discriminant',
     input: [
-      VariableSpec(name: 'a', magnitude: 'coefficient'),
-      VariableSpec(name: 'b', magnitude: 'coefficient'),
-      VariableSpec(name: 'c', magnitude: 'coefficient'),
+      VariableSpec(name: 'a', unit: 'coefficient'),
+      VariableSpec(name: 'b', unit: 'coefficient'),
+      VariableSpec(name: 'c', unit: 'coefficient'),
     ],
-    output : VariableSpec(name: 'discriminant', magnitude: 'scalar'),
+    output : VariableSpec(name: 'discriminant', unit: 'scalar'),
     d4rtCode: '''
         return b * b - 4 * a * c;
     ''',
@@ -89,9 +89,9 @@ void main() {
   final circleAreaFormula = Formula(
     name: 'Circle Area',
     input: [
-      VariableSpec(name: 'r', magnitude: 'length'),
+      VariableSpec(name: 'r', unit: 'length'),
     ],
-    output: VariableSpec(name: 'A', magnitude: 'area'),
+    output: VariableSpec(name: 'A', unit: 'area'),
 
     d4rtCode: '''
         var pi = 3.14159265359;
@@ -132,12 +132,12 @@ void main() {
   final compoundInterestFormula = Formula(
     name: 'Compound Interest',
     input: [
-      VariableSpec(name: 'P', magnitude: 'currency'),      // Principal
-      VariableSpec(name: 'r', magnitude: 'rate'),          // Annual interest rate
-      VariableSpec(name: 'n', magnitude: 'count'),         // Times compounded per year
-      VariableSpec(name: 't', magnitude: 'time'),          // Time in years
+      VariableSpec(name: 'P', unit: 'currency'),      // Principal
+      VariableSpec(name: 'r', unit: 'rate'),          // Annual interest rate
+      VariableSpec(name: 'n', unit: 'count'),         // Times compounded per year
+      VariableSpec(name: 't', unit: 'time'),          // Time in years
     ],
-    output: VariableSpec(name: 'A', magnitude: 'currency'),      // Final amount
+    output: VariableSpec(name: 'A', unit: 'currency'),      // Final amount
     d4rtCode: '''
         // A = P * (1 + r/n)^(n*t)
         var rate_per_period = r / n;
