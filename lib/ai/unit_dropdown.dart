@@ -48,7 +48,6 @@ class UnitDropdown extends StatelessWidget {
           ),
         );
       }).toList(),
-      dropdownPadding: const EdgeInsets.symmetric(vertical: 8),
       menuMaxHeight: 400,
       isExpanded: true,
       ),
