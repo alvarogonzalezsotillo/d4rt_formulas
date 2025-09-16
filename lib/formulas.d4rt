@@ -13,11 +13,11 @@ Where:
 
 ![Free Fall Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Free-fall.svg/1200px-Free-fall.svg.png)''',
     input: [
-      {name: "t", magnitude: "s"},  // Time in seconds
-      {name: "g", magnitude: "m/s²"}  // Gravitational acceleration
+      {name: "t", unit: "s"},  // Time in seconds
+      {name: "g", unit: "m/s²"}  // Gravitational acceleration
     ],
-    output: {name: "h", magnitude: "m"},  // Height in meters
-    d4rtCode: "0.5 * g * pow(t, 2)"
+    output: {name: "h", unit: "m"},  // Height in meters
+    d4rtCode: "h = 0.5 * g * pow(t, 2)"
   },
   
   // Newton's Law of Universal Gravitation
@@ -35,12 +35,12 @@ Where:
 
 ![Gravitation](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NewtonsLawOfUniversalGravitation.svg/1200px-NewtonsLawOfUniversalGravitation.svg.png)''',
     input: [
-      {name: "m1", magnitude: "kg"},  // Mass 1
-      {name: "m2", magnitude: "kg"},  // Mass 2
-      {name: "r", magnitude: "m"}     // Distance between masses
+      {name: "m1", unit: "kg"},  // Mass 1
+      {name: "m2", unit: "kg"},  // Mass 2
+      {name: "r", unit: "m"}     // Distance between masses
     ],
-    output: {name: "F", magnitude: "N"},  // Force in newtons
-    d4rtCode: "(6.67430e-11 * m1 * m2) / pow(r, 2)"
+    output: {name: "F", unit: "N"},  // Force in newtons
+    d4rtCode: "F = (6.67430e-11 * m1 * m2) / pow(r, 2)"
   },
   
   // Kinetic Energy
@@ -57,11 +57,11 @@ Where:
 
 ![Kinetic Energy](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kinetic_energy.svg/1200px-Kinetic_energy.svg.png)''',
     input: [
-      {name: "m", magnitude: "kg"},  // Mass
-      {name: "v", magnitude: "m/s"}  // Velocity
+      {name: "m", unit: "kg"},  // Mass
+      {name: "v", unit: "m/s"}  // Velocity
     ],
-    output: {name: "KE", magnitude: "J"},  // Energy in joules
-    d4rtCode: "0.5 * m * pow(v, 2)"
+    output: {name: "KE", unit: "J"},  // Energy in joules
+    d4rtCode: "KE = 0.5 * m * pow(v, 2)"
   },
   
   // Projectile Motion Range
@@ -75,10 +75,30 @@ Where:
                  "- `g` = Gravitational acceleration\n\n"
                  "![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)",
     input: [
-      {name: "v", magnitude: "m/s"},  // Initial velocity
-      {name: "θ", magnitude: "deg"}   // Launch angle
+      {name: "v", unit: "m/s"},  // Initial velocity
+      {name: "θ", unit: "deg"}   // Launch angle
     ],
-    output: {name: "R", magnitude: "m"},  // Horizontal distance
-    d4rtCode: "(pow(v, 2) * sin(2 * radians(θ))) / 9.80665"
-  }
+    output: {name: "R", unit: "m"},  // Horizontal distance
+    d4rtCode: "R = (pow(v, 2) * sin(2 * radians(θ))) / 9.80665"
+  },
+
+  {
+    name: "Newton's Second Law",
+    description: '''
+Force equals mass times acceleration
+
+`F = m * a`
+
+Where:
+- `m` = Mass of object (kg)
+- `a` = Acceleration (m/s²)
+
+![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)''',
+    input: [
+      {name: "m", unit: "kg"},  // Mass
+      {name: "a", unit: "m/s²"} // Acceleration
+    ],
+    output: {name: "F", unit: "N"},  // Force in newtons
+    d4rtCode: "F = m * a"
+  },
 ]
