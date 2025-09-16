@@ -22,6 +22,11 @@ class Multimap<K, V> extends DelegatingMap<K, List<V>> {
   }
 }
 
+class FormulaCorpus{
+  final Multimap<String, Formula> _tags = Multimap.create();
+  final Map<String, Formula> _allFormulas = {};
+}
+
 class UnitCorpus {
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};

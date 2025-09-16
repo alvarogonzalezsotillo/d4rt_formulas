@@ -127,6 +127,7 @@ class Formula {
   final List<VariableSpec> input;
   final VariableSpec output;
   final String d4rtCode;
+  final List<String> tags;
 
   Formula({
     required this.name,
@@ -134,6 +135,7 @@ class Formula {
     required this.input,
     required this.output,
     required this.d4rtCode,
+    this.tags = const [],
   }) {
     validate();
   }
@@ -146,7 +148,7 @@ class Formula {
 
   @override
   String toString() =>
-      'Formula(name: $name, description: $description, input: $input, output: $output, d4rtCode: $d4rtCode)';
+      'Formula(name: $name, description: $description, input: $input, output: $output, d4rtCode: $d4rtCode, tags: $tags)';
 
   @override
   bool operator ==(Object other) =>
@@ -157,11 +159,12 @@ class Formula {
           description == other.description &&
           output == other.output &&
           ListEquality().equals(input, other.input) &&
-          d4rtCode == other.d4rtCode;
+          d4rtCode == other.d4rtCode &&
+          ListEquality().equals(tags, other.tags);
 
   @override
   int get hashCode =>
-      Object.hash(name, description, ListEquality().hash(input), output, d4rtCode);
+      Object.hash(name, description, ListEquality().hash(input), output, d4rtCode, ListEquality().hash(tags));
 
   List<String> inputVarNames() =>
       input.map((v) => v.name).toList(growable: false);
@@ -199,6 +202,7 @@ class Formula {
 
     String name = SetUtils.stringValue(theSet, "name");
     String? description = theSet ["description"] as String?;
+    List<String> tags = (theSet["tags"] as List<Object?>? ?? []).map((t) => t.toString()).toList();
     final List<Object?> inputSet = SetUtils.listValue(theSet, "input");
     List<VariableSpec> input = inputSet
         .map((v) => parseVar(v as Map))
