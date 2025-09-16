@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import '../formula_models.dart';
 import '../formula_evaluator.dart';
 import '../corpus.dart';
@@ -106,6 +107,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
+              _buildDescriptionSection(),
               _buildInputSection(),
               const SizedBox(height: 24),
               _buildOutputSection(),
@@ -113,6 +115,38 @@ class _FormulaScreenState extends State<FormulaScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDescriptionSection() {
+    if (widget.formula.description == null || 
+        widget.formula.description!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Description',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceVariant,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: MarkdownBody(
+            data: widget.formula.description!,
+            shrinkWrap: true,
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 

@@ -54,6 +54,11 @@ class _UnitListState extends State<UnitList> {
                   VariableSpec(name: 'mass', unit: 'kilogram'),
                   VariableSpec(name: 'velocity', unit: 'meters_per_second'),
                 ],
+                description : """
+                # titulo
+                hola
+                ## otro titulo
+                """,
                 output: VariableSpec(name: 'energy', unit: 'joule'),
                 d4rtCode: "energy = 0.5 * mass * velocity * velocity;",
               );
