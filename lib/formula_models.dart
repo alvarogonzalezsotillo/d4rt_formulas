@@ -196,8 +196,8 @@ class Formula {
   factory Formula.fromSet(Map<Object?, Object?> theSet) {
     VariableSpec parseVar(Map<Object?, Object?> varSpec) {
       String name = SetUtils.stringValue(varSpec, "name");
-      String magnitude = SetUtils.stringValue(varSpec, "magnitude");
-      return VariableSpec(name: name, unit: magnitude);
+      String unit = SetUtils.stringValue(varSpec, "unit");
+      return VariableSpec(name: name, unit: unit);
     }
 
     String name = SetUtils.stringValue(theSet, "name");

@@ -4,7 +4,7 @@ import '../formula_models.dart';
 import 'formula_screen.dart';
 
 class UnitList extends StatefulWidget {
-  final UnitCorpus corpus;
+  final Corpus corpus;
 
   const UnitList({super.key, required this.corpus});
 

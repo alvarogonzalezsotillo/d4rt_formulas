@@ -3,7 +3,7 @@ import '../../formula_models.dart';
 import '../../corpus.dart';
 
 class UnitDropdown extends StatelessWidget {
-  final UnitCorpus corpus;
+  final Corpus corpus;
   final VariableSpec variable;
   final String? selectedUnit;
   final ValueChanged<String?> onUnitChanged;
@@ -19,7 +19,7 @@ class UnitDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unitNames = corpus.unitsOfSameMagnitude(variable.unit);
-    final availableUnits = unitNames.map((name) => corpus.get(name)).toList();
+    final availableUnits = unitNames.map((name) => corpus.getUnit(name)).toList();
 
     return SizedBox(
       width: 200, // Constrain dropdown width

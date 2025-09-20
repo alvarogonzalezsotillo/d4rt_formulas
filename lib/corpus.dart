@@ -22,12 +22,38 @@ class Multimap<K, V> extends DelegatingMap<K, List<V>> {
   }
 }
 
-class FormulaCorpus{
+class Corpus{
   final Multimap<String, Formula> _tags = Multimap.create();
   final Map<String, Formula> _allFormulas = {};
-}
 
-class UnitCorpus {
+  void loadFormulas(List<Formula> formulas, {bool replaceOnDuplicates = false, bool checkUnits = true}) {
+    for (final formula in formulas) {
+      if (!replaceOnDuplicates && _allFormulas.containsKey(formula.name)) {
+        throw ArgumentError("Duplicate formula:$formula");
+      }
+
+      if( checkUnits ){
+        for( final inputVar in formula.input + [formula.output] ){
+          if( getUnit(inputVar.unit) == null ){
+            throw ArgumentError( "Unit not found: ${inputVar.unit}");
+          }
+        }
+      }
+
+      _allFormulas[formula.name] = formula;
+      for( final tag in formula.tags ){
+        _tags[tag]?.add(formula);
+      }
+    }
+  }
+
+  List<Formula> getTagFormulas(String tag){
+    if( _tags[tag] == null ){
+      return [];
+    }
+    return _tags[tag]?.toList(growable:false) as List<Formula>;
+  }
+
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 
@@ -42,18 +68,17 @@ class UnitCorpus {
   }
 
   List<String> unitsOfSameMagnitude(String unit){
-    final base = this[unit].baseUnit;
+    final base = getUnit(unit).baseUnit;
     return _baseToUnits[base] as List<String>;
   }
 
-  UnitSpec operator [](String unit) {
+
+  UnitSpec getUnit(String unit) {
     if (!_allUnits.containsKey(unit)) {
       throw ArgumentError("Unit not found:$unit");
     }
     return _allUnits.get(unit);
   }
-
-  UnitSpec get(String unit) => this[unit];
 
   String _converterFromCodeString(Number x, String codeString) {
     final buffer = StringBuffer();
@@ -64,7 +89,7 @@ class UnitCorpus {
   }
 
   Number _convertToBase(Number x, String fromUnit) {
-    final unit = this[fromUnit];
+    final unit = getUnit(fromUnit);
 
     if (unit.factorFromUnitToBase != null) {
       return x * (unit.factorFromUnitToBase as Number);
@@ -81,7 +106,7 @@ class UnitCorpus {
   }
 
   Number _convertFromBase(Number x, String toUnit) {
-    final unit = this[toUnit];
+    final unit = getUnit(toUnit);
 
     if (unit.factorFromUnitToBase != null) {
       return x / (unit.factorFromUnitToBase as Number);
@@ -105,4 +130,6 @@ class UnitCorpus {
   }
 
   Iterable<UnitSpec> allUnits() => _allUnits.values;
+
+
 }

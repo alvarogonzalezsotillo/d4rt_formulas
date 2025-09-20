@@ -9,7 +9,7 @@ import 'unit_dropdown.dart';
 
 class FormulaScreen extends StatefulWidget {
   final Formula formula;
-  final UnitCorpus corpus;
+  final Corpus corpus;
 
   const FormulaScreen({
     super.key,

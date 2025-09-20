@@ -6,11 +6,12 @@ import 'dart:convert';
 
 import 'ai/unit_list.dart';
 import 'corpus.dart';
+import 'defaults/default_corpus.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: FutureBuilder<UnitCorpus>(
-      future: createTestCorpus(),
+    home: FutureBuilder<Corpus>(
+      future: createDefaultCorpus(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -24,31 +25,6 @@ void main() {
   ));
 }
 
-Future<UnitCorpus> createTestCorpus() async {
-  final corpus = UnitCorpus();
-  final resources = [
-    "lib/units/area.d4rt.units",
-    "lib/units/distance.d4rt.units",
-    "lib/units/energy.d4rt.units",
-    "lib/units/pressure.d4rt.units",
-    "lib/units/temperature.d4rt.units",
-    "lib/units/velocity.d4rt.units",
-    "lib/units/mass.d4rt.units",
-    "lib/units/angle.d4rt.units"
-  ];
-  
-  for (final resourcePath in resources) {
-    try {
-      final resource = Resource(resourcePath);
-      final literal = await resource.readAsString(encoding: utf8);
-      final units = UnitSpec.fromArrayStringLiteral(literal);
-      corpus.loadUnits(units);
-    } catch (e) {
-      print('Error loading $resourcePath: $e');
-    }
-  }
-  return corpus;
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

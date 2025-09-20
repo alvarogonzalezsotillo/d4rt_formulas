@@ -1,4 +1,5 @@
 import 'package:d4rt_formulas/corpus.dart';
+import 'package:d4rt_formulas/defaults/default_corpus.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:test/test.dart';
 import 'package:d4rt_formulas/formula_models.dart';
@@ -8,16 +9,8 @@ import 'package:resource_portable/resource.dart' show Resource;
 
 void main() {
 
-  Future<UnitCorpus> createTestCorpus() async {
-    final corpus = UnitCorpus();
-    final resources = ["lib/units/distance.d4rt.units", "lib/units/temperature.d4rt.units"];
-    for( final r in resources ) {
-      final resource = Resource(r);
-      final literal = await resource.readAsString(encoding: utf8);
-      final units = UnitSpec.fromArrayStringLiteral(literal);
-      corpus.loadUnits(units);
-    }
-    return corpus;
+  Future<Corpus> createTestCorpus() async {
+    return createDefaultCorpus();
   }
 
   test("Parses unit", () {
