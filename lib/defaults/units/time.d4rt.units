@@ -1,0 +1,31 @@
+[
+  {
+    "name": "second",
+    "symbol": "s",
+    "isBase": true
+  },
+  {
+    "name": "minute",
+    "symbol": "min",
+    "baseUnit": "second",
+    "factor": 60
+  },
+  {
+    "name": "hour",
+    "symbol": "hr",
+    "baseUnit": "second",
+    "factor": 3600
+  },
+  {
+    "name": "day",
+    "symbol": "d",
+    "baseUnit": "second",
+    "factor": 86400
+  },
+  {
+    "name": "week",
+    "symbol": "wk",
+    "baseUnit": "second",
+    "factor": 604800
+  }
+]

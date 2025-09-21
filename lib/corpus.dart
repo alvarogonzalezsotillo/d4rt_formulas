@@ -54,6 +54,10 @@ class Corpus{
     return _tags[tag]?.toList(growable:false) as List<Formula>;
   }
 
+  List<Formula> getFormulas(){
+    return _allFormulas.values.toList(growable:false);
+  }
+
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 
@@ -75,6 +79,7 @@ class Corpus{
 
   UnitSpec getUnit(String unit) {
     if (!_allUnits.containsKey(unit)) {
+      print(  _allUnits.keys.join(",") );
       throw ArgumentError("Unit not found:$unit");
     }
     return _allUnits.get(unit);
