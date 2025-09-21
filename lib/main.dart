@@ -5,6 +5,7 @@ import 'package:resource_portable/resource.dart' show Resource;
 import 'dart:convert';
 
 import 'ai/formula_screen.dart';
+import 'ai/formula_list.dart';
 import 'corpus.dart';
 import 'defaults/default_corpus.dart';
 
@@ -19,26 +20,9 @@ void main() {
           }
           return Scaffold(
             appBar: AppBar(title: const Text('Formulas')),
-            body: ListView.builder(
-              itemCount: snapshot.data!.getFormulas().length,
-              itemBuilder: (context, index) {
-                final formula = snapshot.data!.getFormulas()[index];
-                return ListTile(
-                  title: Text(formula.name),
-                  subtitle: Text(formula.description ?? ''),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FormulaScreen(
-                          formula: formula,
-                          corpus: snapshot.data!,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
+            body: FormulaList(
+              corpus: snapshot.data!,
+              formulas: snapshot.data!.getFormulas(),
             ),
           );
         }

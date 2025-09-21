@@ -1,0 +1,31 @@
+[
+  {
+    "name": "newton",
+    "symbol": "N",
+    "isBase": true
+  },
+  {
+    "name": "kilonewton",
+    "symbol": "kN",
+    "baseUnit": "newton",
+    "factor": 1000
+  },
+  {
+    "name": "meganewton",
+    "symbol": "MN",
+    "baseUnit": "newton",
+    "factor": 1000000
+  },
+  {
+    "name": "dyne",
+    "symbol": "dyn",
+    "baseUnit": "newton",
+    "factor": 0.00001
+  },
+  {
+    "name": "pound-force",
+    "symbol": "lbf",
+    "baseUnit": "newton",
+    "factor": 4.44822
+  }
+]
