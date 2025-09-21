@@ -81,7 +81,7 @@ Where:
       {"name": "v", "unit": "meters per second"},  // Initial velocity
       {"name": "θ", "unit": "degree"}   // Launch angle
     ],
-    "output": {"name": "R", "unit": "m"},  // Horizontal distance
+    "output": {"name": "R", "unit": "meter"},  // Horizontal distance
     "d4rtCode": "R = (pow(v, 2) * sin(2 * radians(θ))) / 9.80665",
     "tags": ["physics", "kinematics", "projectile"]
   },

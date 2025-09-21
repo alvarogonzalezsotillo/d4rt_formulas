@@ -64,10 +64,10 @@ void main() {
     final setLiteral = {
       "name": "Newton's second law",
       "input": [
-        {"name": 'm', "magnitude": 'mass'},
-        {"name": 'a', "magnitude": 'acceleration'},
+        {"name": 'm', "unit": 'kilogram'},
+        {"name": 'a', "unit": 'meters per square second'},
       ],
-      "output": {"name": 'F', "magnitude": 'force'},
+      "output": {"name": 'F', "unit": 'newton'},
       "d4rtCode": '''
               F = a * m;
           ''',
@@ -89,10 +89,10 @@ void main() {
     {
       "name": "Newton's second law",
       "input": [
-        { "name": 'm', "magnitude": 'mass'},
-        { "name": 'a', "magnitude": 'acceleration'}
+        { "name": 'm', "unit": 'kilogram'},
+        { "name": 'a', "unit": 'meters per square second'}
       ],
-      "output": { "name": 'F', "magnitude": 'force'},
+      "output": { "name": 'F', "unit": 'newton'},
       "d4rtCode": '''
               F = a * m;
           '''
@@ -110,44 +110,5 @@ void main() {
     expect(result, 98.0); // F = m * a = 10 * 9.8 = 98 N
   });
 
-  test('d4rt parses formula from list literal', () {
-    final literal = """
-    [
-    {
-      "name": "Newton's second law",
-      "input": [
-        { "name": 'm', "magnitude": 'mass'},
-        { "name": 'a', "magnitude": 'acceleration'}
-      ],
-      "output": { "name": 'F', "magnitude": 'force'},
-      "d4rtCode": '''
-              F = a * m;
-          '''
-    },
-    {
-      "name": "Newton's second law, again",
-      "input": [
-        { "name": 'mass', "magnitude": 'mass'},
-        { "name": 'acc', "magnitude": 'acceleration'}
-      ],
-      "output": { "name": 'force', "magnitude": 'force'},
-      "d4rtCode": '''
-              force = mass * acc;
-          '''
-    }
-    ]   
-    """;
 
-    final formulas = Formula.fromArrayStringLiteral(literal);
-    final evaluator = FormulaEvaluator();
-
-    final formula = formulas[0];
-
-    final result = evaluator.evaluate(formula, {
-      'm': 10.0, // 10 kg
-      'a': 9.8, // 9.8 m/s²
-    });
-
-    expect(result, 98.0); // F = m * a = 10 * 9.8 = 98 N
-  });
 }
