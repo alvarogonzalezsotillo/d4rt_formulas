@@ -17,7 +17,7 @@ Where:
       {"name": "g", "unit": "meters per second"}  // Gravitational acceleration
     ],
     "output": {"name": "h", "unit": "meter"},  // Height in meters
-    "d4rtCode": "h = 0.5 * g * pow(t, 2);",
+    "d4rtCode": "h = 0.5 * g * Math.pow(t, 2);",
     "tags": ["physics", "kinematics"]
   },
   
@@ -41,7 +41,7 @@ Where:
       {"name": "r", "unit": "meter"}     // Distance between masses
     ],
     "output": {"name": "F", "unit": "newton"},  // Force in newtons
-    "d4rtCode": "F = (6.67430e-11 * m1 * m2) / pow(r, 2);",
+    "d4rtCode": "F = (6.67430e-11 * m1 * m2) / Math.pow(r, 2);",
     "tags": ["physics", "astronomy", "gravity"]
   },
   
@@ -63,7 +63,7 @@ Where:
       {"name": "v", "unit": "meters per second"}  // Velocity
     ],
     "output": {"name": "KE", "unit": "joule"},  // Energy in joules
-    "d4rtCode": "KE = 0.5 * m * pow(v, 2);",
+    "d4rtCode": "KE = 0.5 * m * Math.pow(v, 2);",
     "tags": ["physics", "energy", "mechanics"]
   },
   
@@ -82,7 +82,7 @@ Where:
       {"name": "θ", "unit": "degree"}   // Launch angle
     ],
     "output": {"name": "R", "unit": "meter"},  // Horizontal distance
-    "d4rtCode": "R = (pow(v, 2) * sin(2 * radians(θ))) / 9.80665;",
+    "d4rtCode": "R = (Math.pow(v, 2) * sin(2 * radians(θ))) / 9.80665;",
     "tags": ["physics", "kinematics", "projectile"]
   },
 
