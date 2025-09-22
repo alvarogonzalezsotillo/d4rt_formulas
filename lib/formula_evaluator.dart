@@ -46,30 +46,22 @@ class FormulaEvaluator {
           final Number exp = getNumberValueOf( positionalArgs[1].toString() );
           return MyMath.pow(base,exp);
         },
+        'log': (visitor, positionalArgs, namedArgs) {
+          final Number x = getNumberValueOf( positionalArgs[0].toString() );
+          return MyMath.log(x);
+        },
       }
     );
     
-    interpreter.registerBridgedClass(myMathDefinition, 'package:myapp/my_math.dart');
+    interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
   }
 
   
   dynamic evaluate(Formula formula, Map<String, dynamic> inputValues) {
     _validateInputValues(formula, inputValues);
-
-    try {
-      // Build the complete d4rt source code with variable declarations
-      final completeSource = _buildCompleteSource(formula, inputValues);
-
-      // Execute the code using d4rt (no args needed since variables are in source)
-      final result = _interpreter.execute(source: completeSource);
-      
-      return result;
-    } catch (e) {
-      throw FormulaEvaluationException(
-        'Failed to execute formula "${formula.name}"',
-        e,
-      );
-    }
+    final completeSource = _buildCompleteSource(formula, inputValues);
+    final result = _interpreter.execute(source: completeSource);
+    return result;
   }
 
   void _validateInputValues(Formula formula, Map<String, dynamic> inputValues) {
@@ -104,8 +96,17 @@ class FormulaEvaluator {
   String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
     final buffer = StringBuffer();
 
-    buffer.writeln("import 'package:myapp/my_math.dart';");
-    buffer.writeln("main(){");
+    buffer.writeln("""
+      import 'dart:math';
+
+      //log(x) => M.log(x);
+      //pow(a,b) => M.pow(a,b);
+      
+      main()
+      {
+      """
+    );
+    
 
     for (final entry in inputValues.entries) {
       final varName = entry.key;
@@ -113,16 +114,22 @@ class FormulaEvaluator {
       
       if (value is String) {
         final escapedValue = value.replaceAll('"', '\\"');
-        buffer.writeln('var $varName = "$escapedValue";');
+        buffer.writeln("""
+          final $varName = "$escapedValue";
+        """);
       } else {
-        buffer.writeln('var $varName = $value;');
+        buffer.writeln("""
+          final $varName = $value;
+        """);
       }
     }
-    buffer.writeln("late var ${getOutputVariableName(formula)};");
-    
-    buffer.writeln(formula.d4rtCode);
-    buffer.writeln("return ${getOutputVariableName(formula)};");
-    buffer.writeln("}");
+    buffer.writeln("""
+      late var ${getOutputVariableName(formula)};
+      ${formula.d4rtCode}
+      return ${getOutputVariableName(formula)};
+      }
+      """
+    );
     
     return buffer.toString();
   }

@@ -141,19 +141,6 @@ void main() {
         );
       });
 
-      test('throws exception for invalid d4rt code', () {
-        final formula = Formula(
-          name: 'Invalid code formula',
-          input: [VariableSpec(name: 'x', unit: 'scalar')],
-          output: VariableSpec(name: 'result', unit: 'scalar'),
-          d4rtCode: 'invalid dart code here!',
-        );
-
-        expect(
-          () => evaluator.evaluate(formula, {'x': 1}),
-          throwsA(isA<FormulaEvaluationException>()),
-        );
-      });
     });
 
     group('Utility methods', () {

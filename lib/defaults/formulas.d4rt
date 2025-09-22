@@ -5,11 +5,11 @@
     "description": '''
 Calculates vertical displacement under constant gravity
 
-`h = ½gt²`
+$$h = \\frac{1}{2}gt^2$$
 
 Where:
-- `g` = Gravitational acceleration (9.81 m/s² on Earth)
-- `t` = Time in free fall (seconds)
+- $g$: Gravitational acceleration ($9.81\\ \\mathrm{m/s^2}$ on Earth)
+- $t$: Time in free fall (seconds)
 
 ![Free Fall Diagram](https://altcalculator.com/wp-content/uploads/2023/08/Free-Fall.png)''',
     "input": [
@@ -17,7 +17,7 @@ Where:
       {"name": "g", "unit": "meters per second"}  // Gravitational acceleration
     ],
     "output": {"name": "h", "unit": "meter"},  // Height in meters
-    "d4rtCode": "h = 0.5 * g * Math.pow(t, 2);",
+    "d4rtCode": "h = 0.5 * g * pow(t, 2);",
     "tags": ["physics", "kinematics"]
   },
   
@@ -27,12 +27,12 @@ Where:
     "description": '''
 Newton's law of universal gravitation
 
-`F = G(m₁m₂)/r²`
+$$F = G\\frac{m_1m_2}{r^2}$$
 
 Where:
-- `G` = Gravitational constant (6.674×10⁻¹¹ N·m²/kg²)
-- `m₁`, `m₂` = Masses of two objects
-- `r` = Distance between centers of masses
+- $G$: Gravitational constant ($6.674\\times 10^{-11}\\ \\mathrm{N\\cdot m^2/kg^2}$)
+- $m_1, m_2$: Masses of two objects
+- $r$: Distance between centers of masses
 
 ![Gravitation](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NewtonsLawOfUniversalGravitation.svg/1200px-NewtonsLawOfUniversalGravitation.svg.png)''',
     "input": [
@@ -41,7 +41,7 @@ Where:
       {"name": "r", "unit": "meter"}     // Distance between masses
     ],
     "output": {"name": "F", "unit": "newton"},  // Force in newtons
-    "d4rtCode": "F = (6.67430e-11 * m1 * m2) / Math.pow(r, 2);",
+    "d4rtCode": "F = (6.67430e-11 * m1 * m2) / pow(r, 2);",
     "tags": ["physics", "astronomy", "gravity"]
   },
   
@@ -51,11 +51,11 @@ Where:
     "description": '''
 Energy possessed by a moving object
 
-`KE = ½mv²`
+$$KE = \\frac{1}{2}mv^2$$
 
 Where:
-- `m` = Mass of object
-- `v` = Velocity of object
+- $m$: Mass of object
+- $v$: Velocity of object
 
 ![Kinetic Energy](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kinetic_energy.svg/1200px-Kinetic_energy.svg.png)''',
     "input": [
@@ -63,7 +63,7 @@ Where:
       {"name": "v", "unit": "meters per second"}  // Velocity
     ],
     "output": {"name": "KE", "unit": "joule"},  // Energy in joules
-    "d4rtCode": "KE = 0.5 * m * Math.pow(v, 2);",
+    "d4rtCode": "KE = 0.5 * m * pow(v, 2);",
     "tags": ["physics", "energy", "mechanics"]
   },
   
@@ -71,18 +71,21 @@ Where:
   {
     "name": "Projectile Range",
     "description": "Calculates horizontal distance of projectile motion\n\n"
-                 "`R = (v² sin(2θ))/g`\n\n"
+                 "$$R = \\frac{v^2 \\sin(2\\theta)}{g}$$\n\n"
                  "Where:\n"
-                 "- `v` = Initial velocity\n"
-                 "- `θ` = Launch angle\n"
-                 "- `g` = Gravitational acceleration\n\n"
+                 "- $v$: Initial velocity\n"
+                 "- $\\theta$: Launch angle\n"
+                 "- $g$: Gravitational acceleration\n\n"
                  "![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)",
     "input": [
       {"name": "v", "unit": "meters per second"},  // Initial velocity
-      {"name": "θ", "unit": "degree"}   // Launch angle
+      {"name": "a", "unit": "degree"}   // Launch angle
     ],
     "output": {"name": "R", "unit": "meter"},  // Horizontal distance
-    "d4rtCode": "R = (Math.pow(v, 2) * sin(2 * radians(θ))) / 9.80665;",
+    "d4rtCode": """
+       var radians = a * (pi / 180);
+       R = (pow(v, 2) * sin(2 * radians)) / 9.80665;
+    """,
     "tags": ["physics", "kinematics", "projectile"]
   },
 
@@ -91,11 +94,11 @@ Where:
     "description": '''
 Force equals mass times acceleration
 
-`F = m * a`
+$$F = m \\cdot a$$
 
 Where:
-- `m` = Mass of object (kg)
-- `a` = Acceleration (m/s²)
+- $m$: Mass of object ($\\mathrm{kg}$)
+- $a$: Acceleration ($\\mathrm{m/s^2}$)
 
 ![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)''',
     "input": [
