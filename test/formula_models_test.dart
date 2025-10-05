@@ -3,9 +3,7 @@ import 'package:d4rt_formulas/defaults/default_corpus.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:test/test.dart';
 import 'package:d4rt_formulas/formula_models.dart';
-import 'dart:convert' show utf8;
 
-import 'package:resource_portable/resource.dart' show Resource;
 
 void main() {
 

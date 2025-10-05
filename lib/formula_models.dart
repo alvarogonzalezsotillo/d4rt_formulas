@@ -186,6 +186,7 @@ class Formula {
     buffer.write("main(){ return $arrayStringLiteral; }");
     final code = buffer.toString();
 
+    //print("fromArrayStringLiteral:$code");
     final List<Object?> list = d4rt.execute(source: code);
 
     final formulas = list.map((set) => Formula.fromSet(set as Map));
@@ -214,6 +215,7 @@ class Formula {
     return Formula(
       name: name,
       description: description,
+      tags: tags,
       input: input,
       output: output,
       d4rtCode: d4rtCode,

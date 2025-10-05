@@ -182,7 +182,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
             Text(widget.formula.output.name),
             const Spacer(),
             SizedBox(
-              width: 100,
+              width: 150,
               child: TextFormField(
                 readOnly: true,
                 enabled: false,

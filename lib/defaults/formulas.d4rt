@@ -2,7 +2,7 @@
   // Free fall distance (vertical)
   {
     "name": "Free Fall Distance",
-    "description": '''
+    "description": r"""
 Calculates vertical displacement under constant gravity
 
 $$h = \\frac{1}{2}gt^2$$
@@ -11,7 +11,7 @@ Where:
 - $g$: Gravitational acceleration ($9.81\\ \\mathrm{m/s^2}$ on Earth)
 - $t$: Time in free fall (seconds)
 
-![Free Fall Diagram](https://altcalculator.com/wp-content/uploads/2023/08/Free-Fall.png)''',
+![Free Fall Diagram](https://altcalculator.com/wp-content/uploads/2023/08/Free-Fall.png)""",
     "input": [
       {"name": "t", "unit": "second"},  // Time in seconds
       {"name": "g", "unit": "meters per second"}  // Gravitational acceleration
@@ -24,7 +24,7 @@ Where:
   // Newton's Law of Universal Gravitation
   {
     "name": "Gravitational Force",
-    "description": '''
+    "description": r'''
 Newton's law of universal gravitation
 
 $$F = G\\frac{m_1m_2}{r^2}$$
@@ -48,7 +48,7 @@ Where:
   // Kinetic Energy
   {
     "name": "Kinetic Energy",
-    "description": '''
+    "description": r'''
 Energy possessed by a moving object
 
 $$KE = \\frac{1}{2}mv^2$$
@@ -70,13 +70,13 @@ Where:
   // Projectile Motion Range
   {
     "name": "Projectile Range",
-    "description": "Calculates horizontal distance of projectile motion\n\n"
-                 "$$R = \\frac{v^2 \\sin(2\\theta)}{g}$$\n\n"
-                 "Where:\n"
-                 "- $v$: Initial velocity\n"
-                 "- $\\theta$: Launch angle\n"
-                 "- $g$: Gravitational acceleration\n\n"
-                 "![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)",
+    "description": r"""Calculates horizontal distance of projectile motion
+                 $$R = \\frac{v^2 \\sin(2\\theta)}{g}$$
+                 Where:
+                 - $v$: Initial velocity
+                 - $\\theta$: Launch angle
+                 - $g$: Gravitational acceleration
+                 ![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)""",
     "input": [
       {"name": "v", "unit": "meters per second"},  // Initial velocity
       {"name": "a", "unit": "degree"}   // Launch angle
@@ -91,7 +91,7 @@ Where:
 
   {
     "name": "Newton's Second Law",
-    "description": '''
+    "description": r'''
 Force equals mass times acceleration
 
 $$F = m \\cdot a$$
