@@ -21,34 +21,36 @@ class FormulaEvaluationException implements Exception {
 }
 
 class MyMath{
-  static Number log(Number x) => Math.log(x);
-  static Number pow(Number b, Number e) => Math.pow(b,e) as Number;
+  static Number myLog(Number x) => Math.log(x);
+  static Number myPow(Number b, Number e) => Math.pow(b,e) as Number;
 }
 
 class FormulaEvaluator {
   final D4rt _interpreter;
 
-  FormulaEvaluator([D4rt? interpreter]) : _interpreter = interpreter ?? D4rt(){
+  static D4rt createDefaultInterpreter() => D4rt();
+
+  FormulaEvaluator([D4rt? interpreter]) : _interpreter = interpreter ?? createDefaultInterpreter(){
     prepareInterpreter(_interpreter);
   }
 
-  Number getNumberValueOf(String s){
+  static Number getNumberValueOf(String s){
     return double.parse(s);
   }
 
-  void prepareInterpreter(D4rt interpreter){
+  static void prepareInterpreter(D4rt interpreter){
     final myMathDefinition = BridgedClass(
       nativeType: MyMath,
-      name: 'Math',
+      name: 'MyMath',
       staticMethods: {
-        'pow': (visitor, positionalArgs, namedArgs) {
+        'myPow': (visitor, positionalArgs, namedArgs) {
           final Number base = getNumberValueOf( positionalArgs[0].toString() );
           final Number exp = getNumberValueOf( positionalArgs[1].toString() );
-          return MyMath.pow(base,exp);
+          return MyMath.myPow(base,exp);
         },
-        'log': (visitor, positionalArgs, namedArgs) {
+        'myLog': (visitor, positionalArgs, namedArgs) {
           final Number x = getNumberValueOf( positionalArgs[0].toString() );
-          return MyMath.log(x);
+          return MyMath.myLog(x);
         },
       }
     );
@@ -56,6 +58,20 @@ class FormulaEvaluator {
     interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
   }
 
+
+  static dynamic evaluateExpression(String code) {
+    final interpreter = createDefaultInterpreter();
+    prepareInterpreter(interpreter);
+    final d4rtCode = """
+      import 'dart:math';
+      import "package:d4rt_formulas.dart";
+      main()
+      {
+        return $code;
+      }""";
+    final result = interpreter.execute(source: d4rtCode);
+    return result.toDouble();
+  }
   
   dynamic evaluate(Formula formula, Map<String, dynamic> inputValues) {
     _validateInputValues(formula, inputValues);
@@ -98,9 +114,8 @@ class FormulaEvaluator {
 
     buffer.writeln("""
       import 'dart:math';
+      import "package:d4rt_formulas.dart";
 
-      //log(x) => M.log(x);
-      //pow(a,b) => M.pow(a,b);
       
       main()
       {

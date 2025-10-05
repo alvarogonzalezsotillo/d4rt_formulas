@@ -56,7 +56,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
     try {
       final inputValues = <String, dynamic>{};
       for (final input in widget.formula.input) {
-        final value = double.tryParse(_inputControllers[input.name]!.text) ?? 0.0;
+        final text = _inputControllers[input.name]!.text;
+        //final value = double.tryParse(text) ?? 0.0;
+        final value = FormulaEvaluator.evaluateExpression(text);
 
         // Convert input to base unit if needed
         // Always convert from dropdown unit to variable's base unit

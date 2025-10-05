@@ -102,7 +102,6 @@ class UnitSpec {
 class VariableSpec {
   final String name;
   final String unit;
-  static final MAGNITUDELESS = "magnitudeless";
 
   VariableSpec({required this.name, required this.unit});
 
