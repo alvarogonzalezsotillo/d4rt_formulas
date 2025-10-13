@@ -67,9 +67,11 @@ class FormulaEvaluator {
       import "package:d4rt_formulas.dart";
       main()
       {
-        return $code;
+        late var result;
+        result = $code;
+        return result;
       }""";
-    print("evaluateExpression:\n$d4rtCode");
+    //print("evaluateExpression:\n$d4rtCode");
     final result = interpreter.execute(source: d4rtCode);
     return result.toDouble();
   }

@@ -1,4 +1,15 @@
 [
+
+{
+  "name": "Temperature converter",
+  "description": "Example of simple formula, just unit conversion",
+  "input": [
+    {"name": "Input", "unit": "Celsius" }
+  ],
+  "output": {"name": "Output", "unit": "Kelvin" },
+  "d4rtCode": "Output = Input;",
+  "tags": ["converter", "temperature" ]
+},
   // Free fall distance (vertical)
   {
     "name": "Free Fall Distance",

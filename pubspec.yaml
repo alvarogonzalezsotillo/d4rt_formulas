@@ -38,6 +38,7 @@ dependencies:
   d4rt:
   flutter_d4rt:
   flutter_markdown: ^0.6.0
+  flutter_code_editor:
 
   collection: any
 dev_dependencies:

@@ -21,9 +21,42 @@ class FormulaScreen extends StatefulWidget {
   State<FormulaScreen> createState() => _FormulaScreenState();
 }
 
+//// Start of D4rtEditingController class ////
+class D4rtEditingController extends TextEditingController {
+  String? _lastError;
+
+  String? get lastError => _lastError;
+
+  D4rtEditingController({String? text}) : super(text: text);
+
+  bool validate() {
+    try {
+      FormulaEvaluator.evaluateExpression(text);
+      _lastError = null;
+      return true;
+    } catch (e) {
+      _lastError = e.toString();
+      return false;
+    }
+  }
+
+  @override
+  set text(String newText) {
+    super.text = newText;
+    validate();
+  }
+
+  @override
+  void notifyListeners() {
+    validate();
+    super.notifyListeners();
+  }
+}
+//// End of D4rtEditingController class ////
+
 class _FormulaScreenState extends State<FormulaScreen> {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, TextEditingController> _inputControllers = {};
+  final Map<String, D4rtEditingController> _inputControllers = {};
   final Map<String, String?> _selectedUnits = {};
   String? _result;
   String? _selectedOutputUnit;
@@ -33,7 +66,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     super.initState();
     // Initialize controllers and units with listeners
     for (final input in widget.formula.input) {
-      _inputControllers[input.name] = TextEditingController();
+      _inputControllers[input.name] = D4rtEditingController();
       _selectedUnits[input.name] = input.unit;
       _inputControllers[input.name]!.addListener(_evaluateFormula);
     }
@@ -235,7 +268,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 if (value == null || value.isEmpty) {
                   return 'Required';
                 }
-                return null;
+                return _inputControllers[variable.name]!.lastError;
               },
             ),
           ),
