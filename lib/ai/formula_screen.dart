@@ -226,7 +226,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
               controller: _inputControllers[variable.name],
               keyboardType: TextInputType.number,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
+                //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
               ],
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),

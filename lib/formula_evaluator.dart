@@ -69,6 +69,7 @@ class FormulaEvaluator {
       {
         return $code;
       }""";
+    print("evaluateExpression:\n$d4rtCode");
     final result = interpreter.execute(source: d4rtCode);
     return result.toDouble();
   }
