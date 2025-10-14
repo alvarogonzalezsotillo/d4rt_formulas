@@ -61,6 +61,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   String? _result;
   String? _selectedOutputUnit;
 
+
   @override
   void initState() {
     super.initState();
@@ -106,15 +107,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
       final result = evaluator.evaluate(widget.formula, inputValues);
 
       // Convert output to selected unit if needed
-      if (_selectedOutputUnit != widget.formula.output.unit) {
-        _result = widget.corpus.convert(
-          result,
-          widget.formula.output.unit,
-          _selectedOutputUnit!,
-        ).toStringAsFixed(2);
-      } else {
-        _result = result.toStringAsFixed(2);
-      }
+      _result = widget.corpus.convert(
+        result,
+        widget.formula.output.unit,
+        _selectedOutputUnit!,
+      ).toStringAsFixed(2);
+
+      //print( "_evaluateFormula: result:${result} _result:${_result}");
 
       setState(() {});
     } catch (e, stack) {

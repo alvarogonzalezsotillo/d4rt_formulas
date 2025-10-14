@@ -4,7 +4,7 @@
   "name": "Temperature converter",
   "description": "Example of simple formula, just unit conversion",
   "input": [
-    {"name": "Input", "unit": "Celsius" }
+    {"name": "Input", "unit": "Kelvin" }
   ],
   "output": {"name": "Output", "unit": "Kelvin" },
   "d4rtCode": "Output = Input;",
