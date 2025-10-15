@@ -85,10 +85,18 @@ class Corpus{
     return _allUnits.get(unit);
   }
 
-  String _converterFromCodeString(Number x, String codeString) {
+  String _converterFromCodeStringAsExpression(Number x, String codeString) {
     final buffer = StringBuffer();
     buffer.writeln("final x = ${x};");
     buffer.writeln("main(){return $codeString;}");
+    final code = buffer.toString();
+    return code;
+  }
+
+  String _converterFromCodeStringAsStatement(Number x, String codeString) {
+    final buffer = StringBuffer();
+    buffer.writeln("final x = ${x};");
+    buffer.writeln("main(){ $codeString; return x; }");
     final code = buffer.toString();
     return code;
   }
@@ -104,9 +112,7 @@ class Corpus{
       throw ArgumentError("Unit has no codeFromUnitToBase: $unit");
     }
 
-    final d4rt = D4rt();
-    final completeSource = _converterFromCodeString(x, unit.codeFromUnitToBase as String);
-    final ret = d4rt.execute(source: completeSource);
+    final ret = _convertUsingCode(x, unit.codeFromUnitToBase as String);
     return ret as Number;
   }
 
@@ -121,11 +127,43 @@ class Corpus{
       throw ArgumentError("Unit has no codeFromBaseToUnit: $unit");
     }
 
-    final d4rt = D4rt();
-    final completeSource = _converterFromCodeString(x, unit.codeFromBaseToUnit as String);
-    final ret = d4rt.execute(source: completeSource);
+    final ret = _convertUsingCode(x, unit.codeFromBaseToUnit as String);
     return ret as Number;
   }
+
+
+  Number _convertUsingCode(Number x, String code ){
+    late String completeSourceExpression;
+    late String completeSourceStatement;
+    try {
+      completeSourceExpression = _converterFromCodeStringAsExpression(x, code);
+      final ret = _evaluate(completeSourceExpression);
+      return ret;
+    }
+    catch(e1,stack){
+      try{
+        completeSourceStatement = _converterFromCodeStringAsStatement(x, code);
+        final ret = _evaluate(completeSourceStatement);
+        return ret;
+      }
+      catch( e2, stack ){
+        print(completeSourceExpression);
+        print(e1);
+        print(completeSourceStatement);
+        print(e2);
+        throw FormulaEvaluationException( "Evaluation as statement and expression failed" );
+      }
+    }
+  }
+
+  static dynamic _evaluate(String code, [D4rt? interpreter]) {
+    final d4rtInterpreter = interpreter ?? FormulaEvaluator.createDefaultInterpreter();
+    FormulaEvaluator.prepareInterpreter(d4rtInterpreter);
+    final completeCode = "${FormulaEvaluator.d4rtImports}\n$code";
+    final result = d4rtInterpreter.execute(source: completeCode);
+    return result.toDouble();
+  }
+
 
   Number convert(Number x, String fromUnit, String toUnit) {
     final xBase = _convertToBase(x, fromUnit);

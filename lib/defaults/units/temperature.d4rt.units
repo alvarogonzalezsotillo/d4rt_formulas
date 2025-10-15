@@ -46,7 +46,7 @@
     "name": "Gas Mark",
     "symbol": "GM",
     "baseUnit": "Kelvin",
-    "toBase": """
+    "toBase": r"""
       if (x < 1) {
         double celsius = (243 - 25 * (log(1 / x) / log(2))) / 1.8;
         return celsius + 273.15; // convert Celsius to Kelvin

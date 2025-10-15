@@ -58,10 +58,9 @@ class FormulaEvaluator {
     interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
   }
 
-
-  static dynamic evaluateExpression(String code) {
-    final interpreter = createDefaultInterpreter();
-    prepareInterpreter(interpreter);
+  static dynamic evaluateExpression(String code, [D4rt? interpreter]) {
+    final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
+    prepareInterpreter(d4rtInterpreter);
     final d4rtCode = """
       import 'dart:math';
       import "package:d4rt_formulas.dart";
@@ -72,7 +71,7 @@ class FormulaEvaluator {
         return result;
       }""";
     //print("evaluateExpression:\n$d4rtCode");
-    final result = interpreter.execute(source: d4rtCode);
+    final result = d4rtInterpreter.execute(source: d4rtCode);
     return result.toDouble();
   }
   
@@ -112,19 +111,22 @@ class FormulaEvaluator {
     return formula.inputVarNames()..sort();
   }
 
+  static final String d4rtImports = """
+      import 'dart:math';
+      import "package:d4rt_formulas.dart";
+  """;
+
   String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
     final buffer = StringBuffer();
 
     buffer.writeln("""
-      import 'dart:math';
-      import "package:d4rt_formulas.dart";
-
+      $d4rtImports
       
       main()
       {
       """
     );
-    
+
 
     for (final entry in inputValues.entries) {
       final varName = entry.key;
