@@ -156,7 +156,7 @@ class Corpus{
     }
   }
 
-  static dynamic _evaluate(String code, [D4rt? interpreter]) {
+  static Number _evaluate(String code, [D4rt? interpreter]) {
     final d4rtInterpreter = interpreter ?? FormulaEvaluator.createDefaultInterpreter();
     FormulaEvaluator.prepareInterpreter(d4rtInterpreter);
     final completeCode = "${FormulaEvaluator.d4rtImports}\n$code";

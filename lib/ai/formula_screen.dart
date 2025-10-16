@@ -26,12 +26,14 @@ class D4rtEditingController extends TextEditingController {
   String? _lastError;
 
   String? get lastError => _lastError;
+  Number? _lastValue;
 
   D4rtEditingController({String? text}) : super(text: text);
 
   bool validate() {
     try {
-      FormulaEvaluator.evaluateExpression(text);
+      _lastValue = null;
+      _lastValue = FormulaEvaluator.evaluateExpression(text);
       _lastError = null;
       return true;
     } catch (e) {
@@ -39,6 +41,8 @@ class D4rtEditingController extends TextEditingController {
       return false;
     }
   }
+
+  get d4rtValue => _lastValue;
 
   @override
   set text(String newText) {
@@ -90,9 +94,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
     try {
       final inputValues = <String, dynamic>{};
       for (final input in widget.formula.input) {
-        final text = _inputControllers[input.name]!.text;
-        //final value = double.tryParse(text) ?? 0.0;
-        final value = FormulaEvaluator.evaluateExpression(text);
+        final controller = _inputControllers[input.name]!;
+        if( controller.d4rtValue == null ){
+          throw FormulaEvaluationException( "Field ${input.name} is invalid" );
+        }
+        final value = controller.d4rtValue;
 
         // Convert input to base unit if needed
         // Always convert from dropdown unit to variable's base unit

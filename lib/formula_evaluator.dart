@@ -62,8 +62,7 @@ class FormulaEvaluator {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
     final d4rtCode = """
-      import 'dart:math';
-      import "package:d4rt_formulas.dart";
+      ${d4rtImports}
       main()
       {
         late var result;
