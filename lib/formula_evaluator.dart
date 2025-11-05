@@ -25,6 +25,20 @@ class MyMath{
   static Number myPow(Number b, Number e) => Math.pow(b,e) as Number;
 }
 
+class FormulaResult{
+  const FormulaResult();
+}
+
+class StringResult extends FormulaResult{
+  final String value;
+  const StringResult(this.value);
+}
+
+class NumberResult extends FormulaResult{
+  final Number value;
+  const NumberResult(this.value);
+}
+
 class FormulaEvaluator {
   final D4rt _interpreter;
 
@@ -34,7 +48,7 @@ class FormulaEvaluator {
     prepareInterpreter(_interpreter);
   }
 
-  static Number getNumberValueOf(String s){
+  static Number _getNumberValueOf(String s){
     return double.parse(s);
   }
 
@@ -44,12 +58,12 @@ class FormulaEvaluator {
       name: 'MyMath',
       staticMethods: {
         'myPow': (visitor, positionalArgs, namedArgs) {
-          final Number base = getNumberValueOf( positionalArgs[0].toString() );
-          final Number exp = getNumberValueOf( positionalArgs[1].toString() );
+          final Number base = _getNumberValueOf( positionalArgs[0].toString() );
+          final Number exp = _getNumberValueOf( positionalArgs[1].toString() );
           return MyMath.myPow(base,exp);
         },
         'myLog': (visitor, positionalArgs, namedArgs) {
-          final Number x = getNumberValueOf( positionalArgs[0].toString() );
+          final Number x = _getNumberValueOf( positionalArgs[0].toString() );
           return MyMath.myLog(x);
         },
       }
@@ -58,7 +72,7 @@ class FormulaEvaluator {
     interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
   }
 
-  static dynamic evaluateExpression(String code, [D4rt? interpreter]) {
+  static FormulaResult evaluateExpression(String code, [D4rt? interpreter]) {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
     final d4rtCode = """
@@ -71,7 +85,16 @@ class FormulaEvaluator {
       }""";
     //print("evaluateExpression:\n$d4rtCode");
     final result = d4rtInterpreter.execute(source: d4rtCode);
-    return result.toDouble();
+    switch ( result ){
+      case int value:
+        return NumberResult(value.toDouble());
+      case Number value:
+        return NumberResult(value);
+      case String value:
+        return StringResult(value);
+      default:
+        throw FormulaEvaluationException( "Unexpected result type: ${result.runtimeType} -- $result" );
+    }
   }
   
   dynamic evaluate(Formula formula, Map<String, dynamic> inputValues) {
