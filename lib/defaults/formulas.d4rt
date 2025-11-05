@@ -120,4 +120,28 @@ Where:
     "d4rtCode": "F = m * a;",
     "tags": ["physics", "mechanics", "newton"]
   },
+
+  // Apgar Score
+  {
+    "name": "Apgar Score",
+    "description": "Newborn health assessment scoring system\n\nScores 0-2 for:\n1. Heart rate\n2. Breathing\n3. Muscle tone\n4. Reflexes\n5. Skin color\nTotal score 0-10",
+    "input": [
+      {"name": "HeartRate", "unit": "integer"},
+      {"name": "Breathing", "unit": "integer"},
+      {"name": "MuscleTone", "unit": "integer"},
+      {"name": "Reflexes", "unit": "integer"},
+      {"name": "SkinColor", "unit": "integer"}
+    ],
+    "output": {"name": "Result", "unit": "Apgar score"},
+    "d4rtCode": """
+      var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
+      var interpretation = switch (total) {
+        >= 7 => 'Normal',
+        4-6 => 'Requires attention',
+        _ => 'Emergency care needed'
+      };
+      Result = 'Score: \$total - \$interpretation';
+    """,
+    "tags": ["medical", "pediatrics", "assessment"]
+  }
 ]
