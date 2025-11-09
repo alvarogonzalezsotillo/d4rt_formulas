@@ -126,13 +126,13 @@ Where:
     "name": "Apgar Score",
     "description": "Newborn health assessment scoring system\n\nScores 0-2 for:\n1. Heart rate\n2. Breathing\n3. Muscle tone\n4. Reflexes\n5. Skin color\nTotal score 0-10",
     "input": [
-      {"name": "HeartRate", "unit": "integer"},
-      {"name": "Breathing", "unit": "integer"},
-      {"name": "MuscleTone", "unit": "integer"},
-      {"name": "Reflexes", "unit": "integer"},
-      {"name": "SkinColor", "unit": "integer"}
+      {"name": "HeartRate", "values": ["hr1", "hr2", "hr3"] },
+      {"name": "Breathing", "values": ["hr1", "hr2", "hr3"] },
+      {"name": "MuscleTone", "values": ["hr1", "hr2", "hr3"] },
+      {"name": "Reflexes", "values": ["hr1", "hr2", "hr3"] },
+      {"name": "SkinColor", "values": ["hr1", "hr2", "hr3"] }
     ],
-    "output": {"name": "Result", "unit": "Apgar score"},
+    "output": {"name": "Result", "unit": "scalar"},
     "d4rtCode": """
       var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
       var interpretation = switch (total) {

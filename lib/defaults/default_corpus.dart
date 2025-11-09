@@ -17,6 +17,7 @@ Future<Corpus> createDefaultCorpus() async{
       "lib/defaults/units/force.d4rt.units",
       "lib/defaults/units/mass.d4rt.units",
       "lib/defaults/units/pressure.d4rt.units",
+      "lib/defaults/units/scalar.d4rt.units",
       "lib/defaults/units/temperature.d4rt.units",
       "lib/defaults/units/time.d4rt.units",
       "lib/defaults/units/velocity.d4rt.units",

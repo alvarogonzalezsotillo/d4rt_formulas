@@ -37,8 +37,8 @@ void main() {
     print('   Mass: 10.0 kg');
     print('   Acceleration: 9.8 m/s²');
     print('   Calculated Force: $force N');
-    print('   Output variable: ${evaluator.getOutputVariableName(newtonFormula)}');
-    print('   Output magnitude: ${evaluator.getOutputVariableMagnitude(newtonFormula)}');
+    print('   Output variable: ${newtonFormula.output.name}');
+    print('   Output magnitude: ${newtonFormula.output.unit}');
   } catch (e) {
     print('   Error: $e');
   }

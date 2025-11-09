@@ -121,13 +121,7 @@ class FormulaEvaluator {
     }
   }
 
-  String getOutputVariableName(Formula formula) {
-    return formula.output.name;
-  }
 
-  String getOutputVariableMagnitude(Formula formula) {
-    return formula.output.unit;
-  }
 
   List<String> getInputVariableOrder(Formula formula) {
     return formula.inputVarNames()..sort();
@@ -166,9 +160,9 @@ class FormulaEvaluator {
       }
     }
     buffer.writeln("""
-      late var ${getOutputVariableName(formula)};
+      late var ${formula.output.name};
       ${formula.d4rtCode}
-      return ${getOutputVariableName(formula)};
+      return ${formula.output.name};
       }
       """
     );

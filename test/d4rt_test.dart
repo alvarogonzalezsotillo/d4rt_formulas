@@ -29,6 +29,7 @@ main(){
        }
       """;
     final interpreter = D4rt();
+    interpreter.grant(FilesystemPermission.readPath("/etc/passwd"));
     final result = interpreter.execute(source: completeSource);
 
     expect(result, contains("root"));

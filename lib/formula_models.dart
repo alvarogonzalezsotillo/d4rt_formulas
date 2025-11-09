@@ -101,12 +101,18 @@ class UnitSpec {
 
 class VariableSpec {
   final String name;
-  final String unit;
+  final String? unit;
+  final List<dynamic>? allowedValues;
 
-  VariableSpec({required this.name, required this.unit});
+  VariableSpec({required this.name, this.unit, this.allowedValues}){
+    final valuesValid = allowedValues != null && allowedValues?.isNotEmpty == true;
+    if( unit == null && !valuesValid ){
+      throw new ArgumentError("$name: at least unit or allowedValues should be valid");
+    }
+  }
 
   @override
-  String toString() => 'var($name: $unit)';
+  String toString() => 'var($name: $unit${allowedValues != null ? ' allowed: $allowedValues' : ''})';
 
   @override
   bool operator ==(Object other) =>
@@ -114,10 +120,11 @@ class VariableSpec {
       other is VariableSpec &&
           runtimeType == other.runtimeType &&
           unit == other.unit &&
-          name == other.name;
+          name == other.name &&
+          const DeepCollectionEquality().equals(allowedValues, other.allowedValues);
 
   @override
-  int get hashCode => Object.hash(unit, name);
+  int get hashCode => Object.hash(unit, name, allowedValues != null ? const DeepCollectionEquality().hash(allowedValues!) : 0);
 }
 
 class Formula {
@@ -196,8 +203,25 @@ class Formula {
   factory Formula.fromSet(Map<Object?, Object?> theSet) {
     VariableSpec parseVar(Map<Object?, Object?> varSpec) {
       String name = SetUtils.stringValue(varSpec, "name");
-      String unit = SetUtils.stringValue(varSpec, "unit");
-      return VariableSpec(name: name, unit: unit);
+      String? unit;
+      if (varSpec.containsKey("unit")) {
+        unit = SetUtils.stringValue(varSpec, "unit");
+      }
+      final allowed = varSpec['values'] as List<dynamic>?;
+      if (allowed != null) {
+        final types = allowed.map((v) => v.runtimeType).toSet();
+        if (types.length > 1) {
+          throw ArgumentError('Allowed values must be all Strings or all Numbers');
+        }
+        if (!types.contains(String) && !types.contains(double) && !types.contains(int)) {
+          throw ArgumentError('Allowed values must be Strings or Numbers');
+        }
+      }
+      return VariableSpec(
+        name: name,
+        unit: unit,
+        allowedValues: allowed?.toList(growable: false),
+      );
     }
 
     String name = SetUtils.stringValue(theSet, "name");

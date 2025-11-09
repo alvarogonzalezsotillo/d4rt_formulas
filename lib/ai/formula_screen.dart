@@ -105,11 +105,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
         // Convert input to base unit if needed
         // Always convert from dropdown unit to variable's base unit
         late final convertedValue;
-        if( value is Number ) {
+        if( value is Number && input.unit != null ) {
           convertedValue = widget.corpus.convert(
             value,
             _selectedUnits[input.name]!,
-            input.unit,
+            input.unit as String,
           );
         }
         else{
@@ -124,11 +124,17 @@ class _FormulaScreenState extends State<FormulaScreen> {
       final result = evaluator.evaluate(widget.formula, inputValues);
 
       // Convert output to selected unit if needed
-      _result = widget.corpus.convert(
-        result,
-        widget.formula.output.unit,
-        _selectedOutputUnit!,
-      ).toStringAsFixed(2);
+      String? unit = widget.formula.output.unit;
+      if( unit != null ) {
+        _result = widget.corpus.convert(
+          result,
+          unit,
+          _selectedOutputUnit!,
+        ).toStringAsFixed(2);
+      }
+      else{
+        _result = result;
+      }
 
       //print( "_evaluateFormula: result:${result} _result:${_result}");
 
