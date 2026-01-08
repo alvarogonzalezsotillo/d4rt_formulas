@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  flutter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app  # Link the current directory to /app in the container
+    environment:
+      - FLUTTER_FLAVOR=prod  # Example environment variable, adjust as needed
+    command: flutter build apk --release  # You can run any Flutter command here
