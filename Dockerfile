@@ -12,10 +12,8 @@ ENV GRADLE_USER_HOME=/cache/gradle-cache
 RUN mkdir -p $PUB_CACHE $GRADLE_USER_HOME
 
 # Copy pubspec files and get dependencies
-# This step is separated to leverage Docker layer caching
-# REMEMBER: buld application with Makefile, it builds docker image first
-COPY pubspec.yaml pubspec.lock ./
-RUN flutter pub get
+# COPY pubspec.yaml pubspec.lock ./
+# RUN flutter pub get
 
 # Copy the rest of the application code and build
 # Commented out to avoid building the app during image creation, this will be handled externally by makefile
