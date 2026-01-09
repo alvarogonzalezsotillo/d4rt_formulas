@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: d4rt-formulas-builder
     volumes:
-      - ./docker/cache:/cache
-      - .:/app  # Link the current directory to /app in the container
+      - ./docker/cache:/cache:z
+      - .:/app:z  # Link the current directory to /app in the container
     environment:
       - FLUTTER_FLAVOR=prod  # Example environment variable, adjust as needed

@@ -123,15 +123,11 @@ Each formula includes:
 - **Images** - Visual diagrams, graphs, or illustrations
 - **Examples** - Sample calculations and use cases
 
-## Project Structure
-
-- `bin/` - Main executable and entry point
-- `lib/` - Core library code and formula engine
-- `test/` - Unit tests and formula validation tests
-
 ## Getting Started
 
-[Installation and usage instructions to be added]
+This project uses `flutter`, so a valid installation is needed in order to build it.
+
+For convenience, a containerized build is provided. It is based on `podman` and `podman-compose`. See [Makefile](Makefile) for details.
 
 ## Contributing
 
