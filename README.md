@@ -1,3 +1,5 @@
+https://github.com/Shahxad-Akram/flutter_tex/blob/master/example/lib/tex_view_markdown_example.dart
+
 # Math Formulae Manager
 
 A comprehensive command-line application for managing and computing mathematical formulas across various disciplines including mathematics, physics, medicine, and engineering.

@@ -1,6 +1,8 @@
 
 flutter-container-exec = podman-compose run --entrypoint "$(1)"  flutter
 
+all: clean-podman build-linux-debug-podman build-linux-debug-podman
+
 build-podman:
 	podman-compose build
 
