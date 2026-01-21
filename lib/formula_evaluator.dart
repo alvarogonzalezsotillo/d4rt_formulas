@@ -76,14 +76,14 @@ class FormulaEvaluator {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
     final d4rtCode = """
-      ${d4rtImports}
+      $d4rtImports
       main()
       {
         late var result;
         result = $code;
         return result;
       }""";
-    //print("evaluateExpression:\n$d4rtCode");
+    print("evaluateExpression:\n$d4rtCode");
     final result = d4rtInterpreter.execute(source: d4rtCode);
     switch ( result ){
       case int value:

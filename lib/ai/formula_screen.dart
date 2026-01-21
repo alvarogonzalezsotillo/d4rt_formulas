@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import '../formula_models.dart';
 import '../formula_evaluator.dart';
@@ -11,11 +9,7 @@ class FormulaScreen extends StatefulWidget {
   final Formula formula;
   final Corpus corpus;
 
-  const FormulaScreen({
-    super.key,
-    required this.formula,
-    required this.corpus,
-  });
+  const FormulaScreen({super.key, required this.formula, required this.corpus});
 
   @override
   State<FormulaScreen> createState() => _FormulaScreenState();
@@ -24,7 +18,7 @@ class FormulaScreen extends StatefulWidget {
 //// Start of D4rtEditingController class ////
 class D4rtEditingController extends TextEditingController {
   String? _lastError;
-
+  String _text = "";
   String? get lastError => _lastError;
   FormulaResult? _lastValue;
 
@@ -46,7 +40,6 @@ class D4rtEditingController extends TextEditingController {
 
   get d4rtValue => _lastValue;
 
-  @override
   set text(String newText) {
     super.text = newText;
     validate();
@@ -97,27 +90,37 @@ class _FormulaScreenState extends State<FormulaScreen> {
       final inputValues = <String, dynamic>{};
       for (final input in widget.formula.input) {
         final controller = _inputControllers[input.name]!;
-        if( controller.d4rtValue == null ){
-          throw FormulaEvaluationException( "Field ${input.name} is invalid" );
+        if (controller.d4rtValue == null) {
+          //throw FormulaEvaluationException("Field ${input.name} is invalid");
+          _result = "";
+          return;
         }
-        final value = controller.d4rtValue.value;
 
-        // Convert input to base unit if needed
-        // Always convert from dropdown unit to variable's base unit
-        late final convertedValue;
-        if( value is Number && input.unit != null ) {
-          convertedValue = widget.corpus.convert(
-            value,
-            _selectedUnits[input.name]!,
-            input.unit as String,
-          );
-        }
-        else{
-          convertedValue = value;
+        late final dynamic convertedValue;
+
+        switch (controller.d4rtValue) {
+          case NumberResult nr:
+            // Convert input to base unit if needed
+            // Always convert from dropdown unit to variable's base unit
+            if (input.unit != null) {
+              convertedValue = widget.corpus.convert(
+                nr.value,
+                _selectedUnits[input.name]!,
+                input.unit as String,
+              );
+            } else {
+              convertedValue = nr.value;
+            }
+
+          case StringResult sr:
+            convertedValue = sr.value;
+          default:
+            throw FormulaEvaluationException(
+              "Field ${input.name} has unsupported type ${controller.d4rtValue!.runtimeType}",
+            );
         }
 
         inputValues[input.name] = convertedValue;
-
       }
 
       final evaluator = FormulaEvaluator();
@@ -125,14 +128,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
       // Convert output to selected unit if needed
       String? unit = widget.formula.output.unit;
-      if( unit != null ) {
-        _result = widget.corpus.convert(
-          result,
-          unit,
-          _selectedOutputUnit!,
-        ).toStringAsFixed(2);
-      }
-      else{
+      if (unit != null) {
+        _result = widget.corpus
+            .convert(result, unit, _selectedOutputUnit!)
+            .toStringAsFixed(2);
+      } else {
         _result = result;
       }
 
@@ -142,7 +142,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     } catch (e, stack) {
       debugPrint('Formula evaluation error: $e');
       debugPrint('Stack trace: $stack');
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: ${e.toString()}\n${stack.toString()}'),
@@ -155,9 +155,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.formula.name),
-      ),
+      appBar: AppBar(title: Text(widget.formula.name)),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -176,7 +174,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   Widget _buildDescriptionSection() {
-    if (widget.formula.description == null || 
+    if (widget.formula.description == null ||
         widget.formula.description!.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -186,9 +184,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Description',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Container(
@@ -213,9 +211,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Input Variables',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         ...widget.formula.input.map((variable) => _buildVariableRow(variable)),
@@ -229,9 +227,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Result',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Row(
@@ -286,6 +284,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
               ),
+              autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Required';

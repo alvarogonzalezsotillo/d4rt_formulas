@@ -73,7 +73,7 @@ class Corpus{
 
   List<String> unitsOfSameMagnitude(String? unit){
     if( unit == null ){
-      return ["unitless"];
+      return ["scalar"];
     }
     final base = getUnit(unit).baseUnit;
     return _baseToUnits[base] as List<String>;
@@ -90,7 +90,7 @@ class Corpus{
 
   String _converterFromCodeStringAsExpression(Number x, String codeString) {
     final buffer = StringBuffer();
-    buffer.writeln("final x = ${x};");
+    buffer.writeln("final x = $x;");
     buffer.writeln("main(){return $codeString;}");
     final code = buffer.toString();
     return code;
@@ -98,7 +98,7 @@ class Corpus{
 
   String _converterFromCodeStringAsStatement(Number x, String codeString) {
     final buffer = StringBuffer();
-    buffer.writeln("final x = ${x};");
+    buffer.writeln("final x = $x;");
     buffer.writeln("main(){ $codeString; return x; }");
     final code = buffer.toString();
     return code;

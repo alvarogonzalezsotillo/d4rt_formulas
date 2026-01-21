@@ -102,17 +102,17 @@ class UnitSpec {
 class VariableSpec {
   final String name;
   final String? unit;
-  final List<dynamic>? allowedValues;
+  final List<dynamic>? values;
 
-  VariableSpec({required this.name, this.unit, this.allowedValues}){
-    final valuesValid = allowedValues != null && allowedValues?.isNotEmpty == true;
+  VariableSpec({required this.name, this.unit, this.values}){
+    final valuesValid = values != null && values?.isNotEmpty == true;
     if( unit == null && !valuesValid ){
-      throw new ArgumentError("$name: at least unit or allowedValues should be valid");
+      throw ArgumentError("$name: at least unit or allowedValues should be valid");
     }
   }
 
   @override
-  String toString() => 'var($name: $unit${allowedValues != null ? ' allowed: $allowedValues' : ''})';
+  String toString() => 'var($name: $unit${values != null ? ' allowed: $values' : ''})';
 
   @override
   bool operator ==(Object other) =>
@@ -121,10 +121,10 @@ class VariableSpec {
           runtimeType == other.runtimeType &&
           unit == other.unit &&
           name == other.name &&
-          const DeepCollectionEquality().equals(allowedValues, other.allowedValues);
+          const DeepCollectionEquality().equals(values, other.values);
 
   @override
-  int get hashCode => Object.hash(unit, name, allowedValues != null ? const DeepCollectionEquality().hash(allowedValues!) : 0);
+  int get hashCode => Object.hash(unit, name, values != null ? const DeepCollectionEquality().hash(values!) : 0);
 }
 
 class Formula {
@@ -146,7 +146,7 @@ class Formula {
     validate();
   }
 
-  validate() {
+  void validate() {
     if (name.trim().isEmpty) {
       throw ArgumentError('Formula name cannot be empty');
     }
@@ -220,7 +220,7 @@ class Formula {
       return VariableSpec(
         name: name,
         unit: unit,
-        allowedValues: allowed?.toList(growable: false),
+        values: allowed?.toList(growable: false),
       );
     }
 

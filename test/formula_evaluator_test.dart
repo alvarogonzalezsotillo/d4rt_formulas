@@ -208,5 +208,112 @@ void main() {
         expect(result, closeTo(9.8596, 0.0001));
       });
     });
+
+    group('APGAR Score', () {
+      test('evaluates APGAR score formula - Normal case', () {
+        final formula = Formula(
+          name: "Apgar Score",
+          description: "Newborn health assessment scoring system",
+          input: [
+            VariableSpec(name: "HeartRate", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "Breathing", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "MuscleTone", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "Reflexes", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "SkinColor", values: ["hr1", "hr2", "hr3"])
+          ],
+          output: VariableSpec(name: "Result", unit: "stringscalar"),
+          d4rtCode: """
+            var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
+            var interpretation = switch (total) {
+              >= 7 => 'Normal',
+              4-6 => 'Requires attention',
+              _ => 'Emergency care needed'
+            };
+            Result = 'Score: \$total - \$interpretation';
+          """,
+        );
+
+        // Test normal case (score 7-10)
+        final result = evaluator.evaluate(formula, {
+          'HeartRate': 2,
+          'Breathing': 2,
+          'MuscleTone': 2,
+          'Reflexes': 2,
+          'SkinColor': 2
+        });
+
+        expect(result, 'Score: 10 - Normal');
+      });
+
+      test('evaluates APGAR score formula - Requires attention case', () {
+        final formula = Formula(
+          name: "Apgar Score",
+          description: "Newborn health assessment scoring system",
+          input: [
+            VariableSpec(name: "HeartRate", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "Breathing", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "MuscleTone", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "Reflexes", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "SkinColor", values: ["hr1", "hr2", "hr3"])
+          ],
+          output: VariableSpec(name: "Result", unit: "stringscalar"),
+          d4rtCode: """
+            var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
+            var interpretation = switch (total) {
+              >= 7 => 'Normal',
+              4-6 => 'Requires attention',
+              _ => 'Emergency care needed'
+            };
+            Result = 'Score: \$total - \$interpretation';
+          """,
+        );
+
+        // Test requires attention case (score 4-6)
+        final result = evaluator.evaluate(formula, {
+          'HeartRate': 1,
+          'Breathing': 1,
+          'MuscleTone': 1,
+          'Reflexes': 1,
+          'SkinColor': 2
+        });
+
+        expect(result, 'Score: 6 - Requires attention');
+      });
+
+      test('evaluates APGAR score formula - Emergency case', () {
+        final formula = Formula(
+          name: "Apgar Score",
+          description: "Newborn health assessment scoring system",
+          input: [
+            VariableSpec(name: "HeartRate", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "Breathing", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "MuscleTone", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "Reflexes", values: ["hr1", "hr2", "hr3"]),
+            VariableSpec(name: "SkinColor", values: ["hr1", "hr2", "hr3"])
+          ],
+          output: VariableSpec(name: "Result", unit: "stringscalar"),
+          d4rtCode: """
+            var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
+            var interpretation = switch (total) {
+              >= 7 => 'Normal',
+              4-6 => 'Requires attention',
+              _ => 'Emergency care needed'
+            };
+            Result = 'Score: \$total - \$interpretation';
+          """,
+        );
+
+        // Test emergency case (score 0-3)
+        final result = evaluator.evaluate(formula, {
+          'HeartRate': 0,
+          'Breathing': 0,
+          'MuscleTone': 1,
+          'Reflexes': 0,
+          'SkinColor': 1
+        });
+
+        expect(result, 'Score: 2 - Emergency care needed');
+      });
+    });
   });
 }
