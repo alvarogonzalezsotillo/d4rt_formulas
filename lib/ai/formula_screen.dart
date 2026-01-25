@@ -15,14 +15,16 @@ class FormulaScreen extends StatefulWidget {
   State<FormulaScreen> createState() => _FormulaScreenState();
 }
 
+// TODO: Create VariableWidget. Depending on VariableSpec.values, it can be a ValueDropdown or a D4rtEditingController
+//       The d4rtValue will be FormulaResult?
+
 //// Start of D4rtEditingController class ////
 class D4rtEditingController extends TextEditingController {
   String? _lastError;
-  String _text = "";
   String? get lastError => _lastError;
   FormulaResult? _lastValue;
 
-  D4rtEditingController({String? text}) : super(text: text);
+  D4rtEditingController({super.text});
 
   bool validate() {
     try {
@@ -38,7 +40,7 @@ class D4rtEditingController extends TextEditingController {
     }
   }
 
-  get d4rtValue => _lastValue;
+  FormulaResult? get d4rtValue => _lastValue;
 
   set text(String newText) {
     super.text = newText;

@@ -126,11 +126,11 @@ Where:
     "name": "Apgar Score",
     "description": "Newborn health assessment scoring system\n\nScores 0-2 for:\n1. Heart rate\n2. Breathing\n3. Muscle tone\n4. Reflexes\n5. Skin color\nTotal score 0-10",
     "input": [
-      {"name": "HeartRate", "values": ["hr1", "hr2", "hr3"] },
-      {"name": "Breathing", "values": ["hr1", "hr2", "hr3"] },
-      {"name": "MuscleTone", "values": ["hr1", "hr2", "hr3"] },
-      {"name": "Reflexes", "values": ["hr1", "hr2", "hr3"] },
-      {"name": "SkinColor", "values": ["hr1", "hr2", "hr3"] }
+      {"name": "HeartRate", "values": ["Absent", "< 100 bpm>", "> 100 bpm"] },
+      {"name": "Breathing", "values": ["Absent", "Weak, irregular", "Strong, robust cry"] },
+      {"name": "MuscleTone", "values": ["None", "Some", "Flexed arms/leg, resists extension"] },
+      {"name": "Reflexes", "values": ["No response", "Grimace on aggressive stimulation", "Cry on stimulation"] },
+      {"name": "SkinColor", "values": ["Blue or pale", "Blue extremities, pink body", "Pink"] }
     ],
     "output": {"name": "Result", "unit": "scalar"},
     "d4rtCode": """
