@@ -34,7 +34,7 @@ class Corpus{
 
       if( checkUnits ){
         for( final inputVar in formula.input + [formula.output] ){
-          if( !_allUnits.containsKey(inputVar.unit) ){
+          if( inputVar.unit != null && !_allUnits.containsKey(inputVar.unit) ){
             throw ArgumentError( "Unit not found: ${inputVar.unit}");
           }
         }
@@ -58,6 +58,10 @@ class Corpus{
     return _allFormulas.values.toList(growable:false);
   }
 
+  Formula? getFormula(String name) {
+    return _allFormulas.get(name);
+  }
+
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 
@@ -71,7 +75,10 @@ class Corpus{
     }
   }
 
-  List<String> unitsOfSameMagnitude(String unit){
+  List<String> unitsOfSameMagnitude(String? unit){
+    if( unit == null ){
+      return ["scalar"];
+    }
     final base = getUnit(unit).baseUnit;
     return _baseToUnits[base] as List<String>;
   }
@@ -87,7 +94,7 @@ class Corpus{
 
   String _converterFromCodeStringAsExpression(Number x, String codeString) {
     final buffer = StringBuffer();
-    buffer.writeln("final x = ${x};");
+    buffer.writeln("final x = $x;");
     buffer.writeln("main(){return $codeString;}");
     final code = buffer.toString();
     return code;
@@ -95,7 +102,7 @@ class Corpus{
 
   String _converterFromCodeStringAsStatement(Number x, String codeString) {
     final buffer = StringBuffer();
-    buffer.writeln("final x = ${x};");
+    buffer.writeln("final x = $x;");
     buffer.writeln("main(){ $codeString; return x; }");
     final code = buffer.toString();
     return code;
@@ -113,7 +120,7 @@ class Corpus{
     }
 
     final ret = _convertUsingCode(x, unit.codeFromUnitToBase as String);
-    return ret as Number;
+    return ret;
   }
 
   Number _convertFromBase(Number x, String toUnit) {
@@ -128,7 +135,7 @@ class Corpus{
     }
 
     final ret = _convertUsingCode(x, unit.codeFromBaseToUnit as String);
-    return ret as Number;
+    return ret;
   }
 
 
@@ -140,17 +147,19 @@ class Corpus{
       final ret = _evaluate(completeSourceExpression);
       return ret;
     }
-    catch(e1,stack){
+    catch(e1, stack1){
       try{
         completeSourceStatement = _converterFromCodeStringAsStatement(x, code);
         final ret = _evaluate(completeSourceStatement);
         return ret;
       }
-      catch( e2, stack ){
+      catch( e2, stack2 ){
         print(completeSourceExpression);
         print(e1);
+        print(stack1);
         print(completeSourceStatement);
         print(e2);
+        print(stack2);
         throw FormulaEvaluationException( "Evaluation as statement and expression failed" );
       }
     }

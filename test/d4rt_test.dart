@@ -3,7 +3,7 @@ import 'package:d4rt/d4rt.dart';
 import 'dart:math' as Math;
 
 
-main(){
+void main(){
   test('Access to Math', () {
 
       final completeSource = """
@@ -29,6 +29,7 @@ main(){
        }
       """;
     final interpreter = D4rt();
+    interpreter.grant(FilesystemPermission.readPath("/etc/passwd"));
     final result = interpreter.execute(source: completeSource);
 
     expect(result, contains("root"));

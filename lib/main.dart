@@ -6,6 +6,7 @@ import 'corpus.dart';
 import 'defaults/default_corpus.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     home: FutureBuilder<Corpus>(
       future: createDefaultCorpus(),

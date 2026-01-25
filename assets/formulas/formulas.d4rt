@@ -120,4 +120,33 @@ Where:
     "d4rtCode": "F = m * a;",
     "tags": ["physics", "mechanics", "newton"]
   },
+
+  // Apgar Score
+  {
+    "name": "Apgar Score",
+    "description": "Newborn health assessment scoring system\n\nScores 0-2 for:\n1. Heart rate\n2. Breathing\n3. Muscle tone\n4. Reflexes\n5. Skin color\nTotal score 0-10",
+    "input": [
+      {"name": "HeartRate", "values": ["Absent", "< 100 bpm>", "> 100 bpm"] },
+      {"name": "Breathing", "values": ["Absent", "Weak, irregular", "Strong, robust cry"] },
+      {"name": "MuscleTone", "values": ["None", "Some", "Flexed arms/leg, resists extension"] },
+      {"name": "Reflexes", "values": ["No response", "Grimace on aggressive stimulation", "Cry on stimulation"] },
+      {"name": "SkinColor", "values": ["Blue or pale", "Blue extremities, pink body", "Pink"] }
+    ],
+    "output": {"name": "Result", "unit": "scalar"},
+    "d4rtCode": """
+      var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
+      late var interpretation;
+      if( total < 4 ) {
+        interpretation = 'Critical condition';
+      }
+      else if( total < 7 ){
+        interpretation = 'Needs assistance';
+      }
+      else {
+        interpretation = 'Normal';
+      }
+      Result = 'Score: \$total - \$interpretation';
+    """,
+    "tags": ["medical", "pediatrics", "assessment"]
+  }
 ]

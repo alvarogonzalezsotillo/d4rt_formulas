@@ -152,7 +152,7 @@ void main() {
           d4rtCode: 'force = x;',
         );
 
-        expect(evaluator.getOutputVariableName(formula), 'force');
+        expect(formula.output.name, 'force');
       });
 
       test(
@@ -165,7 +165,7 @@ void main() {
             d4rtCode: 'force = x;',
           );
 
-          expect(evaluator.getOutputVariableMagnitude(formula), 'Newton');
+          expect(formula.output.unit, 'Newton');
         },
       );
 
@@ -177,8 +177,8 @@ void main() {
           d4rtCode: 'result = x;',
         );
 
-        expect(evaluator.getOutputVariableName(validFormula), 'result');
-        expect(evaluator.getOutputVariableMagnitude(validFormula), 'Newton');
+        expect(validFormula.output.name, 'result');
+        expect(validFormula.output.unit, 'Newton');
       });
 
     });
