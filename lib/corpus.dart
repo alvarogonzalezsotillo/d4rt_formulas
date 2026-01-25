@@ -58,6 +58,10 @@ class Corpus{
     return _allFormulas.values.toList(growable:false);
   }
 
+  Formula? getFormula(String name) {
+    return _allFormulas.get(name);
+  }
+
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 
@@ -73,7 +77,7 @@ class Corpus{
 
   List<String> unitsOfSameMagnitude(String? unit){
     if( unit == null ){
-      return ["unitless"];
+      return ["scalar"];
     }
     final base = getUnit(unit).baseUnit;
     return _baseToUnits[base] as List<String>;
@@ -90,7 +94,7 @@ class Corpus{
 
   String _converterFromCodeStringAsExpression(Number x, String codeString) {
     final buffer = StringBuffer();
-    buffer.writeln("final x = ${x};");
+    buffer.writeln("final x = $x;");
     buffer.writeln("main(){return $codeString;}");
     final code = buffer.toString();
     return code;
@@ -98,7 +102,7 @@ class Corpus{
 
   String _converterFromCodeStringAsStatement(Number x, String codeString) {
     final buffer = StringBuffer();
-    buffer.writeln("final x = ${x};");
+    buffer.writeln("final x = $x;");
     buffer.writeln("main(){ $codeString; return x; }");
     final code = buffer.toString();
     return code;

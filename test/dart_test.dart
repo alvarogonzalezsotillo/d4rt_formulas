@@ -3,7 +3,7 @@ import 'package:d4rt/d4rt.dart';
 import 'dart:math' as Math;
 
 
-main(){
+void main(){
   test('for dart grammar tests', () {
 
   });

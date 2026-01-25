@@ -1,15 +1,20 @@
 import 'package:d4rt_formulas/corpus.dart';
 import 'package:d4rt_formulas/defaults/default_corpus.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 
 
 void main() {
 
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   Future<Corpus> createTestCorpus() async {
     return createDefaultCorpus();
   }
+
+  Future<Corpus> testCorpus = createTestCorpus();
+
 
   test("Parses unit", () {
     final setLiteral = {"name": "kilometer", "symbol": "km", "baseUnit": "meter", "factor": 1000};
@@ -23,37 +28,37 @@ void main() {
   });
 
   test("From km to in", () async {
-    final corpus = await createTestCorpus();
+    final corpus = await testCorpus;
     final inches = corpus.convert(1, "kilometer", "inch");
     expect( inches, closeTo(39370.078,0.001) );
   });
 
   test("From furlong to base", () async {
-    final corpus = await createTestCorpus();
+    final corpus = await testCorpus;
     final m = corpus.convert(1, "furlong", "meter");
     expect(m,closeTo(201.168,0.001));
   });
 
   test("From base to furlong", () async {
-    final corpus = await createTestCorpus();
+    final corpus = await testCorpus;
     final m = corpus.convert(201.168, "meter", "furlong");
     expect(m,closeTo(1,0.001));
   });
 
   test("From C to F", () async {
-    final corpus = await createTestCorpus();
+    final corpus = await testCorpus;
     final m = corpus.convert(37, "Celsius", "Fahrenheit");
     expect(m,closeTo(98.6,0.001));
   });
 
   test("From K to F", () async {
-    final corpus = await createTestCorpus();
+    final corpus = await testCorpus;
     final m = corpus.convert(37, "Kelvin", "Fahrenheit");
     expect(m,closeTo(-393.07,0.001));
   });
 
   test("From C to K", () async {
-    final corpus = await createTestCorpus();
+    final corpus = await testCorpus;
     final m = corpus.convert(100, "Celsius", "Kelvin");
     expect(m,closeTo(373.15,0.001));
   });
@@ -108,5 +113,22 @@ void main() {
     expect(result, 98.0); // F = m * a = 10 * 9.8 = 98 N
   });
 
+  group('APGAR Score', () {
+    test('evaluates APGAR score formula - Normal case', () async {
+      final corpus = await testCorpus;
+      final formula = corpus.getFormula("Apgar Score")!;
+      final evaluator = FormulaEvaluator();
+
+      final result = evaluator.evaluate(formula, {
+        'HeartRate': 2,
+        'Breathing': 2,
+        'MuscleTone': 2,
+        'Reflexes': 2,
+        'SkinColor': 2
+      });
+
+      expect(result, 'Score: 10 - Normal');
+    });
+  });
 
 }
