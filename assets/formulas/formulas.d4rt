@@ -135,11 +135,16 @@ Where:
     "output": {"name": "Result", "unit": "scalar"},
     "d4rtCode": """
       var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
-      var interpretation = switch (total) {
-        >= 7 => 'Normal',
-        4-6 => 'Requires attention',
-        _ => 'Emergency care needed'
-      };
+      late var interpretation;
+      if( total < 4 ) {
+        interpretation = 'Critical condition';
+      }
+      else if( total < 7 ){
+        interpretation = 'Needs assistance';
+      }
+      else {
+        interpretation = 'Normal';
+      }
       Result = 'Score: \$total - \$interpretation';
     """,
     "tags": ["medical", "pediatrics", "assessment"]

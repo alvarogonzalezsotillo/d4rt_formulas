@@ -58,6 +58,10 @@ class Corpus{
     return _allFormulas.values.toList(growable:false);
   }
 
+  Formula? getFormula(String name) {
+    return _allFormulas.get(name);
+  }
+
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 

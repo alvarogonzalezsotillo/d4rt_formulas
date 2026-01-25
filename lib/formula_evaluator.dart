@@ -100,8 +100,17 @@ class FormulaEvaluator {
   dynamic evaluate(Formula formula, Map<String, dynamic> inputValues) {
     _validateInputValues(formula, inputValues);
     final completeSource = _buildCompleteSource(formula, inputValues);
-    final result = _interpreter.execute(source: completeSource);
-    return result;
+    try {
+      final result = _interpreter.execute(source: completeSource);
+      return result;
+    }
+    catch (e) {
+      print( "Error evaluating formula source:\n$completeSource" );
+      throw FormulaEvaluationException(
+        'Error evaluating formula "${formula.name}": $e',
+        e,
+      );
+    }
   }
 
   void _validateInputValues(Formula formula, Map<String, dynamic> inputValues) {
