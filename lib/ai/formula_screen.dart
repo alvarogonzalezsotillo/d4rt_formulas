@@ -1,3 +1,4 @@
+// dart
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import '../formula_models.dart';
@@ -15,9 +16,6 @@ class FormulaScreen extends StatefulWidget {
   State<FormulaScreen> createState() => _FormulaScreenState();
 }
 
-// TODO: Create VariableWidget. Depending on VariableSpec.values, it can be a ValueDropdown or a D4rtEditingController
-//       The d4rtValue will be FormulaResult?
-
 //// Start of D4rtEditingController class ////
 class D4rtEditingController extends TextEditingController {
   String? _lastError;
@@ -34,8 +32,8 @@ class D4rtEditingController extends TextEditingController {
       return true;
     } catch (e, s) {
       _lastError = e.toString();
-      print( "validate: $text: $e" );
-      print( "stack: $s" );
+      print("validate: $text: $e");
+      print("stack: $s");
       return false;
     }
   }
@@ -59,18 +57,24 @@ class _FormulaScreenState extends State<FormulaScreen> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, D4rtEditingController> _inputControllers = {};
   final Map<String, String?> _selectedUnits = {};
+  final Map<String, String?> _selectedValues = {}; // for string dropdowns
   String? _result;
   String? _selectedOutputUnit;
-
 
   @override
   void initState() {
     super.initState();
     // Initialize controllers and units with listeners
     for (final input in widget.formula.input) {
-      _inputControllers[input.name] = D4rtEditingController();
       _selectedUnits[input.name] = input.unit;
-      _inputControllers[input.name]!.addListener(_evaluateFormula);
+      if (input.values != null && input.values!.isNotEmpty) {
+        // string/categorical variable -> use dropdown
+        _selectedValues[input.name] = input.values!.first;
+      } else {
+        // numeric variable -> use D4rtEditingController
+        _inputControllers[input.name] = D4rtEditingController();
+        _inputControllers[input.name]!.addListener(_evaluateFormula);
+      }
     }
     _selectedOutputUnit = widget.formula.output.unit;
   }
@@ -91,35 +95,42 @@ class _FormulaScreenState extends State<FormulaScreen> {
     try {
       final inputValues = <String, dynamic>{};
       for (final input in widget.formula.input) {
+        // string/categorical variable
+        if (input.values != null && input.values!.isNotEmpty) {
+          final selected = _selectedValues[input.name];
+          if (selected == null) {
+            _result = "";
+            return;
+          }
+          inputValues[input.name] = selected;
+          continue;
+        }
+
+        // numeric variable - must have controller
         final controller = _inputControllers[input.name]!;
-        if (controller.d4rtValue == null) {
-          //throw FormulaEvaluationException("Field ${input.name} is invalid");
+        final val = controller.d4rtValue;
+        if (val == null) {
           _result = "";
           return;
         }
 
-        late final dynamic convertedValue;
-
-        switch (controller.d4rtValue) {
-          case NumberResult nr:
-            // Convert input to base unit if needed
-            // Always convert from dropdown unit to variable's base unit
-            if (input.unit != null) {
-              convertedValue = widget.corpus.convert(
-                nr.value,
-                _selectedUnits[input.name]!,
-                input.unit as String,
-              );
-            } else {
-              convertedValue = nr.value;
-            }
-
-          case StringResult sr:
-            convertedValue = sr.value;
-          default:
-            throw FormulaEvaluationException(
-              "Field ${input.name} has unsupported type ${controller.d4rtValue!.runtimeType}",
+        dynamic convertedValue;
+        if (val is NumberResult) {
+          if (input.unit != null) {
+            convertedValue = widget.corpus.convert(
+              val.value,
+              _selectedUnits[input.name]!,
+              input.unit as String,
             );
+          } else {
+            convertedValue = val.value;
+          }
+        } else if (val is StringResult) {
+          convertedValue = val.value;
+        } else {
+          throw FormulaEvaluationException(
+            "Field ${input.name} has unsupported type ${val.runtimeType}",
+          );
         }
 
         inputValues[input.name] = convertedValue;
@@ -131,14 +142,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
       // Convert output to selected unit if needed
       String? unit = widget.formula.output.unit;
       if (unit != null) {
-        _result = widget.corpus
-            .convert(result, unit, _selectedOutputUnit!)
-            .toStringAsFixed(2);
+        final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
+        if (converted is num) {
+          _result = converted.toStringAsFixed(2);
+        } else {
+          _result = converted.toString();
+        }
       } else {
-        _result = result;
+        _result = result?.toString();
       }
-
-      //print( "_evaluateFormula: result:${result} _result:${_result}");
 
       setState(() {});
     } catch (e, stack) {
@@ -269,44 +281,85 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   Widget _buildVariableRow(VariableSpec variable) {
+    final isCategorical = variable.values != null && variable.values!.isNotEmpty;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
           Text(variable.name),
           const Spacer(),
-          SizedBox(
-            width: 100,
-            child: TextFormField(
-              controller: _inputControllers[variable.name],
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
-              ],
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
+          if (isCategorical) ...[
+            SizedBox(
+              width: 150,
+              child: DropdownButtonFormField<String>(
+                value: _selectedValues[variable.name],
+                items: variable.values!
+                    .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
+                    .toList(),
+                onChanged: (v) {
+                  setState(() {
+                    _selectedValues[variable.name] = v;
+                  });
+                  _evaluateFormula();
+                },
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Required';
+                  return null;
+                },
               ),
-              autovalidateMode: AutovalidateMode.always,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Required';
-                }
-                return _inputControllers[variable.name]!.lastError;
-              },
             ),
-          ),
-          const SizedBox(width: 8),
-          UnitDropdown(
-            corpus: widget.corpus,
-            variable: variable,
-            selectedUnit: _selectedUnits[variable.name],
-            onUnitChanged: (unit) {
-              setState(() {
-                _selectedUnits[variable.name] = unit;
-              });
-              _evaluateFormula();
-            },
-          ),
+            const SizedBox(width: 8),
+            if (variable.unit != null)
+              UnitDropdown(
+                corpus: widget.corpus,
+                variable: variable,
+                selectedUnit: _selectedUnits[variable.name],
+                onUnitChanged: (unit) {
+                  setState(() {
+                    _selectedUnits[variable.name] = unit;
+                  });
+                  _evaluateFormula();
+                },
+              ),
+          ] else ...[
+            SizedBox(
+              width: 100,
+              child: TextFormField(
+                controller: _inputControllers[variable.name],
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
+                ],
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                ),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Required';
+                  }
+                  return _inputControllers[variable.name]!.lastError;
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            if (variable.unit != null)
+              UnitDropdown(
+                corpus: widget.corpus,
+                variable: variable,
+                selectedUnit: _selectedUnits[variable.name],
+                onUnitChanged: (unit) {
+                  setState(() {
+                    _selectedUnits[variable.name] = unit;
+                  });
+                  _evaluateFormula();
+                },
+              ),
+          ],
         ],
       ),
     );
