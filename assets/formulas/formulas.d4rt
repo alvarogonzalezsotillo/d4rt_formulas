@@ -149,4 +149,28 @@ Where:
     """,
     "tags": ["medical", "pediatrics", "assessment"]
   }
+  ,
+  {
+    "name": "Compare price per mass",
+    "description": "Compares two products by their price per mass and returns which is cheaper.",
+    "input": [
+      {"name": "price1", "unit": "scalar"},
+      {"name": "mass1", "unit": "kilogram"},
+      {"name": "price2", "unit": "scalar"},
+      {"name": "mass2", "unit": "kilogram"}
+    ],
+    "output": {"name": "Result", "unit": "scalar"},
+    "d4rtCode": """
+      var p1 = price1 / mass1;
+      var p2 = price2 / mass2;
+      if (p1 < p2) {
+        Result = 'first product is cheaper';
+      } else if (p2 < p1) {
+        Result = 'second product is cheaper';
+      } else {
+        Result = 'both products have the same price per mass';
+      }
+    """,
+    "tags": ["comparison", "shopping", "economics"]
+  }
 ]

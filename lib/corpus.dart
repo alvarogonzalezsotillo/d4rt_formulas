@@ -35,7 +35,7 @@ class Corpus{
       if( checkUnits ){
         for( final inputVar in formula.input + [formula.output] ){
           if( inputVar.unit != null && !_allUnits.containsKey(inputVar.unit) ){
-            throw ArgumentError( "Unit not found: ${inputVar.unit}");
+            throw ArgumentError( "Unit not found in formula ${formula.name}: ${inputVar.unit}");
           }
         }
       }

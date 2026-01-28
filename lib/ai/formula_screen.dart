@@ -27,6 +27,9 @@ class D4rtEditingController extends TextEditingController {
   bool validate() {
     try {
       _lastValue = null;
+      if( text.trim().isEmpty ){
+        return true;
+      }
       _lastValue = FormulaEvaluator.evaluateExpression(text);
       _lastError = null;
       return true;
@@ -141,7 +144,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
       // Convert output to selected unit if needed
       String? unit = widget.formula.output.unit;
-      if (unit != null) {
+      if (unit != null && unit is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
         if (converted is num) {
           _result = converted.toStringAsFixed(2);

@@ -168,14 +168,39 @@ class FormulaEvaluator {
         """);
       }
     }
+    // Build a Map<String, List<String>> named `variableValues` that exposes allowed values
+    // for each VariableSpec (inputs and output) to the interpreted code. Values are
+    // converted to strings and quoted in the produced d4rt source.
+    final variableValuesMap = <String, List<String>>{};
+
+    // Include input VariableSpecs when they have allowed values
+    for (final vs in formula.input) {
+      final values = vs.values;
+      if (values != null && values.isNotEmpty) {
+        variableValuesMap[vs.name] = values.map((v) => v.toString()).toList(growable: false);
+      }
+    }
+    // Explicitly include the output VariableSpec if it has allowed values
+    final outValues = formula.output.values;
+    if (outValues != null && outValues.isNotEmpty) {
+      variableValuesMap[formula.output.name] = outValues.map((v) => v.toString()).toList(growable: false);
+    }
+
+    // Write the variableValues map into the generated source without escaping names/values
+    buffer.writeln("final variableValues = {");
+    variableValuesMap.forEach((name, list) {
+      final listLiteral = list.map((s) => '"' + s + '"').join(', ');
+      buffer.writeln('  "' + name + '": [' + listLiteral + '],');
+    });
+    buffer.writeln('};');
+
     buffer.writeln("""
       late var ${formula.output.name};
       ${formula.d4rtCode}
       return ${formula.output.name};
       }
-      """
-    );
-    
-    return buffer.toString();
-  }
-}
+      """);
+
+     return buffer.toString();
+   }
+ }

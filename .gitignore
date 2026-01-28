@@ -1,5 +1,6 @@
 # https://dart.dev/guides/libraries/private-files
 # Created by `dart pub`
+.flutter-plugins-dependencies
 .dart_tool/
 .dart-tool/
 .dartServer/
@@ -12,7 +13,7 @@
 .zcompdump
 .zshrc
 .idea
-/d4rt-formulas.iml
 /build/
 /d4rt_formulas.iml
 .aider*
+.build-container-cache
