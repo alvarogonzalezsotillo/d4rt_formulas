@@ -1,23 +1,26 @@
 
-all: clean-podman build-linux-debug-podman build-linux-debug-podman
+all: clean-container build-linux-debug-container
 
-build-podman:
+build-container:
 	./docker-exec.sh build
 
-clean-podman: build-podman
+clean-container: build-container
 	./docker-exec.sh exec flutter clean
 
-pub-get-podman: build-podman
+pub-get-container: build-container
 	./docker-exec.sh exec flutter pub get
 
-build-android-release-podman: pub-get-podman
+build-android-release-container: pub-get-container
 	./docker-exec.sh exec flutter build apk --release
 
-build-linux-debug-podman: pub-get-podman
+build-linux-debug-container: pub-get-container
 	./docker-exec.sh exec flutter build linux --debug
 
-run-linux-debug: build-linux-debug-podman
-	build/linux/x64/debug/bundle/d4rt_formulas
+build-web-debug-container: pub-get-container
+	./docker-exec.sh exec flutter build web --debug
 
-run-web-release-podman: build-web-release-podman
+run-linux-debug-container: build-linux-debug-container
+	./docker-exec.sh exec /app/build/linux/x64/debug/bundle/d4rt_formulas
+
+run-web-debug-container: build-web-debug-container
 	cd build/web && python3 -m http.server 8080

@@ -1,4 +1,3 @@
-# Use the official Flutter SDK image
 FROM ghcr.io/cirruslabs/flutter:stable
 
 # Install cmake, ninja, clang, pkg-config for flutter linux
@@ -12,6 +11,7 @@ ENV GRADLE_USER_HOME=/cache/gradle-cache
 RUN mkdir -p $PUB_CACHE $GRADLE_USER_HOME
 
 # Copy pubspec files and get dependencies
+# Commented out to avoid building the app during image creation, this will be handled externally by makefile
 # COPY pubspec.yaml pubspec.lock ./
 # RUN flutter pub get
 
