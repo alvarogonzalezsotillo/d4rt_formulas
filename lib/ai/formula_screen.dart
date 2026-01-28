@@ -93,6 +93,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   void _evaluateFormula() {
+    print( "EVALUATE FORMULA");
     if (!_formKey.currentState!.validate()) return;
 
     try {
@@ -271,10 +272,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
               variable: widget.formula.output,
               selectedUnit: _selectedOutputUnit,
               onUnitChanged: (unit) {
-                setState(() {
-                  _selectedOutputUnit = unit;
-                });
+                _selectedOutputUnit = unit;
                 _evaluateFormula();
+                setState(() {
+                });
               },
             ),
           ],
@@ -301,10 +302,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
                     .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
                     .toList(),
                 onChanged: (v) {
-                  setState(() {
-                    _selectedValues[variable.name] = v;
-                  });
+                  _selectedValues[variable.name] = v;
                   _evaluateFormula();
+                  setState(() {
+                  });
                 },
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -322,10 +323,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 variable: variable,
                 selectedUnit: _selectedUnits[variable.name],
                 onUnitChanged: (unit) {
-                  setState(() {
-                    _selectedUnits[variable.name] = unit;
-                  });
+                  _selectedUnits[variable.name] = unit;
                   _evaluateFormula();
+                  setState(() {
+                  });
                 },
               ),
           ] else ...[

@@ -53,6 +53,8 @@ exec_in_container(){
     mkdir -p $BUILDCACHE
 
     $DOCKER run \
+            -it \
+            --init \
             --rm \
             $GRAPHICOPTIONS \
             $SPIOPTIONS \
