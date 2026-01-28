@@ -26,4 +26,5 @@ run-linux-debug: build-linux-debug-container
 	./build/linux/x64/debug/bundle/d4rt_formulas
 
 run-web-debug-container: build-web-debug-container
-	cd build/web && python3 -m http.server 8080
+	./docker-exec.sh exec flutter run -d web-server
+	#cd build/web && python3 -m http.server 8080

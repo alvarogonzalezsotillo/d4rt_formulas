@@ -47,7 +47,7 @@ graphic_options(){
 
 exec_in_container(){
     local SPIOPTIONS="--env AT_SPI_BUS=/run/user/$(id -u)/at-spi/bus_0 --volume=/run/user/$(id -u)/at-spi:/run/user/$(id -u)/at-spi  --device=/dev/dri"
-
+    SPIOPTIONS=
     local GRAPHICOPTIONS=$(graphic_options)
     local BUILDCACHE=./.build-container-cache
     mkdir -p $BUILDCACHE
