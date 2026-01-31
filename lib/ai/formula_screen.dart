@@ -94,7 +94,6 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
   void _evaluateFormula() {
     print( "EVALUATE FORMULA");
-    if (!_formKey.currentState!.validate()) return;
 
     try {
       final inputValues = <String, dynamic>{};
@@ -145,7 +144,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
       // Convert output to selected unit if needed
       String? unit = widget.formula.output.unit;
-      if (unit != null && unit is Number) {
+      if (unit != null && result is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
         if (converted is num) {
           _result = converted.toStringAsFixed(2);
@@ -274,6 +273,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
               onUnitChanged: (unit) {
                 _selectedOutputUnit = unit;
                 _evaluateFormula();
+                print( "En output unit changed to $unit: $_result");
                 setState(() {
                 });
               },

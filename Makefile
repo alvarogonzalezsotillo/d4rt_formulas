@@ -19,12 +19,14 @@ build-linux-debug-container: pub-get-container
 build-web-debug-container: pub-get-container
 	./docker-exec.sh exec flutter build web --debug
 
-run-linux-debug-container: build-linux-debug-container
+run-linux-debug-container: pub-get-container
 	./docker-exec.sh exec flutter run -d linux
 
-run-linux-debug: build-linux-debug-container
+run-web-debug-container: pub-get-container
+	./docker-exec.sh exec flutter run --web-port 8081 -d web-server
+
+run-linux-debug-native: build-linux-debug-container
 	./build/linux/x64/debug/bundle/d4rt_formulas
 
-run-web-debug-container: build-web-debug-container
-	./docker-exec.sh exec flutter run -d web-server
-	#cd build/web && python3 -m http.server 8080
+run-web-debug-native: build-web-debug-container
+	cd build/web && python3 -m http.server 8081

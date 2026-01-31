@@ -19,9 +19,12 @@ detect_container(){
     fi
 }
 
+clean_build_cache(){
+  $DOCKER builder prune --all --force
+}
 
 build_image(){
-    $DOCKER build -t d4rt-formulas-builder -f Dockerfile .
+    $DOCKER build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) --progress=plain -t d4rt-formulas-builder -f Dockerfile .
 }
 
 graphic_options(){
@@ -45,19 +48,37 @@ graphic_options(){
     fi
 }
 
+spi_options(){
+    if [ -e /run/user/$(id -u)/at-spi/bus_0 ]
+    then
+      printf " %s " "--env AT_SPI_BUS=/run/user/$(id -u)/at-spi/bus_0"
+    fi
+
+    if [ -e /run/user/$(id -u)/at-spi ]
+     then
+      printf " %s " "--volume=/run/user/$(id -u)/at-spi:/run/user/$(id -u)/at-spi"
+    fi
+    if [ -e /dev/dri ]
+    then
+      printf " %s " "--device /dev/dri"
+    fi
+}
+
 exec_in_container(){
-    local SPIOPTIONS="--env AT_SPI_BUS=/run/user/$(id -u)/at-spi/bus_0 --volume=/run/user/$(id -u)/at-spi:/run/user/$(id -u)/at-spi  --device=/dev/dri"
-    SPIOPTIONS=
+    SPIOPTIONS=$(spi_options)
     local GRAPHICOPTIONS=$(graphic_options)
     local BUILDCACHE=./.build-container-cache
     mkdir -p $BUILDCACHE
 
     $DOCKER run \
             -it \
+            --userns=keep-id \
+            --user $(id -u):$(id -g) \
             --init \
             --rm \
             $GRAPHICOPTIONS \
             $SPIOPTIONS \
+            -p ${WEBPORT:-8081}:8081 \
             -v $BUILDCACHE:/cache:z \
             -v .:/app:z \
             -e FLUTTER_FLAVOR=prod \
@@ -73,12 +94,18 @@ main(){
         return $?
     fi
 
+    if [ "$1" = "cleancache" ]; then
+        clean_build_cache
+        return $?
+    fi
+
+
     if [ "$1" = "exec" ]; then
         exec_in_container ${@:2}
         return $?
     fi
 
-    echo "Usage: $0 {build|exec <command>}"
+    echo "Usage: $0 {build|cleancache|exec <command>}"
     return 1
 }
 

@@ -104,8 +104,9 @@ class FormulaEvaluator {
       final result = _interpreter.execute(source: completeSource);
       return result;
     }
-    catch (e) {
+    catch (e, stack) {
       print( "Error evaluating formula source:\n$completeSource" );
+      print( stack );
       throw FormulaEvaluationException(
         'Error evaluating formula "${formula.name}": $e',
         e,
@@ -168,6 +169,29 @@ class FormulaEvaluator {
         """);
       }
     }
+
+    buffer.writeln("""
+          final variableValues = <String, dynamic>{
+    """);
+    for (final entry in inputValues.entries) {
+      final varName = entry.key;
+      final value = entry.value;
+
+      if (value is String) {
+        final escapedValue = value.replaceAll('"', '\\"');
+        buffer.writeln("""
+          "$varName": "$escapedValue",
+        """);
+      } else {
+        buffer.writeln("""
+          "$varName": "$value",
+        """);
+      }
+    }
+    buffer.writeln("""
+          };
+    """);
+
     // Build a Map<String, List<String>> named `variableValues` that exposes allowed values
     // for each VariableSpec (inputs and output) to the interpreted code. Values are
     // converted to strings and quoted in the produced d4rt source.
@@ -187,12 +211,21 @@ class FormulaEvaluator {
     }
 
     // Write the variableValues map into the generated source without escaping names/values
-    buffer.writeln("final variableValues = {");
+    buffer.writeln("final variableAllowedValues = {");
     variableValuesMap.forEach((name, list) {
       final listLiteral = list.map((s) => '"' + s + '"').join(', ');
       buffer.writeln('  "' + name + '": [' + listLiteral + '],');
     });
     buffer.writeln('};');
+
+    // Some functions to deal with string values
+    buffer.writeln("""
+      int indexOf(String inputName) {
+        String value = variableValues[inputName];
+        String allowedValues = variableAllowedValues[inputName];
+        return allowedValues.indexOf(value);
+      }
+      """);
 
     buffer.writeln("""
       late var ${formula.output.name};

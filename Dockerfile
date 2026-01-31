@@ -10,6 +10,16 @@ ENV PUB_CACHE=/cache/pub-cache
 ENV GRADLE_USER_HOME=/cache/gradle-cache
 RUN mkdir -p $PUB_CACHE $GRADLE_USER_HOME
 
+# To avoid: fatal: detected dubious ownership in repository at '/sdks/flutter'
+# Pass this during build: --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)
+ARG USER_ID
+ARG GROUP_ID
+RUN echo "Using UID: $USER_ID and GID: $GROUP_ID"
+RUN chown -R $USER_ID:$GROUP_ID $PUB_CACHE $GRADLE_USER_HOME
+RUN chown -R $USER_ID:$GROUP_ID /sdks/flutter
+
+USER $USER_ID:$GROUP_ID
+
 # Copy pubspec files and get dependencies
 # Commented out to avoid building the app during image creation, this will be handled externally by makefile
 # COPY pubspec.yaml pubspec.lock ./
