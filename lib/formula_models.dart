@@ -1,5 +1,6 @@
 import 'package:d4rt/d4rt.dart';
 import 'package:collection/collection.dart';
+import 'package:d4rt_formulas/d4rt_formulas.dart';
 
 abstract class SetUtils {
   static Object safeGet(Map<Object?, Object?> map, String key) {
@@ -105,6 +106,13 @@ class VariableSpec {
   final List<dynamic>? values;
 
   VariableSpec({required this.name, this.unit, this.values}){
+    validate();
+  }
+
+  void validate(){
+    if( FormulaEvaluator.reservedVariableNames.contains(name) ){
+      throw ArgumentError("$name: is a reserved variable name for FormulaEvaluator");
+    }
     final valuesValid = values != null && values?.isNotEmpty == true;
     if( unit == null && !valuesValid ){
       throw ArgumentError("$name: at least unit or allowedValues should be valid");

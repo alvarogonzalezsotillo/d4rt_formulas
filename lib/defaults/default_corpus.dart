@@ -20,6 +20,7 @@ Future<Corpus> createDefaultCorpus() async{
     final unitResources = [
       "assets/units/angle.d4rt.units",
       "assets/units/area.d4rt.units",
+      "assets/units/currency.d4rt.units",
       "assets/units/distance.d4rt.units",
       "assets/units/energy.d4rt.units",
       "assets/units/force.d4rt.units",
@@ -32,6 +33,7 @@ Future<Corpus> createDefaultCorpus() async{
     ];
 
     for (final unitRes in unitResources) {
+      print( "Loading units from $unitRes");
       final literal = await loadResourceAsString(unitRes);
       final units = UnitSpec.fromArrayStringLiteral(literal);
       corpus.loadUnits(units);

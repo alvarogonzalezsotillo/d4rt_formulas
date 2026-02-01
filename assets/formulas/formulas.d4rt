@@ -132,9 +132,9 @@ Where:
       {"name": "Reflexes", "values": ["No response", "Grimace on aggressive stimulation", "Cry on stimulation"] },
       {"name": "SkinColor", "values": ["Blue or pale", "Blue extremities, pink body", "Pink"] }
     ],
-    "output": {"name": "Result", "unit": "scalar"},
+    "output": {"name": "Result", "unit": "string"},
     "d4rtCode": """
-      var total = HeartRate + Breathing + MuscleTone + Reflexes + SkinColor;
+      var total = indexOf("HeartRate") + indexOf("Breathing") + indexOf("MuscleTone") + indexOf("Reflexes") + indexOf("SkinColor");
       late var interpretation;
       if( total < 4 ) {
         interpretation = 'Critical condition';
@@ -154,12 +154,12 @@ Where:
     "name": "Compare price per mass",
     "description": "Compares two products by their price per mass and returns which is cheaper.",
     "input": [
-      {"name": "price1", "unit": "scalar"},
+      {"name": "price1", "unit": "currency"},
       {"name": "mass1", "unit": "kilogram"},
-      {"name": "price2", "unit": "scalar"},
+      {"name": "price2", "unit": "currency"},
       {"name": "mass2", "unit": "kilogram"}
     ],
-    "output": {"name": "Result", "unit": "scalar"},
+    "output": {"name": "Result", "unit": "string"},
     "d4rtCode": """
       var p1 = price1 / mass1;
       var p2 = price2 / mass2;
