@@ -27,12 +27,17 @@ clean_build_cache(){
   if [ -d $BUILDCACHE ]; then  rm -r $BUILDCACHE; fi
   if [ -d .dart_tool ]; then  rm -r .dart_tool; fi
   if [ -d build ]; then  rm -r build; fi
-  $DOCKER builder prune --all --force
+  $DOCKER builder prune
 }
 
 build_image(){
     # docker doesnt support --progress=PLAIN
-    $DOCKER build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t d4rt-formulas-builder -f Dockerfile .
+    local USERMAPING
+    if [ $DOCKER = 'docker' ]
+    then
+        USERMAPING="--build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)"
+    fi 
+    $DOCKER build $USERMAPING -t d4rt-formulas-builder -f Dockerfile .
 }
 
 graphic_options(){
@@ -76,7 +81,10 @@ spi_options(){
 docker_options(){
     if [ "$DOCKER" = "podman" ]
     then
-        printf " %s " "--userns=keep-id"
+        #printf " %s " "--userns=keep-id"
+        printf ""
+    else
+        printf " %s " "--user $(id -u):$(id -g)"
     fi
 }
 
@@ -88,7 +96,6 @@ exec_in_container(){
 
     $DOCKER run \
             -it \
-            --user $(id -u):$(id -g) \
             --init \
             --rm \
             $DOCKEROPTIONS \
