@@ -142,6 +142,8 @@ class FormulaEvaluator {
       import "package:d4rt_formulas.dart";
   """;
 
+  static const reservedVariableNames = { "variableValues", "indexOf", "variableAllowedValues"} ;
+
   String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
     final buffer = StringBuffer();
 
@@ -220,10 +222,12 @@ class FormulaEvaluator {
 
     // Some functions to deal with string values
     buffer.writeln("""
-      int indexOf(String inputName) {
+      // If return type is int, there is an error converting double to int 🤷‍
+      dynamic indexOf(String inputName) {
         String value = variableValues[inputName];
         String allowedValues = variableAllowedValues[inputName];
-        return allowedValues.indexOf(value);
+        dynamic ret = allowedValues.indexOf(value) as int;
+        return ret as int;
       }
       """);
 
