@@ -4,7 +4,8 @@ set -e
 set -x
 
 BUILDCACHE=./.build-container-cache
-
+DOCKERFILE=./docker/Dockerfile
+IMAGE=d4rt-formulas-builder
 
 detect_container(){
 
@@ -37,7 +38,7 @@ build_image(){
     then
         USERMAPING="--build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)"
     fi 
-    $DOCKER build $USERMAPING -t d4rt-formulas-builder -f Dockerfile .
+    $DOCKER build $USERMAPING -t $IMAGE -f $DOCKERFILE .
 }
 
 graphic_options(){
@@ -112,24 +113,22 @@ exec_in_container(){
 main(){
     detect_container
 
-    if [ "$1" = "build" ]; then
+    if [ "$1" = "--build" ]; then
         build_image
         return $?
-    fi
-
-    if [ "$1" = "cleancache" ]; then
+    elif [ "$1" = "--cleancache" ]; then
         clean_build_cache
         return $?
-    fi
-
-
-    if [ "$1" = "exec" ]; then
+    elif [ "$1" = "--exec" ]; then
         exec_in_container ${@:2}
         return $?
+    elif [ "$1" = "" ] || [ "$1" = "--help" ]  || [ "$1" = "-h" ]; then    
+         echo "Usage: $0 {build|cleancache|exec <command>}"
+         return 1
     fi
-
-    echo "Usage: $0 {build|cleancache|exec <command>}"
-    return 1
+    
+    exec_in_container flutter ${@:1}
+    return $?
 }
 
 main "$@"
