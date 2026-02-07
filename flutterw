@@ -43,19 +43,33 @@ build_image(){
 
 graphic_options(){
 
-    is_x11(){
-        [ "$XDG_SESSION_TYPE" = "x11" ] || [ "$DISPLAY" != "" ]
+    is_ssh_x11(){
+        # Check if we're in an SSH session with X11 forwarding
+        [ -n "$SSH_CONNECTION" ] && [ -n "$DISPLAY" ] && [[ "$DISPLAY" == *:* ]]
+    }
+
+    is_local_x11(){
+        [ "$XDG_SESSION_TYPE" = "x11" ] && [ "$DISPLAY" != "" ]
     }
 
     is_wayland(){
         [ "$XDG_SESSION_TYPE" = "wayland" ] || [ "$WAYLAND_DISPLAY" != "" ]
     }
-    
+
     # DISPLAY IS ALSO DEFINED IN WAYLAND, SO TEST WAYLAND FIRST
     if is_wayland
     then
         echo "--env=XDG_RUNTIME_DIR=/run/user/$(id -u) --volume=/run/user/$(id -u)/$WAYLAND_DISPLAY:/run/user/$(id -u)/$WAYLAND_DISPLAY --group-add=video"
-    elif is_x11
+    elif is_ssh_x11
+    then
+        # For SSH-X sessions, we need to handle X11 authentication properly
+        local xauth_file="$HOME/.Xauthority"
+        local xauth_mount=""
+        if [ -f "$xauth_file" ]; then
+            xauth_mount="--volume $xauth_file:/root/.Xauthority:ro"
+        fi
+        echo "--env DISPLAY=$DISPLAY $xauth_mount --network host --security-opt=label=disable"
+    elif is_local_x11
     then
         echo "--env DISPLAY=$DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix --security-opt=label=disable"
     else
