@@ -1,6 +1,8 @@
 // dart
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_latex/flutter_markdown_latex.dart';
+import 'package:markdown/markdown.dart' as markdown;
 import '../formula_models.dart';
 import '../formula_evaluator.dart';
 import '../corpus.dart';
@@ -215,6 +217,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
           child: MarkdownBody(
             data: widget.formula.description!,
             shrinkWrap: true,
+            builders: {
+              'latex': LatexElementBuilder(),
+            },
+            extensionSet: markdown.ExtensionSet(
+              [LatexBlockSyntax()],
+              [LatexInlineSyntax()],
+            ),
           ),
         ),
         const SizedBox(height: 24),

@@ -16,10 +16,10 @@
     "description": r"""
 Calculates vertical displacement under constant gravity
 
-$$h = \\frac{1}{2}gt^2$$
+$$h = \frac{1}{2}gt^2$$
 
 Where:
-- $g$: Gravitational acceleration ($9.81\\ \\mathrm{m/s^2}$ on Earth)
+- $g$: Gravitational acceleration $9.81\ \mathrm{m/s^2}$ on Earth
 - $t$: Time in free fall (seconds)
 
 ![Free Fall Diagram](https://altcalculator.com/wp-content/uploads/2023/08/Free-Fall.png)""",
@@ -38,10 +38,10 @@ Where:
     "description": r'''
 Newton's law of universal gravitation
 
-\(F = G\\frac{m_1m_2}{r^2}\)
+\(F = G\frac{m_1m_2}{r^2}\)
 
 Where:
-- $G$: Gravitational constant ($6.674\\times 10^{-11}\\ \\mathrm{N\\cdot m^2/kg^2}$)
+- $G$: Gravitational constant ($6.674\times 10^{-11}\ \mathrm{N\cdot m^2/kg^2}$)
 - $m_1, m_2$: Masses of two objects
 - $r$: Distance between centers of masses
 
@@ -62,7 +62,7 @@ Where:
     "description": r'''
 Energy possessed by a moving object
 
-$$KE = \\frac{1}{2}mv^2$$
+$$KE = \frac{1}{2}mv^2$$
 
 Where:
 - $m$: Mass of object
@@ -82,10 +82,10 @@ Where:
   {
     "name": "Projectile Range",
     "description": r"""Calculates horizontal distance of projectile motion
-                 $$R = \\frac{v^2 \\sin(2\\theta)}{g}$$
+                 $$R = \frac{v^2 \sin(2\theta)}{g}$$
                  Where:
                  - $v$: Initial velocity
-                 - $\\theta$: Launch angle
+                 - $\theta$: Launch angle
                  - $g$: Gravitational acceleration
                  ![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)""",
     "input": [
@@ -105,11 +105,11 @@ Where:
     "description": r'''
 Force equals mass times acceleration
 
-$$F = m \\cdot a$$
+$$F = m \cdot a$$
 
 Where:
-- $m$: Mass of object ($\\mathrm{kg}$)
-- $a$: Acceleration ($\\mathrm{m/s^2}$)
+- $m$: Mass of object ($\mathrm{kg}$)
+- $a$: Acceleration ($\mathrm{m/s^2}$)
 
 ![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)''',
     "input": [
@@ -186,7 +186,7 @@ $$E = mc^2$$
 Where:
 - $E$: Energy (Joules)
 - $m$: Mass (kilograms)
-- $c$: Speed of light ($299,792,458\\ \\mathrm{m/s}$)
+- $c$: Speed of light $299,792,458$ $\mathrm{m/s}$
 
 This equation shows that mass can be converted to energy and vice versa.''',
     "input": [
@@ -249,7 +249,7 @@ The negative sign indicates the force opposes the displacement.''',
     "description": r'''
 Force required to keep an object moving in circular motion
 
-$$F = \\frac{mv^2}{r}$$
+$$F = \frac{mv^2}{r}$$
 
 Where:
 - $F$: Centripetal force (Newtons)
@@ -274,7 +274,7 @@ This force acts toward the center of the circle.''',
     "description": r'''
 Relationship between wave speed, frequency, and wavelength
 
-$$v = f\\lambda$$
+$$v = f\lambda$$
 
 Where:
 - $v$: Wave speed (m/s)
@@ -319,7 +319,7 @@ The square of the hypotenuse is equal to the sum of squares of the other two sid
     "description": r'''
 Relationship between the sides and angles of any triangle
 
-$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$
+$$\frac{a}{\sin A} = \frac{b}{\sin B} = \frac{c}{\sin C}$$
 
 Where:
 - $a$, $b$, $c$: Sides of the triangle
@@ -346,7 +346,7 @@ This rule is useful for solving triangles when certain combinations of angles an
     "description": r'''
 Generalization of the Pythagorean theorem for any triangle
 
-$$c^2 = a^2 + b^2 - 2ab\\cos(C)$$
+$$c^2 = a^2 + b^2 - 2ab\cos(C)$$
 
 Where:
 - $a$, $b$, $c$: Sides of the triangle
@@ -372,7 +372,7 @@ This rule relates all three sides of a triangle to one of its angles.''',
     "description": r'''
 Fundamental Pythagorean identity in trigonometry
 
-$$\\sin^2(\\theta) + \\cos^2(\\theta) = 1$$
+$$\sin^2(\theta) + \cos^2(\theta) = 1$$
 
 Where:
 - $\theta$: Any angle in radians or degrees

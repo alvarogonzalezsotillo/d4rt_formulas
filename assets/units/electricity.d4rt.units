@@ -1,0 +1,53 @@
+[
+  {
+    "name": "ampere",
+    "symbol": "A",
+    "isBase": true
+  },
+  {
+    "name": "milliampere",
+    "symbol": "mA",
+    "baseUnit": "ampere",
+    "factor": 0.001
+  },
+  {
+    "name": "microampere",
+    "symbol": "µA",
+    "baseUnit": "ampere",
+    "factor": 0.000001
+  },
+  {
+    "name": "ohm",
+    "symbol": "Ω",
+    "isBase": true
+  },
+  {
+    "name": "kiloohm",
+    "symbol": "kΩ",
+    "baseUnit": "ohm",
+    "factor": 1000
+  },
+  {
+    "name": "megaohm",
+    "symbol": "MΩ",
+    "baseUnit": "ohm",
+    "factor": 1000000
+  },
+  {
+    "name": "volt",
+    "symbol": "V",
+    "isBase": true
+  },
+  {
+    "name": "millivolt",
+    "symbol": "mV",
+    "baseUnit": "volt",
+    "factor": 0.001
+  },
+  {
+    "name": "kilovolt",
+    "symbol": "kV",
+    "baseUnit": "volt",
+    "factor": 1000
+  }
+]

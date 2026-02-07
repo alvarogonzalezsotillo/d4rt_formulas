@@ -1,0 +1,25 @@
+[
+  {
+    "name": "hertz",
+    "symbol": "Hz",
+    "isBase": true
+  },
+  {
+    "name": "kilohertz",
+    "symbol": "kHz",
+    "baseUnit": "hertz",
+    "factor": 1000
+  },
+  {
+    "name": "megahertz",
+    "symbol": "MHz",
+    "baseUnit": "hertz",
+    "factor": 1000000
+  },
+  {
+    "name": "gigahertz",
+    "symbol": "GHz",
+    "baseUnit": "hertz",
+    "factor": 1000000000
+  }
+]
