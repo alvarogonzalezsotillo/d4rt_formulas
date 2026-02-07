@@ -251,10 +251,17 @@ class _FormulaScreenState extends State<FormulaScreen> {
         const SizedBox(height: 8),
         Row(
           children: [
-            Text(widget.formula.output.name),
-            const Spacer(),
+            // Fixed width for field name
             SizedBox(
               width: 150,
+              child: Text(
+                widget.formula.output.name,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8), // Add some spacing
+            // Flexible space for result field
+            Expanded(
               child: TextFormField(
                 readOnly: true,
                 enabled: false,
@@ -291,79 +298,68 @@ class _FormulaScreenState extends State<FormulaScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Text(variable.name),
-          const Spacer(),
-          if (isCategorical) ...[
-            SizedBox(
-              width: 150,
-              child: DropdownButtonFormField<String>(
-                value: _selectedValues[variable.name],
-                items: variable.values!
-                    .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
-                    .toList(),
-                onChanged: (v) {
-                  _selectedValues[variable.name] = v;
-                  _evaluateFormula();
-                  setState(() {
-                  });
-                },
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Required';
-                  return null;
-                },
-              ),
+          // Fixed width for field name
+          SizedBox(
+            width: 150,
+            child: Text(
+              variable.name,
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(width: 8),
-            if (variable.unit != null)
-              UnitDropdown(
-                corpus: widget.corpus,
-                variable: variable,
-                selectedUnit: _selectedUnits[variable.name],
-                onUnitChanged: (unit) {
+          ),
+          const SizedBox(width: 8), // Add some spacing
+          // Flexible space for input field
+          Expanded(
+            child: isCategorical 
+              ? DropdownButtonFormField<String>(
+                  value: _selectedValues[variable.name],
+                  items: variable.values!
+                      .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
+                      .toList(),
+                  onChanged: (v) {
+                    _selectedValues[variable.name] = v;
+                    _evaluateFormula();
+                    setState(() {
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Required';
+                    return null;
+                  },
+                )
+              : TextFormField(
+                  controller: _inputControllers[variable.name],
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
+                  ],
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                  ),
+                  autovalidateMode: AutovalidateMode.always,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Required';
+                    }
+                    return _inputControllers[variable.name]!.lastError;
+                  },
+                ),
+          ),
+          const SizedBox(width: 8),
+          if (variable.unit != null)
+            UnitDropdown(
+              corpus: widget.corpus,
+              variable: variable,
+              selectedUnit: _selectedUnits[variable.name],
+              onUnitChanged: (unit) {
+                setState(() {
                   _selectedUnits[variable.name] = unit;
-                  _evaluateFormula();
-                  setState(() {
-                  });
-                },
-              ),
-          ] else ...[
-            SizedBox(
-              width: 100,
-              child: TextFormField(
-                controller: _inputControllers[variable.name],
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
-                ],
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                ),
-                autovalidateMode: AutovalidateMode.always,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Required';
-                  }
-                  return _inputControllers[variable.name]!.lastError;
-                },
-              ),
+                });
+                _evaluateFormula();
+              },
             ),
-            const SizedBox(width: 8),
-            if (variable.unit != null)
-              UnitDropdown(
-                corpus: widget.corpus,
-                variable: variable,
-                selectedUnit: _selectedUnits[variable.name],
-                onUnitChanged: (unit) {
-                  setState(() {
-                    _selectedUnits[variable.name] = unit;
-                  });
-                  _evaluateFormula();
-                },
-              ),
-          ],
         ],
       ),
     );

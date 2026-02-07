@@ -152,7 +152,7 @@ Where:
   ,
   {
     "name": "Compare price per mass",
-    "description": "Compares two products by their price per mass and returns which is cheaper.",
+    "description": "Compares two products by their price per mass and returns which is cheaper, including price per kg for each product.",
     "input": [
       {"name": "price1", "unit": "currency"},
       {"name": "mass1", "unit": "kilogram"},
@@ -164,11 +164,11 @@ Where:
       var p1 = price1 / mass1;
       var p2 = price2 / mass2;
       if (p1 < p2) {
-        Result = 'first product is cheaper';
+        Result = 'first product is cheaper at \${p1.toStringAsFixed(2)} currency/kg vs \${p2.toStringAsFixed(2)} currency/kg';
       } else if (p2 < p1) {
-        Result = 'second product is cheaper';
+        Result = 'second product is cheaper at \${p2.toStringAsFixed(2)} currency/kg vs \${p1.toStringAsFixed(2)} currency/kg';
       } else {
-        Result = 'both products have the same price per mass';
+        Result = 'both products have the same price per mass at \${p1.toStringAsFixed(2)} currency/kg';
       }
     """,
     "tags": ["comparison", "shopping", "economics"]
