@@ -173,4 +173,219 @@ Where:
     """,
     "tags": ["comparison", "shopping", "economics"]
   }
+  ,
+
+  // Einstein's Mass-Energy Equivalence
+  {
+    "name": "Mass-Energy Equivalence",
+    "description": r'''
+Einstein's famous equation showing the relationship between mass and energy
+
+$$E = mc^2$$
+
+Where:
+- $E$: Energy (Joules)
+- $m$: Mass (kilograms)
+- $c$: Speed of light ($299,792,458\\ \\mathrm{m/s}$)
+
+This equation shows that mass can be converted to energy and vice versa.''',
+    "input": [
+      {"name": "m", "unit": "kilogram"}  // Mass
+    ],
+    "output": {"name": "E", "unit": "joule"},  // Energy
+    "d4rtCode": "E = m * pow(299792458, 2);",
+    "tags": ["physics", "relativity", "energy"]
+  },
+
+  // Ohm's Law
+  {
+    "name": "Ohm's Law",
+    "description": r'''
+Relationship between voltage, current, and resistance in electrical circuits
+
+$$V = IR$$
+
+Where:
+- $V$: Voltage (Volts)
+- $I$: Current (Amperes)
+- $R$: Resistance (Ohms)
+
+This fundamental law describes how current flows through resistive materials.''',
+    "input": [
+      {"name": "I", "unit": "ampere"},  // Current
+      {"name": "R", "unit": "ohm"}     // Resistance
+    ],
+    "output": {"name": "V", "unit": "volt"},  // Voltage
+    "d4rtCode": "V = I * R;",
+    "tags": ["physics", "electricity", "electronics"]
+  },
+
+  // Hooke's Law
+  {
+    "name": "Hooke's Law",
+    "description": r'''
+Force exerted by a spring is proportional to its displacement
+
+$$F = -kx$$
+
+Where:
+- $F$: Restoring force (Newtons)
+- $k$: Spring constant (N/m)
+- $x$: Displacement from equilibrium (meters)
+
+The negative sign indicates the force opposes the displacement.''',
+    "input": [
+      {"name": "k", "unit": "newton per meter"},  // Spring constant
+      {"name": "x", "unit": "meter"}             // Displacement
+    ],
+    "output": {"name": "F", "unit": "newton"},   // Force
+    "d4rtCode": "F = -k * x;",
+    "tags": ["physics", "elasticity", "oscillations"]
+  },
+
+  // Centripetal Force
+  {
+    "name": "Centripetal Force",
+    "description": r'''
+Force required to keep an object moving in circular motion
+
+$$F = \\frac{mv^2}{r}$$
+
+Where:
+- $F$: Centripetal force (Newtons)
+- $m$: Mass of object (kilograms)
+- $v$: Velocity (m/s)
+- $r$: Radius of circular path (meters)
+
+This force acts toward the center of the circle.''',
+    "input": [
+      {"name": "m", "unit": "kilogram"},         // Mass
+      {"name": "v", "unit": "meters per second"}, // Velocity
+      {"name": "r", "unit": "meter"}             // Radius
+    ],
+    "output": {"name": "F", "unit": "newton"},   // Force
+    "d4rtCode": "F = (m * pow(v, 2)) / r;",
+    "tags": ["physics", "circular motion", "centripetal"]
+  },
+
+  // Wave Equation
+  {
+    "name": "Wave Equation",
+    "description": r'''
+Relationship between wave speed, frequency, and wavelength
+
+$$v = f\\lambda$$
+
+Where:
+- $v$: Wave speed (m/s)
+- $f$: Frequency (Hertz)
+- $\lambda$: Wavelength (meters)
+
+This applies to all types of waves including sound and light.''',
+    "input": [
+      {"name": "f", "unit": "hertz"},    // Frequency
+      {"name": "lambda", "unit": "meter"} // Wavelength
+    ],
+    "output": {"name": "v", "unit": "meters per second"}, // Wave speed
+    "d4rtCode": "v = f * lambda;",
+    "tags": ["physics", "waves", "frequency"]
+  },
+
+  // Pythagorean Theorem
+  {
+    "name": "Pythagorean Theorem",
+    "description": r'''
+Fundamental relation in Euclidean geometry among the three sides of a right triangle
+
+$$a^2 + b^2 = c^2$$
+
+Where:
+- $a$, $b$: Legs of the right triangle
+- $c$: Hypotenuse of the right triangle
+
+The square of the hypotenuse is equal to the sum of squares of the other two sides.''',
+    "input": [
+      {"name": "a", "unit": "meter"},  // First leg
+      {"name": "b", "unit": "meter"}   // Second leg
+    ],
+    "output": {"name": "c", "unit": "meter"},  // Hypotenuse
+    "d4rtCode": "c = sqrt(pow(a, 2) + pow(b, 2));",
+    "tags": ["trigonometry", "geometry", "pythagorean"]
+  },
+
+  // Sine Rule
+  {
+    "name": "Sine Rule",
+    "description": r'''
+Relationship between the sides and angles of any triangle
+
+$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}$$
+
+Where:
+- $a$, $b$, $c$: Sides of the triangle
+- $A$, $B$, $C$: Angles opposite to sides $a$, $b$, $c$ respectively
+
+This rule is useful for solving triangles when certain combinations of angles and sides are known.''',
+    "input": [
+      {"name": "a", "unit": "meter"},      // Side a
+      {"name": "A", "unit": "degree"},     // Angle A in degrees
+      {"name": "B", "unit": "degree"}      // Angle B in degrees
+    ],
+    "output": {"name": "b", "unit": "meter"},  // Side b
+    "d4rtCode": """
+       var angleARad = A * (pi / 180);
+       var angleBRad = B * (pi / 180);
+       b = (a * sin(angleBRad)) / sin(angleARad);
+    """,
+    "tags": ["trigonometry", "triangle", "sine"]
+  },
+
+  // Cosine Rule
+  {
+    "name": "Cosine Rule",
+    "description": r'''
+Generalization of the Pythagorean theorem for any triangle
+
+$$c^2 = a^2 + b^2 - 2ab\\cos(C)$$
+
+Where:
+- $a$, $b$, $c$: Sides of the triangle
+- $C$: Angle opposite to side $c$
+
+This rule relates all three sides of a triangle to one of its angles.''',
+    "input": [
+      {"name": "a", "unit": "meter"},      // Side a
+      {"name": "b", "unit": "meter"},      // Side b
+      {"name": "C", "unit": "degree"}      // Angle C in degrees
+    ],
+    "output": {"name": "c", "unit": "meter"},  // Side c
+    "d4rtCode": """
+       var angleCRad = C * (pi / 180);
+       c = sqrt(pow(a, 2) + pow(b, 2) - 2*a*b*cos(angleCRad));
+    """,
+    "tags": ["trigonometry", "triangle", "cosine"]
+  },
+
+  // Trigonometric Identity
+  {
+    "name": "Trigonometric Identity",
+    "description": r'''
+Fundamental Pythagorean identity in trigonometry
+
+$$\\sin^2(\\theta) + \\cos^2(\\theta) = 1$$
+
+Where:
+- $\theta$: Any angle in radians or degrees
+
+This identity is derived from the Pythagorean theorem applied to the unit circle.''',
+    "input": [
+      {"name": "theta", "unit": "degree"}  // Angle in degrees
+    ],
+    "output": {"name": "result", "unit": "scalar"},  // Result (should be 1)
+    "d4rtCode": """
+       var thetaRad = theta * (pi / 180);
+       result = pow(sin(thetaRad), 2) + pow(cos(thetaRad), 2);
+    """,
+    "tags": ["trigonometry", "identity", "sine", "cosine"]
+  }
 ]
