@@ -141,6 +141,22 @@ void main() {
         );
       });
 
+      test('throws exception for invalid values when allowed values are specified', () {
+        final formula = Formula(
+          name: 'Test formula with allowed values',
+          input: [
+            VariableSpec(name: 'status', unit: 'string', values: ['active', 'inactive']),
+          ],
+          output: VariableSpec(name: 'result', unit: 'string'),
+          d4rtCode: 'result = status;',
+        );
+
+        expect(
+          () => evaluator.evaluate(formula, {'status': 'invalid_value'}), // Not in allowed values
+          throwsA(isA<FormulaEvaluationException>()),
+        );
+      });
+
     });
 
     group('Utility methods', () {
