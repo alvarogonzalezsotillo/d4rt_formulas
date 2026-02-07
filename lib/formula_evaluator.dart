@@ -116,18 +116,38 @@ class FormulaEvaluator {
 
   void _validateInputValues(Formula formula, Map<String, dynamic> inputValues) {
     final missingVars = <String>[];
-    
+
     for (final inputVar in formula.inputVarNames()) {
       if (!inputValues.containsKey(inputVar)) {
         missingVars.add(inputVar);
       }
     }
-    
+
     if (missingVars.isNotEmpty) {
       throw FormulaEvaluationException(
         'Missing required input variables for formula "${formula.name}": '
         '${missingVars.join(', ')}',
       );
+    }
+
+    // Validate that input values are in the allowed values list if specified
+    for (final vs in formula.input) {
+      final values = vs.values;
+      if (values != null && values.isNotEmpty) {
+        final inputValue = inputValues[vs.name];
+        if (inputValue != null) {
+          // Convert input value to string for comparison since allowed values are stored as strings
+          final inputValueAsString = inputValue.toString();
+          final containsValue = values.any((allowedValue) => allowedValue.toString() == inputValueAsString);
+          
+          if (!containsValue) {
+            throw FormulaEvaluationException(
+              'Invalid value for variable "${vs.name}" in formula "${formula.name}". '
+              'Expected one of: [${values.join(', ')}], but got: $inputValue',
+            );
+          }
+        }
+      }
     }
   }
 

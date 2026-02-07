@@ -120,14 +120,76 @@ void main() {
       final evaluator = FormulaEvaluator();
 
       final result = evaluator.evaluate(formula, {
-        'HeartRate': 2,
-        'Breathing': 2,
-        'MuscleTone': 2,
-        'Reflexes': 2,
-        'SkinColor': 2
+        'HeartRate': '> 100 bpm',
+        'Breathing': 'Strong, robust cry',
+        'MuscleTone': 'Flexed arms/leg, resists extension',
+        'Reflexes': 'Cry on stimulation',
+        'SkinColor': 'Pink'
       });
 
       expect(result, 'Score: 10 - Normal');
+    });
+
+    test('evaluates APGAR score formula - Good condition case', () async {
+      final corpus = await testCorpus;
+      final formula = corpus.getFormula("Apgar Score")!;
+      final evaluator = FormulaEvaluator();
+
+      final result = evaluator.evaluate(formula, {
+        'HeartRate': '> 100 bpm',  // 2
+        'Breathing': 'Strong, robust cry',  // 2
+        'MuscleTone': 'Some',  // 1
+        'Reflexes': 'Grimace on aggressive stimulation',  // 1
+        'SkinColor': 'Blue extremities, pink body'  // 1
+      });
+
+      expect(result, 'Score: 7 - Normal');
+    });
+
+    test('evaluates APGAR score formula - Needs assistance case', () async {
+      final corpus = await testCorpus;
+      final formula = corpus.getFormula("Apgar Score")!;
+      final evaluator = FormulaEvaluator();
+
+      final result = evaluator.evaluate(formula, {
+        'HeartRate': '> 100 bpm',  // 2
+        'Breathing': 'Weak, irregular',  // 1
+        'MuscleTone': 'Some',  // 1
+        'Reflexes': 'Grimace on aggressive stimulation',  // 1
+        'SkinColor': 'Blue extremities, pink body'  // 1
+      });
+
+      expect(result, 'Score: 6 - Needs assistance');
+    });
+
+    test('evaluates APGAR score formula - Critical condition case', () async {
+      final corpus = await testCorpus;
+      final formula = corpus.getFormula("Apgar Score")!;
+      final evaluator = FormulaEvaluator();
+
+      final result = evaluator.evaluate(formula, {
+        'HeartRate': 'Absent',  // 0
+        'Breathing': 'Absent',  // 0
+        'MuscleTone': 'None',  // 0
+        'Reflexes': 'No response',  // 0
+        'SkinColor': 'Blue or pale'  // 0
+      });
+
+      expect(result, 'Score: 0 - Critical condition');
+    });
+
+    test('evaluates APGAR score formula - Invalid value throws exception', () async {
+      final corpus = await testCorpus;
+      final formula = corpus.getFormula("Apgar Score")!;
+      final evaluator = FormulaEvaluator();
+
+      expect(() => evaluator.evaluate(formula, {
+        'HeartRate': 'Invalid Value',  // Not in allowed values
+        'Breathing': 'Absent',  // 0
+        'MuscleTone': 'None',  // 0
+        'Reflexes': 'No response',  // 0
+        'SkinColor': 'Blue or pale'  // 0
+      }), throwsA(isA<FormulaEvaluationException>()));
     });
   });
 

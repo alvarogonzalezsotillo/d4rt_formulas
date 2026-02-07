@@ -2,7 +2,7 @@
 all: clean-container build-linux-debug-container
 
 build-container:
-	./flutterw --build
+	./flutterw --build-container
 
 clean-container: build-container
 	./flutterw clean
