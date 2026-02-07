@@ -1,7 +1,20 @@
 FROM ghcr.io/cirruslabs/flutter:stable
 
-# Install cmake, ninja, clang, pkg-config for flutter linux
-RUN apt-get update && apt-get install -y cmake ninja-build clang pkg-config libgtk-3-dev liblzma-dev
+# Install cmake, ninja, clang, pkg-config, and other tools for flutter linux
+RUN apt-get update && apt-get install -y \
+    cmake \
+    ninja-build \
+    clang \
+    pkg-config \
+    libgtk-3-dev \
+    liblzma-dev \
+    binutils-dev \
+    build-essential \
+    lld \
+    binutils
+
+# Create symlinks for the linker to ensure it's accessible
+RUN ln -sf /usr/bin/ld.lld /usr/bin/ld
 
 WORKDIR /app
 

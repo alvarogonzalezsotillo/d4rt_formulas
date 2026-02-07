@@ -33,13 +33,20 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: 
+  cupertino_icons:
   resource_portable:
   d4rt:
   flutter_d4rt:
   flutter_markdown:
   flutter_markdown_latex:
   flutter_code_editor:
+
+  # Drift dependencies for database support
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.9
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  get_it: ^8.0.2
 
   collection: any
 dev_dependencies:
@@ -53,6 +60,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints:
   test:
+
+  # Drift build dependencies
+  drift_dev: ^2.18.0
+  build_runner: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
