@@ -3,11 +3,12 @@
 part of 'formulas_database.dart';
 
 // ignore_for_file: type=lint
-class $FormulasTable extends Formulas with TableInfo<$FormulasTable, Formula> {
+class $FormulaElementsTable extends FormulaElements
+    with TableInfo<$FormulaElementsTable, FormulaElement> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FormulasTable(this.attachedDatabase, [this._alias]);
+  $FormulaElementsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -21,27 +22,27 @@ class $FormulasTable extends Formulas with TableInfo<$FormulasTable, Formula> {
       'PRIMARY KEY AUTOINCREMENT',
     ),
   );
-  static const VerificationMeta _formulaMeta = const VerificationMeta(
-    'formula',
+  static const VerificationMeta _elementTextMeta = const VerificationMeta(
+    'elementText',
   );
   @override
-  late final GeneratedColumn<String> formula = GeneratedColumn<String>(
-    'formula',
+  late final GeneratedColumn<String> elementText = GeneratedColumn<String>(
+    'element_text',
     aliasedName,
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, formula];
+  List<GeneratedColumn> get $columns => [id, elementText];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'formulas';
+  static const String $name = 'formula_elements';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Formula> instance, {
+    Insertable<FormulaElement> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -49,13 +50,16 @@ class $FormulasTable extends Formulas with TableInfo<$FormulasTable, Formula> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('formula')) {
+    if (data.containsKey('element_text')) {
       context.handle(
-        _formulaMeta,
-        formula.isAcceptableOrUnknown(data['formula']!, _formulaMeta),
+        _elementTextMeta,
+        elementText.isAcceptableOrUnknown(
+          data['element_text']!,
+          _elementTextMeta,
+        ),
       );
     } else if (isInserting) {
-      context.missing(_formulaMeta);
+      context.missing(_elementTextMeta);
     }
     return context;
   }
@@ -63,50 +67,53 @@ class $FormulasTable extends Formulas with TableInfo<$FormulasTable, Formula> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Formula map(Map<String, dynamic> data, {String? tablePrefix}) {
+  FormulaElement map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Formula(
+    return FormulaElement(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
       )!,
-      formula: attachedDatabase.typeMapping.read(
+      elementText: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}formula'],
+        data['${effectivePrefix}element_text'],
       )!,
     );
   }
 
   @override
-  $FormulasTable createAlias(String alias) {
-    return $FormulasTable(attachedDatabase, alias);
+  $FormulaElementsTable createAlias(String alias) {
+    return $FormulaElementsTable(attachedDatabase, alias);
   }
 }
 
-class Formula extends DataClass implements Insertable<Formula> {
+class FormulaElement extends DataClass implements Insertable<FormulaElement> {
   final int id;
-  final String formula;
-  const Formula({required this.id, required this.formula});
+  final String elementText;
+  const FormulaElement({required this.id, required this.elementText});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['formula'] = Variable<String>(formula);
+    map['element_text'] = Variable<String>(elementText);
     return map;
   }
 
-  FormulasCompanion toCompanion(bool nullToAbsent) {
-    return FormulasCompanion(id: Value(id), formula: Value(formula));
+  FormulaElementsCompanion toCompanion(bool nullToAbsent) {
+    return FormulaElementsCompanion(
+      id: Value(id),
+      elementText: Value(elementText),
+    );
   }
 
-  factory Formula.fromJson(
+  factory FormulaElement.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Formula(
+    return FormulaElement(
       id: serializer.fromJson<int>(json['id']),
-      formula: serializer.fromJson<String>(json['formula']),
+      elementText: serializer.fromJson<String>(json['elementText']),
     );
   }
   @override
@@ -114,63 +121,70 @@ class Formula extends DataClass implements Insertable<Formula> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'formula': serializer.toJson<String>(formula),
+      'elementText': serializer.toJson<String>(elementText),
     };
   }
 
-  Formula copyWith({int? id, String? formula}) =>
-      Formula(id: id ?? this.id, formula: formula ?? this.formula);
-  Formula copyWithCompanion(FormulasCompanion data) {
-    return Formula(
+  FormulaElement copyWith({int? id, String? elementText}) => FormulaElement(
+    id: id ?? this.id,
+    elementText: elementText ?? this.elementText,
+  );
+  FormulaElement copyWithCompanion(FormulaElementsCompanion data) {
+    return FormulaElement(
       id: data.id.present ? data.id.value : this.id,
-      formula: data.formula.present ? data.formula.value : this.formula,
+      elementText: data.elementText.present
+          ? data.elementText.value
+          : this.elementText,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('Formula(')
+    return (StringBuffer('FormulaElement(')
           ..write('id: $id, ')
-          ..write('formula: $formula')
+          ..write('elementText: $elementText')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, formula);
+  int get hashCode => Object.hash(id, elementText);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Formula &&
+      (other is FormulaElement &&
           other.id == this.id &&
-          other.formula == this.formula);
+          other.elementText == this.elementText);
 }
 
-class FormulasCompanion extends UpdateCompanion<Formula> {
+class FormulaElementsCompanion extends UpdateCompanion<FormulaElement> {
   final Value<int> id;
-  final Value<String> formula;
-  const FormulasCompanion({
+  final Value<String> elementText;
+  const FormulaElementsCompanion({
     this.id = const Value.absent(),
-    this.formula = const Value.absent(),
+    this.elementText = const Value.absent(),
   });
-  FormulasCompanion.insert({
+  FormulaElementsCompanion.insert({
     this.id = const Value.absent(),
-    required String formula,
-  }) : formula = Value(formula);
-  static Insertable<Formula> custom({
+    required String elementText,
+  }) : elementText = Value(elementText);
+  static Insertable<FormulaElement> custom({
     Expression<int>? id,
-    Expression<String>? formula,
+    Expression<String>? elementText,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (formula != null) 'formula': formula,
+      if (elementText != null) 'element_text': elementText,
     });
   }
 
-  FormulasCompanion copyWith({Value<int>? id, Value<String>? formula}) {
-    return FormulasCompanion(
+  FormulaElementsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? elementText,
+  }) {
+    return FormulaElementsCompanion(
       id: id ?? this.id,
-      formula: formula ?? this.formula,
+      elementText: elementText ?? this.elementText,
     );
   }
 
@@ -180,17 +194,17 @@ class FormulasCompanion extends UpdateCompanion<Formula> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (formula.present) {
-      map['formula'] = Variable<String>(formula.value);
+    if (elementText.present) {
+      map['element_text'] = Variable<String>(elementText.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('FormulasCompanion(')
+    return (StringBuffer('FormulaElementsCompanion(')
           ..write('id: $id, ')
-          ..write('formula: $formula')
+          ..write('elementText: $elementText')
           ..write(')'))
         .toString();
   }
@@ -199,22 +213,30 @@ class FormulasCompanion extends UpdateCompanion<Formula> {
 abstract class _$FormulasDatabase extends GeneratedDatabase {
   _$FormulasDatabase(QueryExecutor e) : super(e);
   $FormulasDatabaseManager get managers => $FormulasDatabaseManager(this);
-  late final $FormulasTable formulas = $FormulasTable(this);
+  late final $FormulaElementsTable formulaElements = $FormulaElementsTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [formulas];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [formulaElements];
 }
 
-typedef $$FormulasTableCreateCompanionBuilder =
-    FormulasCompanion Function({Value<int> id, required String formula});
-typedef $$FormulasTableUpdateCompanionBuilder =
-    FormulasCompanion Function({Value<int> id, Value<String> formula});
+typedef $$FormulaElementsTableCreateCompanionBuilder =
+    FormulaElementsCompanion Function({
+      Value<int> id,
+      required String elementText,
+    });
+typedef $$FormulaElementsTableUpdateCompanionBuilder =
+    FormulaElementsCompanion Function({
+      Value<int> id,
+      Value<String> elementText,
+    });
 
-class $$FormulasTableFilterComposer
-    extends Composer<_$FormulasDatabase, $FormulasTable> {
-  $$FormulasTableFilterComposer({
+class $$FormulaElementsTableFilterComposer
+    extends Composer<_$FormulasDatabase, $FormulaElementsTable> {
+  $$FormulaElementsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -226,15 +248,15 @@ class $$FormulasTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get formula => $composableBuilder(
-    column: $table.formula,
+  ColumnFilters<String> get elementText => $composableBuilder(
+    column: $table.elementText,
     builder: (column) => ColumnFilters(column),
   );
 }
 
-class $$FormulasTableOrderingComposer
-    extends Composer<_$FormulasDatabase, $FormulasTable> {
-  $$FormulasTableOrderingComposer({
+class $$FormulaElementsTableOrderingComposer
+    extends Composer<_$FormulasDatabase, $FormulaElementsTable> {
+  $$FormulaElementsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -246,15 +268,15 @@ class $$FormulasTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get formula => $composableBuilder(
-    column: $table.formula,
+  ColumnOrderings<String> get elementText => $composableBuilder(
+    column: $table.elementText,
     builder: (column) => ColumnOrderings(column),
   );
 }
 
-class $$FormulasTableAnnotationComposer
-    extends Composer<_$FormulasDatabase, $FormulasTable> {
-  $$FormulasTableAnnotationComposer({
+class $$FormulaElementsTableAnnotationComposer
+    extends Composer<_$FormulasDatabase, $FormulaElementsTable> {
+  $$FormulaElementsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -264,49 +286,60 @@ class $$FormulasTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get formula =>
-      $composableBuilder(column: $table.formula, builder: (column) => column);
+  GeneratedColumn<String> get elementText => $composableBuilder(
+    column: $table.elementText,
+    builder: (column) => column,
+  );
 }
 
-class $$FormulasTableTableManager
+class $$FormulaElementsTableTableManager
     extends
         RootTableManager<
           _$FormulasDatabase,
-          $FormulasTable,
-          Formula,
-          $$FormulasTableFilterComposer,
-          $$FormulasTableOrderingComposer,
-          $$FormulasTableAnnotationComposer,
-          $$FormulasTableCreateCompanionBuilder,
-          $$FormulasTableUpdateCompanionBuilder,
+          $FormulaElementsTable,
+          FormulaElement,
+          $$FormulaElementsTableFilterComposer,
+          $$FormulaElementsTableOrderingComposer,
+          $$FormulaElementsTableAnnotationComposer,
+          $$FormulaElementsTableCreateCompanionBuilder,
+          $$FormulaElementsTableUpdateCompanionBuilder,
           (
-            Formula,
-            BaseReferences<_$FormulasDatabase, $FormulasTable, Formula>,
+            FormulaElement,
+            BaseReferences<
+              _$FormulasDatabase,
+              $FormulaElementsTable,
+              FormulaElement
+            >,
           ),
-          Formula,
+          FormulaElement,
           PrefetchHooks Function()
         > {
-  $$FormulasTableTableManager(_$FormulasDatabase db, $FormulasTable table)
-    : super(
+  $$FormulaElementsTableTableManager(
+    _$FormulasDatabase db,
+    $FormulaElementsTable table,
+  ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$FormulasTableFilterComposer($db: db, $table: table),
+              $$FormulaElementsTableFilterComposer($db: db, $table: table),
           createOrderingComposer: () =>
-              $$FormulasTableOrderingComposer($db: db, $table: table),
+              $$FormulaElementsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
-              $$FormulasTableAnnotationComposer($db: db, $table: table),
+              $$FormulaElementsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                Value<String> formula = const Value.absent(),
-              }) => FormulasCompanion(id: id, formula: formula),
+                Value<String> elementText = const Value.absent(),
+              }) => FormulaElementsCompanion(id: id, elementText: elementText),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
-                required String formula,
-              }) => FormulasCompanion.insert(id: id, formula: formula),
+                required String elementText,
+              }) => FormulaElementsCompanion.insert(
+                id: id,
+                elementText: elementText,
+              ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
@@ -315,24 +348,31 @@ class $$FormulasTableTableManager
       );
 }
 
-typedef $$FormulasTableProcessedTableManager =
+typedef $$FormulaElementsTableProcessedTableManager =
     ProcessedTableManager<
       _$FormulasDatabase,
-      $FormulasTable,
-      Formula,
-      $$FormulasTableFilterComposer,
-      $$FormulasTableOrderingComposer,
-      $$FormulasTableAnnotationComposer,
-      $$FormulasTableCreateCompanionBuilder,
-      $$FormulasTableUpdateCompanionBuilder,
-      (Formula, BaseReferences<_$FormulasDatabase, $FormulasTable, Formula>),
-      Formula,
+      $FormulaElementsTable,
+      FormulaElement,
+      $$FormulaElementsTableFilterComposer,
+      $$FormulaElementsTableOrderingComposer,
+      $$FormulaElementsTableAnnotationComposer,
+      $$FormulaElementsTableCreateCompanionBuilder,
+      $$FormulaElementsTableUpdateCompanionBuilder,
+      (
+        FormulaElement,
+        BaseReferences<
+          _$FormulasDatabase,
+          $FormulaElementsTable,
+          FormulaElement
+        >,
+      ),
+      FormulaElement,
       PrefetchHooks Function()
     >;
 
 class $FormulasDatabaseManager {
   final _$FormulasDatabase _db;
   $FormulasDatabaseManager(this._db);
-  $$FormulasTableTableManager get formulas =>
-      $$FormulasTableTableManager(_db, _db.formulas);
+  $$FormulaElementsTableTableManager get formulaElements =>
+      $$FormulaElementsTableTableManager(_db, _db.formulaElements);
 }

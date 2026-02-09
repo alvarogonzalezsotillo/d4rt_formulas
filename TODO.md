@@ -9,7 +9,8 @@
   - [X] Create function `List<Object> parseCorpusElements(String arrayStringLiteral)`. It uses parseD4rtLiteral and determines if each element of the array is a formula or a unit. Then converts the objects with Formula.fromSet or UnitSpec.fromSet.
   - [X] Create method loadFormulaElements( List<Object> elements). Tipically receives the list from parseCorpusElements(). It loads the units first, then the formulas, to avoid missing dependencies.
   - [X] Change createDefaultCorpus to use loadFormulaElements instead of loadUnits and loadFormula. Make loadUnits and loadFormula private.
-- [ ] Use a single table in database `FORMULAELEMENT` to store formulas and units. The table contains only two columns: autonumeric id and text.
+- [X] Use a single table in database `FORMULAELEMENT` to store formulas and units. The table contains only two columns: autonumeric id and text.
+- Drift files have a lot of duplicate code. "web" version is the same as native version, only _openConnection is diferrent. Refactor to not duplicate code.
 - [ ] Create Formula.toStringLiteral. It is the reverse of Formula.fromSet( Formula.fromArrayStringLiteral(string)[0] )
 - [ ] Create UnitSpec.toStringLiteral, like Formula.toStringLiteral
 - Database file location:
