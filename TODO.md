@@ -1,7 +1,8 @@
 [ ] Means not done
 [x] Means done
 
-- [ ] Unify error reporting. Create class ErrorHandler that get notified of every catched exception. This class prints the exception in stdout.
+- [X] Unify error reporting. Create class ErrorHandler that get notified of every catched exception. This class prints the exception in stdout.
+- [ ] Make formula description collapsable in FormulaScreen. Initialy, the description is visible, but the user can hide it.
 - Refactor formula and unit loading:
   - [ ] Create method `List<Object?> parseD4rtLiteral(String arrayStringLiteral). It parses a d4rt array literal (containing maps and arrays) to a List<Object?> using d4rt
   - [ ] Remove `fromArrayStringLiteral` from UnitSpec and Formula.
@@ -20,3 +21,4 @@
   - [ ] From now on, the corpus will be loaded from database instead of assets
 - [ ] Create method List<UnitSpec> Corpus.withDependencies(Formula formula). It will return the list of units of the formula, and related units from the corpus.
 - [ ] Add a Share button to the formula list. It will export the array string literal of the formula with the units from Corpus.withDependencies().
+- [ ] Replace flutter-markdown with flutter-markdown-plus

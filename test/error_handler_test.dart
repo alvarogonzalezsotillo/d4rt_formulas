@@ -31,10 +31,10 @@ void main() {
         errors.add(error);
       };
       
-      int result = errorHandler.handleError(() => 42, defaultValue: 0);
+      int result = ErrorHandler().handleError(() => 42, defaultValue: 0);
       expect(result, 42);
       
-      result = errorHandler.handleError(() {
+      result = ErrorHandler().handleError(() {
         throw Exception('Handled exception');
       }, defaultValue: 100);
       
@@ -49,7 +49,7 @@ void main() {
       };
       
       expect(() {
-        errorHandler.handleError(() {
+        ErrorHandler().handleError(() {
           throw Exception('Rethrown exception');
         });
       }, throwsA(const TypeMatcher<Exception>()));

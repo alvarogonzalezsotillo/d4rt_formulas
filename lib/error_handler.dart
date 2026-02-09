@@ -14,16 +14,30 @@ class ErrorHandler {
     // Print the exception to stdout as requested
     print('ErrorHandler caught exception:');
     print(error);
-    
+
     if (stackTrace != null) {
       print('Stack trace:');
       print(stackTrace);
     }
-    
+
     // Call the custom error handler if provided
     onError?.call(error, stackTrace);
   }
 
+  /// Convenience method to wrap code that might throw exceptions
+  T handleError<T>(T Function() operation, {T? defaultValue}) {
+    try {
+      return operation();
+    } catch (error, stackTrace) {
+      notify(error, stackTrace);
+
+      if (defaultValue != null) {
+        return defaultValue;
+      }
+
+      rethrow;
+    }
+  }
 }
 
 /// Global instance of ErrorHandler for easy access

@@ -30,3 +30,6 @@ run-linux-debug-native: build-linux-debug-container
 
 run-web-debug-native: build-web-debug-container
 	cd build/web && python3 -m http.server $${WEB_PORT:-8081}
+
+ai:
+	qwen --prompt-interactive --yolo "Read CLAUDE.md. Implement first task not already done in TODO.md"

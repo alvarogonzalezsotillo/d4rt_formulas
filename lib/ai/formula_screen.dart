@@ -65,6 +65,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   final Map<String, String?> _selectedValues = {}; // for string dropdowns
   String? _result;
   String? _selectedOutputUnit;
+  bool _isDescriptionExpanded = true; // Track description expansion state
 
   @override
   void initState() {
@@ -194,36 +195,45 @@ class _FormulaScreenState extends State<FormulaScreen> {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: ExpansionTile(
+        title: Text(
           'Description',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
-            borderRadius: BorderRadius.circular(8),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
           ),
-          child: MarkdownBody(
-            data: widget.formula.description!,
-            shrinkWrap: true,
-            builders: {
-              'latex': LatexElementBuilder(),
-            },
-            extensionSet: markdown.ExtensionSet(
-              [LatexBlockSyntax()],
-              [LatexInlineSyntax()],
+        ),
+        initiallyExpanded: _isDescriptionExpanded,
+        onExpansionChanged: (bool expanded) {
+          setState(() {
+            _isDescriptionExpanded = expanded;
+          });
+        },
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: MarkdownBody(
+                data: widget.formula.description!,
+                shrinkWrap: true,
+                builders: {
+                  'latex': LatexElementBuilder(),
+                },
+                extensionSet: markdown.ExtensionSet(
+                  [LatexBlockSyntax()],
+                  [LatexInlineSyntax()],
+                ),
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 24),
-      ],
+        ],
+      ),
     );
   }
 
