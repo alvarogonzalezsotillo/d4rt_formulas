@@ -180,5 +180,28 @@ class Corpus{
 
   Iterable<UnitSpec> allUnits() => _allUnits.values;
 
+  /// Loads formula elements, making sure to load units first, then formulas
+  /// to avoid dependency issues.
+  void loadFormulaElements(List<Object> elements) {
+    List<UnitSpec> units = [];
+    List<Formula> formulas = [];
+
+    // Separate units and formulas
+    for (final element in elements) {
+      if (element is UnitSpec) {
+        units.add(element);
+      } else if (element is Formula) {
+        formulas.add(element);
+      } else {
+        throw ArgumentError('Element must be either UnitSpec or Formula: $element');
+      }
+    }
+
+    // Load units first to satisfy dependencies
+    loadUnits(units);
+
+    // Then load formulas
+    loadFormulas(formulas);
+  }
 
 }

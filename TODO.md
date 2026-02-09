@@ -2,12 +2,13 @@
 [x] Means done
 
 - [X] Unify error reporting. Create class ErrorHandler that get notified of every catched exception. This class prints the exception in stdout.
-- [ ] Make formula description collapsable in FormulaScreen. Initialy, the description is visible, but the user can hide it.
+- [X] Make formula description collapsable in FormulaScreen. Initialy, the description is visible, but the user can hide it.
 - Refactor formula and unit loading:
-  - [ ] Create method `List<Object?> parseD4rtLiteral(String arrayStringLiteral). It parses a d4rt array literal (containing maps and arrays) to a List<Object?> using d4rt
-  - [ ] Remove `fromArrayStringLiteral` from UnitSpec and Formula.
-  - [ ] Create function `List<Object> parseCorpusElements(String arrayStringLiteral)`. It uses parseD4rtLiteral and determines if each element of the array is a formula or a unit. Then converts the objects with Formula.fromSet or UnitSpec.fromSet.
-  - [ ] Create method loadFormulaElements( List<Object> elements). Tipically receives the list from parseCorpusElements(). It loads the units first, then the formulas, to avoid missing dependencies.
+  - [X] Create method `List<Object?> parseD4rtLiteral(String arrayStringLiteral). It parses a d4rt array literal (containing maps and arrays) to a List<Object?> using d4rt
+  - [X] Make `fromArrayStringLiteral` from UnitSpec and Formula to use parseD4rtLiteral
+  - [X] Create function `List<Object> parseCorpusElements(String arrayStringLiteral)`. It uses parseD4rtLiteral and determines if each element of the array is a formula or a unit. Then converts the objects with Formula.fromSet or UnitSpec.fromSet.
+  - [X] Create method loadFormulaElements( List<Object> elements). Tipically receives the list from parseCorpusElements(). It loads the units first, then the formulas, to avoid missing dependencies.
+  - [X] Change createDefaultCorpus to use loadFormulaElements instead of loadUnits and loadFormula. Make loadUnits and loadFormula private.
 - [ ] Use a single table in database `FORMULAELEMENT` to store formulas and units. The table contains only two columns: autonumeric id and text.
 - [ ] Create Formula.toStringLiteral. It is the reverse of Formula.fromSet( Formula.fromArrayStringLiteral(string)[0] )
 - [ ] Create UnitSpec.toStringLiteral, like Formula.toStringLiteral

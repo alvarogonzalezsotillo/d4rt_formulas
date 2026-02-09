@@ -23,6 +23,47 @@ abstract class SetUtils {
   }
 }
 
+/// Parses a d4rt array literal (containing maps and arrays) to a List<Object?>
+/// using d4rt
+List<Object?> parseD4rtLiteral(String arrayStringLiteral) {
+  var d4rt = D4rt();
+  final buffer = StringBuffer();
+  buffer.write("main(){ return $arrayStringLiteral; }");
+  final code = buffer.toString();
+
+  final List<Object?> list = d4rt.execute(source: code);
+
+  return list;
+}
+
+/// Parses corpus elements from an array string literal.
+/// Determines if each element is a formula or a unit and converts accordingly.
+List<Object> parseCorpusElements(String arrayStringLiteral) {
+  final List<Object?> elements = parseD4rtLiteral(arrayStringLiteral);
+  
+  final List<Object> result = [];
+  for (final element in elements) {
+    if (element is Map<Object?, Object?>) {
+      // Check if it's a formula by looking for required formula properties
+      // Formulas typically have 'd4rtCode' and 'input'/'output' properties
+      if (element.containsKey('d4rtCode')) {
+        result.add(Formula.fromSet(element));
+      } 
+      // Units typically have 'name', 'symbol', and 'baseUnit' properties
+      else if (element.containsKey('name') && element.containsKey('symbol')) {
+        result.add(UnitSpec.fromSet(element));
+      } 
+      else {
+        throw ArgumentError('Unknown element type: $element');
+      }
+    } else {
+      throw ArgumentError('Element must be a Map: $element');
+    }
+  }
+  
+  return result;
+}
+
 typedef Number = double;
 
 
@@ -86,12 +127,7 @@ class UnitSpec {
   }
 
   static List<UnitSpec> fromArrayStringLiteral(String arrayStringLiteral) {
-    var d4rt = D4rt();
-    final buffer = StringBuffer();
-    buffer.write("main(){ return $arrayStringLiteral; }");
-    final code = buffer.toString();
-
-    final List<Object?> list = d4rt.execute(source: code);
+    final List<Object?> list = parseD4rtLiteral(arrayStringLiteral);
 
     final units = list.map((set) => UnitSpec.fromSet(set as Map));
 
@@ -195,13 +231,7 @@ class Formula {
   }
 
   static List<Formula> fromArrayStringLiteral(String arrayStringLiteral) {
-    var d4rt = D4rt();
-    final buffer = StringBuffer();
-    buffer.write("main(){ return $arrayStringLiteral; }");
-    final code = buffer.toString();
-
-    //print("fromArrayStringLiteral:$code");
-    final List<Object?> list = d4rt.execute(source: code);
+    final List<Object?> list = parseD4rtLiteral(arrayStringLiteral);
 
     final formulas = list.map((set) => Formula.fromSet(set as Map));
 
