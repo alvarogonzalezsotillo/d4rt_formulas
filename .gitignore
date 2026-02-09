@@ -17,3 +17,4 @@
 /d4rt_formulas.iml
 .aider*
 .build-container-cache
+/coverage/

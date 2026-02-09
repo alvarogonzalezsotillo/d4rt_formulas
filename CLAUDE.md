@@ -8,6 +8,6 @@
 - Examples:
   - `flutter pub get` --> `./flutterw pub get`
   - `flutter run -d linux` --> `./flutterw run -d linux`
-- See `./Makefile` for more use examples.
+- See `./Makefile` for more examples.
 
 
