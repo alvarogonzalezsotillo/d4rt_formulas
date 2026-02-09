@@ -2,6 +2,7 @@ import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
 import 'formula_models.dart';
+import 'error_handler.dart';
 
 
 
@@ -105,8 +106,7 @@ class FormulaEvaluator {
       return result;
     }
     catch (e, stack) {
-      print( "Error evaluating formula source:\n$completeSource" );
-      print( stack );
+      errorHandler.notify(e.toString() + "\n" + completeSource, stack);
       throw FormulaEvaluationException(
         'Error evaluating formula "${formula.name}": $e',
         e,

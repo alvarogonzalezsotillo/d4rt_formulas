@@ -154,12 +154,8 @@ class Corpus{
         return ret;
       }
       catch( e2, stack2 ){
-        print(completeSourceExpression);
-        print(e1);
-        print(stack1);
-        print(completeSourceStatement);
-        print(e2);
-        print(stack2);
+        errorHandler.notify(e1.toString() + "\n" + completeSourceExpression, stack1);
+        errorHandler.notify(e2.toString() + "\n" + completeSourceStatement, stack2);
         throw FormulaEvaluationException( "Evaluation as statement and expression failed" );
       }
     }

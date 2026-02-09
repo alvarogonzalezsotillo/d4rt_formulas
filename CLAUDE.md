@@ -11,3 +11,11 @@
 - See `./Makefile` for more examples.
 
 
+# Workflow
+- One feature at a time
+- Create a git branch for each new feature
+- After making changes, and before consider the feature is implemented
+  - Allways pass all the tests and integration tests
+  - Build the application for linux and web-server
+  - Launch the apllication for web-server, with a timeout of 60s
+- Dont merge the feature branch into master, the work will be reviewed by a human.

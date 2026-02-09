@@ -6,6 +6,7 @@ import 'package:markdown/markdown.dart' as markdown;
 import '../formula_models.dart';
 import '../formula_evaluator.dart';
 import '../corpus.dart';
+import '../error_handler.dart';
 import 'unit_dropdown.dart';
 
 class FormulaScreen extends StatefulWidget {
@@ -36,9 +37,8 @@ class D4rtEditingController extends TextEditingController {
       _lastError = null;
       return true;
     } catch (e, s) {
+      errorHandler.notify(e, s);
       _lastError = e.toString();
-      print("validate: $text: $e");
-      print("stack: $s");
       return false;
     }
   }
@@ -95,8 +95,6 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   void _evaluateFormula() {
-    print( "EVALUATE FORMULA");
-
     try {
       final inputValues = <String, dynamic>{};
       for (final input in widget.formula.input) {
@@ -159,12 +157,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
       setState(() {});
     } catch (e, stack) {
-      debugPrint('Formula evaluation error: $e');
-      debugPrint('Stack trace: $stack');
-
+      errorHandler.notify(e, stack);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error: ${e.toString()}\n${stack.toString()}'),
+          content: Text('Error: ${e.toString()}'),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
