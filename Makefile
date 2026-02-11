@@ -10,6 +10,12 @@ clean-container: build-container
 pub-get-container: build-container
 	./flutterw pub get
 
+test: pub-get-container
+	./flutterw test
+
+build-builders: build-container
+	./flutterw pub run build_runner build --delete-conflicting-outputs
+
 build-android-release-container: pub-get-container
 	./flutterw build apk --release
 

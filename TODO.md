@@ -19,10 +19,10 @@
 - [X] Create UnitSpec.toStringLiteral, like Formula.toStringLiteral
 - [X] Make Formula and UnitSpec subclasses of FormulaElement. Change return type of functions that return Object to FormulaElement if necessary.
 - [X] Define toStringLiteral in FormulaElement.
-- Database file location:
-  - [ ] In linux, the sqlite database file will be located following rules at https://specifications.freedesktop.org/basedir/latest/
-  - [ ] In Windows, the sqlite database file will be in %appdata%/Roaming
-  - [ ] In Macos, the sqlite database file will be in ~/Library/Application Support
+- [X] Database file location:
+  - [X] In linux, the sqlite database file will be located following rules at https://specifications.freedesktop.org/basedir/latest/
+  - [X] In Windows, the sqlite database file will be in %appdata%/Roaming
+  - [X] In Macos, the sqlite database file will be in ~/Library/Application Support
 - [ ] Initialize database at startup
   - [ ] If the database is empty, sugest to use a default corpus
   - [ ] If the user choose to use the default corpus, populate de database with the default corpus (load defaultcorpus, and the use toStringLiteral)

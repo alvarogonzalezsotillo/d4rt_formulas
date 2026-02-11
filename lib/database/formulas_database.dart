@@ -48,9 +48,22 @@ class FormulasDatabase extends _$FormulasDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    // For native platforms (Linux, Windows, macOS, Android, iOS)
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'formulas.sqlite'));
+    // Determine the platform-specific database directory
+    Directory dbDirectory;
+    
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      final appSupportDir = await getApplicationSupportDirectory();
+      dbDirectory = Directory(p.join(appSupportDir.path, 'd4rt_formulas'));
+    } else {
+      dbDirectory = await getApplicationDocumentsDirectory();
+    }
+    
+    // Ensure the directory exists
+    await dbDirectory.create(recursive: true);
+    
+    // Create the database file in the platform-specific directory
+    final file = File(p.join(dbDirectory.path, 'formulas.sqlite'));
     return NativeDatabase.createInBackground(file);
   });
 }
+
