@@ -65,7 +65,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   final Map<String, String?> _selectedValues = {}; // for string dropdowns
   String? _result;
   String? _selectedOutputUnit;
-  bool _isDescriptionExpanded = true; // Track description expansion state
+  bool _isDescriptionExpanded = false; // Track description expansion state
 
   @override
   void initState() {
