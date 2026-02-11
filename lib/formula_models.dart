@@ -134,6 +134,28 @@ class UnitSpec {
     return units.toList(growable: false);
   }
 
+  /// Creates a string literal representation of the UnitSpec that can be parsed
+  /// by the D4RT parser to recreate the same UnitSpec object.
+  String toStringLiteral() {
+    final buffer = StringBuffer('{');
+    buffer.write('"name": "$name", "symbol": "$symbol"');
+    
+    if (name == baseUnit && factorFromUnitToBase == 1) {
+      // This is a base unit
+      buffer.write(', "isBase": true');
+    } else {
+      buffer.write(', "baseUnit": "$baseUnit"');
+      
+      if (factorFromUnitToBase != null) {
+        buffer.write(', "factor": $factorFromUnitToBase');
+      } else if (codeFromUnitToBase != null && codeFromBaseToUnit != null) {
+        buffer.write(', "toBase": "$codeFromUnitToBase", "fromBase": "$codeFromBaseToUnit"');
+      }
+    }
+    
+    buffer.write('}');
+    return buffer.toString();
+  }
 }
 
 class VariableSpec {
@@ -169,6 +191,30 @@ class VariableSpec {
 
   @override
   int get hashCode => Object.hash(unit, name, values != null ? const DeepCollectionEquality().hash(values!) : 0);
+
+  /// Creates a string literal representation of the VariableSpec that can be parsed
+  /// by the D4RT parser.
+  String toStringLiteral() {
+    final buffer = StringBuffer('{');
+    buffer.write('"name": "$name"');
+    
+    if (unit != null) {
+      buffer.write(', "unit": "$unit"');
+    }
+    
+    if (values != null && values!.isNotEmpty) {
+      buffer.write(', "values": [${values!.map((value) {
+        if (value is String) {
+          return '"$value"';
+        } else {
+          return value.toString();
+        }
+      }).join(", ")}]');
+    }
+    
+    buffer.write('}');
+    return buffer.toString();
+  }
 }
 
 class Formula {
@@ -281,5 +327,29 @@ class Formula {
       output: output,
       d4rtCode: d4rtCode,
     );
+  }
+
+  /// Creates a string literal representation of the Formula that can be parsed
+  /// by the D4RT parser to recreate the same Formula object.
+  String toStringLiteral() {
+    final inputStrings = input.map((varSpec) => varSpec.toStringLiteral()).toList();
+    
+    final buffer = StringBuffer('{');
+    buffer.write('"name": "$name"');
+    
+    if (description != null) {
+      buffer.write(', "description": "$description"');
+    }
+    
+    buffer.write(', "input": [${inputStrings.join(", ")}]');
+    buffer.write(', "output": ${output.toStringLiteral()}');
+    buffer.write(', "d4rtCode": ${d4rtCode.contains('\n') || d4rtCode.contains('"') ? 'r"""$d4rtCode"""' : '"$d4rtCode"'}');
+    
+    if (tags.isNotEmpty) {
+      buffer.write(', "tags": [${tags.map((tag) => '"$tag"').join(", ")}]');
+    }
+    
+    buffer.write('}');
+    return buffer.toString();
   }
 }

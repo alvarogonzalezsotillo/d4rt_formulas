@@ -1,6 +1,10 @@
+# Conventions
 [ ] Means not done
-[x] Means done
+[R] Means done, but needs a human review 
+[X] Means done
 
+
+# List of tasks
 - [X] Unify error reporting. Create class ErrorHandler that get notified of every catched exception. This class prints the exception in stdout.
 - [X] Make formula description collapsable in FormulaScreen. Initialy, the description is visible, but the user can hide it.
 - Refactor formula and unit loading:
@@ -11,8 +15,8 @@
   - [X] Change createDefaultCorpus to use loadFormulaElements instead of loadUnits and loadFormula. Make loadUnits and loadFormula private.
 - [X] Use a single table in database `FORMULAELEMENT` to store formulas and units. The table contains only two columns: autonumeric id and text.
 - Drift files have a lot of duplicate code. "web" version is the same as native version, only _openConnection is diferrent. Refactor to not duplicate code.
-- [ ] Create Formula.toStringLiteral. It is the reverse of Formula.fromSet( Formula.fromArrayStringLiteral(string)[0] )
-- [ ] Create UnitSpec.toStringLiteral, like Formula.toStringLiteral
+- [X] Create Formula.toStringLiteral. It is the reverse of Formula.fromSet( Formula.fromArrayStringLiteral(string)[0] )
+- [X] Create UnitSpec.toStringLiteral, like Formula.toStringLiteral
 - Database file location:
   - [ ] In linux, the sqlite database file will be located following rules at https://specifications.freedesktop.org/basedir/latest/
   - [ ] In Windows, the sqlite database file will be in %appdata%/Roaming

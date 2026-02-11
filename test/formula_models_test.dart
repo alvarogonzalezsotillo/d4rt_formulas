@@ -99,7 +99,7 @@ void main() {
       "d4rtCode": '''
               F = a * m;
           '''
-    }    
+    }
     """;
 
     final formula = Formula.fromStringLiteral(literal);
@@ -111,6 +111,56 @@ void main() {
     });
 
     expect(result, 98.0); // F = m * a = 10 * 9.8 = 98 N
+  });
+
+  test('Formula.toStringLiteral creates reversible string', () {
+    final originalFormula = Formula(
+      name: "Test Formula",
+      description: "A test formula for toStringLiteral",
+      input: [
+        VariableSpec(name: 'x', unit: 'meter'),
+        VariableSpec(name: 'y', unit: 'second', values: ['1', '2', '3']) // Using strings to match D4RT parsing behavior
+      ],
+      output: VariableSpec(name: 'result', unit: 'meter_per_second'),
+      d4rtCode: 'result = x / y;',
+      tags: ['test', 'simple'],
+    );
+
+    final literal = originalFormula.toStringLiteral();
+    final parsedFormula = Formula.fromStringLiteral(literal);
+
+    expect(parsedFormula.name, originalFormula.name);
+    expect(parsedFormula.description, originalFormula.description);
+    expect(parsedFormula.input.length, originalFormula.input.length);
+    expect(parsedFormula.output, originalFormula.output);
+    expect(parsedFormula.d4rtCode, originalFormula.d4rtCode);
+    expect(parsedFormula.tags, originalFormula.tags);
+
+    // Check inputs individually
+    for (int i = 0; i < originalFormula.input.length; i++) {
+      expect(parsedFormula.input[i].name, originalFormula.input[i].name);
+      expect(parsedFormula.input[i].unit, originalFormula.input[i].unit);
+      expect(parsedFormula.input[i].values, originalFormula.input[i].values);
+    }
+  });
+
+  test('UnitSpec.toStringLiteral creates reversible string', () {
+    final originalUnit = UnitSpec(
+      name: "test_unit",
+      baseUnit: "base_unit",
+      symbol: "tu",
+      factorFromUnitToBase: 10.0,
+    );
+
+    final literal = originalUnit.toStringLiteral();
+    final parsedList = parseD4rtLiteral('[${literal}]');
+    final parsedMap = parsedList[0] as Map<Object?, Object?>;
+    final parsedUnit = UnitSpec.fromSet(parsedMap);
+
+    expect(parsedUnit.name, originalUnit.name);
+    expect(parsedUnit.baseUnit, originalUnit.baseUnit);
+    expect(parsedUnit.symbol, originalUnit.symbol);
+    expect(parsedUnit.factorFromUnitToBase, originalUnit.factorFromUnitToBase);
   });
 
   group('APGAR Score', () {
