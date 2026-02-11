@@ -39,7 +39,8 @@ Future<Corpus> createDefaultCorpus() async{
       print( "Loading units from $unitRes");
       final literal = await loadResourceAsString(unitRes);
       final units = UnitSpec.fromArrayStringLiteral(literal);
-      corpus.loadFormulaElements(units);
+      final formulaElements = units.cast<FormulaElement>();
+      corpus.loadFormulaElements(formulaElements);
     }
   }
 
@@ -49,7 +50,8 @@ Future<Corpus> createDefaultCorpus() async{
     for (final formRes in formulaResources) {
       final literal = await loadResourceAsString(formRes);
       final formulas = Formula.fromArrayStringLiteral(literal);
-      corpus.loadFormulaElements(formulas);
+      final formulaElements = formulas.cast<FormulaElement>();
+      corpus.loadFormulaElements(formulaElements);
     }
   }
 

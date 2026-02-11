@@ -38,21 +38,21 @@ List<Object?> parseD4rtLiteral(String arrayStringLiteral) {
 
 /// Parses corpus elements from an array string literal.
 /// Determines if each element is a formula or a unit and converts accordingly.
-List<Object> parseCorpusElements(String arrayStringLiteral) {
+List<FormulaElement> parseCorpusElements(String arrayStringLiteral) {
   final List<Object?> elements = parseD4rtLiteral(arrayStringLiteral);
-  
-  final List<Object> result = [];
+
+  final List<FormulaElement> result = [];
   for (final element in elements) {
     if (element is Map<Object?, Object?>) {
       // Check if it's a formula by looking for required formula properties
       // Formulas typically have 'd4rtCode' and 'input'/'output' properties
       if (element.containsKey('d4rtCode')) {
         result.add(Formula.fromSet(element));
-      } 
+      }
       // Units typically have 'name', 'symbol', and 'baseUnit' properties
       else if (element.containsKey('name') && element.containsKey('symbol')) {
         result.add(UnitSpec.fromSet(element));
-      } 
+      }
       else {
         throw ArgumentError('Unknown element type: $element');
       }
@@ -60,14 +60,16 @@ List<Object> parseCorpusElements(String arrayStringLiteral) {
       throw ArgumentError('Element must be a Map: $element');
     }
   }
-  
+
   return result;
 }
 
 typedef Number = double;
 
+/// Abstract base class for formula elements
+abstract class FormulaElement {}
 
-class UnitSpec {
+class UnitSpec extends FormulaElement {
   final String name;
   final String baseUnit;
   final String symbol;
@@ -217,7 +219,7 @@ class VariableSpec {
   }
 }
 
-class Formula {
+class Formula extends FormulaElement {
   final String name;
   final String? description;
   final List<VariableSpec> input;

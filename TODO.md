@@ -17,7 +17,8 @@
 - Drift files have a lot of duplicate code. "web" version is the same as native version, only _openConnection is diferrent. Refactor to not duplicate code.
 - [X] Create Formula.toStringLiteral. It is the reverse of Formula.fromSet( Formula.fromArrayStringLiteral(string)[0] )
 - [X] Create UnitSpec.toStringLiteral, like Formula.toStringLiteral
-- [ ] Make Formula and UnitSpec subclasses of FormulaElement. Change return type of functions that return Object to FormulaElement if necessary.
+- [X] Make Formula and UnitSpec subclasses of FormulaElement. Change return type of functions that return Object to FormulaElement if necessary.
+- [ ] Define toStringLiteral in FormulaElement.
 - Database file location:
   - [ ] In linux, the sqlite database file will be located following rules at https://specifications.freedesktop.org/basedir/latest/
   - [ ] In Windows, the sqlite database file will be in %appdata%/Roaming

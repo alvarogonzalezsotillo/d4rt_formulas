@@ -1,6 +1,7 @@
 import 'package:d4rt/d4rt.dart';
 import 'package:collection/collection.dart';
 import 'package:d4rt_formulas/d4rt_formulas.dart';
+import 'formula_models.dart';
 
 class Multimap<K, V> extends DelegatingMap<K, List<V>> {
   final Map<K, List<V>> _map;
@@ -182,7 +183,7 @@ class Corpus{
 
   /// Loads formula elements, making sure to load units first, then formulas
   /// to avoid dependency issues.
-  void loadFormulaElements(List<Object> elements) {
+  void loadFormulaElements(List<FormulaElement> elements) {
     List<UnitSpec> units = [];
     List<Formula> formulas = [];
 
