@@ -67,9 +67,13 @@ List<FormulaElement> parseCorpusElements(String arrayStringLiteral) {
 typedef Number = double;
 
 /// Abstract base class for formula elements
-abstract class FormulaElement {}
+abstract class FormulaElement {
+  /// Creates a string literal representation of the FormulaElement that can be parsed
+  /// by the D4RT parser to recreate the same FormulaElement object.
+  String toStringLiteral();
+}
 
-class UnitSpec extends FormulaElement {
+class UnitSpec implements FormulaElement {
   final String name;
   final String baseUnit;
   final String symbol;
@@ -136,8 +140,7 @@ class UnitSpec extends FormulaElement {
     return units.toList(growable: false);
   }
 
-  /// Creates a string literal representation of the UnitSpec that can be parsed
-  /// by the D4RT parser to recreate the same UnitSpec object.
+  @override
   String toStringLiteral() {
     final buffer = StringBuffer('{');
     buffer.write('"name": "$name", "symbol": "$symbol"');
@@ -194,8 +197,7 @@ class VariableSpec {
   @override
   int get hashCode => Object.hash(unit, name, values != null ? const DeepCollectionEquality().hash(values!) : 0);
 
-  /// Creates a string literal representation of the VariableSpec that can be parsed
-  /// by the D4RT parser.
+  @override
   String toStringLiteral() {
     final buffer = StringBuffer('{');
     buffer.write('"name": "$name"');
@@ -219,7 +221,7 @@ class VariableSpec {
   }
 }
 
-class Formula extends FormulaElement {
+class Formula implements FormulaElement {
   final String name;
   final String? description;
   final List<VariableSpec> input;
