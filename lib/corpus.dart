@@ -205,4 +205,11 @@ class Corpus{
     loadFormulas(formulas);
   }
 
+  /// Loads corpus from database elements
+  static Future<Corpus> fromDatabaseElements(List<FormulaElement> elements) async {
+    final corpus = Corpus();
+    corpus.loadFormulaElements(elements);
+    return corpus;
+  }
+
 }

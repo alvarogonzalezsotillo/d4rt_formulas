@@ -1,6 +1,6 @@
 # Conventions
 [ ] Means not done
-[R] Means done, but needs a human review 
+[R] Means done by an ai agent, but needs a human review 
 [X] Means done
 
 
@@ -23,10 +23,11 @@
   - [X] In linux, the sqlite database file will be located following rules at https://specifications.freedesktop.org/basedir/latest/
   - [X] In Windows, the sqlite database file will be in %appdata%/Roaming
   - [X] In Macos, the sqlite database file will be in ~/Library/Application Support
-- [ ] Initialize database at startup
-  - [ ] If the database is empty, sugest to use a default corpus
-  - [ ] If the user choose to use the default corpus, populate de database with the default corpus (load defaultcorpus, and the use toStringLiteral)
-  - [ ] From now on, the corpus will be loaded from database instead of assets
+- [X] Initialize database at startup
+  - [X] Try first to load a corpus from database
+  - [X] If the database is empty, sugest to use a default corpus
+  - [X] If the user choose to use the default corpus, populate de database with the default corpus (load defaultcorpus, and then use toStringLiteral). If not, start with an empty list of formulas.
+  - [X] From now on, the corpus will be loaded from database instead of assets
 - [ ] Create method List<UnitSpec> Corpus.withDependencies(Formula formula). It will return the list of units of the formula, and related units from the corpus.
 - [ ] Add a Share button to the formula list. It will export the array string literal of the formula with the units from Corpus.withDependencies().
 - [ ] Replace flutter-markdown with flutter-markdown-plus

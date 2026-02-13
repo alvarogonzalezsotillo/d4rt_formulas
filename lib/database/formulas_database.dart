@@ -44,6 +44,9 @@ class FormulasDatabase extends _$FormulasDatabase {
   Future<void> deleteFormulaElement(int id) {
     return (delete(formulaElements)..where((tbl) => tbl.id.equals(id))).go();
   }
+  
+  // Additional helper methods for direct access to the table
+  SimpleSelectStatement get allFormulaElements => select(formulaElements);
 }
 
 LazyDatabase _openConnection() {
