@@ -1,6 +1,5 @@
 import 'corpus_database_interface.dart';
-import 'formulas_database.dart'
-    if (dart.library.html) 'formulas_database_web.dart';
+import 'formulas_database.dart';
 import 'package:d4rt_formulas/formula_models.dart' as models;
 
 // Extension to add corpus loading/saving functionality to FormulasDatabase

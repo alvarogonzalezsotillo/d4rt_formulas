@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'database/formulas_database.dart'
-    if (dart.library.html) 'database/formulas_database_web.dart';
+
+import 'database/formulas_database.dart';
 
 GetIt locator = GetIt.instance;
 
