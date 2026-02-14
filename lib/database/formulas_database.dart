@@ -1,8 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+
+import 'formulas_database_unsupported.dart'
+if (dart.library.html) 'formulas_database_web.dart'
+if (dart.library.ffi) 'formulas_database_native.dart';
+
 
 part 'formulas_database.g.dart';
 
@@ -14,7 +15,7 @@ class FormulaElements extends Table {
 
 @DriftDatabase(tables: [FormulaElements])
 class FormulasDatabase extends _$FormulasDatabase {
-  FormulasDatabase() : super(_openConnection());
+  FormulasDatabase() : super(openConnection());
 
   @override
   int get schemaVersion => 1;
@@ -44,29 +45,8 @@ class FormulasDatabase extends _$FormulasDatabase {
   Future<void> deleteFormulaElement(int id) {
     return (delete(formulaElements)..where((tbl) => tbl.id.equals(id))).go();
   }
-  
+
   // Additional helper methods for direct access to the table
   SimpleSelectStatement get allFormulaElements => select(formulaElements);
-}
-
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    // Determine the platform-specific database directory
-    Directory dbDirectory;
-    
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      final appSupportDir = await getApplicationSupportDirectory();
-      dbDirectory = Directory(p.join(appSupportDir.path, 'd4rt_formulas'));
-    } else {
-      dbDirectory = await getApplicationDocumentsDirectory();
-    }
-    
-    // Ensure the directory exists
-    await dbDirectory.create(recursive: true);
-    
-    // Create the database file in the platform-specific directory
-    final file = File(p.join(dbDirectory.path, 'formulas.sqlite'));
-    return NativeDatabase.createInBackground(file);
-  });
 }
 
