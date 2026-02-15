@@ -212,4 +212,33 @@ class Corpus{
     return corpus;
   }
 
+  /// Returns the formula, the units of the formula, and all the units from the corpus with the same base unit.
+  List<FormulaElement> withDependencies(Formula formula) {
+    final result = <FormulaElement>{};
+
+    // Add the formula itself
+    result.add(formula);
+
+    // Helper function to add units and their base equivalents
+    void addUnitsAndBaseEquivalents(String? unitName) {
+      if (unitName != null) {
+        final unit = getUnit(unitName);
+        result.add(unit);
+        // Add all units with the same base unit
+        final unitsWithSameBase = unitsOfSameMagnitude(unitName);
+        result.addAll(unitsWithSameBase.map((name) => getUnit(name)));
+      }
+    }
+
+    // Process input variable units
+    formula.input.where((inputVar) => inputVar.unit != null).forEach((inputVar) {
+      addUnitsAndBaseEquivalents(inputVar.unit);
+    });
+
+    // Process output variable unit
+    addUnitsAndBaseEquivalents(formula.output.unit);
+
+    return result.toList();
+  }
+
 }

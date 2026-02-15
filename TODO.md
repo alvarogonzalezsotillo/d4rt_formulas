@@ -28,6 +28,6 @@
   - [X] If the database is empty, sugest to use a default corpus
   - [X] If the user choose to use the default corpus, populate de database with the default corpus (load defaultcorpus, and then use toStringLiteral). If not, start with an empty list of formulas.
   - [X] From now on, the corpus will be loaded from database instead of assets
-- [ ] Create method List<FormulaElement> Corpus.withDependencies(Formula formula). It will return the formula, the units of the formula, and all the units from the corpus with the same base unit.
+- [R] Create method List<FormulaElement> Corpus.withDependencies(Formula formula). It will return the formula, the units of the formula, and all the units from the corpus with the same base unit.
 - [ ] Add a Share button to the formula list. It will export the array string literal of the formula with the units from Corpus.withDependencies().
 - [ ] Replace flutter-markdown with flutter-markdown-plus

@@ -243,4 +243,45 @@ void main() {
     });
   });
 
+  test('Corpus.withDependencies returns formula and its dependencies', () async {
+    final corpus = await testCorpus;
+    
+    // Get a formula that has units associated with it
+    final formula = corpus.getFormula("Newton's Second Law");
+    expect(formula, isNotNull);
+    
+    // Call withDependencies method
+    final dependencies = corpus.withDependencies(formula!);
+    
+    // Check that the formula itself is included
+    expect(dependencies.any((element) => element is Formula && element.name == formula.name), true);
+    
+    // Check that units from input and output are included
+    for (final inputVar in formula.input) {
+      if (inputVar.unit != null) {
+        expect(dependencies.any((element) => element is UnitSpec && element.name == inputVar.unit), true);
+        
+        // Check that units with same base unit are included
+        final unitsWithSameBase = corpus.unitsOfSameMagnitude(inputVar.unit!);
+        for (final unitName in unitsWithSameBase) {
+          expect(dependencies.any((element) => element is UnitSpec && element.name == unitName), true);
+        }
+      }
+    }
+    
+    if (formula.output.unit != null) {
+      expect(dependencies.any((element) => element is UnitSpec && element.name == formula.output.unit), true);
+      
+      // Check that units with same base unit as output are included
+      final outputUnitsWithSameBase = corpus.unitsOfSameMagnitude(formula.output.unit!);
+      for (final unitName in outputUnitsWithSameBase) {
+        expect(dependencies.any((element) => element is UnitSpec && element.name == unitName), true);
+      }
+    }
+    
+    // Verify that there are no duplicates by checking the length of the list vs the set
+    final uniqueDependencies = dependencies.toSet();
+    expect(dependencies.length, equals(uniqueDependencies.length));
+  });
+
 }
