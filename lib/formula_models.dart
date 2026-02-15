@@ -36,6 +36,16 @@ List<Object?> parseD4rtLiteral(String arrayStringLiteral) {
   return list;
 }
 
+/// Escapes special characters in a string for use in D4RT literals
+String escapeD4rtString(String input) {
+  return input
+      .replaceAll(r'\', r'\\')  // Escape backslashes first
+      .replaceAll('\n', r'\n')   // Escape newlines
+      .replaceAll('\r', r'\r')   // Escape carriage returns
+      .replaceAll('\t', r'\t')   // Escape tabs
+      .replaceAll('"', r'\"');   // Escape quotes last
+}
+
 /// Parses corpus elements from an array string literal.
 /// Determines if each element is a formula or a unit and converts accordingly.
 List<FormulaElement> parseCorpusElements(String arrayStringLiteral) {
@@ -143,21 +153,21 @@ class UnitSpec implements FormulaElement {
   @override
   String toStringLiteral() {
     final buffer = StringBuffer('{');
-    buffer.write('"name": "$name", "symbol": "$symbol"');
-    
+    buffer.write('"name": "${escapeD4rtString(name)}", "symbol": "${escapeD4rtString(symbol)}"');
+
     if (name == baseUnit && factorFromUnitToBase == 1) {
       // This is a base unit
       buffer.write(', "isBase": true');
     } else {
-      buffer.write(', "baseUnit": "$baseUnit"');
-      
+      buffer.write(', "baseUnit": "${escapeD4rtString(baseUnit)}"');
+
       if (factorFromUnitToBase != null) {
         buffer.write(', "factor": $factorFromUnitToBase');
       } else if (codeFromUnitToBase != null && codeFromBaseToUnit != null) {
-        buffer.write(', "toBase": "$codeFromUnitToBase", "fromBase": "$codeFromBaseToUnit"');
+        buffer.write(', "toBase": "${escapeD4rtString(codeFromUnitToBase!)}", "fromBase": "${escapeD4rtString(codeFromBaseToUnit!)}"');
       }
     }
-    
+
     buffer.write('}');
     return buffer.toString();
   }
@@ -200,22 +210,22 @@ class VariableSpec {
   @override
   String toStringLiteral() {
     final buffer = StringBuffer('{');
-    buffer.write('"name": "$name"');
-    
+    buffer.write('"name": "${escapeD4rtString(name)}"');
+
     if (unit != null) {
-      buffer.write(', "unit": "$unit"');
+      buffer.write(', "unit": "${escapeD4rtString(unit!)}"');
     }
-    
+
     if (values != null && values!.isNotEmpty) {
       buffer.write(', "values": [${values!.map((value) {
         if (value is String) {
-          return '"$value"';
+          return '"${escapeD4rtString(value)}"';
         } else {
           return value.toString();
         }
       }).join(", ")}]');
     }
-    
+
     buffer.write('}');
     return buffer.toString();
   }
@@ -337,22 +347,33 @@ class Formula implements FormulaElement {
   /// by the D4RT parser to recreate the same Formula object.
   String toStringLiteral() {
     final inputStrings = input.map((varSpec) => varSpec.toStringLiteral()).toList();
-    
+
     final buffer = StringBuffer('{');
     buffer.write('"name": "$name"');
-    
+
     if (description != null) {
-      buffer.write(', "description": "$description"');
+      buffer.write(', "description": "${escapeD4rtString(description!)}"');
     }
-    
+
     buffer.write(', "input": [${inputStrings.join(", ")}]');
     buffer.write(', "output": ${output.toStringLiteral()}');
-    buffer.write(', "d4rtCode": ${d4rtCode.contains('\n') || d4rtCode.contains('"') ? 'r"""$d4rtCode"""' : '"$d4rtCode"'}');
     
-    if (tags.isNotEmpty) {
-      buffer.write(', "tags": [${tags.map((tag) => '"$tag"').join(", ")}]');
+    // Handle d4rtCode with proper escaping
+    String escapedD4rtCode;
+    if (d4rtCode.contains('\n') || d4rtCode.contains('"')) {
+      // For multiline strings or strings with quotes, use raw string but still escape internal quotes
+      escapedD4rtCode = 'r"""${d4rtCode.replaceAll('"', '\\"')}"""';
+    } else {
+      // For single-line strings, use escaped version
+      escapedD4rtCode = '"${escapeD4rtString(d4rtCode)}"';
     }
     
+    buffer.write(', "d4rtCode": $escapedD4rtCode');
+
+    if (tags.isNotEmpty) {
+      buffer.write(', "tags": [${tags.map((tag) => '"${escapeD4rtString(tag)}"').join(", ")}]');
+    }
+
     buffer.write('}');
     return buffer.toString();
   }
