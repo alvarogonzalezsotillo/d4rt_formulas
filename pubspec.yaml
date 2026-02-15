@@ -51,6 +51,8 @@ dependencies:
   ffi: ^2.0.1
 
   collection: any
+  share_plus: ^10.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

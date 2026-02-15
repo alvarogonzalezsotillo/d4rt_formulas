@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For Clipboard
 import 'package:d4rt_formulas/formula_models.dart';
 import '../corpus.dart';
 import 'formula_screen.dart';
+import 'package:share_plus/share_plus.dart';
 
 class FormulaList extends StatefulWidget {
   final Corpus corpus;
@@ -41,12 +43,79 @@ class _FormulaListState extends State<FormulaList> {
 
   List<Formula> get _filteredFormulas {
     if (_searchQuery.isEmpty) return widget.formulas;
-    
+
     return widget.formulas.where((formula) {
       final nameMatch = formula.name.toLowerCase().contains(_searchQuery);
       final tagMatch = formula.tags.any((tag) => tag.toLowerCase().contains(_searchQuery));
       return nameMatch || tagMatch;
     }).toList();
+  }
+
+  void _shareFormula(Formula formula) async {
+    try {
+      // Get the formula and its dependencies
+      final dependencies = widget.corpus.withDependencies(formula);
+      
+      // Convert each dependency to its string literal representation
+      final literals = dependencies.map((element) => element.toStringLiteral()).toList();
+      
+      // Create an array string literal containing all the elements
+      final exportString = '[${literals.join(', ')}]';
+      
+      // Share the string
+      await Share.share(
+        exportString,
+        subject: 'Sharing formula: ${formula.name}',
+      );
+    } catch (e) {
+      _showErrorDialog('Error sharing formula: $e');
+    }
+  }
+
+  void _copyFormula(Formula formula) async {
+    try {
+      // Get the formula and its dependencies
+      final dependencies = widget.corpus.withDependencies(formula);
+      
+      // Convert each dependency to its string literal representation
+      final literals = dependencies.map((element) => element.toStringLiteral()).toList();
+      
+      // Create an array string literal containing all the elements
+      final exportString = '[${literals.join(', ')}]';
+      
+      // Copy to clipboard
+      await Clipboard.setData(ClipboardData(text: exportString));
+      
+      // Show a snackbar to confirm
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Formula and dependencies copied to clipboard!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      _showErrorDialog('Error copying formula: $e');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -72,9 +141,41 @@ class _FormulaListState extends State<FormulaList> {
               final formula = _filteredFormulas[index];
               return ListTile(
                 title: Text(formula.name),
-                subtitle: formula.tags.isNotEmpty 
+                subtitle: formula.tags.isNotEmpty
                     ? Text('Tags: ${formula.tags.join(', ')}')
                     : null,
+                trailing: PopupMenuButton(
+                  icon: Icon(Icons.share),
+                  onSelected: (value) {
+                    if (value == 'share') {
+                      _shareFormula(formula);
+                    } else if (value == 'copy') {
+                      _copyFormula(formula);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'share',
+                      child: Row(
+                        children: [
+                          Icon(Icons.share),
+                          SizedBox(width: 8),
+                          Text('Share'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'copy',
+                      child: Row(
+                        children: [
+                          Icon(Icons.copy),
+                          SizedBox(width: 8),
+                          Text('Copy to clipboard'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
