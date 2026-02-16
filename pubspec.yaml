@@ -37,8 +37,8 @@ dependencies:
   resource_portable:
   d4rt:
   flutter_d4rt:
-  flutter_markdown:
-  flutter_markdown_latex:
+  flutter_markdown_plus:
+  flutter_markdown_plus_latex:
   flutter_code_editor:
 
   # Drift dependencies for database support
