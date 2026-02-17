@@ -1,5 +1,5 @@
 
-all: clean-container build-linux-debug-container
+all: clean-container build-builders build-linux-debug-container
 
 build-container:
 	./flutterw --build-container

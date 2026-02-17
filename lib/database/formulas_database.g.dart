@@ -12,27 +12,18 @@ class $FormulaElementsTable extends FormulaElements
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _elementTextMeta = const VerificationMeta(
-    'elementText',
-  );
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _elementTextMeta =
+      const VerificationMeta('elementText');
   @override
   late final GeneratedColumn<String> elementText = GeneratedColumn<String>(
-    'element_text',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
+      'element_text', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, elementText];
   @override
@@ -41,10 +32,8 @@ class $FormulaElementsTable extends FormulaElements
   String get actualTableName => $name;
   static const String $name = 'formula_elements';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<FormulaElement> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<FormulaElement> instance,
+      {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
@@ -52,12 +41,9 @@ class $FormulaElementsTable extends FormulaElements
     }
     if (data.containsKey('element_text')) {
       context.handle(
-        _elementTextMeta,
-        elementText.isAcceptableOrUnknown(
-          data['element_text']!,
           _elementTextMeta,
-        ),
-      );
+          elementText.isAcceptableOrUnknown(
+              data['element_text']!, _elementTextMeta));
     } else if (isInserting) {
       context.missing(_elementTextMeta);
     }
@@ -70,14 +56,10 @@ class $FormulaElementsTable extends FormulaElements
   FormulaElement map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FormulaElement(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      elementText: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}element_text'],
-      )!,
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      elementText: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}element_text'])!,
     );
   }
 
@@ -106,10 +88,8 @@ class FormulaElement extends DataClass implements Insertable<FormulaElement> {
     );
   }
 
-  factory FormulaElement.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory FormulaElement.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FormulaElement(
       id: serializer.fromJson<int>(json['id']),
@@ -126,15 +106,14 @@ class FormulaElement extends DataClass implements Insertable<FormulaElement> {
   }
 
   FormulaElement copyWith({int? id, String? elementText}) => FormulaElement(
-    id: id ?? this.id,
-    elementText: elementText ?? this.elementText,
-  );
+        id: id ?? this.id,
+        elementText: elementText ?? this.elementText,
+      );
   FormulaElement copyWithCompanion(FormulaElementsCompanion data) {
     return FormulaElement(
       id: data.id.present ? data.id.value : this.id,
-      elementText: data.elementText.present
-          ? data.elementText.value
-          : this.elementText,
+      elementText:
+          data.elementText.present ? data.elementText.value : this.elementText,
     );
   }
 
@@ -178,10 +157,8 @@ class FormulaElementsCompanion extends UpdateCompanion<FormulaElement> {
     });
   }
 
-  FormulaElementsCompanion copyWith({
-    Value<int>? id,
-    Value<String>? elementText,
-  }) {
+  FormulaElementsCompanion copyWith(
+      {Value<int>? id, Value<String>? elementText}) {
     return FormulaElementsCompanion(
       id: id ?? this.id,
       elementText: elementText ?? this.elementText,
@@ -213,9 +190,8 @@ class FormulaElementsCompanion extends UpdateCompanion<FormulaElement> {
 abstract class _$FormulasDatabase extends GeneratedDatabase {
   _$FormulasDatabase(QueryExecutor e) : super(e);
   $FormulasDatabaseManager get managers => $FormulasDatabaseManager(this);
-  late final $FormulaElementsTable formulaElements = $FormulaElementsTable(
-    this,
-  );
+  late final $FormulaElementsTable formulaElements =
+      $FormulaElementsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -223,16 +199,16 @@ abstract class _$FormulasDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [formulaElements];
 }
 
-typedef $$FormulaElementsTableCreateCompanionBuilder =
-    FormulaElementsCompanion Function({
-      Value<int> id,
-      required String elementText,
-    });
-typedef $$FormulaElementsTableUpdateCompanionBuilder =
-    FormulaElementsCompanion Function({
-      Value<int> id,
-      Value<String> elementText,
-    });
+typedef $$FormulaElementsTableCreateCompanionBuilder = FormulaElementsCompanion
+    Function({
+  Value<int> id,
+  required String elementText,
+});
+typedef $$FormulaElementsTableUpdateCompanionBuilder = FormulaElementsCompanion
+    Function({
+  Value<int> id,
+  Value<String> elementText,
+});
 
 class $$FormulaElementsTableFilterComposer
     extends Composer<_$FormulasDatabase, $FormulaElementsTable> {
@@ -244,14 +220,10 @@ class $$FormulaElementsTableFilterComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get elementText => $composableBuilder(
-    column: $table.elementText,
-    builder: (column) => ColumnFilters(column),
-  );
+      column: $table.elementText, builder: (column) => ColumnFilters(column));
 }
 
 class $$FormulaElementsTableOrderingComposer
@@ -264,14 +236,10 @@ class $$FormulaElementsTableOrderingComposer
     super.$removeJoinBuilderFromRootComposer,
   });
   ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get elementText => $composableBuilder(
-    column: $table.elementText,
-    builder: (column) => ColumnOrderings(column),
-  );
+      column: $table.elementText, builder: (column) => ColumnOrderings(column));
 }
 
 class $$FormulaElementsTableAnnotationComposer
@@ -287,38 +255,27 @@ class $$FormulaElementsTableAnnotationComposer
       $composableBuilder(column: $table.id, builder: (column) => column);
 
   GeneratedColumn<String> get elementText => $composableBuilder(
-    column: $table.elementText,
-    builder: (column) => column,
-  );
+      column: $table.elementText, builder: (column) => column);
 }
 
-class $$FormulaElementsTableTableManager
-    extends
-        RootTableManager<
-          _$FormulasDatabase,
-          $FormulaElementsTable,
-          FormulaElement,
-          $$FormulaElementsTableFilterComposer,
-          $$FormulaElementsTableOrderingComposer,
-          $$FormulaElementsTableAnnotationComposer,
-          $$FormulaElementsTableCreateCompanionBuilder,
-          $$FormulaElementsTableUpdateCompanionBuilder,
-          (
-            FormulaElement,
-            BaseReferences<
-              _$FormulasDatabase,
-              $FormulaElementsTable,
-              FormulaElement
-            >,
-          ),
-          FormulaElement,
-          PrefetchHooks Function()
-        > {
+class $$FormulaElementsTableTableManager extends RootTableManager<
+    _$FormulasDatabase,
+    $FormulaElementsTable,
+    FormulaElement,
+    $$FormulaElementsTableFilterComposer,
+    $$FormulaElementsTableOrderingComposer,
+    $$FormulaElementsTableAnnotationComposer,
+    $$FormulaElementsTableCreateCompanionBuilder,
+    $$FormulaElementsTableUpdateCompanionBuilder,
+    (
+      FormulaElement,
+      BaseReferences<_$FormulasDatabase, $FormulaElementsTable, FormulaElement>
+    ),
+    FormulaElement,
+    PrefetchHooks Function()> {
   $$FormulaElementsTableTableManager(
-    _$FormulasDatabase db,
-    $FormulaElementsTable table,
-  ) : super(
-        TableManagerState(
+      _$FormulasDatabase db, $FormulaElementsTable table)
+      : super(TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
@@ -327,48 +284,44 @@ class $$FormulaElementsTableTableManager
               $$FormulaElementsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$FormulaElementsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<String> elementText = const Value.absent(),
-              }) => FormulaElementsCompanion(id: id, elementText: elementText),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required String elementText,
-              }) => FormulaElementsCompanion.insert(
-                id: id,
-                elementText: elementText,
-              ),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> elementText = const Value.absent(),
+          }) =>
+              FormulaElementsCompanion(
+            id: id,
+            elementText: elementText,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String elementText,
+          }) =>
+              FormulaElementsCompanion.insert(
+            id: id,
+            elementText: elementText,
+          ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback: null,
-        ),
-      );
+        ));
 }
 
-typedef $$FormulaElementsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$FormulasDatabase,
-      $FormulaElementsTable,
+typedef $$FormulaElementsTableProcessedTableManager = ProcessedTableManager<
+    _$FormulasDatabase,
+    $FormulaElementsTable,
+    FormulaElement,
+    $$FormulaElementsTableFilterComposer,
+    $$FormulaElementsTableOrderingComposer,
+    $$FormulaElementsTableAnnotationComposer,
+    $$FormulaElementsTableCreateCompanionBuilder,
+    $$FormulaElementsTableUpdateCompanionBuilder,
+    (
       FormulaElement,
-      $$FormulaElementsTableFilterComposer,
-      $$FormulaElementsTableOrderingComposer,
-      $$FormulaElementsTableAnnotationComposer,
-      $$FormulaElementsTableCreateCompanionBuilder,
-      $$FormulaElementsTableUpdateCompanionBuilder,
-      (
-        FormulaElement,
-        BaseReferences<
-          _$FormulasDatabase,
-          $FormulaElementsTable,
-          FormulaElement
-        >,
-      ),
-      FormulaElement,
-      PrefetchHooks Function()
-    >;
+      BaseReferences<_$FormulasDatabase, $FormulaElementsTable, FormulaElement>
+    ),
+    FormulaElement,
+    PrefetchHooks Function()>;
 
 class $FormulasDatabaseManager {
   final _$FormulasDatabase _db;

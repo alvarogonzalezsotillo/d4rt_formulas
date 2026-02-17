@@ -1,4 +1,4 @@
-FROM ghcr.io/cirruslabs/flutter:stable
+FROM ghcr.io/cirruslabs/flutter:3.32.3
 
 # Install cmake, ninja, clang, pkg-config, and other tools for flutter linux
 RUN apt-get update && apt-get install -y \
