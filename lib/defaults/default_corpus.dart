@@ -18,9 +18,12 @@ Future<Corpus> createDefaultCorpus() async{
 
   Future<void> loadUnits() async {
     final unitResources = [
+      "assets/units/amount.d4rt.units",
       "assets/units/angle.d4rt.units",
       "assets/units/area.d4rt.units",
+      "assets/units/charge.d4rt.units",
       "assets/units/currency.d4rt.units",
+      "assets/units/derived.d4rt.units",
       "assets/units/distance.d4rt.units",
       "assets/units/elasticity.d4rt.units",
       "assets/units/electricity.d4rt.units",
@@ -28,11 +31,13 @@ Future<Corpus> createDefaultCorpus() async{
       "assets/units/frequency.d4rt.units",
       "assets/units/force.d4rt.units",
       "assets/units/mass.d4rt.units",
+      "assets/units/power.d4rt.units",
       "assets/units/pressure.d4rt.units",
       "assets/units/scalar.d4rt.units",
       "assets/units/temperature.d4rt.units",
       "assets/units/time.d4rt.units",
       "assets/units/velocity.d4rt.units",
+      "assets/units/volume.d4rt.units",
     ];
 
     for (final unitRes in unitResources) {

@@ -12,9 +12,11 @@ extension CorpusDatabaseExtension on FormulasDatabase {
     for (final element in elements) {
       try {
         final parsed = models.parseCorpusElements('[${element.elementText}]');
+        print("PARSED:$element");
         parsedElements.addAll(parsed);
       } catch (e) {
         print('Error parsing database element: $e');
+        print("NOT PARSED: $element");
         // Skip invalid elements but continue processing others
         continue;
       }

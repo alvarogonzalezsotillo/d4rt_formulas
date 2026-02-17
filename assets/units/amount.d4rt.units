@@ -1,0 +1,10 @@
+[
+  {"name": "mole", "symbol": "mol", "isBase": true},
+  {"name": "millimole", "symbol": "mmol", "baseUnit": "mole", "factor": 0.001},
+  {"name": "micromole", "symbol": "µmol", "baseUnit": "mole", "factor": 0.000001},
+  {"name": "nanomole", "symbol": "nmol", "baseUnit": "mole", "factor": 0.000000001},
+  {"name": "picomole", "symbol": "pmol", "baseUnit": "mole", "factor": 0.000000000001},
+  {"name": "kilomole", "symbol": "kmol", "baseUnit": "mole", "factor": 1000},
+  {"name": "pound-mole", "symbol": "lb-mol", "baseUnit": "mole", "factor": 453.59237},
+  {"name": "kilopound-mole", "symbol": "kip-mol", "baseUnit": "mole", "factor": 453592.37}
+]

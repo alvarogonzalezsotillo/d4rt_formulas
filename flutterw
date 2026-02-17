@@ -7,7 +7,7 @@ BUILDCACHE=./.build-container-cache
 DOCKERFILE=./docker/Dockerfile
 IMAGE=d4rt-formulas-builder
 
-detect_container(){
+detect_container_manager(){
 
     if [ "$DOCKER" != "" ]
     then
@@ -107,12 +107,17 @@ exec_in_container(){
     local SPIOPTIONS=$(spi_options)
     local GRAPHICOPTIONS=$(graphic_options)
     local DOCKEROPTIONS=$(docker_options)
-    mkdir -p $BUILDCACHE
+    mkdir -p $BUILDCACHE/root-home/.config
+    mkdir -p $BUILDCACHE/root-home/.local
+    mkdir -p $BUILDCACHE/sdks-flutter-bin-cache
+    
 
     $DOCKER run \
             -it \
             --init \
             --rm \
+            -v $BUILDCACHE/root-home/.config:/root/.config \
+            -v $BUILDCACHE/root-home/.local:/root/.local \
             $DOCKEROPTIONS \
             $GRAPHICOPTIONS \
             $SPIOPTIONS \
@@ -125,7 +130,7 @@ exec_in_container(){
 }
 
 main(){
-    detect_container
+    detect_container_manager
 
     if [ "$1" = "--build-container" ]; then
         build_image
