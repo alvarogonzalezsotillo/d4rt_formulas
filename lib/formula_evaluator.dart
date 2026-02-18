@@ -162,6 +162,10 @@ class FormulaEvaluator {
       import "package:d4rt_formulas.dart";
   """;
 
+  static final String signal = """
+      void signal( String msg ) => throw Exception(msg);       
+  """;
+
   static const reservedVariableNames = { "variableValues", "indexOf", "variableAllowedValues"} ;
 
   String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
@@ -169,7 +173,7 @@ class FormulaEvaluator {
 
     buffer.writeln("""
       $d4rtImports
-      
+      $signal
       main()
       {
       """

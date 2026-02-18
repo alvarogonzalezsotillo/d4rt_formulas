@@ -30,4 +30,6 @@
   - [X] From now on, the corpus will be loaded from database instead of assets
 - [X] Create method List<FormulaElement> Corpus.withDependencies(Formula formula). It will return the formula, the units of the formula, and all the units from the corpus with the same base unit.
 - [X] Add a Share button to the formula list. It will export the array string literal of the formula with the units from Corpus.withDependencies().
-- [ ] Replace flutter-markdown with flutter-markdown-plus
+- [X] Replace flutter-markdown with flutter-markdown-plus
+- [X] Heron's formula: investigate why a=3, b=40, c=5 yields NaN. Root cause: input values don't form a valid triangle (violate triangle inequality: 3+5=8 is not > 40). Added documentation note to the formula description.
+- [ ] Investigate starup time when there is no previous database and corpus is loaded from assets.

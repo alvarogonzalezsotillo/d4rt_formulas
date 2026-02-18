@@ -1036,7 +1036,9 @@ Where:
 - $a, b, c$: Side lengths (meters)
 - $s$: Semi-perimeter $= \frac{a+b+c}{2}$
 
-This formula is useful when height is unknown.''',
+This formula is useful when height is unknown.
+
+**Note:** The side lengths must satisfy the triangle inequality: the sum of any two sides must be greater than the third side (a+b>c, a+c>b, b+c>a). If this condition is not met, the formula returns NaN.''',
     "input": [
       {"name": "a", "unit": "meter"},  // Side 1
       {"name": "b", "unit": "meter"},  // Side 2
@@ -1044,6 +1046,9 @@ This formula is useful when height is unknown.''',
     ],
     "output": {"name": "A", "unit": "square meter"},  // Area
     "d4rtCode": """
+       if( a + b < c || a+c < b || b+c < a ){
+          signal( "There is not a valid triangle with those longitudes" );  
+       }
        var s = (a + b + c) / 2;
        A = sqrt(s * (s - a) * (s - b) * (s - c));
     """,
