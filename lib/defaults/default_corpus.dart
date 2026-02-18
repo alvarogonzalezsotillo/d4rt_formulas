@@ -53,7 +53,9 @@ Future<Corpus> createDefaultCorpus() async{
     final formulaResources = ["assets/formulas/formulas.d4rt"];
 
     for (final formRes in formulaResources) {
+      print( "Loading formulas from $formRes ...");
       final literal = await loadResourceAsString(formRes);
+      print( "Loaded $formRes");
       final formulas = Formula.fromArrayStringLiteral(literal);
       final formulaElements = formulas.cast<FormulaElement>();
       corpus.loadFormulaElements(formulaElements);

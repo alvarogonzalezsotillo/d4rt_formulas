@@ -116,7 +116,8 @@ void main() {
   test('Formula.toStringLiteral creates reversible string', () {
     final originalFormula = Formula(
       name: "Test Formula",
-      description: "A test formula for toStringLiteral",
+      description: r"""A test formula for toStringLiteral, with some latex $x^2$ and special 
+      characters like "quotes" and \backslashes\ and some strange combinations \"'~()\\].""",
       input: [
         VariableSpec(name: 'x', unit: 'meter'),
         VariableSpec(name: 'y', unit: 'second', values: ['1', '2', '3']) // Using strings to match D4RT parsing behavior

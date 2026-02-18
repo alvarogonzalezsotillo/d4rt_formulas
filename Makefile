@@ -4,6 +4,10 @@ all: clean-container build-builders build-linux-debug-container
 build-container:
 	./flutterw --build-container
 
+clean:
+	flutter clean
+	rm ~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
+
 clean-container: build-container
 	./flutterw clean
 

@@ -22,6 +22,7 @@ LazyDatabase openConnection() {
     
     // Create the database file in the platform-specific directory
     final file = File(p.join(dbDirectory.path, 'formulas.sqlite'));
+    print( "Database file path: ${file.path}");
     return NativeDatabase.createInBackground(file);
   });
 }

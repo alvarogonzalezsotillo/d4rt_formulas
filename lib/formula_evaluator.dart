@@ -106,7 +106,16 @@ class FormulaEvaluator {
       return result;
     }
     catch (e, stack) {
-      errorHandler.notify(e.toString() + "\n" + completeSource, stack);
+      // SPECIAL CASE: If the error message starts with signalMagicString, treat it as a signal message and return it instead of throwing an exception
+      // SEE signal() function in the generated d4rt code above for how this is used
+      print( "#######################");
+      if(e.toString().contains(signalMagicString)){
+        print( "***********************");
+        final signalMessage = e.toString().split(signalMagicString).last.trim();
+        return signalMessage;
+      }
+
+      errorHandler.notify("$e\n$completeSource", stack);
       throw FormulaEvaluationException(
         'Error evaluating formula "${formula.name}": $e',
         e,
@@ -162,8 +171,10 @@ class FormulaEvaluator {
       import "package:d4rt_formulas.dart";
   """;
 
+  static final String signalMagicString = "###";
+
   static final String signal = """
-      void signal( String msg ) => throw Exception(msg);       
+      void signal( String msg ) => throw Exception("$signalMagicString\$msg");       
   """;
 
   static const reservedVariableNames = { "variableValues", "indexOf", "variableAllowedValues"} ;
