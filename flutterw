@@ -110,7 +110,6 @@ exec_in_container(){
     mkdir -p $BUILDCACHE/root-home/.config
     mkdir -p $BUILDCACHE/root-home/.local
     mkdir -p $BUILDCACHE/sdks-flutter-bin-cache
-    
 
     $DOCKER run \
             -it \

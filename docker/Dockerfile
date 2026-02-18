@@ -16,8 +16,6 @@ RUN apt-get update && apt-get install -y \
 # Create symlinks for the linker to ensure it's accessible
 RUN ln -sf /usr/bin/ld.lld /usr/bin/ld
 
-WORKDIR /app
-
 # Configure cache directories
 ENV PUB_CACHE=/cache/pub-cache
 ENV GRADLE_USER_HOME=/cache/gradle-cache
@@ -32,6 +30,16 @@ RUN chown -R $USER_ID:$GROUP_ID $PUB_CACHE $GRADLE_USER_HOME
 RUN chown -R $USER_ID:$GROUP_ID /sdks/flutter
 
 USER $USER_ID:$GROUP_ID
+
+# Pre-cache Flutter artifacts for Linux, Android, and Web to speed up subsequent builds
+WORKDIR /dummy_app_only_for_cache
+RUN flutter create . && flutter pub get
+RUN flutter precache --linux
+RUN flutter precache --android
+RUN flutter precache --web
+
+WORKDIR /app
+
 
 # Copy pubspec files and get dependencies
 # Commented out to avoid building the app during image creation, this will be handled externally by makefile
