@@ -345,6 +345,7 @@ class Formula implements FormulaElement {
 
   /// Creates a string literal representation of the Formula that can be parsed
   /// by the D4RT parser to recreate the same Formula object.
+  @override
   String toStringLiteral() {
     final inputStrings = input.map((varSpec) => varSpec.toStringLiteral()).toList();
 
@@ -352,23 +353,13 @@ class Formula implements FormulaElement {
     buffer.write('"name": "$name"');
 
     if (description != null) {
-      buffer.write(', "description": "${escapeD4rtString(description!)}"');
+      buffer.write(', "description": r"""${description!}"""');
     }
 
     buffer.write(', "input": [${inputStrings.join(", ")}]');
     buffer.write(', "output": ${output.toStringLiteral()}');
     
-    // Handle d4rtCode with proper escaping
-    String escapedD4rtCode;
-    if (d4rtCode.contains('\n') || d4rtCode.contains('"')) {
-      // For multiline strings or strings with quotes, use raw string but still escape internal quotes
-      escapedD4rtCode = 'r"""${d4rtCode.replaceAll('"', '\\"')}"""';
-    } else {
-      // For single-line strings, use escaped version
-      escapedD4rtCode = '"${escapeD4rtString(d4rtCode)}"';
-    }
-    
-    buffer.write(', "d4rtCode": $escapedD4rtCode');
+    buffer.write(', "d4rtCode": r"""$d4rtCode"""');
 
     if (tags.isNotEmpty) {
       buffer.write(', "tags": [${tags.map((tag) => '"${escapeD4rtString(tag)}"').join(", ")}]');
