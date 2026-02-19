@@ -35,8 +35,11 @@ USER $USER_ID:$GROUP_ID
 WORKDIR /dummy_app_only_for_cache
 RUN flutter create . && flutter pub get
 RUN flutter precache --linux
-RUN flutter precache --android
+RUN flutter build linux
 RUN flutter precache --web
+RUN flutter build web
+RUN flutter precache --android
+RUN flutter build apk
 
 WORKDIR /app
 
