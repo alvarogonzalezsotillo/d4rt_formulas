@@ -1,0 +1,3 @@
+[
+  {"name":"Ideal Gas Law","input":[{"name":"n","unit":"mole"},{"name":"T","unit":"kelvin"},{"name":"V","unit":"cubic meter"}],"output":{"name":"P","unit":"pascal"},"d4rtCode":"P = (n * 8.314462618 * T) / V;","tags":["physics","thermodynamics","gas"]}
+]

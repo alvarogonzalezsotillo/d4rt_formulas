@@ -1,0 +1,3 @@
+[
+  {"name":"Hooke's Law","input":[{"name":"k","unit":"newton per meter"},{"name":"x","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = -k * x;","tags":["physics","elasticity","oscillations"]}
+]

@@ -1,0 +1,6 @@
+[
+  {"name":"Kinetic Energy","input":[{"name":"m","unit":"kilogram"},{"name":"v","unit":"meters per second"}],"output":{"name":"KE","unit":"joule"},"d4rtCode":"KE = 0.5 * m * pow(v, 2);","tags":["physics","energy","mechanics"]},
+  {"name":"Work","input":[{"name":"F","unit":"newton"},{"name":"d","unit":"meter"},{"name":"theta","unit":"degree"}],"output":{"name":"W","unit":"joule"},"d4rtCode":"var thetaRad = theta * (pi / 180); W = F * d * cos(thetaRad);","tags":["physics","energy","mechanics"]},
+  {"name":"Power","input":[{"name":"W","unit":"joule"},{"name":"t","unit":"second"}],"output":{"name":"P","unit":"watt"},"d4rtCode":"P = W / t;","tags":["physics","energy","mechanics"]},
+  {"name":"Mass-Energy Equivalence","input":[{"name":"m","unit":"kilogram"}],"output":{"name":"E","unit":"joule"},"d4rtCode":"E = m * pow(299792458, 2);","tags":["physics","relativity","energy"]}
+]

@@ -1,0 +1,5 @@
+[
+  {"name":"Coulomb's Law","input":[{"name":"q1","unit":"coulomb"},{"name":"q2","unit":"coulomb"},{"name":"r","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = (8.9875517923e9 * q1 * q2) / pow(r, 2);","tags":["physics","electricity","electrostatics"]},
+  {"name":"Ohm's Law","input":[{"name":"I","unit":"ampere"},{"name":"R","unit":"ohm"}],"output":{"name":"V","unit":"volt"},"d4rtCode":"V = I * R;","tags":["physics","electricity","electronics"]},
+  {"name":"Electric Power","input":[{"name":"V","unit":"volt"},{"name":"I","unit":"ampere"}],"output":{"name":"P","unit":"watt"},"d4rtCode":"P = V * I;","tags":["physics","electricity","electronics"]}
+]

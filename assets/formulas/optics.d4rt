@@ -1,0 +1,3 @@
+[
+  {"name":"Snell's Law","input":[{"name":"n1","unit":"scalar"},{"name":"n2","unit":"scalar"},{"name":"theta1","unit":"degree"}],"output":{"name":"theta2","unit":"degree"},"d4rtCode":"var theta1Rad = theta1 * (pi / 180); var sinTheta2 = (n1 * sin(theta1Rad)) / n2; theta2 = asin(sinTheta2) * (180 / pi);","tags":["physics","optics","light"]}
+]
