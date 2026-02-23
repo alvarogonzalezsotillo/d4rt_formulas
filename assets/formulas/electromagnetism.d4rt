@@ -1,5 +1,20 @@
 [
-  {"name":"Coulomb's Law","input":[{"name":"q1","unit":"coulomb"},{"name":"q2","unit":"coulomb"},{"name":"r","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = (8.9875517923e9 * q1 * q2) / pow(r, 2);","tags":["physics","electricity","electrostatics"]},
-  {"name":"Ohm's Law","input":[{"name":"I","unit":"ampere"},{"name":"R","unit":"ohm"}],"output":{"name":"V","unit":"volt"},"d4rtCode":"V = I * R;","tags":["physics","electricity","electronics"]},
-  {"name":"Electric Power","input":[{"name":"V","unit":"volt"},{"name":"I","unit":"ampere"}],"output":{"name":"P","unit":"watt"},"d4rtCode":"P = V * I;","tags":["physics","electricity","electronics"]}
+  {"name":"Coulomb's Law","input":[{"name":"q1","unit":"coulomb"},{"name":"q2","unit":"coulomb"},{"name":"r","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = (8.9875517923e9 * q1 * q2) / pow(r, 2);","description":r"""
+    Calculates the magnitude of the electrostatic force between two point charges.
+    Formula: $F = k \dfrac{q_1 q_2}{r^2}$ where $k = 8.9875517923\times10^9\ \mathrm{N\,m^2/C^2}$.
+    Inputs: `q1`, `q2` in coulombs; `r` in meters.
+    Output: Force `F` in newtons (N).
+    ""","tags":["physics","electricity","electrostatics"]},
+  {"name":"Ohm's Law","input":[{"name":"I","unit":"ampere"},{"name":"R","unit":"ohm"}],"output":{"name":"V","unit":"volt"},"d4rtCode":"V = I * R;","description":r"""
+    Relates voltage, current and resistance for a linear resistor.
+    Formula: $V = I\,R$.
+    Inputs: current `I` in amperes (A), resistance `R` in ohms (Ω).
+    Output: voltage `V` in volts (V).
+    ""","tags":["physics","electricity","electronics"]},
+  {"name":"Electric Power","input":[{"name":"V","unit":"volt"},{"name":"I","unit":"ampere"}],"output":{"name":"P","unit":"watt"},"d4rtCode":"P = V * I;","description":r"""
+    Calculates electrical power delivered to a load.
+    Formula: $P = V\,I$ (also $P = I^2 R$ or $P = V^2 / R$ when substituting Ohm's law).
+    Inputs: voltage `V` in volts (V), current `I` in amperes (A).
+    Output: power `P` in watts (W).
+    ""","tags":["physics","electricity","electronics"]}
 ]

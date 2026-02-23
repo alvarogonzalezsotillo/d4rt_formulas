@@ -50,7 +50,13 @@ Future<Corpus> createDefaultCorpus() async{
   }
 
   Future<void> loadFormulas() async {
-    final formulaResources = ["assets/formulas/formulas.d4rt"];
+    final formulaResources = [
+      "assets/formulas/formulas.d4rt",
+      "assets/formulas/electromagnetism.d4rt",
+      "assets/formulas/thermodynamics.d4rt",
+      "assets/formulas/fluids_and_pressure.d4rt",
+
+    ];
 
     for (final formRes in formulaResources) {
       print( "Loading formulas from $formRes ...");

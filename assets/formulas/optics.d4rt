@@ -1,3 +1,16 @@
 [
-  {"name":"Snell's Law","input":[{"name":"n1","unit":"scalar"},{"name":"n2","unit":"scalar"},{"name":"theta1","unit":"degree"}],"output":{"name":"theta2","unit":"degree"},"d4rtCode":"var theta1Rad = theta1 * (pi / 180); var sinTheta2 = (n1 * sin(theta1Rad)) / n2; theta2 = asin(sinTheta2) * (180 / pi);","tags":["physics","optics","light"]}
+  {"name":"Snell's Law","description":r"""
+Law describing refraction of light at an interface between two media.
+
+$$n_1 \sin(\theta_1) = n_2 \sin(\theta_2)$$
+
+Where:
+- $n_1, n_2$: Refractive indices
+- $\theta_1$: Angle of incidence
+- $\theta_2$: Angle of refraction
+
+This law explains how light bends when passing between materials.
+
+![Refraction diagram (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Refraction_en.svg/800px-Refraction_en.svg.png)
+""","input":[{"name":"n1","unit":"scalar"},{"name":"n2","unit":"scalar"},{"name":"theta1","unit":"degree"}],"output":{"name":"theta2","unit":"degree"},"d4rtCode":"var theta1Rad = theta1 * (pi / 180); var sinTheta2 = (n1 * sin(theta1Rad)) / n2; theta2 = asin(sinTheta2) * (180 / pi);","tags":["physics","optics","light"]}
 ]

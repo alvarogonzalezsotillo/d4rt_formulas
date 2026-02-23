@@ -635,30 +635,6 @@ This law explains how light bends when passing between materials.''',
     "tags": ["physics", "optics", "light"]
   },
 
-  // Buoyant Force (Archimedes' Principle)
-  {
-    "name": "Buoyant Force",
-    "description": r'''
-Upward force exerted on an object immersed in a fluid
-
-$$F_b = \rho g V$$
-
-Where:
-- $F_b$: Buoyant force (Newtons)
-- $\rho$: Fluid density ($\mathrm{kg/m^3}$)
-- $g$: Gravitational acceleration ($\mathrm{m/s^2}$)
-- $V$: Displaced volume (cubic meters)
-
-An object floats when buoyant force equals its weight.''',
-    "input": [
-      {"name": "rho", "unit": "kilogram per cubic meter"},  // Fluid density
-      {"name": "g", "unit": "meters per square second"},    // Gravitational acceleration
-      {"name": "V", "unit": "cubic meter"}                  // Displaced volume
-    ],
-    "output": {"name": "Fb", "unit": "newton"},  // Buoyant force
-    "d4rtCode": "Fb = rho * g * V;",
-    "tags": ["physics", "fluid", "mechanics"]
-  },
 
   // Area of Circle
   {

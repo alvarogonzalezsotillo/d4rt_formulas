@@ -27,7 +27,7 @@ class Corpus{
   final Multimap<String, Formula> _tags = Multimap.create();
   final Map<String, Formula> _allFormulas = {};
 
-  void loadFormulas(List<Formula> formulas, {bool replaceOnDuplicates = false, bool checkUnits = true}) {
+  void loadFormulas(List<Formula> formulas, {bool replaceOnDuplicates = true, bool checkUnits = true}) {
     for (final formula in formulas) {
       if (!replaceOnDuplicates && _allFormulas.containsKey(formula.name)) {
         throw ArgumentError("Duplicate formula:$formula");
