@@ -1,15 +1,18 @@
 
 all: clean-container build-builders build-linux-debug-container
 
+DB=~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
+
 build-container:
 	./flutterw --build-container
 
 clean:
 	flutter clean
-	rm ~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
+	[ -f $(DB) ] && rm $(DB)
 
 clean-container: build-container
 	./flutterw clean
+	rm .build-container-cache
 
 pub-get-container: build-container
 	./flutterw pub get
@@ -35,11 +38,11 @@ run-linux-debug-container: pub-get-container
 run-web-debug-container: pub-get-container
 	./flutterw run --web-port $${WEB_PORT:-8081} -d web-server
 
-run-linux-debug-native: build-linux-debug-container
-	./build/linux/x64/debug/bundle/d4rt_formulas
+run-linux-debug-native:
+	flutter run -d linux
 
-run-web-debug-native: build-web-debug-container
-	cd build/web && python3 -m http.server $${WEB_PORT:-8081}
+run-web-debug-native:
+	flutter run --web-port $${WEB_PORT:-8081} -d web-server
 
 ai:
 	qwen --prompt-interactive --yolo "Read CLAUDE.md. Implement first task not already done in TODO.md"
