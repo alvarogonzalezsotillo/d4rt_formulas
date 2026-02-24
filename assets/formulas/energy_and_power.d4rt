@@ -1,5 +1,8 @@
 [
-  {"name":"Kinetic Energy","description":r"""
+  // Kinetic Energy
+  {
+    "name": "Kinetic Energy",
+    "description": r"""
 Energy possessed by a moving object.
 
 $$KE = \frac{1}{2}mv^2$$
@@ -8,9 +11,20 @@ Where:
 - $m$: Mass (kg)
 - $v$: Velocity (m/s)
 
-![Kinetic energy (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kinetic_energy.svg/1200px-Kinetic_energy.svg.png)
-""","input":[{"name":"m","unit":"kilogram"},{"name":"v","unit":"meters per second"}],"output":{"name":"KE","unit":"joule"},"d4rtCode":"KE = 0.5 * m * pow(v, 2);","tags":["physics","energy","mechanics"]},
-  {"name":"Work","description":r"""
+![Kinetic energy (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kinetic_energy.svg/1200px-Kinetic_energy.svg.png)""",
+    "input": [
+      {"name": "m", "unit": "kilogram"},
+      {"name": "v", "unit": "meters per second"}
+    ],
+    "output": {"name": "KE", "unit": "joule"},
+    "d4rtCode": "KE = 0.5 * m * pow(v, 2);",
+    "tags": ["physics", "energy", "mechanics"]
+  },
+
+  // Work
+  {
+    "name": "Work",
+    "description": r"""
 Energy transferred when a force moves an object.
 
 $$W = F d \cos(\theta)$$
@@ -21,9 +35,24 @@ Where:
 - $d$: Displacement (meters)
 - $\theta$: Angle between force and displacement
 
-![Work (diagram) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Work.svg/800px-Work.svg.png)
-""","input":[{"name":"F","unit":"newton"},{"name":"d","unit":"meter"},{"name":"theta","unit":"degree"}],"output":{"name":"W","unit":"joule"},"d4rtCode":"var thetaRad = theta * (pi / 180); W = F * d * cos(thetaRad);","tags":["physics","energy","mechanics"]},
-  {"name":"Power","description":r"""
+![Work (diagram) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Work.svg/800px-Work.svg.png)""",
+    "input": [
+      {"name": "F", "unit": "newton"},
+      {"name": "d", "unit": "meter"},
+      {"name": "theta", "unit": "degree"}
+    ],
+    "output": {"name": "W", "unit": "joule"},
+    "d4rtCode": """
+       var thetaRad = theta * (pi / 180);
+       W = F * d * cos(thetaRad);
+    """,
+    "tags": ["physics", "energy", "mechanics"]
+  },
+
+  // Power
+  {
+    "name": "Power",
+    "description": r"""
 Rate at which work is done or energy is transferred.
 
 $$P = \frac{W}{t}$$
@@ -33,9 +62,20 @@ Where:
 - $W$: Work or energy (Joules)
 - $t$: Time (seconds)
 
-![Power (diagram) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Power_equation.svg/800px-Power_equation.svg.png)
-""","input":[{"name":"W","unit":"joule"},{"name":"t","unit":"second"}],"output":{"name":"P","unit":"watt"},"d4rtCode":"P = W / t;","tags":["physics","energy","mechanics"]},
-  {"name":"Mass-Energy Equivalence","description":r"""
+![Power (diagram) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Power_equation.svg/800px-Power_equation.svg.png)""",
+    "input": [
+      {"name": "W", "unit": "joule"},
+      {"name": "t", "unit": "second"}
+    ],
+    "output": {"name": "P", "unit": "watt"},
+    "d4rtCode": "P = W / t;",
+    "tags": ["physics", "energy", "mechanics"]
+  },
+
+  // Mass-Energy Equivalence
+  {
+    "name": "Mass-Energy Equivalence",
+    "description": r"""
 Einstein's mass-energy equivalence relation.
 
 $$E = mc^2$$
@@ -47,6 +87,12 @@ Where:
 
 This shows mass can be converted to energy and vice versa.
 
-![Einstein formula (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Einstein_light_beam.svg/800px-Einstein_light_beam.svg.png)
-""","input":[{"name":"m","unit":"kilogram"}],"output":{"name":"E","unit":"joule"},"d4rtCode":"E = m * pow(299792458, 2);","tags":["physics","relativity","energy"]}
+![Einstein formula (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Einstein_light_beam.svg/800px-Einstein_light_beam.svg.png)""",
+    "input": [
+      {"name": "m", "unit": "kilogram"}
+    ],
+    "output": {"name": "E", "unit": "joule"},
+    "d4rtCode": "E = m * pow(299792458, 2);",
+    "tags": ["physics", "relativity", "energy"]
+  }
 ]

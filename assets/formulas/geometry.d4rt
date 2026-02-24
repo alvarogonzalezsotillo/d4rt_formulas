@@ -1,13 +1,22 @@
 [
-  // Geometry formulas extracted from formulas.d4rt
   // Area of Circle
   {
     "name": "Area of Circle",
-    "description": r'''\nArea enclosed by a circle\n\n$$A = \pi r^2$$\n\nWhere:\n- $A$: Area (square meters)\n- $r$: Radius (meters)\n- $\pi$: Pi ($\approx 3.14159$)\n\nThe area is proportional to the square of the radius.''',
+    "description": r"""
+Area enclosed by a circle
+
+$$A = \pi r^2$$
+
+Where:
+- $A$: Area (square meters)
+- $r$: Radius (meters)
+- $\pi$: Pi ($\approx 3.14159$)
+
+The area is proportional to the square of the radius.""",
     "input": [
-      {"name": "r", "unit": "meter"}  // Radius
+      {"name": "r", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = pi * pow(r, 2);",
     "tags": ["geometry", "circle", "area"]
   },
@@ -15,11 +24,21 @@
   // Circumference of Circle
   {
     "name": "Circumference of Circle",
-    "description": r'''\nPerimeter (distance around) a circle\n\n$$C = 2\pi r$$\n\nWhere:\n- $C$: Circumference (meters)\n- $r$: Radius (meters)\n- $\pi$: Pi ($\approx 3.14159$)\n\nThe circumference is proportional to the radius.''',
+    "description": r"""
+Perimeter (distance around) a circle
+
+$$C = 2\pi r$$
+
+Where:
+- $C$: Circumference (meters)
+- $r$: Radius (meters)
+- $\pi$: Pi ($\approx 3.14159$)
+
+The circumference is proportional to the radius.""",
     "input": [
-      {"name": "r", "unit": "meter"}  // Radius
+      {"name": "r", "unit": "meter"}
     ],
-    "output": {"name": "C", "unit": "meter"},  // Circumference
+    "output": {"name": "C", "unit": "meter"},
     "d4rtCode": "C = 2 * pi * r;",
     "tags": ["geometry", "circle", "perimeter"]
   },
@@ -27,12 +46,22 @@
   // Area of Triangle
   {
     "name": "Area of Triangle",
-    "description": r'''\nArea enclosed by a triangle\n\n$$A = \frac{1}{2}bh$$\n\nWhere:\n- $A$: Area (square meters)\n- $b$: Base length (meters)\n- $h$: Height perpendicular to base (meters)\n\nThis formula works for any triangle.''',
+    "description": r"""
+Area enclosed by a triangle
+
+$$A = \frac{1}{2}bh$$
+
+Where:
+- $A$: Area (square meters)
+- $b$: Base length (meters)
+- $h$: Height perpendicular to base (meters)
+
+This formula works for any triangle.""",
     "input": [
-      {"name": "b", "unit": "meter"},  // Base
-      {"name": "h", "unit": "meter"}   // Height
+      {"name": "b", "unit": "meter"},
+      {"name": "h", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = 0.5 * b * h;",
     "tags": ["geometry", "triangle", "area"]
   },
@@ -40,12 +69,22 @@
   // Area of Rectangle
   {
     "name": "Area of Rectangle",
-    "description": r'''\nArea enclosed by a rectangle\n\n$$A = lw$$\n\nWhere:\n- $A$: Area (square meters)\n- $l$: Length (meters)\n- $w$: Width (meters)\n\nThe area is the product of length and width.''',
+    "description": r"""
+Area enclosed by a rectangle
+
+$$A = lw$$
+
+Where:
+- $A$: Area (square meters)
+- $l$: Length (meters)
+- $w$: Width (meters)
+
+The area is the product of length and width.""",
     "input": [
-      {"name": "l", "unit": "meter"},  // Length
-      {"name": "w", "unit": "meter"}   // Width
+      {"name": "l", "unit": "meter"},
+      {"name": "w", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = l * w;",
     "tags": ["geometry", "rectangle", "area"]
   },
@@ -53,13 +92,23 @@
   // Area of Trapezoid
   {
     "name": "Area of Trapezoid",
-    "description": r'''\nArea enclosed by a trapezoid\n\n$$A = \frac{1}{2}(a+b)h$$\n\nWhere:\n- $A$: Area (square meters)\n- $a, b$: Lengths of parallel sides (meters)\n- $h$: Height (perpendicular distance between parallel sides, meters)\n\nThe area is the average of parallel sides times height.''',
+    "description": r"""
+Area enclosed by a trapezoid
+
+$$A = \frac{1}{2}(a+b)h$$
+
+Where:
+- $A$: Area (square meters)
+- $a, b$: Lengths of parallel sides (meters)
+- $h$: Height (perpendicular distance between parallel sides, meters)
+
+The area is the average of parallel sides times height.""",
     "input": [
-      {"name": "a", "unit": "meter"},  // Parallel side 1
-      {"name": "b", "unit": "meter"},  // Parallel side 2
-      {"name": "h", "unit": "meter"}   // Height
+      {"name": "a", "unit": "meter"},
+      {"name": "b", "unit": "meter"},
+      {"name": "h", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = 0.5 * (a + b) * h;",
     "tags": ["geometry", "trapezoid", "area"]
   },
@@ -67,12 +116,23 @@
   // Area of Regular Polygon
   {
     "name": "Area of Regular Polygon",
-    "description": r'''\nArea of a regular polygon with n sides\n\n$$A = \frac{1}{4}ns^2\cot(\frac{\pi}{n})$$\n\nWhere:\n- $A$: Area (square meters)\n- $n$: Number of sides\n- $s$: Side length (meters)\n- $\pi$: Pi ($\approx 3.14159$)\n\nThis formula works for any regular polygon (equal sides and angles).''',
+    "description": r"""
+Area of a regular polygon with n sides
+
+$$A = \frac{1}{4}ns^2\cot(\frac{\pi}{n})$$
+
+Where:
+- $A$: Area (square meters)
+- $n$: Number of sides
+- $s$: Side length (meters)
+- $\pi$: Pi ($\approx 3.14159$)
+
+This formula works for any regular polygon (equal sides and angles).""",
     "input": [
-      {"name": "n", "unit": "scalar"},  // Number of sides
-      {"name": "s", "unit": "meter"}    // Side length
+      {"name": "n", "unit": "scalar"},
+      {"name": "s", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = 0.25 * n * pow(s, 2) * (cos(pi/n) / sin(pi/n));",
     "tags": ["geometry", "polygon", "area"]
   },
@@ -80,11 +140,20 @@
   // Sum of Interior Angles of Polygon
   {
     "name": "Sum of Interior Angles",
-    "description": r'''\nSum of interior angles of a polygon\n\n$$S = (n - 2) \times 180°$$\n\nWhere:\n- $S$: Sum of interior angles (degrees)\n- $n$: Number of sides\n\nThis formula works for any simple polygon.''',
+    "description": r"""
+Sum of interior angles of a polygon
+
+$$S = (n - 2) \times 180°$$
+
+Where:
+- $S$: Sum of interior angles (degrees)
+- $n$: Number of sides
+
+This formula works for any simple polygon.""",
     "input": [
-      {"name": "n", "unit": "scalar"}  // Number of sides
+      {"name": "n", "unit": "scalar"}
     ],
-    "output": {"name": "S", "unit": "degree"},  // Sum of angles
+    "output": {"name": "S", "unit": "degree"},
     "d4rtCode": "S = (n - 2) * 180;",
     "tags": ["geometry", "polygon", "angles"]
   },
@@ -92,13 +161,25 @@
   // Heron's Formula (Area of Triangle)
   {
     "name": "Heron's Formula",
-    "description": r'''\nArea of a triangle using only side lengths\n\n$$A = \sqrt{s(s-a)(s-b)(s-c)}$$\n\nWhere:\n- $A$: Area (square meters)\n- $a, b, c$: Side lengths (meters)\n- $s$: Semi-perimeter $= \frac{a+b+c}{2}$\n\nThis formula is useful when height is unknown.\n\n**Note:** The side lengths must satisfy the triangle inequality: the sum of any two sides must be greater than the third side (a+b>c, a+c>b, b+c>a). If this condition is not met, the formula returns NaN.''',
+    "description": r"""
+Area of a triangle using only side lengths
+
+$$A = \sqrt{s(s-a)(s-b)(s-c)}$$
+
+Where:
+- $A$: Area (square meters)
+- $a, b, c$: Side lengths (meters)
+- $s$: Semi-perimeter $= \frac{a+b+c}{2}$
+
+This formula is useful when height is unknown.
+
+**Note:** The side lengths must satisfy the triangle inequality: the sum of any two sides must be greater than the third side (a+b>c, a+c>b, b+c>a). If this condition is not met, the formula returns NaN.""",
     "input": [
-      {"name": "a", "unit": "meter"},  // Side 1
-      {"name": "b", "unit": "meter"},  // Side 2
-      {"name": "c", "unit": "meter"}   // Side 3
+      {"name": "a", "unit": "meter"},
+      {"name": "b", "unit": "meter"},
+      {"name": "c", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": """
        if( a + b < c || a+c < b || b+c < a ){
           signal( "There is not a valid triangle with those longitudes" );

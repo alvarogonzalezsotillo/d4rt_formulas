@@ -32,4 +32,8 @@
 - [X] Add a Share button to the formula list. It will export the array string literal of the formula with the units from Corpus.withDependencies().
 - [X] Replace flutter-markdown with flutter-markdown-plus
 - [X] Heron's formula: investigate why a=3, b=40, c=5 yields NaN. Root cause: input values don't form a valid triangle (violate triangle inequality: 3+5=8 is not > 40). Added documentation note to the formula description.
+- [R] Refactor ./assets/formulas d4rt files:
+  - [R] Pretty print files as dart literals (like JSON, but allow raw strings r"""like this""")
+  - [R] Ensure there is no formula duplicates. If necesary, move or delete the formula in file formulas.d4rt
+  - [R] defaultCorpus must load all formula files
 - [ ] Investigate starup time when there is no previous database and corpus is loaded from assets.

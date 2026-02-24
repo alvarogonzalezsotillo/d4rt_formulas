@@ -1,15 +1,4 @@
 [
-
-{
-  "name": "Temperature converter",
-  "description": "Example of simple formula, just unit conversion",
-  "input": [
-    {"name": "Input", "unit": "Kelvin" }
-  ],
-  "output": {"name": "Output", "unit": "Kelvin" },
-  "d4rtCode": "Output = Input;",
-  "tags": ["converter", "temperature" ]
-},
   // Free fall distance (vertical)
   {
     "name": "Free Fall Distance",
@@ -24,75 +13,57 @@ Where:
 
 ![Free Fall Diagram](https://altcalculator.com/wp-content/uploads/2023/08/Free-Fall.png)""",
     "input": [
-      {"name": "t", "unit": "second"},  // Time in seconds
-      {"name": "g", "unit": "meters per second"}  // Gravitational acceleration
+      {"name": "t", "unit": "second"},
+      {"name": "g", "unit": "meters per second"}
     ],
-    "output": {"name": "h", "unit": "meter"},  // Height in meters
+    "output": {"name": "h", "unit": "meter"},
     "d4rtCode": "h = 0.5 * g * pow(t, 2);",
     "tags": ["physics", "kinematics"]
   },
-  
+
   // Newton's Law of Universal Gravitation
   {
     "name": "Gravitational Force",
-    "description": r'''
+    "description": r"""
 Newton's law of universal gravitation
 
-\(F = G\frac{m_1m_2}{r^2}\)
+$$F = G\frac{m_1m_2}{r^2}$$
 
 Where:
 - $G$: Gravitational constant $6.674\times 10^{-11}\ \mathrm{N\cdot m^2/kg^2}$
 - $m_1, m_2$: Masses of two objects
 - $r$: Distance between centers of masses
 
-![Gravitation](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NewtonsLawOfUniversalGravitation.svg/1200px-NewtonsLawOfUniversalGravitation.svg.png)''',
+![Gravitation](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NewtonsLawOfUniversalGravitation.svg/1200px-NewtonsLawOfUniversalGravitation.svg.png)""",
     "input": [
-      {"name": "m1", "unit": "kilogram"},  // Mass 1
-      {"name": "m2", "unit": "kilogram"},  // Mass 2
-      {"name": "r", "unit": "meter"}     // Distance between masses
+      {"name": "m1", "unit": "kilogram"},
+      {"name": "m2", "unit": "kilogram"},
+      {"name": "r", "unit": "meter"}
     ],
-    "output": {"name": "F", "unit": "newton"},  // Force in newtons
+    "output": {"name": "F", "unit": "newton"},
     "d4rtCode": "F = (6.67430e-11 * m1 * m2) / pow(r, 2);",
     "tags": ["physics", "astronomy", "gravity"]
   },
-  
-  // Kinetic Energy
-  {
-    "name": "Kinetic Energy",
-    "description": r'''
-Energy possessed by a moving object
 
-$$KE = \frac{1}{2}mv^2$$
-
-Where:
-- $m$: Mass of object
-- $v$: Velocity of object
-
-![Kinetic Energy](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Kinetic_energy.svg/1200px-Kinetic_energy.svg.png)''',
-    "input": [
-      {"name": "m", "unit": "kilogram"},  // Mass
-      {"name": "v", "unit": "meters per second"}  // Velocity
-    ],
-    "output": {"name": "KE", "unit": "joule"},  // Energy in joules
-    "d4rtCode": "KE = 0.5 * m * pow(v, 2);",
-    "tags": ["physics", "energy", "mechanics"]
-  },
-  
   // Projectile Motion Range
   {
     "name": "Projectile Range",
-    "description": r"""Calculates horizontal distance of projectile motion
-                 $$R = \frac{v^2 \sin(2\theta)}{g}$$
-                 Where:
-                 - $v$: Initial velocity
-                 - $\theta$: Launch angle
-                 - $g$: Gravitational acceleration
-                 ![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)""",
+    "description": r"""
+Calculates horizontal distance of projectile motion
+
+$$R = \frac{v^2 \sin(2\theta)}{g}$$
+
+Where:
+- $v$: Initial velocity
+- $\theta$: Launch angle
+- $g$: Gravitational acceleration
+
+![Projectile Motion](https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Projectile_motion_diagram.png/800px-Projectile_motion_diagram.png)""",
     "input": [
-      {"name": "v", "unit": "meters per second"},  // Initial velocity
-      {"name": "a", "unit": "degree"}   // Launch angle
+      {"name": "v", "unit": "meters per second"},
+      {"name": "a", "unit": "degree"}
     ],
-    "output": {"name": "R", "unit": "meter"},  // Horizontal distance
+    "output": {"name": "R", "unit": "meter"},
     "d4rtCode": """
        var radians = a * (pi / 180);
        R = (pow(v, 2) * sin(2 * radians)) / 9.80665;
@@ -100,9 +71,10 @@ Where:
     "tags": ["physics", "kinematics", "projectile"]
   },
 
+  // Newton's Second Law
   {
     "name": "Newton's Second Law",
-    "description": r'''
+    "description": r"""
 Force equals mass times acceleration
 
 $$F = m \cdot a$$
@@ -111,142 +83,20 @@ Where:
 - $m$: Mass of object ($\mathrm{kg}$)
 - $a$: Acceleration ($\mathrm{m/s^2}$)
 
-![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)''',
+![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)""",
     "input": [
-      {"name": "m", "unit": "kilogram"},  // Mass
-      {"name": "a", "unit": "meters per square second"} // Acceleration
+      {"name": "m", "unit": "kilogram"},
+      {"name": "a", "unit": "meters per square second"}
     ],
-    "output": {"name": "F", "unit": "newton"},  // Force in newtons
+    "output": {"name": "F", "unit": "newton"},
     "d4rtCode": "F = m * a;",
     "tags": ["physics", "mechanics", "newton"]
-  },
-
-  // Apgar Score
-  {
-    "name": "Apgar Score",
-    "description": "Newborn health assessment scoring system\n\nScores 0-2 for:\n1. Heart rate\n2. Breathing\n3. Muscle tone\n4. Reflexes\n5. Skin color\nTotal score 0-10",
-    "input": [
-      {"name": "HeartRate", "values": ["Absent", "< 100 bpm>", "> 100 bpm"] },
-      {"name": "Breathing", "values": ["Absent", "Weak, irregular", "Strong, robust cry"] },
-      {"name": "MuscleTone", "values": ["None", "Some", "Flexed arms/leg, resists extension"] },
-      {"name": "Reflexes", "values": ["No response", "Grimace on aggressive stimulation", "Cry on stimulation"] },
-      {"name": "SkinColor", "values": ["Blue or pale", "Blue extremities, pink body", "Pink"] }
-    ],
-    "output": {"name": "Result", "unit": "string"},
-    "d4rtCode": """
-      var total = indexOf("HeartRate") + indexOf("Breathing") + indexOf("MuscleTone") + indexOf("Reflexes") + indexOf("SkinColor");
-      late var interpretation;
-      if( total < 4 ) {
-        interpretation = 'Critical condition';
-      }
-      else if( total < 7 ){
-        interpretation = 'Needs assistance';
-      }
-      else {
-        interpretation = 'Normal';
-      }
-      Result = 'Score: \$total - \$interpretation';
-    """,
-    "tags": ["medical", "pediatrics", "assessment"]
-  }
-  ,
-  {
-    "name": "Compare price per mass",
-    "description": "Compares two products by their price per mass and returns which is cheaper, including price per kg for each product.",
-    "input": [
-      {"name": "price1", "unit": "currency"},
-      {"name": "mass1", "unit": "kilogram"},
-      {"name": "price2", "unit": "currency"},
-      {"name": "mass2", "unit": "kilogram"}
-    ],
-    "output": {"name": "Result", "unit": "string"},
-    "d4rtCode": """
-      var p1 = price1 / mass1;
-      var p2 = price2 / mass2;
-      if (p1 < p2) {
-        Result = 'first product is cheaper at \${p1.toStringAsFixed(2)} currency/kg vs \${p2.toStringAsFixed(2)} currency/kg';
-      } else if (p2 < p1) {
-        Result = 'second product is cheaper at \${p2.toStringAsFixed(2)} currency/kg vs \${p1.toStringAsFixed(2)} currency/kg';
-      } else {
-        Result = 'both products have the same price per mass at \${p1.toStringAsFixed(2)} currency/kg';
-      }
-    """,
-    "tags": ["comparison", "shopping", "economics"]
-  }
-  ,
-
-  // Einstein's Mass-Energy Equivalence
-  {
-    "name": "Mass-Energy Equivalence",
-    "description": r'''
-Einstein's famous equation showing the relationship between mass and energy
-
-$$E = mc^2$$
-
-Where:
-- $E$: Energy (Joules)
-- $m$: Mass (kilograms)
-- $c$: Speed of light $299,792,458$ $\mathrm{m/s}$
-
-This equation shows that mass can be converted to energy and vice versa.''',
-    "input": [
-      {"name": "m", "unit": "kilogram"}  // Mass
-    ],
-    "output": {"name": "E", "unit": "joule"},  // Energy
-    "d4rtCode": "E = m * pow(299792458, 2);",
-    "tags": ["physics", "relativity", "energy"]
-  },
-
-  // Ohm's Law
-  {
-    "name": "Ohm's Law",
-    "description": r'''
-Relationship between voltage, current, and resistance in electrical circuits
-
-$$V = IR$$
-
-Where:
-- $V$: Voltage (Volts)
-- $I$: Current (Amperes)
-- $R$: Resistance (Ohms)
-
-This fundamental law describes how current flows through resistive materials.''',
-    "input": [
-      {"name": "I", "unit": "ampere"},  // Current
-      {"name": "R", "unit": "ohm"}     // Resistance
-    ],
-    "output": {"name": "V", "unit": "volt"},  // Voltage
-    "d4rtCode": "V = I * R;",
-    "tags": ["physics", "electricity", "electronics"]
-  },
-
-  // Hooke's Law
-  {
-    "name": "Hooke's Law",
-    "description": r'''
-Force exerted by a spring is proportional to its displacement
-
-$$F = -kx$$
-
-Where:
-- $F$: Restoring force (Newtons)
-- $k$: Spring constant (N/m)
-- $x$: Displacement from equilibrium (meters)
-
-The negative sign indicates the force opposes the displacement.''',
-    "input": [
-      {"name": "k", "unit": "newton per meter"},  // Spring constant
-      {"name": "x", "unit": "meter"}             // Displacement
-    ],
-    "output": {"name": "F", "unit": "newton"},   // Force
-    "d4rtCode": "F = -k * x;",
-    "tags": ["physics", "elasticity", "oscillations"]
   },
 
   // Centripetal Force
   {
     "name": "Centripetal Force",
-    "description": r'''
+    "description": r"""
 Force required to keep an object moving in circular motion
 
 $$F = \frac{mv^2}{r}$$
@@ -257,13 +107,13 @@ Where:
 - $v$: Velocity (m/s)
 - $r$: Radius of circular path (meters)
 
-This force acts toward the center of the circle.''',
+This force acts toward the center of the circle.""",
     "input": [
-      {"name": "m", "unit": "kilogram"},         // Mass
-      {"name": "v", "unit": "meters per second"}, // Velocity
-      {"name": "r", "unit": "meter"}             // Radius
+      {"name": "m", "unit": "kilogram"},
+      {"name": "v", "unit": "meters per second"},
+      {"name": "r", "unit": "meter"}
     ],
-    "output": {"name": "F", "unit": "newton"},   // Force
+    "output": {"name": "F", "unit": "newton"},
     "d4rtCode": "F = (m * pow(v, 2)) / r;",
     "tags": ["physics", "circular motion", "centripetal"]
   },
@@ -271,7 +121,7 @@ This force acts toward the center of the circle.''',
   // Wave Equation
   {
     "name": "Wave Equation",
-    "description": r'''
+    "description": r"""
 Relationship between wave speed, frequency, and wavelength
 
 $$v = f\lambda$$
@@ -281,12 +131,12 @@ Where:
 - $f$: Frequency (Hertz)
 - $\lambda$: Wavelength (meters)
 
-This applies to all types of waves including sound and light.''',
+This applies to all types of waves including sound and light.""",
     "input": [
-      {"name": "f", "unit": "hertz"},    // Frequency
-      {"name": "lambda", "unit": "meter"} // Wavelength
+      {"name": "f", "unit": "hertz"},
+      {"name": "lambda", "unit": "meter"}
     ],
-    "output": {"name": "v", "unit": "meters per second"}, // Wave speed
+    "output": {"name": "v", "unit": "meters per second"},
     "d4rtCode": "v = f * lambda;",
     "tags": ["physics", "waves", "frequency"]
   },
@@ -294,7 +144,7 @@ This applies to all types of waves including sound and light.''',
   // Pythagorean Theorem
   {
     "name": "Pythagorean Theorem",
-    "description": r'''
+    "description": r"""
 Fundamental relation in Euclidean geometry among the three sides of a right triangle
 
 $$a^2 + b^2 = c^2$$
@@ -303,12 +153,12 @@ Where:
 - $a$, $b$: Legs of the right triangle
 - $c$: Hypotenuse of the right triangle
 
-The square of the hypotenuse is equal to the sum of squares of the other two sides.''',
+The square of the hypotenuse is equal to the sum of squares of the other two sides.""",
     "input": [
-      {"name": "a", "unit": "meter"},  // First leg
-      {"name": "b", "unit": "meter"}   // Second leg
+      {"name": "a", "unit": "meter"},
+      {"name": "b", "unit": "meter"}
     ],
-    "output": {"name": "c", "unit": "meter"},  // Hypotenuse
+    "output": {"name": "c", "unit": "meter"},
     "d4rtCode": "c = sqrt(pow(a, 2) + pow(b, 2));",
     "tags": ["trigonometry", "geometry", "pythagorean"]
   },
@@ -316,7 +166,7 @@ The square of the hypotenuse is equal to the sum of squares of the other two sid
   // Sine Rule
   {
     "name": "Sine Rule",
-    "description": r'''
+    "description": r"""
 Relationship between the sides and angles of any triangle
 
 $$\frac{a}{\sin A} = \frac{b}{\sin B} = \frac{c}{\sin C}$$
@@ -325,13 +175,13 @@ Where:
 - $a$, $b$, $c$: Sides of the triangle
 - $A$, $B$, $C$: Angles opposite to sides $a$, $b$, $c$ respectively
 
-This rule is useful for solving triangles when certain combinations of angles and sides are known.''',
+This rule is useful for solving triangles when certain combinations of angles and sides are known.""",
     "input": [
-      {"name": "a", "unit": "meter"},      // Side a
-      {"name": "A", "unit": "degree"},     // Angle A in degrees
-      {"name": "B", "unit": "degree"}      // Angle B in degrees
+      {"name": "a", "unit": "meter"},
+      {"name": "A", "unit": "degree"},
+      {"name": "B", "unit": "degree"}
     ],
-    "output": {"name": "b", "unit": "meter"},  // Side b
+    "output": {"name": "b", "unit": "meter"},
     "d4rtCode": """
        var angleARad = A * (pi / 180);
        var angleBRad = B * (pi / 180);
@@ -343,7 +193,7 @@ This rule is useful for solving triangles when certain combinations of angles an
   // Cosine Rule
   {
     "name": "Cosine Rule",
-    "description": r'''
+    "description": r"""
 Generalization of the Pythagorean theorem for any triangle
 
 $$c^2 = a^2 + b^2 - 2ab\cos(C)$$
@@ -352,13 +202,13 @@ Where:
 - $a$, $b$, $c$: Sides of the triangle
 - $C$: Angle opposite to side $c$
 
-This rule relates all three sides of a triangle to one of its angles.''',
+This rule relates all three sides of a triangle to one of its angles.""",
     "input": [
-      {"name": "a", "unit": "meter"},      // Side a
-      {"name": "b", "unit": "meter"},      // Side b
-      {"name": "C", "unit": "degree"}      // Angle C in degrees
+      {"name": "a", "unit": "meter"},
+      {"name": "b", "unit": "meter"},
+      {"name": "C", "unit": "degree"}
     ],
-    "output": {"name": "c", "unit": "meter"},  // Side c
+    "output": {"name": "c", "unit": "meter"},
     "d4rtCode": """
        var angleCRad = C * (pi / 180);
        c = sqrt(pow(a, 2) + pow(b, 2) - 2*a*b*cos(angleCRad));
@@ -369,7 +219,7 @@ This rule relates all three sides of a triangle to one of its angles.''',
   // Trigonometric Identity
   {
     "name": "Trigonometric Identity",
-    "description": r'''
+    "description": r"""
 Fundamental Pythagorean identity in trigonometry
 
 $$\sin^2(\theta) + \cos^2(\theta) = 1$$
@@ -377,11 +227,11 @@ $$\sin^2(\theta) + \cos^2(\theta) = 1$$
 Where:
 - $\theta$: Any angle in radians or degrees
 
-This identity is derived from the Pythagorean theorem applied to the unit circle.''',
+This identity is derived from the Pythagorean theorem applied to the unit circle.""",
     "input": [
-      {"name": "theta", "unit": "degree"}  // Angle in degrees
+      {"name": "theta", "unit": "degree"}
     ],
-    "output": {"name": "result", "unit": "scalar"},  // Result (should be 1)
+    "output": {"name": "result", "unit": "scalar"},
     "d4rtCode": """
        var thetaRad = theta * (pi / 180);
        result = pow(sin(thetaRad), 2) + pow(cos(thetaRad), 2);
@@ -392,7 +242,7 @@ This identity is derived from the Pythagorean theorem applied to the unit circle
   // Gravitational Potential Energy
   {
     "name": "Gravitational Potential Energy",
-    "description": r'''
+    "description": r"""
 Energy possessed by an object due to its position in a gravitational field
 
 $$PE = mgh$$
@@ -402,13 +252,13 @@ Where:
 - $g$: Gravitational acceleration ($9.81\ \mathrm{m/s^2}$ on Earth)
 - $h$: Height above reference point (meters)
 
-This energy increases with height and can be converted to kinetic energy.''',
+This energy increases with height and can be converted to kinetic energy.""",
     "input": [
-      {"name": "m", "unit": "kilogram"},  // Mass
-      {"name": "h", "unit": "meter"},     // Height
-      {"name": "g", "unit": "meters per square second"}  // Gravitational acceleration
+      {"name": "m", "unit": "kilogram"},
+      {"name": "h", "unit": "meter"},
+      {"name": "g", "unit": "meters per square second"}
     ],
-    "output": {"name": "PE", "unit": "joule"},  // Potential energy
+    "output": {"name": "PE", "unit": "joule"},
     "d4rtCode": "PE = m * g * h;",
     "tags": ["physics", "energy", "mechanics", "gravity"]
   },
@@ -416,7 +266,7 @@ This energy increases with height and can be converted to kinetic energy.''',
   // Linear Momentum
   {
     "name": "Linear Momentum",
-    "description": r'''
+    "description": r"""
 Quantity of motion possessed by a moving object
 
 $$p = mv$$
@@ -426,334 +276,20 @@ Where:
 - $m$: Mass (kilograms)
 - $v$: Velocity (m/s)
 
-Momentum is conserved in isolated systems.''',
+Momentum is conserved in isolated systems.""",
     "input": [
-      {"name": "m", "unit": "kilogram"},  // Mass
-      {"name": "v", "unit": "meters per second"}  // Velocity
+      {"name": "m", "unit": "kilogram"},
+      {"name": "v", "unit": "meters per second"}
     ],
-    "output": {"name": "p", "unit": "kilogram meter per second"},  // Momentum
+    "output": {"name": "p", "unit": "kilogram meter per second"},
     "d4rtCode": "p = m * v;",
     "tags": ["physics", "mechanics", "momentum"]
-  },
-
-  // Density
-  {
-    "name": "Density",
-    "description": r'''
-Mass per unit volume of a substance
-
-$$\rho = \frac{m}{V}$$
-
-Where:
-- $\rho$: Density ($\mathrm{kg/m^3}$)
-- $m$: Mass (kilograms)
-- $V$: Volume (cubic meters)
-
-Density is an intrinsic property of materials.''',
-    "input": [
-      {"name": "m", "unit": "kilogram"},  // Mass
-      {"name": "V", "unit": "cubic meter"}  // Volume
-    ],
-    "output": {"name": "rho", "unit": "kilogram per cubic meter"},  // Density
-    "d4rtCode": "rho = m / V;",
-    "tags": ["physics", "mechanics", "material"]
-  },
-
-  // Pressure
-  {
-    "name": "Pressure",
-    "description": r'''
-Force applied perpendicular to a surface per unit area
-
-$$P = \frac{F}{A}$$
-
-Where:
-- $P$: Pressure (Pascals)
-- $F$: Force (Newtons)
-- $A$: Area (square meters)
-
-Pressure is transmitted equally in all directions in fluids.''',
-    "input": [
-      {"name": "F", "unit": "newton"},  // Force
-      {"name": "A", "unit": "square meter"}  // Area
-    ],
-    "output": {"name": "P", "unit": "pascal"},  // Pressure
-    "d4rtCode": "P = F / A;",
-    "tags": ["physics", "mechanics", "fluid"]
-  },
-
-  // Work
-  {
-    "name": "Work",
-    "description": r'''
-Energy transferred when a force moves an object
-
-$$W = Fd\cos(\theta)$$
-
-Where:
-- $W$: Work (Joules)
-- $F$: Force (Newtons)
-- $d$: Displacement (meters)
-- $\theta$: Angle between force and displacement
-
-Maximum work occurs when force and displacement are parallel.''',
-    "input": [
-      {"name": "F", "unit": "newton"},  // Force
-      {"name": "d", "unit": "meter"},   // Displacement
-      {"name": "theta", "unit": "degree"}  // Angle
-    ],
-    "output": {"name": "W", "unit": "joule"},  // Work
-    "d4rtCode": """
-       var thetaRad = theta * (pi / 180);
-       W = F * d * cos(thetaRad);
-    """,
-    "tags": ["physics", "energy", "mechanics"]
-  },
-
-  // Power
-  {
-    "name": "Power",
-    "description": r'''
-Rate at which work is done or energy is transferred
-
-$$P = \frac{W}{t}$$
-
-Where:
-- $P$: Power (Watts)
-- $W$: Work or Energy (Joules)
-- $t$: Time (seconds)
-
-Power measures how quickly energy is used or transferred.''',
-    "input": [
-      {"name": "W", "unit": "joule"},  // Work or Energy
-      {"name": "t", "unit": "second"}  // Time
-    ],
-    "output": {"name": "P", "unit": "watt"},  // Power
-    "d4rtCode": "P = W / t;",
-    "tags": ["physics", "energy", "mechanics"]
-  },
-
-  // Coulomb's Law
-  {
-    "name": "Coulomb's Law",
-    "description": r'''
-Force between two electrically charged particles
-
-$$F = k_e\frac{q_1q_2}{r^2}$$
-
-Where:
-- $F$: Electrostatic force (Newtons)
-- $k_e$: Coulomb's constant $8.988\times 10^9\ \mathrm{N\cdot m^2/C^2}$
-- $q_1, q_2$: Electric charges (Coulombs)
-- $r$: Distance between charges (meters)
-
-Like charges repel, opposite charges attract.''',
-    "input": [
-      {"name": "q1", "unit": "coulomb"},  // Charge 1
-      {"name": "q2", "unit": "coulomb"},  // Charge 2
-      {"name": "r", "unit": "meter"}      // Distance
-    ],
-    "output": {"name": "F", "unit": "newton"},  // Force
-    "d4rtCode": "F = (8.9875517923e9 * q1 * q2) / pow(r, 2);",
-    "tags": ["physics", "electricity", "electrostatics"]
-  },
-
-  // Electric Power
-  {
-    "name": "Electric Power",
-    "description": r'''
-Rate at which electrical energy is transferred
-
-$$P = VI$$
-
-Where:
-- $P$: Power (Watts)
-- $V$: Voltage (Volts)
-- $I$: Current (Amperes)
-
-This formula is fundamental in electrical circuit analysis.''',
-    "input": [
-      {"name": "V", "unit": "volt"},  // Voltage
-      {"name": "I", "unit": "ampere"}  // Current
-    ],
-    "output": {"name": "P", "unit": "watt"},  // Power
-    "d4rtCode": "P = V * I;",
-    "tags": ["physics", "electricity", "electronics"]
-  },
-
-  // Ideal Gas Law
-  {
-    "name": "Ideal Gas Law",
-    "description": r'''
-Equation of state for an ideal gas
-
-$$PV = nRT$$
-
-Where:
-- $P$: Pressure (Pascals)
-- $V$: Volume (cubic meters)
-- $n$: Amount of substance (moles)
-- $R$: Universal gas constant $8.314\ \mathrm{J/(mol\cdot K)}$
-- $T$: Temperature (Kelvin)
-
-This law combines Boyle's, Charles's, and Avogadro's laws.''',
-    "input": [
-      {"name": "n", "unit": "mole"},     // Amount of substance
-      {"name": "T", "unit": "kelvin"},   // Temperature
-      {"name": "V", "unit": "cubic meter"}  // Volume
-    ],
-    "output": {"name": "P", "unit": "pascal"},  // Pressure
-    "d4rtCode": "P = (n * 8.314462618 * T) / V;",
-    "tags": ["physics", "thermodynamics", "gas"]
-  },
-
-  // Snell's Law
-  {
-    "name": "Snell's Law",
-    "description": r'''
-Law describing refraction of light at interface between media
-
-$$n_1\sin(\theta_1) = n_2\sin(\theta_2)$$
-
-Where:
-- $n_1, n_2$: Refractive indices of the two media
-- $\theta_1$: Angle of incidence
-- $\theta_2$: Angle of refraction
-
-This law explains how light bends when passing between materials.''',
-    "input": [
-      {"name": "n1", "unit": "scalar"},    // Refractive index 1
-      {"name": "n2", "unit": "scalar"},    // Refractive index 2
-      {"name": "theta1", "unit": "degree"} // Angle of incidence
-    ],
-    "output": {"name": "theta2", "unit": "degree"},  // Angle of refraction
-    "d4rtCode": """
-       var theta1Rad = theta1 * (pi / 180);
-       var sinTheta2 = (n1 * sin(theta1Rad)) / n2;
-       theta2 = asin(sinTheta2) * (180 / pi);
-    """,
-    "tags": ["physics", "optics", "light"]
-  },
-
-
-  // Area of Circle
-  {
-    "name": "Area of Circle",
-    "description": r'''
-Area enclosed by a circle
-
-$$A = \pi r^2$$
-
-Where:
-- $A$: Area (square meters)
-- $r$: Radius (meters)
-- $\pi$: Pi ($\approx 3.14159$)
-
-The area is proportional to the square of the radius.''',
-    "input": [
-      {"name": "r", "unit": "meter"}  // Radius
-    ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
-    "d4rtCode": "A = pi * pow(r, 2);",
-    "tags": ["geometry", "circle", "area"]
-  },
-
-  // Circumference of Circle
-  {
-    "name": "Circumference of Circle",
-    "description": r'''
-Perimeter (distance around) a circle
-
-$$C = 2\pi r$$
-
-Where:
-- $C$: Circumference (meters)
-- $r$: Radius (meters)
-- $\pi$: Pi ($\approx 3.14159$)
-
-The circumference is proportional to the radius.''',
-    "input": [
-      {"name": "r", "unit": "meter"}  // Radius
-    ],
-    "output": {"name": "C", "unit": "meter"},  // Circumference
-    "d4rtCode": "C = 2 * pi * r;",
-    "tags": ["geometry", "circle", "perimeter"]
-  },
-
-  // Area of Triangle
-  {
-    "name": "Area of Triangle",
-    "description": r'''
-Area enclosed by a triangle
-
-$$A = \frac{1}{2}bh$$
-
-Where:
-- $A$: Area (square meters)
-- $b$: Base length (meters)
-- $h$: Height perpendicular to base (meters)
-
-This formula works for any triangle.''',
-    "input": [
-      {"name": "b", "unit": "meter"},  // Base
-      {"name": "h", "unit": "meter"}   // Height
-    ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
-    "d4rtCode": "A = 0.5 * b * h;",
-    "tags": ["geometry", "triangle", "area"]
-  },
-
-  // Area of Rectangle
-  {
-    "name": "Area of Rectangle",
-    "description": r'''
-Area enclosed by a rectangle
-
-$$A = lw$$
-
-Where:
-- $A$: Area (square meters)
-- $l$: Length (meters)
-- $w$: Width (meters)
-
-The area is the product of length and width.''',
-    "input": [
-      {"name": "l", "unit": "meter"},  // Length
-      {"name": "w", "unit": "meter"}   // Width
-    ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
-    "d4rtCode": "A = l * w;",
-    "tags": ["geometry", "rectangle", "area"]
-  },
-
-  // Area of Trapezoid
-  {
-    "name": "Area of Trapezoid",
-    "description": r'''
-Area enclosed by a trapezoid
-
-$$A = \frac{1}{2}(a+b)h$$
-
-Where:
-- $A$: Area (square meters)
-- $a, b$: Lengths of parallel sides (meters)
-- $h$: Height (perpendicular distance between parallel sides, meters)
-
-The area is the average of parallel sides times height.''',
-    "input": [
-      {"name": "a", "unit": "meter"},  // Parallel side 1
-      {"name": "b", "unit": "meter"},  // Parallel side 2
-      {"name": "h", "unit": "meter"}   // Height
-    ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
-    "d4rtCode": "A = 0.5 * (a + b) * h;",
-    "tags": ["geometry", "trapezoid", "area"]
   },
 
   // Volume of Sphere
   {
     "name": "Volume of Sphere",
-    "description": r'''
+    "description": r"""
 Volume enclosed by a sphere
 
 $$V = \frac{4}{3}\pi r^3$$
@@ -763,11 +299,11 @@ Where:
 - $r$: Radius (meters)
 - $\pi$: Pi ($\approx 3.14159$)
 
-The volume is proportional to the cube of the radius.''',
+The volume is proportional to the cube of the radius.""",
     "input": [
-      {"name": "r", "unit": "meter"}  // Radius
+      {"name": "r", "unit": "meter"}
     ],
-    "output": {"name": "V", "unit": "cubic meter"},  // Volume
+    "output": {"name": "V", "unit": "cubic meter"},
     "d4rtCode": "V = (4.0/3.0) * pi * pow(r, 3);",
     "tags": ["geometry", "sphere", "volume"]
   },
@@ -775,7 +311,7 @@ The volume is proportional to the cube of the radius.''',
   // Surface Area of Sphere
   {
     "name": "Surface Area of Sphere",
-    "description": r'''
+    "description": r"""
 Total surface area of a sphere
 
 $$A = 4\pi r^2$$
@@ -785,11 +321,11 @@ Where:
 - $r$: Radius (meters)
 - $\pi$: Pi ($\approx 3.14159$)
 
-The surface area is four times the area of a circle with the same radius.''',
+The surface area is four times the area of a circle with the same radius.""",
     "input": [
-      {"name": "r", "unit": "meter"}  // Radius
+      {"name": "r", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Surface area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = 4 * pi * pow(r, 2);",
     "tags": ["geometry", "sphere", "surface area"]
   },
@@ -797,7 +333,7 @@ The surface area is four times the area of a circle with the same radius.''',
   // Volume of Cylinder
   {
     "name": "Volume of Cylinder",
-    "description": r'''
+    "description": r"""
 Volume enclosed by a cylinder
 
 $$V = \pi r^2 h$$
@@ -808,12 +344,12 @@ Where:
 - $h$: Height (meters)
 - $\pi$: Pi ($\approx 3.14159$)
 
-The volume is the area of the base times the height.''',
+The volume is the area of the base times the height.""",
     "input": [
-      {"name": "r", "unit": "meter"},  // Radius
-      {"name": "h", "unit": "meter"}   // Height
+      {"name": "r", "unit": "meter"},
+      {"name": "h", "unit": "meter"}
     ],
-    "output": {"name": "V", "unit": "cubic meter"},  // Volume
+    "output": {"name": "V", "unit": "cubic meter"},
     "d4rtCode": "V = pi * pow(r, 2) * h;",
     "tags": ["geometry", "cylinder", "volume"]
   },
@@ -821,7 +357,7 @@ The volume is the area of the base times the height.''',
   // Surface Area of Cylinder
   {
     "name": "Surface Area of Cylinder",
-    "description": r'''
+    "description": r"""
 Total surface area of a cylinder (including top and bottom)
 
 $$A = 2\pi r(r + h)$$
@@ -832,12 +368,12 @@ Where:
 - $h$: Height (meters)
 - $\pi$: Pi ($\approx 3.14159$)
 
-This includes the lateral surface plus the two circular ends.''',
+This includes the lateral surface plus the two circular ends.""",
     "input": [
-      {"name": "r", "unit": "meter"},  // Radius
-      {"name": "h", "unit": "meter"}   // Height
+      {"name": "r", "unit": "meter"},
+      {"name": "h", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Surface area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = 2 * pi * r * (r + h);",
     "tags": ["geometry", "cylinder", "surface area"]
   },
@@ -845,7 +381,7 @@ This includes the lateral surface plus the two circular ends.''',
   // Volume of Cone
   {
     "name": "Volume of Cone",
-    "description": r'''
+    "description": r"""
 Volume enclosed by a cone
 
 $$V = \frac{1}{3}\pi r^2 h$$
@@ -856,12 +392,12 @@ Where:
 - $h$: Height (meters)
 - $\pi$: Pi ($\approx 3.14159$)
 
-The volume is one-third the volume of a cylinder with the same base and height.''',
+The volume is one-third the volume of a cylinder with the same base and height.""",
     "input": [
-      {"name": "r", "unit": "meter"},  // Radius
-      {"name": "h", "unit": "meter"}   // Height
+      {"name": "r", "unit": "meter"},
+      {"name": "h", "unit": "meter"}
     ],
-    "output": {"name": "V", "unit": "cubic meter"},  // Volume
+    "output": {"name": "V", "unit": "cubic meter"},
     "d4rtCode": "V = (1.0/3.0) * pi * pow(r, 2) * h;",
     "tags": ["geometry", "cone", "volume"]
   },
@@ -869,7 +405,7 @@ The volume is one-third the volume of a cylinder with the same base and height.'
   // Volume of Cube
   {
     "name": "Volume of Cube",
-    "description": r'''
+    "description": r"""
 Volume enclosed by a cube
 
 $$V = s^3$$
@@ -878,11 +414,11 @@ Where:
 - $V$: Volume (cubic meters)
 - $s$: Side length (meters)
 
-The volume is the cube of the side length.''',
+The volume is the cube of the side length.""",
     "input": [
-      {"name": "s", "unit": "meter"}  // Side length
+      {"name": "s", "unit": "meter"}
     ],
-    "output": {"name": "V", "unit": "cubic meter"},  // Volume
+    "output": {"name": "V", "unit": "cubic meter"},
     "d4rtCode": "V = pow(s, 3);",
     "tags": ["geometry", "cube", "volume"]
   },
@@ -890,7 +426,7 @@ The volume is the cube of the side length.''',
   // Surface Area of Cube
   {
     "name": "Surface Area of Cube",
-    "description": r'''
+    "description": r"""
 Total surface area of a cube
 
 $$A = 6s^2$$
@@ -899,11 +435,11 @@ Where:
 - $A$: Total surface area (square meters)
 - $s$: Side length (meters)
 
-The surface area is six times the area of one face.''',
+The surface area is six times the area of one face.""",
     "input": [
-      {"name": "s", "unit": "meter"}  // Side length
+      {"name": "s", "unit": "meter"}
     ],
-    "output": {"name": "A", "unit": "square meter"},  // Surface area
+    "output": {"name": "A", "unit": "square meter"},
     "d4rtCode": "A = 6 * pow(s, 2);",
     "tags": ["geometry", "cube", "surface area"]
   },
@@ -911,7 +447,7 @@ The surface area is six times the area of one face.''',
   // Perimeter of Rectangle
   {
     "name": "Perimeter of Rectangle",
-    "description": r'''
+    "description": r"""
 Total distance around a rectangle
 
 $$P = 2(l + w)$$
@@ -921,12 +457,12 @@ Where:
 - $l$: Length (meters)
 - $w$: Width (meters)
 
-The perimeter is twice the sum of length and width.''',
+The perimeter is twice the sum of length and width.""",
     "input": [
-      {"name": "l", "unit": "meter"},  // Length
-      {"name": "w", "unit": "meter"}   // Width
+      {"name": "l", "unit": "meter"},
+      {"name": "w", "unit": "meter"}
     ],
-    "output": {"name": "P", "unit": "meter"},  // Perimeter
+    "output": {"name": "P", "unit": "meter"},
     "d4rtCode": "P = 2 * (l + w);",
     "tags": ["geometry", "rectangle", "perimeter"]
   },
@@ -934,7 +470,7 @@ The perimeter is twice the sum of length and width.''',
   // Perimeter of Triangle
   {
     "name": "Perimeter of Triangle",
-    "description": r'''
+    "description": r"""
 Total distance around a triangle
 
 $$P = a + b + c$$
@@ -943,91 +479,14 @@ Where:
 - $P$: Perimeter (meters)
 - $a, b, c$: Side lengths (meters)
 
-The perimeter is the sum of all three sides.''',
+The perimeter is the sum of all three sides.""",
     "input": [
-      {"name": "a", "unit": "meter"},  // Side 1
-      {"name": "b", "unit": "meter"},  // Side 2
-      {"name": "c", "unit": "meter"}   // Side 3
+      {"name": "a", "unit": "meter"},
+      {"name": "b", "unit": "meter"},
+      {"name": "c", "unit": "meter"}
     ],
-    "output": {"name": "P", "unit": "meter"},  // Perimeter
+    "output": {"name": "P", "unit": "meter"},
     "d4rtCode": "P = a + b + c;",
     "tags": ["geometry", "triangle", "perimeter"]
-  },
-
-  // Area of Regular Polygon
-  {
-    "name": "Area of Regular Polygon",
-    "description": r'''
-Area of a regular polygon with n sides
-
-$$A = \frac{1}{4}ns^2\cot(\frac{\pi}{n})$$
-
-Where:
-- $A$: Area (square meters)
-- $n$: Number of sides
-- $s$: Side length (meters)
-- $\pi$: Pi ($\approx 3.14159$)
-
-This formula works for any regular polygon (equal sides and angles).''',
-    "input": [
-      {"name": "n", "unit": "scalar"},  // Number of sides
-      {"name": "s", "unit": "meter"}    // Side length
-    ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
-    "d4rtCode": "A = 0.25 * n * pow(s, 2) * (cos(pi/n) / sin(pi/n));",
-    "tags": ["geometry", "polygon", "area"]
-  },
-
-  // Sum of Interior Angles of Polygon
-  {
-    "name": "Sum of Interior Angles",
-    "description": r'''
-Sum of interior angles of a polygon
-
-$$S = (n - 2) \times 180°$$
-
-Where:
-- $S$: Sum of interior angles (degrees)
-- $n$: Number of sides
-
-This formula works for any simple polygon.''',
-    "input": [
-      {"name": "n", "unit": "scalar"}  // Number of sides
-    ],
-    "output": {"name": "S", "unit": "degree"},  // Sum of angles
-    "d4rtCode": "S = (n - 2) * 180;",
-    "tags": ["geometry", "polygon", "angles"]
-  },
-
-  // Heron's Formula (Area of Triangle)
-  {
-    "name": "Heron's Formula",
-    "description": r'''
-Area of a triangle using only side lengths
-
-$$A = \sqrt{s(s-a)(s-b)(s-c)}$$
-
-Where:
-- $A$: Area (square meters)
-- $a, b, c$: Side lengths (meters)
-- $s$: Semi-perimeter $= \frac{a+b+c}{2}$
-
-This formula is useful when height is unknown.
-
-**Note:** The side lengths must satisfy the triangle inequality: the sum of any two sides must be greater than the third side (a+b>c, a+c>b, b+c>a). If this condition is not met, the formula returns NaN.''',
-    "input": [
-      {"name": "a", "unit": "meter"},  // Side 1
-      {"name": "b", "unit": "meter"},  // Side 2
-      {"name": "c", "unit": "meter"}   // Side 3
-    ],
-    "output": {"name": "A", "unit": "square meter"},  // Area
-    "d4rtCode": """
-       if( a + b < c || a+c < b || b+c < a ){
-          signal( "There is not a valid triangle with those longitudes" );  
-       }
-       var s = (a + b + c) / 2;
-       A = sqrt(s * (s - a) * (s - b) * (s - c));
-    """,
-    "tags": ["geometry", "triangle", "area"]
   }
 ]

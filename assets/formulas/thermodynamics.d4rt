@@ -1,5 +1,8 @@
 [
-  {"name":"Ideal Gas Law","description":r"""
+  // Ideal Gas Law
+  {
+    "name": "Ideal Gas Law",
+    "description": r"""
 Equation of state for an ideal gas.
 
 $$PV = nRT$$
@@ -13,6 +16,14 @@ Where:
 
 This law combines Boyle's, Charles's and Avogadro's laws.
 
-![Ideal Gas](https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Ideal_gas_sphere.svg/800px-Ideal_gas_sphere.svg.png)
-""","input":[{"name":"n","unit":"mole"},{"name":"T","unit":"kelvin"},{"name":"V","unit":"cubic meter"}],"output":{"name":"P","unit":"pascal"},"d4rtCode":"P = (n * 8.314462618 * T) / V;","tags":["physics","thermodynamics","gas"]}
+![Ideal Gas](https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Ideal_gas_sphere.svg/800px-Ideal_gas_sphere.svg.png)""",
+    "input": [
+      {"name": "n", "unit": "mole"},
+      {"name": "T", "unit": "kelvin"},
+      {"name": "V", "unit": "cubic meter"}
+    ],
+    "output": {"name": "P", "unit": "pascal"},
+    "d4rtCode": "P = (n * 8.314462618 * T) / V;",
+    "tags": ["physics", "thermodynamics", "gas"]
+  }
 ]

@@ -1,5 +1,8 @@
 [
-  {"name":"Apgar Score","description":r"""
+  // Apgar Score
+  {
+    "name": "Apgar Score",
+    "description": r"""
 Newborn health assessment scoring system performed at 1 and 5 minutes after birth.
 
 The Apgar score sums five categories (0–2 points each):
@@ -11,6 +14,29 @@ The Apgar score sums five categories (0–2 points each):
 
 Total score ranges from 0 to 10. Higher scores indicate better newborn condition.
 
-![Apgar score (illustration) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Apgar_scale.svg/800px-Apgar_scale.svg.png)
-""","input":[{"name":"HeartRate","values":["Absent","< 100 bpm>","> 100 bpm"]},{"name":"Breathing","values":["Absent","Weak, irregular","Strong, robust cry"]},{"name":"MuscleTone","values":["None","Some","Flexed arms/leg, resists extension"]},{"name":"Reflexes","values":["No response","Grimace on aggressive stimulation","Cry on stimulation"]},{"name":"SkinColor","values":["Blue or pale","Blue extremities, pink body","Pink"]}],"output":{"name":"Result","unit":"string"},"d4rtCode":"var total = indexOf(\"HeartRate\") + indexOf(\"Breathing\") + indexOf(\"MuscleTone\") + indexOf(\"Reflexes\") + indexOf(\"SkinColor\"); late var interpretation; if( total < 4 ) { interpretation = 'Critical condition'; } else if( total < 7 ){ interpretation = 'Needs assistance'; } else { interpretation = 'Normal'; } Result = 'Score: \$total - \$interpretation';","tags":["medical","pediatrics","assessment"]}
+![Apgar score (illustration) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Apgar_scale.svg/800px-Apgar_scale.svg.png)""",
+    "input": [
+      {"name": "HeartRate", "values": ["Absent", "< 100 bpm>", "> 100 bpm"]},
+      {"name": "Breathing", "values": ["Absent", "Weak, irregular", "Strong, robust cry"]},
+      {"name": "MuscleTone", "values": ["None", "Some", "Flexed arms/leg, resists extension"]},
+      {"name": "Reflexes", "values": ["No response", "Grimace on aggressive stimulation", "Cry on stimulation"]},
+      {"name": "SkinColor", "values": ["Blue or pale", "Blue extremities, pink body", "Pink"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": """
+       var total = indexOf("HeartRate") + indexOf("Breathing") + indexOf("MuscleTone") + indexOf("Reflexes") + indexOf("SkinColor");
+       late var interpretation;
+       if( total < 4 ) {
+         interpretation = 'Critical condition';
+       }
+       else if( total < 7 ){
+         interpretation = 'Needs assistance';
+       }
+       else {
+         interpretation = 'Normal';
+       }
+       Result = 'Score: \$total - \$interpretation';
+    """,
+    "tags": ["medical", "pediatrics", "assessment"]
+  }
 ]

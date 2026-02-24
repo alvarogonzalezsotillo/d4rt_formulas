@@ -1,5 +1,8 @@
 [
-  {"name":"Density","description":r"""
+  // Density
+  {
+    "name": "Density",
+    "description": r"""
 Mass per unit volume of a substance.
 
 $$\rho = \frac{m}{V}$$
@@ -11,9 +14,20 @@ Where:
 
 Density is an intrinsic property of materials.
 
-![Density illustration (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Density_of_solids.svg/800px-Density_of_solids.svg.png)
-""","input":[{"name":"m","unit":"kilogram"},{"name":"V","unit":"cubic meter"}],"output":{"name":"rho","unit":"kilogram per cubic meter"},"d4rtCode":"rho = m / V;","tags":["physics","mechanics","material"]},
-  {"name":"Pressure","description":r"""
+![Density illustration (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Density_of_solids.svg/800px-Density_of_solids.svg.png)""",
+    "input": [
+      {"name": "m", "unit": "kilogram"},
+      {"name": "V", "unit": "cubic meter"}
+    ],
+    "output": {"name": "rho", "unit": "kilogram per cubic meter"},
+    "d4rtCode": "rho = m / V;",
+    "tags": ["physics", "mechanics", "material"]
+  },
+
+  // Pressure
+  {
+    "name": "Pressure",
+    "description": r"""
 Force applied perpendicular to a surface per unit area.
 
 $$P = \frac{F}{A}$$
@@ -25,9 +39,20 @@ Where:
 
 Pressure is transmitted equally in all directions in fluids.
 
-![Pressure (diagram) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Pressure_in_fluid.svg/800px-Pressure_in_fluid.svg.png)
-""","input":[{"name":"F","unit":"newton"},{"name":"A","unit":"square meter"}],"output":{"name":"P","unit":"pascal"},"d4rtCode":"P = F / A;","tags":["physics","mechanics","fluid"]},
-  {"name":"Buoyant Force","description":r"""
+![Pressure (diagram) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Pressure_in_fluid.svg/800px-Pressure_in_fluid.svg.png)""",
+    "input": [
+      {"name": "F", "unit": "newton"},
+      {"name": "A", "unit": "square meter"}
+    ],
+    "output": {"name": "P", "unit": "pascal"},
+    "d4rtCode": "P = F / A;",
+    "tags": ["physics", "mechanics", "fluid"]
+  },
+
+  // Buoyant Force
+  {
+    "name": "Buoyant Force",
+    "description": r"""
 Upward force exerted on an object immersed in a fluid (Archimedes' principle).
 
 $$F_b = \rho g V$$
@@ -40,7 +65,14 @@ Where:
 
 An object floats when buoyant force equals its weight.
 
-![Archimedes principle (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Archimedes-principle.svg/960px-Archimedes-principle.svg.png)
-
-""","input":[{"name":"rho","unit":"kilogram per cubic meter"},{"name":"g","unit":"meters per square second"},{"name":"V","unit":"cubic meter"}],"output":{"name":"Fb","unit":"newton"},"d4rtCode":"Fb = rho * g * V;","tags":["physics","fluid","mechanics"]}
+![Archimedes principle (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Archimedes-principle.svg/960px-Archimedes-principle.svg.png)""",
+    "input": [
+      {"name": "rho", "unit": "kilogram per cubic meter"},
+      {"name": "g", "unit": "meters per square second"},
+      {"name": "V", "unit": "cubic meter"}
+    ],
+    "output": {"name": "Fb", "unit": "newton"},
+    "d4rtCode": "Fb = rho * g * V;",
+    "tags": ["physics", "fluid", "mechanics"]
+  }
 ]
