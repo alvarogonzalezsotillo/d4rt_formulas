@@ -52,10 +52,20 @@ Future<Corpus> createDefaultCorpus() async{
   Future<void> loadFormulas() async {
     final formulaResources = [
       "assets/formulas/formulas.d4rt",
+      "assets/formulas/conversions_and_constants.d4rt",
       "assets/formulas/electromagnetism.d4rt",
-      "assets/formulas/thermodynamics.d4rt",
+      "assets/formulas/energy_and_power.d4rt",
       "assets/formulas/fluids_and_pressure.d4rt",
-
+      "assets/formulas/geometry.d4rt",
+      "assets/formulas/gravity.d4rt",
+      "assets/formulas/it-networking.d4rt",
+      "assets/formulas/kinematics_and_dynamics.d4rt",
+      "assets/formulas/materials_elasticity.d4rt",
+      "assets/formulas/medical_and_bio.d4rt",
+      "assets/formulas/misc_math.d4rt",
+      "assets/formulas/optics.d4rt",
+      "assets/formulas/thermodynamics.d4rt",
+      "assets/formulas/trigonometry.d4rt",
     ];
 
     for (final formRes in formulaResources) {
@@ -63,6 +73,7 @@ Future<Corpus> createDefaultCorpus() async{
       final literal = await loadResourceAsString(formRes);
       print( "Loaded $formRes");
       final formulas = Formula.fromArrayStringLiteral(literal);
+      print( "Parsed $formRes");
       final formulaElements = formulas.cast<FormulaElement>();
       corpus.loadFormulaElements(formulaElements);
     }

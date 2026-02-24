@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'database/database_service.dart';
 import 'package:drift/drift.dart' as drift;
@@ -92,9 +93,9 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
       // Load corpus from database elements
       return await Corpus.fromDatabaseElements(dbElements);
     }
-  } catch (e) {
+  } catch (e, st) {
     // If there's an error loading from database, fall back to default corpus
-    print('Error loading corpus from database: $e');
+    errorHandler.notify(e,st);
     return await createDefaultCorpus();
   }
 }

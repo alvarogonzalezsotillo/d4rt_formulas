@@ -1,12 +1,2 @@
 [
-  {"name":"Temperature converter","description":r"""
-Simple temperature converter example that returns the input value (Kelvin) as output.
-
-Formula: $$T_{out} = T_{in}$$
-
-Inputs: `Input` in kelvin (K).
-Output: `Output` in kelvin (K).
-
-![Temperature scales (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Temperature_scales.svg/800px-Temperature_scales.svg.png)
-""","input":[{"name":"Input","unit":"Kelvin"}],"output":{"name":"Output","unit":"Kelvin"},"d4rtCode":"Output = Input;","tags":["converter","temperature"]}
 ]

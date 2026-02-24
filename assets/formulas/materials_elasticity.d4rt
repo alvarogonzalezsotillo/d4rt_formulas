@@ -1,16 +1,4 @@
 [
-  {"name":"Hooke's Law","description":r"""
-Force exerted by a spring is proportional to its displacement (linear region).
-
-$$F = -kx$$
-
-Where:
-- $F$: Restoring force (Newtons)
-- $k$: Spring constant (N/m)
-- $x$: Displacement from equilibrium (meters)
-
-The negative sign indicates the force opposes displacement.
-
-![Hooke's law (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/HookesLaw.svg/800px-HookesLaw.svg.png)
-""","input":[{"name":"k","unit":"newton per meter"},{"name":"x","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = -k * x;","tags":["physics","elasticity","oscillations"]}
+  {"name":"Hooke's Law","input":[{"name":"k","unit":"newton per meter"},{"name":"x","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = -k * x;","tags":["physics","elasticity","oscillations"]}
 ]
+
