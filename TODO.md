@@ -32,8 +32,18 @@
 - [X] Add a Share button to the formula list. It will export the array string literal of the formula with the units from Corpus.withDependencies().
 - [X] Replace flutter-markdown with flutter-markdown-plus
 - [X] Heron's formula: investigate why a=3, b=40, c=5 yields NaN. Root cause: input values don't form a valid triangle (violate triangle inequality: 3+5=8 is not > 40). Added documentation note to the formula description.
-- [R] Refactor ./assets/formulas d4rt files:
-  - [R] Pretty print files as dart literals (like JSON, but allow raw strings r"""like this""")
-  - [R] Ensure there is no formula duplicates. If necesary, move or delete the formula in file formulas.d4rt
-  - [R] defaultCorpus must load all formula files
-- [ ] Investigate starup time when there is no previous database and corpus is loaded from assets.
+- [X] Refactor ./assets/formulas d4rt files:
+  - [X] Pretty print files as dart literals (like JSON, but allow raw strings r"""like this""")
+  - [X] Ensure there is no formula duplicates. If necesary, move or delete the formula in file formulas.d4rt
+  - [X] defaultCorpus must load all formula files
+- [X] Create a formula in ./assets/formulas/networking.d4art: input is a string with ip address and mask, output is ip subnet of this address and broadcast address.
+- [R] Develop a new screen that edits a formula in ./lib/ai directory:
+  - [R] FormulaEditor initializes with a Formula
+  - [R] A textfield allows editing the "name" of the formula
+  - [R] A text area allows editing the "description". A button pops up a preview of the markdown.
+  - [R] There is one row per input variable. The "name" is a textfield. A first drop down allows to select the base unit, and a second dropdown is populated with all derived units of the selected base unit, and the base unit. The unit of the input variable is the derived unit.
+  - [R] Each input variable can be deleted with a button
+  - [R] A button after the inputs variables allows to insert a new input variable
+  - [R] There is one row for the ouput variable, similar to the row for the input variable
+  - [R] d4rtCode is a text area with dart syntax highligthing
+  - [R] At the botton, a button allows to test the edited Formula, launching a FormulaScreen

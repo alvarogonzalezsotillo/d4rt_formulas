@@ -8,6 +8,7 @@ import '../formula_evaluator.dart';
 import '../corpus.dart';
 import '../error_handler.dart';
 import 'unit_dropdown.dart';
+import 'formula_editor.dart';
 
 class FormulaScreen extends StatefulWidget {
   final Formula formula;
@@ -171,7 +172,26 @@ class _FormulaScreenState extends State<FormulaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.formula.name)),
+      appBar: AppBar(
+        title: Text(widget.formula.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FormulaEditor(
+                    formula: widget.formula,
+                    corpus: widget.corpus,
+                  ),
+                ),
+              );
+            },
+            tooltip: 'Edit Formula',
+          ),
+        ],
+      ),
       body: Form(
         key: _formKey,
         child: Padding(

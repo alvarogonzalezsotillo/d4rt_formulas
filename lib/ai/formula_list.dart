@@ -3,6 +3,7 @@ import 'package:flutter/services.dart'; // For Clipboard
 import 'package:d4rt_formulas/formula_models.dart';
 import '../corpus.dart';
 import 'formula_screen.dart';
+import 'formula_editor.dart';
 import 'package:share_plus/share_plus.dart';
 
 class FormulaList extends StatefulWidget {
@@ -55,13 +56,13 @@ class _FormulaListState extends State<FormulaList> {
     try {
       // Get the formula and its dependencies
       final dependencies = widget.corpus.withDependencies(formula);
-      
+
       // Convert each dependency to its string literal representation
       final literals = dependencies.map((element) => element.toStringLiteral()).toList();
-      
+
       // Create an array string literal containing all the elements
       final exportString = '[${literals.join(', ')}]';
-      
+
       // Share the string
       await Share.share(
         exportString,
@@ -70,6 +71,18 @@ class _FormulaListState extends State<FormulaList> {
     } catch (e) {
       _showErrorDialog('Error sharing formula: $e');
     }
+  }
+
+  void _editFormula(Formula formula) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FormulaEditor(
+          formula: formula,
+          corpus: widget.corpus,
+        ),
+      ),
+    );
   }
 
   void _copyFormula(Formula formula) async {
@@ -144,35 +157,45 @@ class _FormulaListState extends State<FormulaList> {
                 subtitle: formula.tags.isNotEmpty
                     ? Text('Tags: ${formula.tags.join(', ')}')
                     : null,
-                trailing: PopupMenuButton(
-                  icon: Icon(Icons.share),
-                  onSelected: (value) {
-                    if (value == 'share') {
-                      _shareFormula(formula);
-                    } else if (value == 'copy') {
-                      _copyFormula(formula);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'share',
-                      child: Row(
-                        children: [
-                          Icon(Icons.share),
-                          SizedBox(width: 8),
-                          Text('Share'),
-                        ],
-                      ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _editFormula(formula),
+                      tooltip: 'Edit Formula',
                     ),
-                    PopupMenuItem(
-                      value: 'copy',
-                      child: Row(
-                        children: [
-                          Icon(Icons.copy),
-                          SizedBox(width: 8),
-                          Text('Copy to clipboard'),
-                        ],
-                      ),
+                    PopupMenuButton(
+                      icon: const Icon(Icons.share),
+                      onSelected: (value) {
+                        if (value == 'share') {
+                          _shareFormula(formula);
+                        } else if (value == 'copy') {
+                          _copyFormula(formula);
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'share',
+                          child: Row(
+                            children: [
+                              Icon(Icons.share),
+                              SizedBox(width: 8),
+                              Text('Share'),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: 'copy',
+                          child: Row(
+                            children: [
+                              Icon(Icons.copy),
+                              SizedBox(width: 8),
+                              Text('Copy to clipboard'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

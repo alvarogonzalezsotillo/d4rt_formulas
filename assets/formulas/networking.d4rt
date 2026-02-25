@@ -1,0 +1,83 @@
+[
+  // IP Subnet and Broadcast Calculator
+  {
+    "name": "IP Subnet and Broadcast",
+    "description": r"""
+Calculates the network (subnet) address and broadcast address for an IPv4 address with CIDR notation.
+
+**Input format:** `ip_address/prefix` where:
+- `ip_address`: IPv4 address in dotted decimal notation (e.g., `192.168.1.100`)
+- `prefix`: CIDR prefix length (1-30) or subnet mask in dotted notation (e.g., `24` or `255.255.255.0`)
+
+**Output:**
+- `subnet`: Network address in dotted decimal notation
+- `broadcast`: Broadcast address in dotted decimal notation
+
+**Examples:**
+- Input: `192.168.1.100/24` → Subnet: `192.168.1.0`, Broadcast: `192.168.1.255`
+- Input: `10.0.0.50/8` → Subnet: `10.0.0.0`, Broadcast: `10.255.255.255`
+- Input: `172.16.5.100/16` → Subnet: `172.16.0.0`, Broadcast: `172.16.255.255`""",
+    "input": [
+      {"name": "ipWithMask", "unit": "scalar"}
+    ],
+    "output": {"name": "subnet", "unit": "scalar"},
+    "d4rtCode": """
+       var input = ipWithMask.toString();
+       var slashIndex = input.indexOf('/');
+       if (slashIndex == -1) {
+         subnet = 'error: no / found';
+         broadcast = '';
+       } else {
+         var ipPart = input.substring(0, slashIndex).trim();
+         var maskPart = input.substring(slashIndex + 1).trim();
+         
+         // Parse IP address
+         var ipParts = ipPart.split('.');
+         if (ipParts.length != 4) {
+           subnet = 'error: invalid IP';
+           broadcast = '';
+         } else {
+           var octet1 = int.parse(ipParts[0]);
+           var octet2 = int.parse(ipParts[1]);
+           var octet3 = int.parse(ipParts[2]);
+           var octet4 = int.parse(ipParts[3]);
+           
+           // Convert IP to 32-bit integer
+           var ipInt = (octet1 << 24) | (octet2 << 16) | (octet3 << 8) | octet4;
+           
+           // Parse mask (CIDR prefix or dotted notation)
+           int maskInt;
+           if (maskPart.contains('.')) {
+             var maskParts = maskPart.split('.');
+             var m1 = int.parse(maskParts[0]);
+             var m2 = int.parse(maskParts[1]);
+             var m3 = int.parse(maskParts[2]);
+             var m4 = int.parse(maskParts[3]);
+             maskInt = (m1 << 24) | (m2 << 16) | (m3 << 8) | m4;
+           } else {
+             var prefix = int.parse(maskPart);
+             maskInt = prefix == 0 ? 0 : (-1 << (32 - prefix));
+           }
+           
+           // Calculate subnet and broadcast
+           var subnetInt = ipInt & maskInt;
+           var broadcastInt = subnetInt | (~maskInt & 0xFFFFFFFF);
+           
+           // Convert back to dotted notation
+           var s1 = (subnetInt >> 24) & 0xFF;
+           var s2 = (subnetInt >> 16) & 0xFF;
+           var s3 = (subnetInt >> 8) & 0xFF;
+           var s4 = subnetInt & 0xFF;
+           subnet = '\$s1.\$s2.\$s3.\$s4';
+           
+           var b1 = (broadcastInt >> 24) & 0xFF;
+           var b2 = (broadcastInt >> 16) & 0xFF;
+           var b3 = (broadcastInt >> 8) & 0xFF;
+           var b4 = broadcastInt & 0xFF;
+           broadcast = '\$b1.\$b2.\$b3.\$b4';
+         }
+       }
+    """,
+    "tags": ["networking", "ip", "subnet", "broadcast", "cidr"]
+  }
+]
