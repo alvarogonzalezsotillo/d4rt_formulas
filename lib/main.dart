@@ -1,5 +1,6 @@
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'database/database_service.dart';
 import 'package:drift/drift.dart' as drift;
 import 'service_locator.dart';
@@ -52,13 +53,16 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           if (snapshot.hasError) {
             return Center(child: Text('Error loading corpus: ${snapshot.error}'));
           }
-          
+
+          var corpus = snapshot.data!;
+          GetIt.instance.registerSingleton<Corpus>(corpus);
+
           // If the corpus is empty (user chose not to load default), we could handle that here
           // For now, just display the formula list
           return Scaffold(
             appBar: AppBar(title: const Text('Formulas')),
             body: FormulaList(
-              corpus: snapshot.data!,
+              corpus: corpus,
               formulas: snapshot.data!.getFormulas(),
             ),
           );
