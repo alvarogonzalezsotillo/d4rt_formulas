@@ -184,6 +184,12 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   builder: (context) => FormulaEditor(
                     formula: widget.formula,
                     corpus: widget.corpus,
+                    onSave: (updatedFormula) {
+                      // Refresh the screen after saving
+                      setState(() {
+                        // The corpus has been updated, refresh the displayed formula
+                      });
+                    },
                   ),
                 ),
               );

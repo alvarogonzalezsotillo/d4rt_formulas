@@ -35,4 +35,59 @@ extension CorpusDatabaseExtension on FormulasDatabase {
       await insertFormulaElement(element.toStringLiteral());
     }
   }
+
+  // Method to update a formula in the database by name
+  Future<bool> updateFormula(models.Formula formula) async {
+    final elements = await getAllFormulaElements();
+    
+    for (final element in elements) {
+      try {
+        final parsed = models.parseCorpusElements('[${element.elementText}]');
+        if (parsed.isNotEmpty && parsed.first is models.Formula) {
+          final existingFormula = parsed.first as models.Formula;
+          if (existingFormula.name == formula.name) {
+            // Update this element
+            await updateFormulaElement(
+              element.id, 
+              formula.toStringLiteral()
+            );
+            return true;
+          }
+        }
+      } catch (e) {
+        print('Error parsing database element during update: $e');
+        continue;
+      }
+    }
+    
+    return false; // Formula not found
+  }
+
+  // Method to add a new formula to the database
+  Future<void> addFormula(models.Formula formula) async {
+    await insertFormulaElement(formula.toStringLiteral());
+  }
+
+  // Method to delete a formula from the database by name
+  Future<bool> deleteFormula(String formulaName) async {
+    final elements = await getAllFormulaElements();
+    
+    for (final element in elements) {
+      try {
+        final parsed = models.parseCorpusElements('[${element.elementText}]');
+        if (parsed.isNotEmpty && parsed.first is models.Formula) {
+          final existingFormula = parsed.first as models.Formula;
+          if (existingFormula.name == formulaName) {
+            await deleteFormulaElement(element.id);
+            return true;
+          }
+        }
+      } catch (e) {
+        print('Error parsing database element during delete: $e');
+        continue;
+      }
+    }
+    
+    return false; // Formula not found
+  }
 }
