@@ -25,10 +25,25 @@ class D4rtEditingController extends TextEditingController {
   String? _lastError;
   String? get lastError => _lastError;
   FormulaResult? _lastValue;
+  final bool isString;
 
-  D4rtEditingController({super.text});
+  D4rtEditingController({super.text, this.isString = false});
 
   bool validate() {
+    if( _validateAsNumberExpression(text) ){
+      return true;
+    }
+    if( isString && _validateAsStringExpression(text) ){
+      return true;
+    }
+    return false;
+  }
+
+  bool _validateAsNumberExpression(String text){
+    return _validateAsD4rtExpression(text) && _lastValue is NumberResult;
+  }
+
+  bool _validateAsD4rtExpression(String text){
     try {
       _lastValue = null;
       if( text.trim().isEmpty ){
@@ -38,11 +53,25 @@ class D4rtEditingController extends TextEditingController {
       _lastError = null;
       return true;
     } catch (e, s) {
-      errorHandler.notify(e, s);
+      //errorHandler.notify(e, s);
       _lastError = e.toString();
       return false;
     }
   }
+
+  bool _validateAsStringExpression(String text){
+    if( _validateAsD4rtExpression(text) && _lastValue is StringResult ){
+      return true;
+    }
+    if( _validateAsD4rtExpression('"' + text + '"') && _lastValue is StringResult ){
+      return true;
+    }    
+    if( _validateAsD4rtExpression("'" + text + "'") && _lastValue is StringResult ){
+      return true;
+    }
+    return false;
+  }
+  
 
   FormulaResult? get d4rtValue => _lastValue;
 
@@ -79,7 +108,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _selectedValues[input.name] = input.values!.first;
       } else {
         // numeric variable -> use D4rtEditingController
-        _inputControllers[input.name] = D4rtEditingController();
+        _inputControllers[input.name] = D4rtEditingController(isString: input.unit == "string");
         _inputControllers[input.name]!.addListener(_evaluateFormula);
       }
     }

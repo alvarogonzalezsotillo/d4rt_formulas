@@ -32,13 +32,14 @@ RUN chown -R $USER_ID:$GROUP_ID /sdks/flutter
 USER $USER_ID:$GROUP_ID
 
 # Pre-cache Flutter artifacts for Linux, Android, and Web to speed up subsequent builds
-#WORKDIR /dummy_app_only_for_cache
-#RUN flutter create . && flutter pub get
-#RUN flutter precache --linux
-#RUN flutter build linux
-#RUN flutter precache --web
-#RUN flutter build web
+WORKDIR /dummy_app_only_for_cache
+RUN flutter create . && flutter pub get
+RUN flutter precache --linux
+RUN flutter precache --web
 #RUN flutter precache --android
+
+#RUN flutter build linux
+#RUN flutter build web
 #RUN flutter build apk
 
 WORKDIR /app

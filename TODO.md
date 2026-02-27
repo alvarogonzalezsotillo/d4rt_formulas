@@ -47,3 +47,5 @@
   - [R] There is one row for the ouput variable, similar to the row for the input variable
   - [R] d4rtCode is a text area with dart syntax highligthing
   - [R] At the botton, a button allows to test the edited Formula, launching a FormulaScreen
+- [ ] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
+- [ ] Investigate https://pub.dev/packages/quantity
