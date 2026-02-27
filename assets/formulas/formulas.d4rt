@@ -1,49 +1,4 @@
 [
-  // Free fall distance (vertical)
-  {
-    "name": "Free Fall Distance",
-    "description": r"""
-Calculates vertical displacement under constant gravity
-
-$$h = \frac{1}{2}gt^2$$
-
-Where:
-- $g$: Gravitational acceleration $9.81\ \mathrm{m/s^2}$ on Earth
-- $t$: Time in free fall (seconds)
-
-![Free Fall Diagram](https://altcalculator.com/wp-content/uploads/2023/08/Free-Fall.png)""",
-    "input": [
-      {"name": "t", "unit": "second"},
-      {"name": "g", "unit": "meters per second"}
-    ],
-    "output": {"name": "h", "unit": "meter"},
-    "d4rtCode": "h = 0.5 * g * pow(t, 2);",
-    "tags": ["physics", "kinematics"]
-  },
-
-  // Newton's Law of Universal Gravitation
-  {
-    "name": "Gravitational Force",
-    "description": r"""
-Newton's law of universal gravitation
-
-$$F = G\frac{m_1m_2}{r^2}$$
-
-Where:
-- $G$: Gravitational constant $6.674\times 10^{-11}\ \mathrm{N\cdot m^2/kg^2}$
-- $m_1, m_2$: Masses of two objects
-- $r$: Distance between centers of masses
-
-![Gravitation](https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NewtonsLawOfUniversalGravitation.svg/1200px-NewtonsLawOfUniversalGravitation.svg.png)""",
-    "input": [
-      {"name": "m1", "unit": "kilogram"},
-      {"name": "m2", "unit": "kilogram"},
-      {"name": "r", "unit": "meter"}
-    ],
-    "output": {"name": "F", "unit": "newton"},
-    "d4rtCode": "F = (6.67430e-11 * m1 * m2) / pow(r, 2);",
-    "tags": ["physics", "astronomy", "gravity"]
-  },
 
   // Projectile Motion Range
   {

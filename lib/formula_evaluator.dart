@@ -1,8 +1,11 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
+import 'package:get_it/get_it.dart';
+import 'corpus.dart';
 import 'formula_models.dart';
 import 'error_handler.dart';
+import 'd4rt_bridge.dart';
 
 
 
@@ -71,13 +74,14 @@ class FormulaEvaluator {
     );
     
     interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
+    registerD4rtBridgeBridges(interpreter);
   }
 
   static FormulaResult evaluateExpression(String code, [D4rt? interpreter]) {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
     final d4rtCode = """
-      $d4rtImports
+      $preamble
       main()
       {
         late var result;
@@ -166,15 +170,15 @@ class FormulaEvaluator {
     return formula.inputVarNames()..sort();
   }
 
-  static final String d4rtImports = """
-      import 'dart:math';
-      import "package:d4rt_formulas.dart";
-  """;
-
   static final String signalMagicString = "###";
 
-  static final String signal = """
-      void signal( String msg ) => throw Exception("$signalMagicString\$msg");       
+  static final String preamble = """
+      import 'dart:math';
+      import "package:d4rt_formulas.dart";
+      import "package:formulas/runtime_bridge.dart";
+      void signal( String msg ) => throw Exception("$signalMagicString\$msg");
+      dynamic fn(String formulaName, Map<String, dynamic> inputValues) => D4rtBridgeImpl.fn(formulaName, inputValues);
+              
   """;
 
   static const reservedVariableNames = { "variableValues", "indexOf", "variableAllowedValues"} ;
@@ -183,8 +187,7 @@ class FormulaEvaluator {
     final buffer = StringBuffer();
 
     buffer.writeln("""
-      $d4rtImports
-      $signal
+      $preamble
       main()
       {
       """
