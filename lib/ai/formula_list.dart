@@ -3,7 +3,7 @@ import 'package:flutter/services.dart'; // For Clipboard
 import 'package:d4rt_formulas/formula_models.dart';
 import '../corpus.dart';
 import 'formula_screen.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart' as share_plus;
 
 class FormulaList extends StatefulWidget {
   final Corpus corpus;
@@ -63,9 +63,11 @@ class _FormulaListState extends State<FormulaList> {
       final exportString = '[${literals.join(', ')}]';
       
       // Share the string
-      await Share.share(
-        exportString,
-        subject: 'Sharing formula: ${formula.name}',
+      await share_plus.SharePlus.instance.share(
+        share_plus.ShareParams(
+          text: exportString,
+          subject: 'Sharing formula: ${formula.name}',
+        ),
       );
     } catch (e) {
       _showErrorDialog('Error sharing formula: $e');

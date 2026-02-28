@@ -45,6 +45,7 @@ class D4rtEditingController extends TextEditingController {
 
   FormulaResult? get d4rtValue => _lastValue;
 
+  @override
   set text(String newText) {
     super.text = newText;
     validate();

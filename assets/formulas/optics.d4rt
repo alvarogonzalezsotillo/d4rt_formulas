@@ -1,4 +1,35 @@
 [
-  {"name":"Snell's Law","input":[{"name":"n1","unit":"scalar"},{"name":"n2","unit":"scalar"},{"name":"theta1","unit":"degree"}],"output":{"name":"theta2","unit":"degree"},"d4rtCode":"var theta1Rad = theta1 * (pi / 180); var sinTheta2 = (n1 * sin(theta1Rad)) / n2; theta2 = asin(sinTheta2) * (180 / pi);","tags":["physics","optics","light"]}
-]
+  {
+    "name": "Snell's Law",
+    "description": r'''
+Refraction of light when passing through different media
+
+$$n_1 \sin(\theta_1) = n_2 \sin(\theta_2)$$
+
+Where:
+- $n_1$: Refractive index of the first medium
+- $n_2$: Refractive index of the second medium
+- $\theta_1$: Angle of incidence (degrees)
+- $\theta_2$: Angle of refraction (degrees)
+
+![Figure](https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Snells_law_Diagram_B_vector.svg/330px-Snells_law_Diagram_B_vector.svg.png)
+
+Snell's Law describes how light bends when traveling between media with different refractive indices.
+The product of refractive index and sine of angle remains constant across the interface.
+
+''',
+    "input": [
+      {"name": "n1", "unit": "scalar"},
+      {"name": "n2", "unit": "scalar"},
+      {"name": "theta1", "unit": "degree"}
+    ],
+    "output": {"name": "theta2", "unit": "degree"},
+    "d4rtCode": r"""
+    var theta1Rad = theta1 * (pi / 180);
+    var sinTheta2 = (n1 * sin(theta1Rad)) / n2;
+    theta2 = asin(sinTheta2) * (180 / pi);
+    """,
+    "tags": ["physics", "optics", "light"]
+  }
+];
 

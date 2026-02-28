@@ -37,6 +37,7 @@ dependencies:
   resource_portable:
   d4rt: ^0.2.0
   analyzer: ^8.4.1
+  markdown:
   flutter_markdown_plus:
   flutter_markdown_plus_latex:
   flutter_code_editor:
