@@ -47,3 +47,5 @@
   - [R] There is one row for the ouput variable, similar to the row for the input variable
   - [R] d4rtCode is a text area with dart syntax highligthing
   - [R] At the botton, a button allows to test the edited Formula, launching a FormulaScreen
+- [R] When FormulaEditor._save formula, ensure formula is updated in the initial FormulaList
+- [ ] Refresh FormulaList each time it gets focus, so formulas are updated from corpus

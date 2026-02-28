@@ -8,12 +8,10 @@ import 'package:share_plus/share_plus.dart';
 
 class FormulaList extends StatefulWidget {
   final Corpus corpus;
-  final List<Formula> formulas;
 
   const FormulaList({
     super.key,
     required this.corpus,
-    required this.formulas,
   });
 
   @override
@@ -43,9 +41,9 @@ class _FormulaListState extends State<FormulaList> {
   }
 
   List<Formula> get _filteredFormulas {
-    if (_searchQuery.isEmpty) return widget.formulas;
+    if (_searchQuery.isEmpty) return widget.corpus.getFormulas();
 
-    return widget.formulas.where((formula) {
+    return widget.corpus.getFormulas().where((formula) {
       final nameMatch = formula.name.toLowerCase().contains(_searchQuery);
       final tagMatch = formula.tags.any((tag) => tag.toLowerCase().contains(_searchQuery));
       return nameMatch || tagMatch;
@@ -80,12 +78,6 @@ class _FormulaListState extends State<FormulaList> {
         builder: (context) => FormulaEditor(
           formula: formula,
           corpus: widget.corpus,
-          onSave: (updatedFormula) {
-            // Refresh the formula list after saving
-            setState(() {
-              // The corpus has been updated, so we just need to rebuild
-            });
-          },
         ),
       ),
     );
@@ -122,14 +114,14 @@ class _FormulaListState extends State<FormulaList> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
