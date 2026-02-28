@@ -1,4 +1,25 @@
 [
-  {"name":"Hooke's Law","input":[{"name":"k","unit":"newton per meter"},{"name":"x","unit":"meter"}],"output":{"name":"F","unit":"newton"},"d4rtCode":"F = -k * x;","tags":["physics","elasticity","oscillations"]}
+  // Hooke's Law
+  {
+    "name": "Hooke's Law",
+    "description": r"""
+Force exerted by a spring is proportional to its displacement.
+
+$$F = -kx$$
+
+Where:
+- $F$: Restoring force (Newtons)
+- $k$: Spring constant (N/m)
+- $x$: Displacement from equilibrium (meters)
+
+The negative sign indicates the force opposes the displacement.""",
+    "input": [
+      {"name": "k", "unit": "newton per meter"},
+      {"name": "x", "unit": "meter"}
+    ],
+    "output": {"name": "F", "unit": "newton"},
+    "d4rtCode": "F = -k * x;",
+    "tags": ["physics", "elasticity", "oscillations"]
+  }
 ]
 

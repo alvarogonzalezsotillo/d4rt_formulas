@@ -17,25 +17,25 @@ clean-container: build-container
 pub-get-container: build-container
 	./flutterw pub get
 
-test: pub-get-container
+test: 
 	./flutterw test
 
 build-builders: build-container
 	./flutterw pub run build_runner build --delete-conflicting-outputs
 
-build-android-release-container: pub-get-container
+build-android-release-container: 
 	./flutterw build apk --release
 
-build-linux-debug-container: pub-get-container
+build-linux-debug-container: 
 	./flutterw build linux --debug
 
-build-web-debug-container: pub-get-container
+build-web-debug-container: 
 	./flutterw build web --debug
 
-run-linux-debug-container: pub-get-container
+run-linux-debug-container: 
 	./flutterw run -d linux
 
-run-web-debug-container: pub-get-container
+run-web-debug-container: 
 	./flutterw run --web-port $${WEB_PORT:-8081} -d web-server
 
 run-linux-debug-native:
