@@ -358,7 +358,7 @@ class Formula implements FormulaElement {
 
     buffer.write(', "input": [${inputStrings.join(", ")}]');
     buffer.write(', "output": ${output.toStringLiteral()}');
-    
+
     buffer.write(', "d4rtCode": r"""$d4rtCode"""');
 
     if (tags.isNotEmpty) {

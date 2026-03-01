@@ -53,16 +53,20 @@ class _FormulaListState extends State<FormulaList> {
     }).toList();
   }
 
+  String _formulaAndDependenciesToStringLiteral(Formula formula) {
+    // Get the formula and its dependencies
+    final dependencies = widget.corpus.withDependencies(formula);
+
+    // Convert each dependency to its string literal representation
+    final literals = dependencies.map((element) => element.toStringLiteral()).toList();
+
+    // Create an array string literal containing all the elements
+    return '[${literals.join(', ')}]';
+  }
+
   void _shareFormula(Formula formula) async {
     try {
-      // Get the formula and its dependencies
-      final dependencies = widget.corpus.withDependencies(formula);
-
-      // Convert each dependency to its string literal representation
-      final literals = dependencies.map((element) => element.toStringLiteral()).toList();
-
-      // Create an array string literal containing all the elements
-      final exportString = '[${literals.join(', ')}]';
+      final exportString = _formulaAndDependenciesToStringLiteral(formula);
 
       // Share the string
       await share_plus.SharePlus.instance.share(
@@ -90,14 +94,7 @@ class _FormulaListState extends State<FormulaList> {
 
   void _copyFormula(Formula formula) async {
     try {
-      // Get the formula and its dependencies
-      final dependencies = widget.corpus.withDependencies(formula);
-      
-      // Convert each dependency to its string literal representation
-      final literals = dependencies.map((element) => element.toStringLiteral()).toList();
-      
-      // Create an array string literal containing all the elements
-      final exportString = '[${literals.join(', ')}]';
+      final exportString = _formulaAndDependenciesToStringLiteral(formula);
       
       // Copy to clipboard
       await Clipboard.setData(ClipboardData(text: exportString));
