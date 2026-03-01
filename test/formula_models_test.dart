@@ -154,7 +154,7 @@ void main() {
     );
 
     final literal = originalUnit.toStringLiteral();
-    final parsedList = parseD4rtLiteral('[${literal}]');
+    final parsedList = SetUtils.parseD4rtLiteral('[${literal}]');
     final parsedMap = parsedList[0] as Map<Object?, Object?>;
     final parsedUnit = UnitSpec.fromSet(parsedMap);
 
