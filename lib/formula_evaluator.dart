@@ -7,11 +7,6 @@ import 'formula_models.dart';
 import 'error_handler.dart';
 import 'd4rt_bridge.dart';
 
-
-
-
-
-
 /// Exception thrown when formula evaluation fails
 class FormulaEvaluationException implements Exception {
   final String message;
@@ -20,26 +15,30 @@ class FormulaEvaluationException implements Exception {
   const FormulaEvaluationException(this.message, [this.cause]);
 
   @override
-  String toString() => 'FormulaEvaluationException: $message'
+  String toString() =>
+      'FormulaEvaluationException: $message'
       '${cause != null ? ' (caused by: $cause)' : ''}';
 }
 
-class MyMath{
+class MyMath {
   static Number myLog(Number x) => Math.log(x);
-  static Number myPow(Number b, Number e) => Math.pow(b,e) as Number;
+
+  static Number myPow(Number b, Number e) => Math.pow(b, e) as Number;
 }
 
-class FormulaResult{
+class FormulaResult {
   const FormulaResult();
 }
 
-class StringResult extends FormulaResult{
+class StringResult extends FormulaResult {
   final String value;
+
   const StringResult(this.value);
 }
 
-class NumberResult extends FormulaResult{
+class NumberResult extends FormulaResult {
   final Number value;
+
   const NumberResult(this.value);
 }
 
@@ -48,39 +47,44 @@ class FormulaEvaluator {
 
   static D4rt createDefaultInterpreter() => D4rt();
 
-  FormulaEvaluator([D4rt? interpreter]) : _interpreter = interpreter ?? createDefaultInterpreter(){
+  FormulaEvaluator([D4rt? interpreter])
+    : _interpreter = interpreter ?? createDefaultInterpreter() {
     prepareInterpreter(_interpreter);
   }
 
-  static Number _getNumberValueOf(String s){
+  static Number _getNumberValueOf(String s) {
     return double.parse(s);
   }
 
-  static void prepareInterpreter(D4rt interpreter){
+  static void prepareInterpreter(D4rt interpreter) {
     final myMathDefinition = BridgedClass(
       nativeType: MyMath,
       name: 'MyMath',
       staticMethods: {
         'myPow': (visitor, positionalArgs, namedArgs) {
-          final Number base = _getNumberValueOf( positionalArgs[0].toString() );
-          final Number exp = _getNumberValueOf( positionalArgs[1].toString() );
-          return MyMath.myPow(base,exp);
+          final Number base = _getNumberValueOf(positionalArgs[0].toString());
+          final Number exp = _getNumberValueOf(positionalArgs[1].toString());
+          return MyMath.myPow(base, exp);
         },
         'myLog': (visitor, positionalArgs, namedArgs) {
-          final Number x = _getNumberValueOf( positionalArgs[0].toString() );
+          final Number x = _getNumberValueOf(positionalArgs[0].toString());
           return MyMath.myLog(x);
         },
-      }
+      },
     );
-    
-    interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
+
+    interpreter.registerBridgedClass(
+      myMathDefinition,
+      "package:d4rt_formulas.dart",
+    );
     registerD4rtBridgeBridges(interpreter);
   }
 
   static FormulaResult evaluateExpression(String code, [D4rt? interpreter]) {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
-    final d4rtCode = """
+    final d4rtCode =
+        """
       $preamble
       main()
       {
@@ -90,7 +94,7 @@ class FormulaEvaluator {
       }""";
     print("evaluateExpression:\n$d4rtCode");
     final result = d4rtInterpreter.execute(source: d4rtCode);
-    switch ( result ){
+    switch (result) {
       case int value:
         return NumberResult(value.toDouble());
       case Number value:
@@ -98,23 +102,24 @@ class FormulaEvaluator {
       case String value:
         return StringResult(value);
       default:
-        throw FormulaEvaluationException( "Unexpected result type: ${result.runtimeType} -- $result" );
+        throw FormulaEvaluationException(
+          "Unexpected result type: ${result.runtimeType} -- $result",
+        );
     }
   }
-  
+
   dynamic evaluate(Formula formula, Map<String, dynamic> inputValues) {
     _validateInputValues(formula, inputValues);
     final completeSource = _buildCompleteSource(formula, inputValues);
     try {
       final result = _interpreter.execute(source: completeSource);
       return result;
-    }
-    catch (e, stack) {
+    } catch (e, stack) {
       // SPECIAL CASE: If the error message starts with signalMagicString, treat it as a signal message and return it instead of throwing an exception
       // SEE signal() function in the generated d4rt code above for how this is used
-      print( "#######################");
-      if(e.toString().contains(signalMagicString)){
-        print( "***********************");
+      print("#######################");
+      if (e.toString().contains(signalMagicString)) {
+        print("***********************");
         final signalMessage = e.toString().split(signalMagicString).last.trim();
         return signalMessage;
       }
@@ -151,8 +156,10 @@ class FormulaEvaluator {
         if (inputValue != null) {
           // Convert input value to string for comparison since allowed values are stored as strings
           final inputValueAsString = inputValue.toString();
-          final containsValue = values.any((allowedValue) => allowedValue.toString() == inputValueAsString);
-          
+          final containsValue = values.any(
+            (allowedValue) => allowedValue.toString() == inputValueAsString,
+          );
+
           if (!containsValue) {
             throw FormulaEvaluationException(
               'Invalid value for variable "${vs.name}" in formula "${formula.name}". '
@@ -164,15 +171,14 @@ class FormulaEvaluator {
     }
   }
 
-
-
   List<String> getInputVariableOrder(Formula formula) {
     return formula.inputVarNames()..sort();
   }
 
   static final String signalMagicString = "###";
 
-  static final String preamble = """
+  static final String preamble =
+      """
       import 'dart:math';
       import "package:d4rt_formulas.dart";
       import "package:formulas/runtime_bridge.dart";
@@ -181,23 +187,28 @@ class FormulaEvaluator {
               
   """;
 
-  static const reservedVariableNames = { "variableValues", "indexOf", "variableAllowedValues"} ;
+  static const reservedVariableNames = {
+    "variableValues",
+    "indexOf",
+    "variableAllowedValues",
+  };
 
-  String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
+  String _buildCompleteSource(
+    Formula formula,
+    Map<String, dynamic> inputValues,
+  ) {
     final buffer = StringBuffer();
 
     buffer.writeln("""
       $preamble
       main()
       {
-      """
-    );
-
+      """);
 
     for (final entry in inputValues.entries) {
       final varName = entry.key;
       final value = entry.value;
-      
+
       if (value is String) {
         final escapedValue = value.replaceAll('"', '\\"');
         buffer.writeln("""
@@ -241,13 +252,17 @@ class FormulaEvaluator {
     for (final vs in formula.input) {
       final values = vs.values;
       if (values != null && values.isNotEmpty) {
-        variableValuesMap[vs.name] = values.map((v) => v.toString()).toList(growable: false);
+        variableValuesMap[vs.name] = values
+            .map((v) => v.toString())
+            .toList(growable: false);
       }
     }
     // Explicitly include the output VariableSpec if it has allowed values
     final outValues = formula.output.values;
     if (outValues != null && outValues.isNotEmpty) {
-      variableValuesMap[formula.output.name] = outValues.map((v) => v.toString()).toList(growable: false);
+      variableValuesMap[formula.output.name] = outValues
+          .map((v) => v.toString())
+          .toList(growable: false);
     }
 
     // Write the variableValues map into the generated source without escaping names/values
@@ -276,6 +291,80 @@ class FormulaEvaluator {
       }
       """);
 
-     return buffer.toString();
-   }
- }
+    return buffer.toString();
+  }
+}
+
+class NoSolutionException implements Exception {
+  final String message;
+
+  const NoSolutionException(this.message);
+
+  @override
+  String toString() => 'NoSolutionException: $message';
+}
+
+Number functionSolver(
+  Number Function(Number) f, {
+  Number hint = 0,
+  Number step = 10,
+  Number maxDelta = 0.01,
+  int maxTries = 100,
+}) {
+  Number sign(Number x) => switch (x) {
+    > 0 => 1,
+    < 0 => -1,
+    _ => 0,
+  };
+
+  Number binarySearch(Number low, Number high) {
+    var yLow = f(low);
+    var yHigh = f(high);
+    assert(sign(yLow) != sign(yHigh));
+
+    int count = 0;
+    while ((high - low).abs() > maxDelta) {
+      count += 1;
+      if (count > maxTries) {
+        throw NoSolutionException("Failed to find a root after $maxTries tries.");
+      }
+      var mid = (low + high) / 2;
+      var yMid = f(mid);
+      if (sign(yMid) == sign(f(low))) {
+        low = mid;
+        yLow = yMid;
+      } else {
+        high = mid;
+        yHigh = yMid;
+      }
+    }
+    return (low + high) / 2;
+  }
+
+  List<Number> searchApproximately(Number x1, Number x2) {
+    var y1 = f(x1);
+    var y2 = f(x2);
+    int count = 0;
+    while (sign(y1) == sign(y2)) {
+      count += 1;
+      if (count > maxTries) {
+        throw NoSolutionException("Failed to find a root after $maxTries tries.");
+      }
+      if (y1.abs() < y2.abs()) {
+        x2 = x1;
+        x1 = x1 - step;
+        y2 = y1;
+        y1 = f(x1);
+      } else {
+        x1 = x2;
+        x2 = x2 + step;
+        y1 = y2;
+        y2 = f(x2);
+      }
+    }
+    return [x1, x2];
+  }
+
+  var approx = searchApproximately(hint, hint + step);
+  return binarySearch(approx[0], approx[1]);
+}

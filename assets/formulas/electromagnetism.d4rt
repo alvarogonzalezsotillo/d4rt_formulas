@@ -7,7 +7,7 @@ Calculates the magnitude of the electrostatic force between two point charges.
 
 Formula: $F = k \dfrac{q_1 q_2}{r^2}$ where $k = 8.9875517923\times10^9\ \mathrm{N\,m^2/C^2}$.
 
-Inputs: `q1`, `q2` in coulombs; `r` in meters.
+Inputs: $q_1$, $q_2$ in coulombs; $r$ in meters.
 Output: Force `F` in newtons (N).""",
     "input": [
       {"name": "q1", "unit": "coulomb"},
