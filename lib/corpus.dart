@@ -25,12 +25,13 @@ class Multimap<K, V> extends DelegatingMap<K, List<V>> {
 
 class Corpus{
   final Multimap<String, Formula> _tags = Multimap.create();
+  // Map formulas by uuid
   final Map<String, Formula> _allFormulas = {};
 
   void loadFormulas(List<Formula> formulas, {bool replaceOnDuplicates = true, bool checkUnits = true}) {
     for (final formula in formulas) {
-      if (!replaceOnDuplicates && _allFormulas.containsKey(formula.name)) {
-        throw ArgumentError("Duplicate formula:$formula");
+      if (!replaceOnDuplicates && _allFormulas.containsKey(formula.uuid)) {
+        throw ArgumentError("Duplicate formula:${formula}");
       }
 
       if( checkUnits ){
@@ -41,7 +42,7 @@ class Corpus{
         }
       }
 
-      _allFormulas[formula.name] = formula;
+      _allFormulas[formula.uuid] = formula;
       for( final tag in formula.tags ){
         _tags[tag]?.add(formula);
       }
@@ -59,8 +60,18 @@ class Corpus{
     return _allFormulas.values.toList(growable:false);
   }
 
+  /// Returns first formula with the given name (preserves old API semantics).
   Formula? getFormula(String name) {
-    return _allFormulas.get(name);
+    try {
+      return _allFormulas.values.firstWhere((f) => f.name == name);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Returns formula by uuid
+  Formula? getFormulaByUuid(String uuid) {
+    return _allFormulas[uuid];
   }
 
   final Multimap<String, String> _baseToUnits = Multimap.create();

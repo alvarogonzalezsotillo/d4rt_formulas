@@ -53,5 +53,9 @@
   - _prettyPrintSet(Set s, int indent)
   - _prettyPrintArray(dynamic[] a, int indent)
   - _prettyPrintRawString(String s, int indent): Use _prettyPrintRawString when the string contains newlines, $, backlash...
+- [X] Add a field to Formula: UUID.
+  - A constructor without UUID will generate a new random UUID. A constructor with UUID will use the provided UUID.
+  - The field should be used in database and everywhere instead of the name. The name is not unique anymore, but the UUID is.
+  - This will be used to identify formulas, instead of the name. This way, we can have formulas with the same name but different UUIDs. The name is not unique anymore. Corpus will be a list of UUIDs, instead of a list of formulas. The corpus.getFormula() method will return the first formula with that name.
 - [ ] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
 - [ ] Investigate https://pub.dev/packages/quantity
