@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:d4rt_formulas/database/database_service.dart';
 import 'package:d4rt_formulas/service_locator.dart';
 
 void main() {

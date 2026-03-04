@@ -47,5 +47,11 @@
   - [R] There is one row for the ouput variable, similar to the row for the input variable
   - [R] d4rtCode is a text area with dart syntax highligthing
   - [R] At the botton, a button allows to test the edited Formula, launching a FormulaScreen
+- [X] Create SetUtils.prettyPrint(): receives a dynamic Set, Array, string or number. Convert to a dart representation of than value (a set/array literal), json-like, but for dart language. Do it recursivelly on local functions to that method:
+  - _prettyPrintString(String s, int indent): Only for simple strings
+  - _prettyPrintNumber(Number n, int indent)
+  - _prettyPrintSet(Set s, int indent)
+  - _prettyPrintArray(dynamic[] a, int indent)
+  - _prettyPrintRawString(String s, int indent): Use _prettyPrintRawString when the string contains newlines, $, backlash...
 - [ ] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
 - [ ] Investigate https://pub.dev/packages/quantity
