@@ -56,12 +56,7 @@ class _FormulaListState extends State<FormulaList> {
   String _formulaAndDependenciesToStringLiteral(Formula formula) {
     // Get the formula and its dependencies
     final dependencies = widget.corpus.withDependencies(formula);
-
-    // Convert each dependency to its string literal representation
-    final literals = dependencies.map((element) => element.toStringLiteral()).toList();
-
-    // Create an array string literal containing all the elements
-    return '[${literals.join(', ')}]';
+    return SetUtils.prettyPrint(dependencies.map((f) => f.toMap()).toList());
   }
 
   void _shareFormula(Formula formula) async {
