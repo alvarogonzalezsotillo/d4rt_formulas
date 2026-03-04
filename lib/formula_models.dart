@@ -1,6 +1,8 @@
 import 'package:d4rt/d4rt.dart';
 import 'package:collection/collection.dart';
 import 'package:d4rt_formulas/d4rt_formulas.dart';
+import 'dart:math';
+import 'package:uuid/uuid.dart';
 
 typedef Number = double;
 
@@ -45,7 +47,7 @@ abstract class SetUtils {
         .replaceAll('\n', r'\\n')
         .replaceAll('\r', r'\\r')
         .replaceAll('\t', r'\\t')
-        .replaceAll('"', r'\\"');
+        .replaceAll('"', r'\"');
   }
 
   /// Parses corpus elements from an array string literal.
@@ -95,7 +97,7 @@ abstract class SetUtils {
     // Check if the string needs raw string formatting (newlines, $, backslashes, quotes)
     final needsRawString = s.contains('\n') || 
                             s.contains(r'$') || 
-                            s.contains(r'\') || 
+                            s.contains(r'\\') ||
                             s.contains('"');
     
     if (needsRawString) {
@@ -160,7 +162,7 @@ abstract class SetUtils {
   /// Uses Dart's raw string syntax r"""..."""
   static String _prettyPrintRawString(String s, int indent) {
     // Escape triple quotes by replacing """ with ""\"
-    final escaped = s.replaceAll('"""', r'""\"');
+    final escaped = s.replaceAll('"""', r'""\\"');
     return 'r"""$escaped"""';
   }
 }
@@ -296,7 +298,10 @@ class VariableSpec extends FormulaElement{
 
 }
 
+String _generateUuidV4() => Uuid().v4();
+
 class Formula extends FormulaElement {
+  final String uuid;
   final String name;
   final String? description;
   final List<VariableSpec> input;
@@ -306,6 +311,7 @@ class Formula extends FormulaElement {
 
   @override
   Map<String, dynamic> toMap() {
+    // UUID NOT INCLUDED ON PURPOSE
     return {
       'name': name,
       if (description != null) 'description': description,
@@ -317,13 +323,14 @@ class Formula extends FormulaElement {
   }
 
   Formula({
+    String? uuid = null,
     required this.name,
     this.description,
     required this.input,
     required this.output,
     required this.d4rtCode,
     this.tags = const [],
-  }) {
+  }) : uuid = uuid ?? _generateUuidV4() {
     validate();
   }
 
@@ -337,25 +344,17 @@ class Formula extends FormulaElement {
 
   @override
   String toString() =>
-      'Formula(name: $name, description: $description, input: $input, output: $output, d4rtCode: $d4rtCode, tags: $tags)';
+      'Formula(uuid: $uuid, name: $name, description: $description, input: $input, output: $output, d4rtCode: $d4rtCode, tags: $tags)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
           other is Formula &&
               runtimeType == other.runtimeType &&
-              name == other.name &&
-              description == other.description &&
-              output == other.output &&
-              ListEquality().equals(input, other.input) &&
-              d4rtCode == other.d4rtCode &&
-              ListEquality().equals(tags, other.tags);
+              uuid == other.uuid;
 
   @override
-  int get hashCode =>
-      Object.hash(
-          name, description, ListEquality().hash(input), output, d4rtCode,
-          ListEquality().hash(tags));
+  int get hashCode => uuid.hashCode;
 
   List<String> inputVarNames() =>
       input.map((v) => v.name).toList(growable: false);
@@ -405,6 +404,7 @@ class Formula extends FormulaElement {
       );
     }
 
+    String? uuid = theSet['uuid'] as String?;
     String name = SetUtils.stringValue(theSet, "name");
     String? description = theSet["description"] as String?;
     List<String> tags = (theSet["tags"] as List<Object?>? ?? []).map((t) =>
@@ -417,6 +417,7 @@ class Formula extends FormulaElement {
     String d4rtCode = SetUtils.stringValue(theSet, "d4rtCode");
 
     return Formula(
+      uuid: uuid,
       name: name,
       description: description,
       tags: tags,

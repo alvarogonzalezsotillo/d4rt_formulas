@@ -41,8 +41,7 @@ dependencies:
   flutter_markdown_plus:
   flutter_markdown_plus_latex:
   flutter_code_editor:
-
-  # Drift dependencies for database support
+  uuid:
   drift: 
   sqlite3_flutter_libs:
   path_provider: 
