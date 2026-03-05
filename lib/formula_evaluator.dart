@@ -117,9 +117,7 @@ class FormulaEvaluator {
     } catch (e, stack) {
       // SPECIAL CASE: If the error message starts with signalMagicString, treat it as a signal message and return it instead of throwing an exception
       // SEE signal() function in the generated d4rt code above for how this is used
-      print("#######################");
       if (e.toString().contains(signalMagicString)) {
-        print("***********************");
         final signalMessage = e.toString().split(signalMagicString).last.trim();
         return signalMessage;
       }
@@ -293,6 +291,52 @@ class FormulaEvaluator {
 
     return buffer.toString();
   }
+}
+
+Number formulaSolver(Formula formula,
+    String variableToSolve,
+    Map<String, dynamic> fixedInputValues, {
+      Number hint = 0,
+      Number step = 10,
+      Number maxDelta = 0.01,
+      int maxTries = 100,
+    }) {
+  
+  if( variableToSolve == formula.output.name ){
+    return FormulaEvaluator().evaluate(formula, fixedInputValues);
+  }
+  
+  if (!formula.inputVarNames().contains(variableToSolve) ){
+    throw ArgumentError(
+      'Variable "$variableToSolve" is not an input or output variable of the formula "${formula
+          .name}".',
+    );
+  }
+
+
+  final modifiedInputValues = Map<String, dynamic>.from(fixedInputValues);
+  var evaluator = FormulaEvaluator();
+  Number f(Number x) {
+    modifiedInputValues[variableToSolve] = x;
+    final result = evaluator.evaluate(formula, modifiedInputValues);
+    if (result is Number) {
+      return result;
+    } else {
+      throw FormulaEvaluationException(
+        'Expected formula evaluation to return a number, but got: $result ${result.runtimeType}',
+      );
+    }
+  }
+
+  var fixedFormulaOutput = fixedInputValues[formula.output.name];
+
+  return functionSolver(
+    (Number x) => f(x) - fixedFormulaOutput,
+    hint: hint,
+    step: step,
+    maxDelta: maxDelta,
+    maxTries: maxTries,
+  );
 }
 
 class NoSolutionException implements Exception {
