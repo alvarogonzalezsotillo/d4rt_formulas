@@ -47,8 +47,7 @@ class FormulaEvaluator {
 
   static D4rt createDefaultInterpreter() => D4rt();
 
-  FormulaEvaluator([D4rt? interpreter])
-    : _interpreter = interpreter ?? createDefaultInterpreter() {
+  FormulaEvaluator([D4rt? interpreter]) : _interpreter = interpreter ?? createDefaultInterpreter() {
     prepareInterpreter(_interpreter);
   }
 
@@ -73,10 +72,7 @@ class FormulaEvaluator {
       },
     );
 
-    interpreter.registerBridgedClass(
-      myMathDefinition,
-      "package:d4rt_formulas.dart",
-    );
+    interpreter.registerBridgedClass(myMathDefinition, "package:d4rt_formulas.dart");
     registerD4rtBridgeBridges(interpreter);
   }
 
@@ -102,9 +98,7 @@ class FormulaEvaluator {
       case String value:
         return StringResult(value);
       default:
-        throw FormulaEvaluationException(
-          "Unexpected result type: ${result.runtimeType} -- $result",
-        );
+        throw FormulaEvaluationException("Unexpected result type: ${result.runtimeType} -- $result");
     }
   }
 
@@ -123,10 +117,7 @@ class FormulaEvaluator {
       }
 
       errorHandler.notify("$e\n$completeSource", stack);
-      throw FormulaEvaluationException(
-        'Error evaluating formula "${formula.name}": $e',
-        e,
-      );
+      throw FormulaEvaluationException('Error evaluating formula "${formula.name}": $e', e);
     }
   }
 
@@ -154,9 +145,7 @@ class FormulaEvaluator {
         if (inputValue != null) {
           // Convert input value to string for comparison since allowed values are stored as strings
           final inputValueAsString = inputValue.toString();
-          final containsValue = values.any(
-            (allowedValue) => allowedValue.toString() == inputValueAsString,
-          );
+          final containsValue = values.any((allowedValue) => allowedValue.toString() == inputValueAsString);
 
           if (!containsValue) {
             throw FormulaEvaluationException(
@@ -185,16 +174,9 @@ class FormulaEvaluator {
               
   """;
 
-  static const reservedVariableNames = {
-    "variableValues",
-    "indexOf",
-    "variableAllowedValues",
-  };
+  static const reservedVariableNames = {"variableValues", "indexOf", "variableAllowedValues"};
 
-  String _buildCompleteSource(
-    Formula formula,
-    Map<String, dynamic> inputValues,
-  ) {
+  String _buildCompleteSource(Formula formula, Map<String, dynamic> inputValues) {
     final buffer = StringBuffer();
 
     buffer.writeln("""
@@ -250,17 +232,13 @@ class FormulaEvaluator {
     for (final vs in formula.input) {
       final values = vs.values;
       if (values != null && values.isNotEmpty) {
-        variableValuesMap[vs.name] = values
-            .map((v) => v.toString())
-            .toList(growable: false);
+        variableValuesMap[vs.name] = values.map((v) => v.toString()).toList(growable: false);
       }
     }
     // Explicitly include the output VariableSpec if it has allowed values
     final outValues = formula.output.values;
     if (outValues != null && outValues.isNotEmpty) {
-      variableValuesMap[formula.output.name] = outValues
-          .map((v) => v.toString())
-          .toList(growable: false);
+      variableValuesMap[formula.output.name] = outValues.map((v) => v.toString()).toList(growable: false);
     }
 
     // Write the variableValues map into the generated source without escaping names/values
@@ -293,26 +271,24 @@ class FormulaEvaluator {
   }
 }
 
-Number formulaSolver(Formula formula,
-    String variableToSolve,
-    Map<String, dynamic> fixedInputValues, {
-      Number hint = 0,
-      Number step = 10,
-      Number maxDelta = 0.01,
-      int maxTries = 100,
-    }) {
-  
-  if( variableToSolve == formula.output.name ){
+Number formulaSolver(
+  Formula formula,
+  String variableToSolve,
+  Map<String, dynamic> fixedInputValues, {
+  Number hint = 0,
+  Number step = 10,
+  Number maxDelta = 0.01,
+  int maxTries = 100,
+}) {
+  if (variableToSolve == formula.output.name) {
     return FormulaEvaluator().evaluate(formula, fixedInputValues);
   }
-  
-  if (!formula.inputVarNames().contains(variableToSolve) ){
+
+  if (!formula.inputVarNames().contains(variableToSolve)) {
     throw ArgumentError(
-      'Variable "$variableToSolve" is not an input or output variable of the formula "${formula
-          .name}".',
+      'Variable "$variableToSolve" is not an input or output variable of the formula "${formula.name}".',
     );
   }
-
 
   final modifiedInputValues = Map<String, dynamic>.from(fixedInputValues);
   var evaluator = FormulaEvaluator();
