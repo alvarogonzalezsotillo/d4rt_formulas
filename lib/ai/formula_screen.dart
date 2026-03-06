@@ -11,10 +11,10 @@ import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 
 class FormulaScreen extends StatefulWidget {
-  final Formula formula;
+  Formula formula;
   final Corpus corpus;
 
-  const FormulaScreen({super.key, required this.formula, required this.corpus});
+  FormulaScreen({super.key, required this.formula, required this.corpus});
 
   @override
   State<FormulaScreen> createState() => _FormulaScreenState();
@@ -218,6 +218,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                       // Refresh the screen after saving
                       setState(() {
                         // The corpus has been updated, refresh the displayed formula
+                        widget.formula = updatedFormula;
                       });
                     },
                   ),

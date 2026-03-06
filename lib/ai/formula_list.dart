@@ -81,6 +81,11 @@ class _FormulaListState extends State<FormulaList> {
         builder: (context) => FormulaEditor(
           formula: formula,
           corpus: widget.corpus,
+          onSave: (updatedFormula){
+            setState((){
+              // THIS UPDATES THE FORMULA LIST
+            });
+          }
         ),
       ),
     );
