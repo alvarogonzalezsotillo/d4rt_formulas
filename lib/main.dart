@@ -62,8 +62,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           return Scaffold(
             appBar: AppBar(title: const Text('Formulas')),
             body: FormulaList(
-              corpus: corpus,
-              formulas: snapshot.data!.getFormulas(),
+              corpus: snapshot.data!,
             ),
           );
         }

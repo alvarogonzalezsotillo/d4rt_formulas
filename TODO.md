@@ -48,4 +48,6 @@
   - [R] d4rtCode is a text area with dart syntax highligthing
   - [R] At the botton, a button allows to test the edited Formula, launching a FormulaScreen
 - [ ] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
+- [R] When FormulaEditor._save formula, ensure formula is updated in the initial FormulaList
+- [ ] Refresh FormulaList each time it gets focus, so formulas are updated from corpus
 - [ ] Investigate https://pub.dev/packages/quantity

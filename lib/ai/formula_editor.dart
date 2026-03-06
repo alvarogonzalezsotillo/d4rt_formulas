@@ -5,6 +5,8 @@ import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:markdown/markdown.dart' as markdown;
 import '../formula_models.dart';
 import '../corpus.dart';
+import '../database/database_service.dart';
+import '../service_locator.dart';
 import 'formula_screen.dart';
 import 'unit_dropdown.dart';
 
@@ -13,11 +15,13 @@ import 'unit_dropdown.dart';
 class FormulaEditor extends StatefulWidget {
   final Formula formula;
   final Corpus corpus;
+  final Function(Formula)? onSave; // Callback when formula is saved
 
   const FormulaEditor({
     super.key,
     required this.formula,
     required this.corpus,
+    this.onSave,
   });
 
   @override
@@ -181,7 +185,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
     }
   }
 
-  void _saveFormula() {
+  Future<void> _saveFormula() async {
     if (!_validateFormula()) {
       return;
     }
@@ -189,14 +193,34 @@ class _FormulaEditorState extends State<FormulaEditor> {
     final formula = _buildFormula();
     if (formula == null) return;
 
-    // For now, just show a success message
-    // In a real implementation, this would save to database
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Formula "${formula.name}" saved successfully!'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-    );
+    try {
+      final database = getDatabase();
+      
+      // Update corpus in memory
+      widget.corpus.updateFormula(formula);
+      
+      // Update database
+      final updated = await database.updateFormula(formula);
+      
+      if (!updated) {
+        // If formula wasn't found (e.g., name changed), add it as new
+        await database.addFormula(formula);
+      }
+      
+      // Call the onSave callback if provided
+      widget.onSave?.call(formula);
+      
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Formula "${formula.name}" saved successfully!'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+      );
+    } catch (e, stack) {
+      print('Error saving formula: $e\n$stack');
+      _showErrorDialog('Error saving formula: $e');
+    }
   }
 
   void _showErrorDialog(String message) {

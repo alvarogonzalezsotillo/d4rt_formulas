@@ -63,6 +63,27 @@ class Corpus{
     return _allFormulas.get(name);
   }
 
+  /// Updates a formula in the corpus
+  void updateFormula(Formula formula) {
+    if (!_allFormulas.containsKey(formula.name)) {
+      throw ArgumentError("Formula not found: ${formula.name}");
+    }
+    
+    // Remove old tags
+    final oldFormula = _allFormulas[formula.name]!;
+    for (final tag in oldFormula.tags) {
+      _tags[tag]?.removeWhere((f) => f.name == formula.name);
+    }
+    
+    // Update the formula
+    _allFormulas[formula.name] = formula;
+    
+    // Add new tags
+    for (final tag in formula.tags) {
+      _tags[tag]?.add(formula);
+    }
+  }
+
   final Multimap<String, String> _baseToUnits = Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 
