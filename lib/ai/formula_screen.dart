@@ -63,10 +63,10 @@ class D4rtEditingController extends TextEditingController {
     if( _validateAsD4rtExpression(text) && _lastValue is StringResult ){
       return true;
     }
-    if( _validateAsD4rtExpression('"' + text + '"') && _lastValue is StringResult ){
+    if( _validateAsD4rtExpression('"$text"') && _lastValue is StringResult ){
       return true;
     }    
-    if( _validateAsD4rtExpression("'" + text + "'") && _lastValue is StringResult ){
+    if( _validateAsD4rtExpression("'$text'") && _lastValue is StringResult ){
       return true;
     }
     return false;

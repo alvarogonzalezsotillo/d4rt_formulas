@@ -47,6 +47,16 @@
   - [R] There is one row for the ouput variable, similar to the row for the input variable
   - [R] d4rtCode is a text area with dart syntax highligthing
   - [R] At the botton, a button allows to test the edited Formula, launching a FormulaScreen
+- [X] Create SetUtils.prettyPrint(): receives a dynamic Set, Array, string or number. Convert to a dart representation of than value (a set/array literal), json-like, but for dart language. Do it recursivelly on local functions to that method:
+  - _prettyPrintString(String s, int indent): Only for simple strings
+  - _prettyPrintNumber(Number n, int indent)
+  - _prettyPrintSet(Set s, int indent)
+  - _prettyPrintArray(dynamic[] a, int indent)
+  - _prettyPrintRawString(String s, int indent): Use _prettyPrintRawString when the string contains newlines, $, backlash...
+- [X] Add a field to Formula: UUID.
+  - A constructor without UUID will generate a new random UUID. A constructor with UUID will use the provided UUID.
+  - The field should be used in database and everywhere instead of the name. The name is not unique anymore, but the UUID is.
+  - This will be used to identify formulas, instead of the name. This way, we can have formulas with the same name but different UUIDs. The name is not unique anymore. Corpus will be a list of UUIDs, instead of a list of formulas. The corpus.getFormula() method will return the first formula with that name.
 - [ ] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
 - [R] When FormulaEditor._save formula, ensure formula is updated in the initial FormulaList
 - [ ] Refresh FormulaList each time it gets focus, so formulas are updated from corpus

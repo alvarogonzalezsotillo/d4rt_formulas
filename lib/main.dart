@@ -2,7 +2,6 @@ import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'database/database_service.dart';
-import 'package:drift/drift.dart' as drift;
 import 'service_locator.dart';
 
 import 'ai/formula_list.dart';

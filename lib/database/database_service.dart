@@ -1,3 +1,4 @@
+import '../formula_models.dart';
 import 'corpus_database_interface.dart';
 import 'formulas_database.dart';
 import 'package:d4rt_formulas/formula_models.dart' as models;
@@ -11,7 +12,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
 
     for (final element in elements) {
       try {
-        final parsed = models.parseCorpusElements('[${element.elementText}]');
+        final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
         print("PARSED:$element");
         parsedElements.addAll(parsed);
       } catch (e) {
