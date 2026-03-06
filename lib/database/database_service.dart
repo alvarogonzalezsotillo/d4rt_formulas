@@ -43,7 +43,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
     
     for (final element in elements) {
       try {
-        final parsed = models.parseCorpusElements('[${element.elementText}]');
+        final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
         if (parsed.isNotEmpty && parsed.first is models.Formula) {
           final existingFormula = parsed.first as models.Formula;
           if (existingFormula.name == formula.name) {
@@ -75,7 +75,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
     
     for (final element in elements) {
       try {
-        final parsed = models.parseCorpusElements('[${element.elementText}]');
+        final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
         if (parsed.isNotEmpty && parsed.first is models.Formula) {
           final existingFormula = parsed.first as models.Formula;
           if (existingFormula.name == formulaName) {
