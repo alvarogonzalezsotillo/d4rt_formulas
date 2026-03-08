@@ -1,5 +1,5 @@
 
-all: clean-container build-builders build-linux-debug-container
+all: build-container clean-container build-builders build-linux-debug-container
 
 DB=~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
 
@@ -10,17 +10,18 @@ clean:
 	flutter clean
 	[ -f $(DB) ] && rm $(DB)
 
-clean-container: build-container
+clean-container:
+	rm -r .build-container-cache
 	./flutterw clean
-	rm .build-container-cache
 
-pub-get-container: build-container
+
+pub-get-container:
 	./flutterw pub get
 
 test: 
 	./flutterw test
 
-build-builders: build-container
+build-builders:
 	./flutterw pub run build_runner build --delete-conflicting-outputs
 
 build-android-release-container: 

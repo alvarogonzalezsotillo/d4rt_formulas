@@ -63,7 +63,6 @@ Future<Corpus> createDefaultCorpus() async{
       "assets/formulas/materials_elasticity.d4rt",
       "assets/formulas/medical_and_bio.d4rt",
       "assets/formulas/misc_math.d4rt",
-      "assets/formulas/networking.d4rt",
       "assets/formulas/optics.d4rt",
       "assets/formulas/thermodynamics.d4rt",
       "assets/formulas/trigonometry.d4rt",
