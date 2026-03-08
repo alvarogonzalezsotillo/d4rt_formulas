@@ -172,6 +172,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
       );
 
       return Formula(
+        uuid: widget.formula.uuid,
         name: _nameController.text.trim(),
         description: _descriptionController.text.isEmpty ? null : _descriptionController.text,
         input: input,

@@ -76,18 +76,19 @@ class Corpus{
 
   /// Updates a formula in the corpus
   void updateFormula(Formula formula) {
-    if (!_allFormulas.containsKey(formula.name)) {
-      throw ArgumentError("Formula not found: ${formula.name}");
+    if (!_allFormulas.containsKey(formula.uuid)) {
+      _allFormulas.keys.forEach( (uuid)=> print("Existing formula uuid: $uuid, name: ${_allFormulas[uuid]?.name}") );
+      throw ArgumentError("Formula not found: ${formula.name} ${formula.uuid}");
     }
     
     // Remove old tags
-    final oldFormula = _allFormulas[formula.name]!;
+    final oldFormula = _allFormulas[formula.uuid]!;
     for (final tag in oldFormula.tags) {
       _tags[tag]?.removeWhere((f) => f.name == formula.name);
     }
     
     // Update the formula
-    _allFormulas[formula.name] = formula;
+    _allFormulas[formula.uuid] = formula;
     
     // Add new tags
     for (final tag in formula.tags) {

@@ -12,10 +12,10 @@ import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 
 class FormulaScreen extends StatefulWidget {
-  Formula formula;
+  final Formula initialformula;
   final Corpus corpus;
 
-  FormulaScreen({super.key, required this.formula, required this.corpus});
+  FormulaScreen({super.key, required formula, required this.corpus}) : initialformula = formula;
 
   @override
   State<FormulaScreen> createState() => _FormulaScreenState();
@@ -30,12 +30,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
   String? _result;
   String? _selectedOutputUnit;
   bool _isDescriptionExpanded = false; // Track description expansion state
+  late Formula _formula;
 
-  @override
-  void initState() {
-    super.initState();
+  Formula get formula => _formula;
+
+  set formula(Formula newFormula) {
+    _formula = newFormula;
+
     // Initialize controllers and units with listeners
-    for (final input in widget.formula.input) {
+    for (final input in formula.input) {
       _selectedUnits[input.name] = input.unit;
       if (input.values != null && input.values!.isNotEmpty) {
         // string/categorical variable -> use dropdown
@@ -46,7 +49,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _inputControllers[input.name]!.addListener(_evaluateFormula);
       }
     }
-    _selectedOutputUnit = widget.formula.output.unit;
+    _selectedOutputUnit = formula.output.unit;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    formula = widget.initialformula;
   }
 
   @override
@@ -62,7 +71,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   void _evaluateFormula() {
     try {
       final inputValues = <String, dynamic>{};
-      for (final input in widget.formula.input) {
+      for (final input in formula.input) {
         // string/categorical variable
         if (input.values != null && input.values!.isNotEmpty) {
           final selected = _selectedValues[input.name];
@@ -105,10 +114,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       final evaluator = FormulaEvaluator();
-      final result = evaluator.evaluate(widget.formula, inputValues);
+      final result = evaluator.evaluate(formula, inputValues);
 
       // Convert output to selected unit if needed
-      String? unit = widget.formula.output.unit;
+      String? unit = formula.output.unit;
       if (unit != null && result is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
         if (converted is num) {
@@ -126,7 +135,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: ${e.toString()}'),
-          backgroundColor: Theme.of(context).colorScheme.error,
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .error,
         ),
       );
     }
@@ -136,7 +148,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.formula.name),
+        title: Text(formula.name),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -144,17 +156,18 @@ class _FormulaScreenState extends State<FormulaScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FormulaEditor(
-                    formula: widget.formula,
-                    corpus: widget.corpus,
-                    onSave: (updatedFormula) {
-                      // Refresh the screen after saving
-                      setState(() {
-                        // The corpus has been updated, refresh the displayed formula
-                        widget.formula = updatedFormula;
-                      });
-                    },
-                  ),
+                  builder: (context) =>
+                      FormulaEditor(
+                        formula: formula,
+                        corpus: widget.corpus,
+                        onSave: (updatedFormula) {
+                          // Refresh the screen after saving
+                          setState(() {
+                            // The corpus has been updated, refresh the displayed formula
+                            formula = updatedFormula;
+                          });
+                        },
+                      ),
                 ),
               );
             },
@@ -180,8 +193,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   Widget _buildDescriptionSection() {
-    if (widget.formula.description == null ||
-        widget.formula.description!.isEmpty) {
+    if (formula.description == null ||
+        formula.description!.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -190,7 +203,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
       child: ExpansionTile(
         title: Text(
           'Description',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          style: Theme
+              .of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -206,11 +223,14 @@ class _FormulaScreenState extends State<FormulaScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .surfaceVariant,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Markdown(
-                data: widget.formula.description!,
+                data: formula.description!,
                 shrinkWrap: true,
                 builders: {
                   'latex': LatexElementBuilder(),
@@ -233,12 +253,16 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Input Variables',
-          style: Theme.of(
+          style: Theme
+              .of(
             context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          )
+              .textTheme
+              .titleMedium
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        ...widget.formula.input.map((variable) => _buildVariableRow(variable)),
+        ...formula.input.map((variable) => _buildVariableRow(variable)),
       ],
     );
   }
@@ -249,9 +273,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Result',
-          style: Theme.of(
+          style: Theme
+              .of(
             context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          )
+              .textTheme
+              .titleMedium
+              ?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Row(
@@ -260,7 +288,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
             SizedBox(
               width: 150,
               child: Text(
-                widget.formula.output.name,
+                formula.output.name,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -280,14 +308,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
             const SizedBox(width: 8),
             UnitDropdown(
               corpus: widget.corpus,
-              variable: widget.formula.output,
+              variable: formula.output,
               selectedUnit: _selectedOutputUnit,
               onUnitChanged: (unit) {
                 _selectedOutputUnit = unit;
                 _evaluateFormula();
-                print( "En output unit changed to $unit: $_result");
-                setState(() {
-                });
+                print("En output unit changed to $unit: $_result");
+                setState(() {});
               },
             ),
           ],
@@ -314,43 +341,42 @@ class _FormulaScreenState extends State<FormulaScreen> {
           const SizedBox(width: 8), // Add some spacing
           // Flexible space for input field
           Expanded(
-            child: isCategorical 
-              ? DropdownButtonFormField<String>(
-                  value: _selectedValues[variable.name],
-                  items: variable.values!
-                      .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
-                      .toList(),
-                  onChanged: (v) {
-                    _selectedValues[variable.name] = v;
-                    _evaluateFormula();
-                    setState(() {
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return 'Required';
-                    return null;
-                  },
-                )
-              : TextFormField(
-                  controller: _inputControllers[variable.name],
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
-                  ],
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                  ),
-                  autovalidateMode: AutovalidateMode.always,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required';
-                    }
-                    return _inputControllers[variable.name]!.lastError;
-                  },
-                ),
+            child: isCategorical
+                ? DropdownButtonFormField<String>(
+              value: _selectedValues[variable.name],
+              items: variable.values!
+                  .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
+                  .toList(),
+              onChanged: (v) {
+                _selectedValues[variable.name] = v;
+                _evaluateFormula();
+                setState(() {});
+              },
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'Required';
+                return null;
+              },
+            )
+                : TextFormField(
+              controller: _inputControllers[variable.name],
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
+              ],
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+              ),
+              autovalidateMode: AutovalidateMode.always,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Required';
+                }
+                return _inputControllers[variable.name]!.lastError;
+              },
+            ),
           ),
           const SizedBox(width: 8),
           if (variable.unit != null)
