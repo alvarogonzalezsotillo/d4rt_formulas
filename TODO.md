@@ -57,7 +57,6 @@
   - A constructor without UUID will generate a new random UUID. A constructor with UUID will use the provided UUID.
   - The field should be used in database and everywhere instead of the name. The name is not unique anymore, but the UUID is.
   - This will be used to identify formulas, instead of the name. This way, we can have formulas with the same name but different UUIDs. The name is not unique anymore. Corpus will be a list of UUIDs, instead of a list of formulas. The corpus.getFormula() method will return the first formula with that name.
-- [ ] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
+- [R] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
 - [R] When FormulaEditor._save formula, ensure formula is updated in the initial FormulaList
-- [ ] Refresh FormulaList each time it gets focus, so formulas are updated from corpus
-- [ ] Investigate https://pub.dev/packages/quantity
+- [R] In FormulaEditor, add a button to "Save as copy", additional to the existing button "Save". It doesnt matter if the copy has the same name as the original formula, since they are identified by a internal UUID.

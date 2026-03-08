@@ -195,21 +195,21 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
     try {
       final database = getDatabase();
-      
+
       // Update corpus in memory
       widget.corpus.updateFormula(formula);
-      
+
       // Update database
       final updated = await database.updateFormula(formula);
-      
+
       if (!updated) {
         // If formula wasn't found (e.g., name changed), add it as new
         await database.addFormula(formula);
       }
-      
+
       // Call the onSave callback if provided
       widget.onSave?.call(formula);
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -220,6 +220,52 @@ class _FormulaEditorState extends State<FormulaEditor> {
     } catch (e, stack) {
       print('Error saving formula: $e\n$stack');
       _showErrorDialog('Error saving formula: $e');
+    }
+  }
+
+  Future<void> _saveFormulaAsCopy() async {
+    if (!_validateFormula()) {
+      return;
+    }
+
+    final formula = _buildFormula();
+    if (formula == null) return;
+
+    try {
+      final database = getDatabase();
+
+      // Create a copy with a new UUID
+      final formulaCopy = Formula(
+        name: '${formula.name} (Copy)',
+        description: formula.description,
+        input: formula.input,
+        output: formula.output,
+        d4rtCode: formula.d4rtCode,
+        tags: formula.tags,
+      );
+
+      // Add to corpus
+      widget.corpus.addFormula(formulaCopy);
+
+      // Add to database
+      await database.addFormula(formulaCopy);
+
+      // Call the onSave callback if provided
+      widget.onSave?.call(formulaCopy);
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Formula "${formulaCopy.name}" saved successfully!'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+      );
+
+      // Navigate back to the formula list with the new formula
+      Navigator.pop(context, formulaCopy);
+    } catch (e, stack) {
+      print('Error saving formula copy: $e\n$stack');
+      _showErrorDialog('Error saving formula copy: $e');
     }
   }
 
@@ -253,6 +299,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
             icon: const Icon(Icons.play_arrow),
             onPressed: _testFormula,
             tooltip: 'Test Formula',
+          ),
+          IconButton(
+            icon: const Icon(Icons.copy),
+            onPressed: _saveFormulaAsCopy,
+            tooltip: 'Save as copy',
           ),
           IconButton(
             icon: const Icon(Icons.save),

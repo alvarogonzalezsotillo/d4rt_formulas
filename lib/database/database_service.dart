@@ -37,19 +37,19 @@ extension CorpusDatabaseExtension on FormulasDatabase {
     }
   }
 
-  // Method to update a formula in the database by name
+  // Method to update a formula in the database by UUID
   Future<bool> updateFormula(models.Formula formula) async {
     final elements = await getAllFormulaElements();
-    
+
     for (final element in elements) {
       try {
         final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
         if (parsed.isNotEmpty && parsed.first is models.Formula) {
           final existingFormula = parsed.first as models.Formula;
-          if (existingFormula.name == formula.name) {
+          if (existingFormula.uuid == formula.uuid) {
             // Update this element
             await updateFormulaElement(
-              element.id, 
+              element.id,
               formula.toStringLiteral()
             );
             return true;
@@ -60,7 +60,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
         continue;
       }
     }
-    
+
     return false; // Formula not found
   }
 
