@@ -116,8 +116,14 @@ class _FormulaScreenState extends State<FormulaScreen> {
         inputValues[input.name] = convertedValue;
       }
 
-      final evaluator = FormulaEvaluator();
-      final result = evaluator.evaluate(formula, inputValues);
+      late final dynamic result;
+      if( formula is DerivedFormula) {
+        result = formulaSolver(formula, formula.output.name, inputValues,);
+      }
+      else {
+        final evaluator = FormulaEvaluator();
+        result = evaluator.evaluate(formula, inputValues);
+      }
 
       // Convert output to selected unit if needed
       String? unit = formula.output.unit;

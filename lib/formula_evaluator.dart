@@ -276,9 +276,9 @@ Number formulaSolver(
   String variableToSolve,
   Map<String, dynamic> fixedInputValues, {
   Number hint = 0,
-  Number step = 10,
+  Number step = 100,
   Number maxDelta = 0.01,
-  int maxTries = 100,
+  int maxTries = 1000,
 }) {
   if (variableToSolve == formula.output.name) {
     return FormulaEvaluator().evaluate(formula, fixedInputValues);

@@ -1,6 +1,7 @@
 import 'package:d4rt_formulas/corpus.dart';
 import 'package:d4rt_formulas/defaults/default_corpus.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
+import 'package:d4rt_formulas/set_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 

@@ -1,176 +1,15 @@
 import 'package:d4rt/d4rt.dart';
 import 'package:collection/collection.dart';
 import 'package:d4rt_formulas/d4rt_formulas.dart';
+import 'package:d4rt_formulas/set_utils.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
 
 typedef Number = double;
 
-abstract class SetUtils {
-  static Object safeGet(Map<Object?, Object?> map, String key) {
-    if (!map.containsKey(key)) {
-      throw ArgumentError("Key not found: $key -- $map");
-    }
-    return map[key] ?? "Not possible!!!";
-  }
-
-  static String stringValue(Map<Object?, Object?> map, String key) {
-    return safeGet(map, key).toString();
-  }
-
-  static List<Object?> listValue(Map<Object?, Object?> map, String key) {
-    return safeGet(map, key) as List<Object?>;
-  }
-
-  static Number numberValue(Map<Object?, Object?> map, String key) {
-    return double.parse(stringValue(map, key));
-  }
-
-  /// Parses a d4rt array literal (containing maps and arrays) to a List<Object?>
-  /// using d4rt
-  static List<Object?> parseD4rtLiteral(String arrayStringLiteral) {
-    var d4rt = D4rt();
-    final buffer = StringBuffer();
-    buffer.write("main(){ return $arrayStringLiteral; }");
-    final code = buffer.toString();
-
-    final List<Object?> list = d4rt.execute(source: code);
-
-    return list;
-  }
-
-  /// Escapes special characters in a string for use in D4RT literals
-  @deprecated
-  static String escapeD4rtString(String input) {
-    return input
-        .replaceAll(r'\\', r'\\\\') // escape backslashes first
-        .replaceAll('\n', r'\\n')
-        .replaceAll('\r', r'\\r')
-        .replaceAll('\t', r'\\t')
-        .replaceAll('"', r'\"');
-  }
-
-  /// Parses corpus elements from an array string literal.
-  /// Determines if each element is a formula or a unit and converts accordingly.
-  static List<FormulaElement> parseCorpusElements(String arrayStringLiteral) {
-    final List<Object?> elements = parseD4rtLiteral(arrayStringLiteral);
-
-    final List<FormulaElement> result = [];
-    for (final element in elements) {
-      if (element is Map<Object?, Object?>) {
-        if (element.containsKey('d4rtCode')) {
-          result.add(Formula.fromSet(element));
-        } else
-        if (element.containsKey('name') && element.containsKey('symbol')) {
-          result.add(UnitSpec.fromSet(element));
-        } else {
-          throw ArgumentError('Unknown element type: $element');
-        }
-      } else {
-        throw ArgumentError('Element must be a Map: $element');
-      }
-    }
-
-    return result;
-  }
-
-  /// Pretty prints a dynamic value (Set, Array, string or number) as a Dart literal.
-  /// Uses JSON-like formatting but for Dart language, with proper indentation.
-  static String prettyPrint(dynamic value, {int indent = 0}) {
-    if (value   is String) {
-      return _prettyPrintString(value, indent);
-    } else if (value is num) {
-      return _prettyPrintNumber(value, indent);
-    } else if (value is Set) {
-      return _prettyPrintSet(value, indent);
-    } else if (value is List) {
-      return _prettyPrintArray(value, indent);
-    } else if (value is Map) {
-      return _prettyPrintMap(value, indent);
-    } else {
-      return value.toString();
-    }
-  }
-
-  /// Pretty prints a simple string, escaping special characters if needed.
-  static String _prettyPrintString(String s, int indent) {
-    // Check if the string needs raw string formatting (newlines, $, backslashes, quotes)
-    final needsRawString = s.contains('\n') || 
-                            s.contains(r'$') || 
-                            s.contains(r'\\') ||
-                            s.contains('"');
-    
-    if (needsRawString) {
-      return _prettyPrintRawString(s, indent);
-    }
-    
-    // Simple string with escaped quotes
-    return '"${s.replaceAll('"', r'\"')}"';
-    //'
-  }
-
-  /// Pretty prints a number.
-  static String _prettyPrintNumber(num n, int indent) {
-    return n.toString();
-  }
-
-  /// Pretty prints a Set as a Dart set literal.
-  static String _prettyPrintSet(Set s, int indent) {
-    if (s.isEmpty) {
-      return '{}';
-    }
-    
-    final indentStr = '  ' * indent;
-    final innerIndent = '  ' * (indent + 1);
-    
-    final elements = s.map((e) => '$innerIndent${prettyPrint(e, indent: indent + 1)}').join(',\n');
-    return '{$elements\n$indentStr}';
-  }
-
-  /// Pretty prints an Array/List as a Dart list literal.
-  static String _prettyPrintArray(List a, int indent) {
-    if (a.isEmpty) {
-      return '[]';
-    }
-    
-    final indentStr = '  ' * indent;
-    final innerIndent = '  ' * (indent + 1);
-    
-    final elements = a.map((e) => '$innerIndent${prettyPrint(e, indent: indent + 1)}').join(',\n');
-    return '[\n$elements\n$indentStr]';
-  }
-
-  /// Pretty prints a Map as a Dart map literal.
-  static String _prettyPrintMap(Map m, int indent) {
-    if (m.isEmpty) {
-      return '{}';
-    }
-
-    final indentStr = '  ' * indent;
-    final innerIndent = '  ' * (indent + 1);
-    
-    final entries = m.entries.map((e) {
-      final key = prettyPrint(e.key, indent: indent + 1);
-      final value = prettyPrint(e.value, indent: indent + 1);
-      return '$innerIndent$key: $value';
-    }).join(',\n');
-    
-    return '{\n$entries\n$indentStr}';
-  }
-
-  /// Pretty prints a raw string (for strings containing newlines, $, backslashes, etc.)
-  /// Uses Dart's raw string syntax r"""..."""
-  static String _prettyPrintRawString(String s, int indent) {
-    // Escape triple quotes by replacing """ with ""\"
-    final escaped = s.replaceAll('"""', r'""\\"');
-    return 'r"""$escaped"""';
-  }
-}
-
-
 /// Abstract base class for formula elements
 abstract class FormulaElement {
-  Map<String,dynamic> toMap();
+  Map<String, dynamic> toMap();
 
   String toStringLiteral() {
     final map = toMap();
@@ -198,7 +37,6 @@ class UnitSpec extends FormulaElement {
     };
   }
 
-
   UnitSpec({
     required this.name,
     required this.baseUnit,
@@ -220,12 +58,7 @@ class UnitSpec extends FormulaElement {
 
     if (theSet.containsKey("factor")) {
       Number factorFromUnitToBase = SetUtils.numberValue(theSet, "factor");
-      return UnitSpec(
-        name: name,
-        baseUnit: baseUnit,
-        symbol: symbol,
-        factorFromUnitToBase: factorFromUnitToBase,
-      );
+      return UnitSpec(name: name, baseUnit: baseUnit, symbol: symbol, factorFromUnitToBase: factorFromUnitToBase);
     } else if (theSet.containsKey("toBase")) {
       String codeFromBaseToUnit = SetUtils.stringValue(theSet, "fromBase");
       String codeFromUnitToBase = SetUtils.stringValue(theSet, "toBase");
@@ -249,10 +82,9 @@ class UnitSpec extends FormulaElement {
 
     return units.toList(growable: false);
   }
-
 }
 
-class VariableSpec extends FormulaElement{
+class VariableSpec extends FormulaElement {
   final String name;
   final String? unit;
   final List<dynamic>? values;
@@ -262,9 +94,9 @@ class VariableSpec extends FormulaElement{
     return {
       'name': name,
       if (unit != null) 'unit': unit,
-      if (values != null) 'values': List.from(values!,growable: false),
+      if (values != null) 'values': List.from(values!, growable: false),
     };
- }
+  }
 
   VariableSpec({required this.name, this.unit, this.values}) {
     validate();
@@ -294,20 +126,98 @@ class VariableSpec extends FormulaElement{
 
   @override
   int get hashCode => Object.hash(unit, name, values != null ? const DeepCollectionEquality().hash(values!) : 0);
-
-
 }
 
 String _generateUuidV4() => Uuid().v4();
 
-class Formula extends FormulaElement {
+abstract class FormulaInterface {
+  String get uuid;
+
+  String get name;
+
+  String? get description;
+
+  List<VariableSpec> get input;
+
+  VariableSpec get output;
+
+  String get d4rtCode;
+
+  List<String> get tags;
+
+  Map<String, dynamic> toMap();
+
+  Formula get originalFormula;
+}
+
+class DerivedFormula implements FormulaInterface {
+  @override
+  String get uuid => originalFormula.uuid;
+
+  @override
+  String get name => originalFormula.name;
+
+  @override
+  String? get description => originalFormula.description;
+
+  @override
+  List<VariableSpec> get input => _input;
+
+  @override
+  VariableSpec get output => _output;
+
+  @override
+  String get d4rtCode => "signal('no code for derived formula, use formulaSolver')";
+
+  @override
+  List<String> get tags => originalFormula.tags;
+
+  @override
+  final Formula originalFormula;
+
+  @override
+  Map<String, dynamic> toMap() => originalFormula.toMap();
+
+  String outputName;
+  late List<VariableSpec> _input;
+  late VariableSpec _output;
+
+  DerivedFormula({required this.outputName, required this.originalFormula}) {
+
+    if( originalFormula.input.any( (vs) => vs.unit == "string") || originalFormula.output.unit == "string") {
+      throw ArgumentError(
+          "Derived formulas are not supported for formulas with string inputs, because we can't solve for them. Original formula: ${originalFormula
+              .toString()}");
+    }
+
+    var newInput = List<VariableSpec>.from(originalFormula.input).where((v) => v.name != outputName).toList();
+    newInput.add(originalFormula.output);
+    _input = newInput.toList(growable: false);
+    _output = originalFormula.input.firstWhere(
+      (v) => v.name == outputName,
+      orElse: () => throw ArgumentError("New output variable $outputName not found in original formula input"),
+    );
+  }
+}
+
+class Formula extends FormulaElement implements FormulaInterface {
+  @override
   final String uuid;
+  @override
   final String name;
+  @override
   final String? description;
+  @override
   final List<VariableSpec> input;
+  @override
   final VariableSpec output;
+  @override
   final String d4rtCode;
+  @override
   final List<String> tags;
+
+  @override
+  Formula get originalFormula => this;
 
   @override
   Map<String, dynamic> toMap() {
@@ -335,9 +245,7 @@ class Formula extends FormulaElement {
   }
 
   void validate() {
-    if (name
-        .trim()
-        .isEmpty) {
+    if (name.trim().isEmpty) {
       throw ArgumentError('Formula name cannot be empty');
     }
   }
@@ -348,16 +256,12 @@ class Formula extends FormulaElement {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is Formula &&
-              runtimeType == other.runtimeType &&
-              uuid == other.uuid;
+      identical(this, other) || other is Formula && runtimeType == other.runtimeType && uuid == other.uuid;
 
   @override
   int get hashCode => uuid.hashCode;
 
-  List<String> inputVarNames() =>
-      input.map((v) => v.name).toList(growable: false);
+  List<String> inputVarNames() => input.map((v) => v.name).toList(growable: false);
 
   factory Formula.fromStringLiteral(String setStringLiteral) {
     var d4rt = D4rt();
@@ -389,29 +293,21 @@ class Formula extends FormulaElement {
       if (allowed != null) {
         final types = allowed.map((v) => v.runtimeType).toSet();
         if (types.length > 1) {
-          throw ArgumentError(
-              'Allowed values must be all Strings or all Numbers');
+          throw ArgumentError('Allowed values must be all Strings or all Numbers');
         }
-        if (!types.contains(String) && !types.contains(double) &&
-            !types.contains(int)) {
+        if (!types.contains(String) && !types.contains(double) && !types.contains(int)) {
           throw ArgumentError('Allowed values must be Strings or Numbers');
         }
       }
-      return VariableSpec(
-        name: name,
-        unit: unit,
-        values: allowed?.toList(growable: false),
-      );
+      return VariableSpec(name: name, unit: unit, values: allowed?.toList(growable: false));
     }
 
     String? uuid = theSet['uuid'] as String?;
     String name = SetUtils.stringValue(theSet, "name");
     String? description = theSet["description"] as String?;
-    List<String> tags = (theSet["tags"] as List<Object?>? ?? []).map((t) =>
-        t.toString()).toList();
+    List<String> tags = (theSet["tags"] as List<Object?>? ?? []).map((t) => t.toString()).toList();
     final List<Object?> inputSet = SetUtils.listValue(theSet, "input");
-    List<VariableSpec> input = inputSet.map((v) => parseVar(v as Map)).toList(
-        growable: false);
+    List<VariableSpec> input = inputSet.map((v) => parseVar(v as Map)).toList(growable: false);
     Map<Object?, Object?> outputSet = theSet['output'] as Map<Object?, Object?>;
     VariableSpec output = parseVar(outputSet);
     String d4rtCode = SetUtils.stringValue(theSet, "d4rtCode");
@@ -427,4 +323,3 @@ class Formula extends FormulaElement {
     );
   }
 }
-
