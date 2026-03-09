@@ -135,7 +135,6 @@ class _FormulaScreenState extends State<FormulaScreen> {
       errorHandler.notify(e, stack);
       setState(() {
         _errorMessage = e.toString();
-        _isErrorExpanded = true; // Auto-expand on error
         _result = null;
       });
     }
@@ -254,7 +253,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       color: Theme.of(context).colorScheme.errorContainer,
       child: ExpansionTile(
         title: Text(
-          '⚠️ There were an error. Show details...',
+          '⚠️ There was an error. Show details...',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onErrorContainer,
