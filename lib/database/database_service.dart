@@ -46,7 +46,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
         final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
         if (parsed.isNotEmpty && parsed.first is models.Formula) {
           final existingFormula = parsed.first as models.Formula;
-          if (existingFormula.name == formula.name) {
+          if (existingFormula.uuid == formula.uuid) {
             // Update this element
             await updateFormulaElement(
               element.id, 
@@ -70,7 +70,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
   }
 
   // Method to delete a formula from the database by name
-  Future<bool> deleteFormula(String formulaName) async {
+  Future<bool> deleteFormula(String uuid) async {
     final elements = await getAllFormulaElements();
     
     for (final element in elements) {
@@ -78,7 +78,7 @@ extension CorpusDatabaseExtension on FormulasDatabase {
         final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
         if (parsed.isNotEmpty && parsed.first is models.Formula) {
           final existingFormula = parsed.first as models.Formula;
-          if (existingFormula.name == formulaName) {
+          if (existingFormula.uuid == uuid) {
             await deleteFormulaElement(element.id);
             return true;
           }

@@ -51,15 +51,18 @@ class _FormulaListState extends State<FormulaList> {
     }).toList();
   }
 
-  String _formulaAndDependenciesToStringLiteral(Formula formula) {
-    // Get the formula and its dependencies
+  String _formulaAndDependenciesToExportStringLiteral(Formula formula) {
     final dependencies = widget.corpus.withDependencies(formula);
-    return SetUtils.prettyPrint(dependencies.map((f) => f.toMap()).toList());
+    final dependenciesAsMap = dependencies.map((f) => f.toMap()).toList();
+    for( final f in dependenciesAsMap ){
+      f.remove("uuid");
+    }
+    return SetUtils.prettyPrint(dependenciesAsMap);
   }
 
   void _shareFormula(Formula formula) async {
     try {
-      final exportString = _formulaAndDependenciesToStringLiteral(formula);
+      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
 
       // Share the string
       await share_plus.SharePlus.instance.share(
@@ -92,7 +95,7 @@ class _FormulaListState extends State<FormulaList> {
 
   void _copyFormula(Formula formula) async {
     try {
-      final exportString = _formulaAndDependenciesToStringLiteral(formula);
+      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
       
       // Copy to clipboard
       await Clipboard.setData(ClipboardData(text: exportString));
@@ -204,6 +207,11 @@ class _FormulaListState extends State<FormulaList> {
                       builder: (context) => FormulaScreen(
                         formula: formula,
                         corpus: widget.corpus,
+                        onSave: (formula){
+                          setState(() {
+                            // Refresh the list when returning from the formula screen
+                          });
+                        },
                       ),
                     ),
                   );

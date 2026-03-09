@@ -15,7 +15,7 @@ import 'unit_dropdown.dart';
 class FormulaEditor extends StatefulWidget {
   final Formula formula;
   final Corpus corpus;
-  final Function(Formula)? onSave; // Callback when formula is saved
+  final Function(Formula)? onSave;
 
   const FormulaEditor({
     super.key,

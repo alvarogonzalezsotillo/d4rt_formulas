@@ -311,8 +311,8 @@ class Formula extends FormulaElement {
 
   @override
   Map<String, dynamic> toMap() {
-    // UUID NOT INCLUDED ON PURPOSE
     return {
+      'uuid': uuid,
       'name': name,
       if (description != null) 'description': description,
       'input': input.map((v) => v.toMap()).toList(growable: false),
@@ -323,7 +323,7 @@ class Formula extends FormulaElement {
   }
 
   Formula({
-    String? uuid = null,
+    String? uuid,
     required this.name,
     this.description,
     required this.input,

@@ -12,10 +12,11 @@ import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 
 class FormulaScreen extends StatefulWidget {
-  final Formula initialformula;
+  final Formula initialFormula;
   final Corpus corpus;
+  final Function(Formula)? onSave; // Callback when formula is saved
 
-  FormulaScreen({super.key, required formula, required this.corpus}) : initialformula = formula;
+  FormulaScreen({super.key, required formula, required this.corpus, this.onSave}) : initialFormula = formula;
 
   @override
   State<FormulaScreen> createState() => _FormulaScreenState();
@@ -55,7 +56,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   @override
   void initState() {
     super.initState();
-    formula = widget.initialformula;
+    formula = widget.initialFormula;
   }
 
   @override
@@ -120,11 +121,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       String? unit = formula.output.unit;
       if (unit != null && result is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
-        if (converted is num) {
-          _result = converted.toStringAsFixed(2);
-        } else {
-          _result = converted.toString();
-        }
+        _result = converted.toStringAsFixed(2);
       } else {
         _result = result?.toString();
       }
@@ -161,9 +158,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
                         formula: formula,
                         corpus: widget.corpus,
                         onSave: (updatedFormula) {
-                          // Refresh the screen after saving
+                          widget.onSave?.call(updatedFormula);
                           setState(() {
-                            // The corpus has been updated, refresh the displayed formula
                             formula = updatedFormula;
                           });
                         },
