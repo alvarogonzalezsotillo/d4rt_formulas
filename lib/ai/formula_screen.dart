@@ -34,6 +34,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
   late Formula _formula;
 
   Formula get formula => _formula;
+  String? _errorMessage; // Track error message for expansion tile
+  bool _isErrorExpanded = false; // Track error expansion state
 
   set formula(Formula newFormula) {
     _formula = newFormula;
@@ -126,18 +128,16 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _result = result?.toString();
       }
 
-      setState(() {});
+      setState(() {
+        _errorMessage = null; // Clear error on successful evaluation
+      });
     } catch (e, stack) {
       errorHandler.notify(e, stack);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${e.toString()}'),
-          backgroundColor: Theme
-              .of(context)
-              .colorScheme
-              .error,
-        ),
-      );
+      setState(() {
+        _errorMessage = e.toString();
+        _isErrorExpanded = true; // Auto-expand on error
+        _result = null;
+      });
     }
   }
 
@@ -178,6 +178,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           child: ListView(
             children: [
               _buildDescriptionSection(),
+              _buildErrorSection(),
               _buildInputSection(),
               const SizedBox(height: 24),
               _buildOutputSection(),
@@ -234,6 +235,51 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 extensionSet: markdown.ExtensionSet(
                   [LatexBlockSyntax()],
                   [LatexInlineSyntax()],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorSection() {
+    if (_errorMessage == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      color: Theme.of(context).colorScheme.errorContainer,
+      child: ExpansionTile(
+        title: Text(
+          '⚠️ There were an error. Show details...',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onErrorContainer,
+          ),
+        ),
+        initiallyExpanded: _isErrorExpanded,
+        onExpansionChanged: (bool expanded) {
+          setState(() {
+            _isErrorExpanded = expanded;
+          });
+        },
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: SelectableText(
+                _errorMessage!,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                  fontFamily: 'monospace',
                 ),
               ),
             ),

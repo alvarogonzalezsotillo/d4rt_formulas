@@ -15,23 +15,25 @@ The network address is calculated by applying the subnet mask to zero out the ho
       {"name": "hostIP", "unit": "string"}
     ],
     "output": {"name": "network", "unit": "string"},
-    "d4rtCode": r"""var parts = hostIP.split('/');
-var ip = parts[0];
-var mask = int.parse(parts[1]);
-var octets = ip.split('.').map((e) => int.parse(e)).toList();
-var hostBits = 32 - mask;
-var shiftAmount = hostBits;
-var networkValue = 0;
-for (var i = 0; i < 4; i++) {
-  networkValue = (networkValue << 8) | octets[i];
-}
-networkValue = (networkValue >> shiftAmount) << shiftAmount;
-var networkOctets = [];
-for (var i = 0; i < 4; i++) {
-  networkOctets.insert(0, networkValue & 0xFF);
-  networkValue = networkValue >> 8;
-}
-network = networkOctets.join('.') + '/' + mask.toString();""",
+    "d4rtCode": r"""
+       var parts = hostIP.split('/');
+       var ip = parts[0];
+       var mask = int.parse(parts[1]);
+       var octets = ip.split('.').map((e) => int.parse(e)).toList();
+       var hostBits = 32 - mask;
+       var shiftAmount = hostBits;
+       var networkValue = 0;
+       for (var i = 0; i < 4; i++) {
+         networkValue = (networkValue << 8) | octets[i];
+       }
+       networkValue = (networkValue >> shiftAmount) << shiftAmount;
+       var networkOctets = [];
+       for (var i = 0; i < 4; i++) {
+         networkOctets.insert(0, networkValue & 0xFF);
+         networkValue = networkValue >> 8;
+       }
+       network = networkOctets.join('.') + '/' + mask.toString();
+    """,
     "tags": ["networking", "ip", "subnetting", "cidr", "network"]
   }
 ]
