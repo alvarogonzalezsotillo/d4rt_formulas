@@ -157,7 +157,10 @@ Where:
 - $a$, $b$, $c$: Sides of the triangle
 - $C$: Angle opposite to side $c$
 
-This rule relates all three sides of a triangle to one of its angles.""",
+This rule relates all three sides of a triangle to one of its angles.
+
+![Pic](https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Triangle_with_notations_2.svg/330px-Triangle_with_notations_2.svg.png)
+""",
     "input": [
       {"name": "a", "unit": "meter"},
       {"name": "b", "unit": "meter"},
