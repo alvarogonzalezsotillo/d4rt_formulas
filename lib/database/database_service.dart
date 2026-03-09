@@ -1,4 +1,5 @@
 import '../formula_models.dart';
+import '../set_utils.dart';
 import 'corpus_database_interface.dart';
 import 'formulas_database.dart';
 import 'package:d4rt_formulas/formula_models.dart' as models;

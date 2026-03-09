@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For Clipboard
 import 'package:d4rt_formulas/formula_models.dart';
 import '../corpus.dart';
+import '../set_utils.dart';
 import 'formula_screen.dart';
 import 'package:share_plus/share_plus.dart' as share_plus;
 import 'formula_editor.dart';
