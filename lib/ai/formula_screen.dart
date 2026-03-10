@@ -472,13 +472,16 @@ class _FormulaScreenState extends State<FormulaScreen> {
     }
 
     try {
-      // Create a DerivedFormula with this input variable as output
-      final derivedFormula = DerivedFormula(
-        outputName: variable.name,
-        originalFormula: rootFormula
-      );
-
-
+      late final FormulaInterface derivedFormula;
+      if( variable.name == rootFormula.output.name) {
+        derivedFormula = rootFormula;
+      }
+      else {
+        derivedFormula = DerivedFormula(
+            outputName: variable.name,
+            originalFormula: rootFormula
+        );
+      }
 
       // Replace the current FormulaScreen with the new DerivedFormula screen
       Navigator.pushReplacement(
