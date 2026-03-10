@@ -60,3 +60,8 @@
 - [R] When _FormulaScreenState._evaluateFormula() detect an error, instead of show an SnackBar, show a ExpansionTile with "⚠️ There were an error. Show details..." with the details of the exception. The ExpansionTile will be invisible if there is no error.
 - [R] When FormulaEditor._save formula, ensure formula is updated in the initial FormulaList
 - [R] In FormulaEditor, add a button to "Save as copy", additional to the existing button "Save". It doesnt matter if the copy has the same name as the original formula, since they are identified by a internal UUID.
+- [ ] Add a button for each input variable in FormulaScreen. 
+  - This button will create a DerivedFormula, with the input variable as output, and the rest of the input variables as inputs. 
+  - The DerivedFormula will then be displayed in the FormulaScreen
+- [ ] If the Formula displayed in FormulaScreen is a DerivedFormula, the edit button will be disabled
+- [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.
