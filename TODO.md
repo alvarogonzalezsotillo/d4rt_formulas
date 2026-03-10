@@ -64,7 +64,7 @@
   - This button will create a DerivedFormula, with the input variable as output, and the rest of the input variables as inputs.
   - The DerivedFormula will then be displayed in the FormulaScreen
 - [R] If the Formula displayed in FormulaScreen is a DerivedFormula, the edit button will be disabled
-- [ ] When a formula is derived in FormulaScreen, the new FormulaScreen is not pushed in navigator, it replacles the current FormulaScreen
-- [ ] In FormulaScreen, a Formula cant be derived if DerivedFormula.isDerivable() returns false
+- [R] When a formula is derived in FormulaScreen, the new FormulaScreen is not pushed in navigator, it replacles the current FormulaScreen
+- [R] In FormulaScreen, a Formula cant be derived if DerivedFormula.isDerivable() returns false
 - [ ] The algorithm of formulaSolver should be https://en.wikipedia.org/wiki/Newton%27s_method
 - [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.

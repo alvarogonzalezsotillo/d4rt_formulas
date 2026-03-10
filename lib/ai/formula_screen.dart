@@ -468,6 +468,18 @@ class _FormulaScreenState extends State<FormulaScreen> {
       return;
     }
 
+    // Check if the formula can be derived
+    if (!DerivedFormula.isDerivable(formula)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This formula cannot be derived because it contains non number variables'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+
     try {
       // Create a DerivedFormula with this input variable as output
       final derivedFormula = DerivedFormula(
@@ -475,8 +487,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
         originalFormula: formula,
       );
 
-      // Navigate to the new DerivedFormula screen
-      Navigator.push(
+      // Replace the current FormulaScreen with the new DerivedFormula screen
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => FormulaScreen(
