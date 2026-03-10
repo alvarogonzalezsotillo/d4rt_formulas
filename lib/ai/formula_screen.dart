@@ -457,17 +457,31 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   void _solveForVariable(VariableSpec variable) {
-    // Check if the formula is already a DerivedFormula
+
+    var rootFormula = FormulaInterface.getRootFormula(formula);
+
+    // Check if the formula can be derived
+    if (!DerivedFormula.isDerivable(rootFormula)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This formula cannot be derived because it contains non number variables'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
     try {
       // Create a DerivedFormula with this input variable as output
-      var rootFormula = FormulaInterface.getRootFormula(formula);
       final derivedFormula = DerivedFormula(
         outputName: variable.name,
         originalFormula: rootFormula
       );
 
-      // Navigate to the new DerivedFormula screen
-      Navigator.push(
+
+
+      // Replace the current FormulaScreen with the new DerivedFormula screen
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => FormulaScreen(
