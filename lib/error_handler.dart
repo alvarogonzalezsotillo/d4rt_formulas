@@ -9,6 +9,17 @@ class ErrorHandler {
   /// Callback function to handle errors - can be overridden for custom behavior
   void Function(Object error, [StackTrace? stackTrace])? onError;
 
+
+  // TODO: SET A DEFAULT ONERROR LIKE
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //      SnackBar(
+  //        content: Text('Error creating derived formula: $e'),
+  //        duration: const Duration(seconds: 3),
+  //      ),
+  //    );
+  //  }
+
+
   /// Notifies the error handler of an exception
   void notify(Object error, [StackTrace? stackTrace]) {
     // Print the exception to stdout as requested

@@ -148,6 +148,16 @@ abstract class FormulaInterface {
   Map<String, dynamic> toMap();
 
   Formula get originalFormula;
+
+  static Formula getRootFormula( FormulaInterface fi ){
+    if( fi is DerivedFormula ){
+       return getRootFormula(fi.originalFormula);
+    }
+    if( fi is Formula ){
+       return fi as Formula;
+    }
+    throw ArgumentError("Is not a known Formula subclass: ${fi} ${fi.runtimeType}");
+  }
 }
 
 class DerivedFormula implements FormulaInterface {
@@ -155,7 +165,7 @@ class DerivedFormula implements FormulaInterface {
   String get uuid => originalFormula.uuid;
 
   @override
-  String get name => originalFormula.name;
+  String get name => "${originalFormula.name} (Solving for ${_output.name})";
 
   @override
   String? get description => originalFormula.description;
@@ -173,7 +183,7 @@ class DerivedFormula implements FormulaInterface {
   List<String> get tags => originalFormula.tags;
 
   @override
-  final Formula originalFormula;
+  late final Formula originalFormula;
 
   @override
   Map<String, dynamic> toMap() => originalFormula.toMap();
@@ -182,14 +192,22 @@ class DerivedFormula implements FormulaInterface {
   late List<VariableSpec> _input;
   late VariableSpec _output;
 
-  DerivedFormula({required this.outputName, required this.originalFormula}) {
+  static bool isDerivable(Formula f){
+    return f.input.every( (vs) => vs.unit != "string") && f.output.unit != "string";
+  }
 
-    if( originalFormula.input.any( (vs) => vs.unit == "string") || originalFormula.output.unit == "string") {
+  DerivedFormula({required this.outputName, required FormulaInterface originalFormula}) {
+
+    this.originalFormula = FormulaInterface.getRootFormula(originalFormula);
+
+    if( !isDerivable(this.originalFormula) ){
       throw ArgumentError(
-          "Derived formulas are not supported for formulas with string inputs, because we can't solve for them. Original formula: ${originalFormula
-              .toString()}");
+          "Derived formulas are not supported for formulas with string inputs, because we can't solve for them. Original formula: ${originalFormula.toString()}");
     }
+    _init();
+  }
 
+  void _init(){
     var newInput = List<VariableSpec>.from(originalFormula.input).where((v) => v.name != outputName).toList();
     newInput.add(originalFormula.output);
     _input = newInput.toList(growable: false);

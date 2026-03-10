@@ -272,7 +272,7 @@ class FormulaEvaluator {
 }
 
 Number formulaSolver(
-  Formula formula,
+  FormulaInterface formulaInterface,
   String variableToSolve,
   Map<String, dynamic> fixedInputValues, {
   Number hint = 0,
@@ -280,6 +280,9 @@ Number formulaSolver(
   Number maxDelta = 0.01,
   int maxTries = 1000,
 }) {
+
+  var formula = FormulaInterface.getRootFormula(formulaInterface);
+
   if (variableToSolve == formula.output.name) {
     return FormulaEvaluator().evaluate(formula, fixedInputValues);
   }

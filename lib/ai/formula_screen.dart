@@ -12,7 +12,7 @@ import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 
 class FormulaScreen extends StatefulWidget {
-  final Formula initialFormula;
+  final FormulaInterface initialFormula;
   final Corpus corpus;
   final Function(Formula)? onSave; // Callback when formula is saved
 
@@ -31,13 +31,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
   String? _result;
   String? _selectedOutputUnit;
   bool _isDescriptionExpanded = false; // Track description expansion state
-  late Formula _formula;
+  late FormulaInterface _formula;
 
-  Formula get formula => _formula;
+  FormulaInterface get formula => _formula;
   String? _errorMessage; // Track error message for expansion tile
   bool _isErrorExpanded = false; // Track error expansion state
 
-  set formula(Formula newFormula) {
+  set formula(FormulaInterface newFormula) {
     _formula = newFormula;
 
     // Initialize controllers and units with listeners
@@ -121,8 +121,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
         result = formulaSolver(formula, formula.output.name, inputValues,);
       }
       else {
+        print( "TODO: MAYBE ONLY FORMULASOLVER IS NECCESSARY");
         final evaluator = FormulaEvaluator();
-        result = evaluator.evaluate(formula, inputValues);
+        result = evaluator.evaluate(formula as Formula, inputValues);
       }
 
       // Convert output to selected unit if needed
@@ -154,25 +155,29 @@ class _FormulaScreenState extends State<FormulaScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      FormulaEditor(
-                        formula: formula,
-                        corpus: widget.corpus,
-                        onSave: (updatedFormula) {
-                          widget.onSave?.call(updatedFormula);
-                          setState(() {
-                            formula = updatedFormula;
-                          });
-                        },
+            onPressed: formula is DerivedFormula
+                ? null
+                : () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FormulaEditor(
+                              formula: formula as Formula,
+                              corpus: widget.corpus,
+                              onSave: (updatedFormula) {
+                                widget.onSave?.call(updatedFormula);
+                                setState(() {
+                                  formula = updatedFormula;
+                                });
+                              },
+                            ),
                       ),
-                ),
-              );
-            },
-            tooltip: 'Edit Formula',
+                    );
+                  },
+            tooltip: formula is DerivedFormula
+                ? 'Cannot edit derived formula'
+                : 'Edit Formula',
           ),
         ],
       ),
@@ -426,7 +431,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          if (variable.unit != null)
+          if (variable.unit != null && !isCategorical)
+            IconButton(
+              icon: const Icon(Icons.swap_horiz),
+              tooltip: 'Solve for ${variable.name}',
+              onPressed: () {
+                _solveForVariable(variable);
+              },
+            ),
+          if (variable.unit != null && !isCategorical)
             UnitDropdown(
               corpus: widget.corpus,
               variable: variable,
@@ -441,5 +454,40 @@ class _FormulaScreenState extends State<FormulaScreen> {
         ],
       ),
     );
+  }
+
+  void _solveForVariable(VariableSpec variable) {
+    // Check if the formula is already a DerivedFormula
+    if (formula is DerivedFormula) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cannot create derived formula from another derived formula'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    try {
+      // Create a DerivedFormula with this input variable as output
+      final derivedFormula = DerivedFormula(
+        outputName: variable.name,
+        originalFormula: formula,
+      );
+
+      // Navigate to the new DerivedFormula screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FormulaScreen(
+            formula: derivedFormula,
+            corpus: widget.corpus,
+            onSave: widget.onSave,
+          ),
+        ),
+      );
+    } catch (e, st) {
+      errorHandler.notify(e,st);
+    }
   }
 }
