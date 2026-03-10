@@ -196,11 +196,10 @@ class DerivedFormula implements FormulaInterface {
     return f.input.every( (vs) => vs.unit != "string") && f.output.unit != "string";
   }
 
-  DerivedFormula({required this.outputName, required FormulaInterface originalFormula}) {
+  DerivedFormula({required this.outputName, required this.originalFormula}) {
 
-    this.originalFormula = FormulaInterface.getRootFormula(originalFormula);
 
-    if( !isDerivable(this.originalFormula) ){
+    if( !isDerivable(originalFormula) ){
       throw ArgumentError(
           "Derived formulas are not supported for formulas with string inputs, because we can't solve for them. Original formula: ${originalFormula.toString()}");
     }

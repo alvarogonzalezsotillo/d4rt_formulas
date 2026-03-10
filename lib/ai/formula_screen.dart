@@ -458,21 +458,12 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
   void _solveForVariable(VariableSpec variable) {
     // Check if the formula is already a DerivedFormula
-    if (formula is DerivedFormula) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cannot create derived formula from another derived formula'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return;
-    }
-
     try {
       // Create a DerivedFormula with this input variable as output
+      var rootFormula = FormulaInterface.getRootFormula(formula);
       final derivedFormula = DerivedFormula(
         outputName: variable.name,
-        originalFormula: formula,
+        originalFormula: rootFormula
       );
 
       // Navigate to the new DerivedFormula screen
