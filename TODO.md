@@ -66,5 +66,9 @@
 - [R] If the Formula displayed in FormulaScreen is a DerivedFormula, the edit button will be disabled
 - [R] When a formula is derived in FormulaScreen, the new FormulaScreen is not pushed in navigator, it replacles the current FormulaScreen
 - [R] In FormulaScreen, a Formula cant be derived if DerivedFormula.isDerivable() returns false
-- [ ] The algorithm of formulaSolver should be https://en.wikipedia.org/wiki/Newton%27s_method
+- [R] The algorithm of formulaSolver should be https://en.wikipedia.org/wiki/Newton%27s_method
+- [ ] In FormulaList, add a button next to "export" to import formulaelements. 
+  - It will show a screen with a text editor with dart syntax and a button "paste". 
+  - The "paste" button will copy the clipboard into the text editor. 
+  - A second button "import" will call parseCorpusElements() and will add that to the Corpus.
 - [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.
