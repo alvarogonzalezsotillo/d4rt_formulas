@@ -395,7 +395,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           Expanded(
             child: isCategorical
                 ? DropdownButtonFormField<String>(
-              value: _selectedValues[variable.name],
+              initialValue: _selectedValues[variable.name],
               items: variable.values!
                   .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
                   .toList(),
@@ -433,7 +433,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           const SizedBox(width: 8),
           if (variable.unit != null && !isCategorical)
             IconButton(
-              icon: const Icon(Icons.swap_horiz),
+              icon: const Icon(Icons.arrow_downward),
               tooltip: 'Solve for ${variable.name}',
               onPressed: () {
                 _solveForVariable(variable);
