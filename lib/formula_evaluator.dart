@@ -1,8 +1,6 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
-import 'package:get_it/get_it.dart';
-import 'corpus.dart';
 import 'formula_models.dart';
 import 'error_handler.dart';
 import 'd4rt_bridge.dart';
@@ -340,6 +338,7 @@ Number functionSolver(
     _ => 0,
   };
 
+  // Binary search between low and high (expects f(low) and f(high) to have opposite signs)
   Number binarySearch(Number low, Number high) {
     var yLow = f(low);
     var yHigh = f(high);
@@ -364,6 +363,7 @@ Number functionSolver(
     return (low + high) / 2;
   }
 
+  // Search for an interval [x1, x2] where f changes sign
   List<Number> searchApproximately(Number x1, Number x2) {
     var y1 = f(x1);
     var y2 = f(x2);
@@ -388,6 +388,67 @@ Number functionSolver(
     return [x1, x2];
   }
 
-  var approx = searchApproximately(hint, hint + step);
-  return binarySearch(approx[0], approx[1]);
+  // Numerical derivative using central differences
+  Number numericalDerivative(Number x) {
+    final double h = 1e-6;
+    Number realNumericalDerivative(Number x) {
+      // Ensure h is not larger than scale of x
+      final double dx = (x == 0) ? h : (h * x.abs().toDouble());
+      final Number y1 = f(x + dx);
+      final Number y2 = f(x - dx);
+      final Number deriv = (y1 - y2) / (2 * dx);
+      print( "numericalDerivative $deriv at x=$x: y1=$y1, y2=$y2, dx=$dx");
+      return deriv;
+    }
+    var ret = realNumericalDerivative(x);
+    if ( ret.abs() < 1e-12) {
+      // If derivative is too small, try a slightly modified x
+      ret = realNumericalDerivative(x+h);
+    }
+    return ret;
+  }
+
+  Number searchNewton(){
+    Number x = hint;
+    final int maxNewtonIters = maxTries;
+    int iter = 0;
+
+    while (iter < maxNewtonIters) {
+      final Number y = f(x);
+      if (y == 0 || y.abs() <= maxDelta) {
+        return x;
+      }
+
+      final Number dy = numericalDerivative(x);
+
+      if (dy == 0 || dy.abs() < 1e-12) {
+        throw NoSolutionException("Derivative is zero or too small, cannot continue Newton-Raphson.");
+      }
+
+      final Number delta = y / dy;
+      var xNew = x - delta;
+
+      if (xNew.isNaN || xNew.isInfinite) {
+        throw NoSolutionException("Newton-Raphson diverged to NaN or Infinity.");
+      }
+
+      // If step exploded, cap the step to a reasonable multiple of `step`
+      final Number maxStepAllowed = step * 1e6;
+      if ((xNew - x).abs() > maxStepAllowed) {
+        xNew = x + (delta.isNegative ? -maxStepAllowed : maxStepAllowed);
+      }
+
+      x = xNew;
+      iter += 1;
+    }
+    throw NoSolutionException("Failed to find a root using Newton-Raphson after $maxNewtonIters iterations.");
+  }
+
+  try {
+    return searchNewton();
+  } catch (e) {
+    var approx = searchApproximately(hint, hint + step);
+    return binarySearch(approx[0], approx[1]);
+  }
+
 }
