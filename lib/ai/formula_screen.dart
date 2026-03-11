@@ -484,16 +484,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       // Replace the current FormulaScreen with the new DerivedFormula screen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FormulaScreen(
-            formula: derivedFormula,
-            corpus: widget.corpus,
-            onSave: widget.onSave,
-          ),
-        ),
-      );
+      setState( (){
+        formula = derivedFormula;
+      });
     } catch (e, st) {
       errorHandler.notify(e,st);
     }
