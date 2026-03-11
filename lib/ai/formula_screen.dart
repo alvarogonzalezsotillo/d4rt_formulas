@@ -55,6 +55,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
     _selectedOutputUnit = formula.output.unit;
   }
 
+  void _initInputs( Map<String,dynamic> inputValues ){
+    // TODO: FIND WIDGETS AND SET VALUES
+  }
+
   @override
   void initState() {
     super.initState();
@@ -117,14 +121,14 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       late final dynamic result;
-      if( formula is DerivedFormula) {
+      //if( formula is DerivedFormula) {
         result = formulaSolver(formula, formula.output.name, inputValues,);
-      }
-      else {
-        print( "TODO: MAYBE ONLY FORMULASOLVER IS NECCESSARY");
-        final evaluator = FormulaEvaluator();
-        result = evaluator.evaluate(formula as Formula, inputValues);
-      }
+      //}
+      //else {
+        // TODO: MAYBE ONLY FORMULASOLVER IS NECCESSARY"
+        //final evaluator = FormulaEvaluator();
+        //result = evaluator.evaluate(formula as Formula, inputValues);
+      //}
 
       // Convert output to selected unit if needed
       String? unit = formula.output.unit;
