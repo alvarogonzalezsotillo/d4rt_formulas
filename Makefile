@@ -47,3 +47,7 @@ run-web-debug-native:
 
 ai:
 	qwen --prompt-interactive --yolo "Read CLAUDE.md. Implement first task not already done in TODO.md"
+
+run-emulator:
+	flutter emulators --launch Medium_Phone
+	flutter run -d emulator-5554

@@ -51,7 +51,8 @@ dependencies:
   ffi: 
 
   collection: 
-  share_plus: 
+  share_plus:
+  receive_sharing_intent:
 
 dev_dependencies:
   flutter_test:
