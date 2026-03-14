@@ -71,4 +71,8 @@
   - It will show a screen with a text editor with dart syntax and a button "paste". 
   - The "paste" button will copy the clipboard into the text editor. 
   - A second button "import" will call parseCorpusElements() and will add that to the Corpus.
+- [ ] Use receive_sharing_intent package to implement import of files in linux and android.
+  - The application will accept *.d4rtf files with the same format of files in ./assets .
+  - The application will accept also shared text, with same format as files in ./assets.
+  - The loaded formulaelemets will be added to the GetIt.instance.get<Corpus)()
 - [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.
