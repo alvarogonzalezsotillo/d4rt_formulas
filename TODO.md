@@ -75,4 +75,8 @@
   - The application will accept *.d4rtf files with the same format of files in ./assets .
   - The application will accept also shared text, with same format as files in ./assets.
   - The loaded formulaelemets will be added to the GetIt.instance.get<Corpus)()
+- [ ] Preview of imported formulalements
+  - The screen will receive a list of FormulaElements to import
+  - The formulas will have a "edit" button to show a FormulaEditor with the formula
+  - The screen will have an "import all" button to import all the FormulaElements in the list. This will call Corpus.addFormulaElement() for each element, and then pop the screen.
 - [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.
