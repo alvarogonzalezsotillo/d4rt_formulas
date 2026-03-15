@@ -67,15 +67,15 @@
 - [R] When a formula is derived in FormulaScreen, the new FormulaScreen is not pushed in navigator, it replacles the current FormulaScreen
 - [R] In FormulaScreen, a Formula cant be derived if DerivedFormula.isDerivable() returns false
 - [R] The algorithm of formulaSolver should be https://en.wikipedia.org/wiki/Newton%27s_method
-- [ ] Use receive_sharing_intent package to implement import of files in linux and android.
+- [R] Use receive_sharing_intent package to implement import of files in linux and android.
   - The application will accept *.d4rtf files with the same format of files in ./assets .
   - The application will accept also shared text, with same format as files in ./assets.
-  - The loaded formulaelemets will be added to the GetIt.instance.get<Corpus)()
-- [ ] Preview of imported formulalements
+  - The loaded formulaelemets will be added to the GetIt.instance.get<Corpus>()
+- [R] Preview of imported formulalements
   - The screen will receive a list of FormulaElements to import
   - The formulas will have a "edit" button to show a FormulaEditor with the formula
   - The screen will have an "import all" button to import all the FormulaElements in the list. This will call Corpus.addFormulaElement() for each element, and then pop the screen.
-- [ ] In FormulaList, add a button next to "export" to import FormulaElements.
+- [R] In FormulaList, add a button next to "export" to import FormulaElements.
   - It will show a screen with a text editor with dart syntax and a button "paste".
   - The "paste" button will copy the clipboard into the text editor.
   - A second button "import" will use the import preview screen

@@ -18,3 +18,4 @@
 .aider*
 .build-container-cache
 /coverage/
+/.agent-shell/

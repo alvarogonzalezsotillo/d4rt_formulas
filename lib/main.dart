@@ -8,6 +8,7 @@ import 'ai/formula_list.dart';
 import 'corpus.dart';
 import 'defaults/default_corpus.dart';
 import 'formula_models.dart' as models;
+import 'ai/import_preview_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +44,23 @@ class _CorpusLoaderState extends State<CorpusLoader> {
     _corpusFuture = loadCorpusFromDatabaseOrAssets();
   }
 
+  void _handleImport() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImportFromTextScreen(
+          corpus: _corpusFuture.then((c) => c).value as Corpus? ?? Corpus(),
+        ),
+      ),
+    ).then((result) {
+      if( result ) {
+        setState(() {
+          // Refresh the list when returning from import
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Corpus>(
@@ -59,9 +77,19 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           // If the corpus is empty (user chose not to load default), we could handle that here
           // For now, just display the formula list
           return Scaffold(
-            appBar: AppBar(title: const Text('Formulas')),
+            appBar: AppBar(
+              title: const Text('Formulas'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.import_export),
+                  tooltip: 'Import formulas',
+                  onPressed: _handleImport,
+                ),
+              ],
+            ),
             body: FormulaList(
               corpus: snapshot.data!,
+              onImport: _handleImport,
             ),
           );
         }

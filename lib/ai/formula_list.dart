@@ -7,13 +7,17 @@ import 'formula_screen.dart';
 import 'package:share_plus/share_plus.dart' as share_plus;
 import 'formula_editor.dart';
 import 'package:share_plus/share_plus.dart';
+import 'import_preview_screen.dart';
+import '../services/import_service.dart';
 
 class FormulaList extends StatefulWidget {
   final Corpus corpus;
+  final VoidCallback? onImport;
 
   const FormulaList({
     super.key,
     required this.corpus,
+    this.onImport,
   });
 
   @override
@@ -131,6 +135,23 @@ class _FormulaListState extends State<FormulaList> {
         );
       },
     );
+  }
+
+  void _importFromText() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImportFromTextScreen(
+          corpus: widget.corpus,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) {
+        setState(() {
+          // Refresh the list when returning from import
+        });
+      }
+    });
   }
 
   @override
