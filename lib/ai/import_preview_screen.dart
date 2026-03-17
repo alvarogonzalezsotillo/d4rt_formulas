@@ -5,6 +5,11 @@ import 'package:d4rt_formulas/corpus.dart';
 import 'package:d4rt_formulas/ai/formula_editor.dart';
 import 'package:d4rt_formulas/services/import_service.dart';
 
+
+import 'package:flutter_code_editor/flutter_code_editor.dart';
+import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:highlight/languages/java.dart';
+
 /// Screen to preview and import formula elements
 class ImportPreviewScreen extends StatefulWidget {
   final List<FormulaElement> elements;
@@ -254,12 +259,15 @@ class ImportFromTextScreen extends StatefulWidget {
 }
 
 class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
-  final TextEditingController _textController = TextEditingController();
+  final CodeController _codeController = CodeController(
+    language: dart,
+    text: "// Insert code here...",
+  );
   bool _isLoading = false;
 
   @override
   void dispose() {
-    _textController.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 
@@ -269,7 +277,7 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
     try {
       final clipboardData = await Clipboard.getData('text/plain');
       if (clipboardData?.text != null) {
-        _textController.text = clipboardData!.text!;
+        _codeController.text = clipboardData!.text!;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -291,7 +299,7 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
   }
 
   Future<void> _import() async {
-    final text = _textController.text.trim();
+    final text = _codeController.fullText;
     if (text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -343,17 +351,17 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _textController,
-              decoration: const InputDecoration(
-                labelText: 'Paste formula text here',
-                hintText: 'Paste formula array literal in d4rt format...',
-                border: OutlineInputBorder(),
+          Expanded(
+            child: CodeTheme(
+              data: CodeThemeData(styles: monokaiSublimeTheme),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: CodeField(
+                    controller: _codeController,
+                  ),
+                ),
               ),
-              maxLines: null,
-              expands: false,
             ),
           ),
           Padding(
