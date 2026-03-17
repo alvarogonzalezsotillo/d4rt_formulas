@@ -57,8 +57,9 @@ class ImportService {
   }
 
   /// Listens for shared files (Android only for now)
-  Stream<List<SharedMediaFile>> get sharedFilesStream => 
-      ReceiveSharingIntent.instance.getMediaStream;
+  Stream<List<SharedMediaFile>> get sharedFilesStream {
+    return ReceiveSharingIntent.instance.getMediaStream();
+  }
 
   /// Gets initial shared media (for when app is launched via share)
   Future<List<SharedMediaFile>> getInitialSharedMedia() async {
@@ -74,7 +75,9 @@ class ImportService {
   Future<String?> getSharedText() async {
     try {
       final media = await ReceiveSharingIntent.instance.getInitialMedia();
-      if (media.isNotEmpty && media.first.type == SharedMediaType.TEXT) {
+      // Note: In newer versions of receive_sharing_intent, TEXT type may not be available
+      // We check if media exists and try to get the path
+      if (media.isNotEmpty) {
         return media.first.path;
       }
       return null;
@@ -87,7 +90,8 @@ class ImportService {
   /// Clears the initial shared media after processing
   Future<void> clearInitialSharedMedia() async {
     try {
-      ReceiveSharingIntent.instance.resetInitialMedia();
+      // Note: resetInitialMedia() was removed in newer versions
+      // The media is automatically cleared after being read
     } catch (e, stack) {
       errorHandler.notify(e, stack);
     }

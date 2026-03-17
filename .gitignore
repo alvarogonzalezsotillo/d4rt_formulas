@@ -19,3 +19,5 @@
 .build-container-cache
 /coverage/
 /.agent-shell/
+/ios/
+/macos/

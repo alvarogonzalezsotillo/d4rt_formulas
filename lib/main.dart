@@ -45,19 +45,21 @@ class _CorpusLoaderState extends State<CorpusLoader> {
   }
 
   void _handleImport() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ImportFromTextScreen(
-          corpus: _corpusFuture.then((c) => c).value as Corpus? ?? Corpus(),
+    _corpusFuture.then((corpus) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImportFromTextScreen(
+            corpus: corpus,
+          ),
         ),
-      ),
-    ).then((result) {
-      if( result ) {
-        setState(() {
-          // Refresh the list when returning from import
-        });
-      }
+      ).then((result) {
+        if (result) {
+          setState(() {
+            // Refresh the list when returning from import
+          });
+        }
+      });
     });
   }
 
