@@ -81,23 +81,6 @@ class _FormulaListState extends State<FormulaList> {
     }
   }
 
-  void _editFormula(Formula formula) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FormulaEditor(
-          formula: formula,
-          corpus: widget.corpus,
-          onSave: (updatedFormula){
-            setState((){
-              // THIS UPDATES THE FORMULA LIST
-            });
-          }
-        ),
-      ),
-    );
-  }
-
   void _copyFormula(Formula formula) async {
     try {
       final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
@@ -137,22 +120,6 @@ class _FormulaListState extends State<FormulaList> {
     );
   }
 
-  void _importFromText() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ImportFromTextScreen(
-          corpus: widget.corpus,
-        ),
-      ),
-    ).then((result) {
-      if (result == true) {
-        setState(() {
-          // Refresh the list when returning from import
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,13 +150,9 @@ class _FormulaListState extends State<FormulaList> {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _editFormula(formula),
-                      tooltip: 'Edit Formula',
-                    ),
                     PopupMenuButton(
                       icon: const Icon(Icons.share),
+                      tooltip: 'Share or copy to clipboard',
                       onSelected: (value) {
                         if (value == 'share') {
                           _shareFormula(formula);

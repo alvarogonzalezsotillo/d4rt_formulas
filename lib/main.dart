@@ -83,7 +83,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
               title: const Text('Formulas'),
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.import_export),
+                  icon: const Icon(Icons.library_add),
                   tooltip: 'Import formulas',
                   onPressed: _handleImport,
                 ),
