@@ -1,6 +1,7 @@
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'ai/import_from_text_screen.dart';
 import 'database/database_service.dart';
 import 'service_locator.dart';
 
