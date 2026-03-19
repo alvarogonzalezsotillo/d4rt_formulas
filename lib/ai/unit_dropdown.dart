@@ -22,10 +22,10 @@ class UnitDropdown extends StatelessWidget {
     final availableUnits = unitNames.map((name) => corpus.getUnit(name)).toList();
 
     return SizedBox(
-      width: 200, // Constrain dropdown width
+      width: 50, // Constrain dropdown width
       child: DropdownButton<String>(
         value: selectedUnit ?? variable.unit,
-      selectedItemBuilder: (context) => availableUnits.map((unit) => 
+      selectedItemBuilder: (context) => availableUnits.map((unit) =>
         SizedBox(
           width: 200,
           child: Text(unit.symbol, overflow: TextOverflow.ellipsis),
@@ -41,7 +41,7 @@ class UnitDropdown extends StatelessWidget {
           value: unit.name,
           child: SizedBox(
             width: 200, // Fixed width for all items
-            child: Text("${unit.symbol} - ${unit.name}", 
+            child: Text("${unit.symbol} - ${unit.name}",
               style: const TextStyle(fontSize: 14),
               overflow: TextOverflow.ellipsis,
             ),

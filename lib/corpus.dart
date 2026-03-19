@@ -223,7 +223,7 @@ class Corpus{
 
   /// Loads formula elements, making sure to load units first, then formulas
   /// to avoid dependency issues.
-  void loadFormulaElements(List<FormulaElement> elements) {
+  void loadFormulaElements(List<FormulaElement> elements, [bool replaceOnDuplicates = false]) {
     List<UnitSpec> units = [];
     List<Formula> formulas = [];
 
@@ -239,10 +239,10 @@ class Corpus{
     }
 
     // Load units first to satisfy dependencies
-    loadUnits(units);
+    loadUnits(units, replaceOnDuplicates);
 
     // Then load formulas
-    loadFormulas(formulas);
+    loadFormulas(formulas, replaceOnDuplicates: replaceOnDuplicates, checkUnits: true);
   }
 
   /// Loads corpus from database elements

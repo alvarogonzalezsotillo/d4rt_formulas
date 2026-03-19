@@ -87,7 +87,7 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     }
 
     try {
-      widget.corpus.loadFormulaElements(selectedElements);
+      widget.corpus.loadFormulaElements(selectedElements, true);
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

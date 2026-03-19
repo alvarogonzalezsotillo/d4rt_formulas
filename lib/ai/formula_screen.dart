@@ -388,10 +388,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
         children: [
           // Fixed width for field name
           SizedBox(
-            width: 150,
+            width: 50,
             child: Text(
               variable.name,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.fade
             ),
           ),
           const SizedBox(width: 8), // Add some spacing
