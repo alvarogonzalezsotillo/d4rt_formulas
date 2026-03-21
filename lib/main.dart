@@ -9,7 +9,6 @@ import 'ai/formula_list.dart';
 import 'corpus.dart';
 import 'defaults/default_corpus.dart';
 import 'formula_models.dart' as models;
-import 'ai/import_preview_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +19,12 @@ void main() async {
   runApp(const MyApp());
 }
 
+final GlobalKey<_CorpusLoaderState> corpusLoaderKey = GlobalKey<_CorpusLoaderState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  get corpusFuture => corpusLoaderKey.currentState?._corpusFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +35,15 @@ class MyApp extends StatelessWidget {
 }
 
 class CorpusLoader extends StatefulWidget {
+  CorpusLoader({Key? key}) : super(key: corpusLoaderKey);
+
   @override
-  _CorpusLoaderState createState() => _CorpusLoaderState();
+  State<CorpusLoader> createState() => _CorpusLoaderState();
 }
 
 class _CorpusLoaderState extends State<CorpusLoader> {
   late Future<Corpus> _corpusFuture;
+
 
   @override
   void initState() {
