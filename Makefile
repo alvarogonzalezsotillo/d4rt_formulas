@@ -1,43 +1,45 @@
 
 all: build-container clean-container build-builders build-linux-debug-container
 
-DB=~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
+DATABASEFILE=~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
+
+FLUTTERW := $(shell if [ "$$CONTAINER_ID" = "" ]; then echo "./flutterw"; else echo "distrobox-host-exec $(CURDIR)/flutterw"; fi)
 
 build-container:
-	./flutterw --build-container
+	$(FLUTTERW) --build-container
 
 clean:
 	flutter clean
-	[ -f $(DB) ] && rm $(DB)
+	[ -f $(DATABASEFILE) ] && rm $(DATABASEFILE)
 
 clean-container:
 	rm -r .build-container-cache
-	./flutterw clean
+	$(FLUTTERW) clean
 
 
 pub-get-container:
-	./flutterw pub get
+	$(FLUTTERW) pub get
 
-test: 
-	./flutterw test
+test:
+	$(FLUTTERW) test
 
 build-builders:
-	./flutterw pub run build_runner build --delete-conflicting-outputs
+	$(FLUTTERW) pub run build_runner build --delete-conflicting-outputs
 
-build-android-release-container: 
-	./flutterw build apk --release
+build-android-release-container:
+	$(FLUTTERW) build apk --release
 
-build-linux-debug-container: 
-	./flutterw build linux --debug
+build-linux-debug-container:
+	$(FLUTTERW) build linux --debug
 
-build-web-debug-container: 
-	./flutterw build web --debug
+build-web-debug-container:
+	$(FLUTTERW) build web --debug
 
-run-linux-debug-container: 
-	./flutterw run -d linux
+run-linux-debug-container:
+	$(FLUTTERW) run -d linux
 
-run-web-debug-container: 
-	./flutterw run --web-port $${WEB_PORT:-8081} -d web-server
+run-web-debug-container:
+	$(FLUTTERW) run --web-port $${WEB_PORT:-8081} -d web-server
 
 run-linux-debug-native:
 	flutter run -d linux
