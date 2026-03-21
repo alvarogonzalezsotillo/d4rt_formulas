@@ -121,14 +121,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       late final dynamic result;
-      //if( formula is DerivedFormula) {
+      if( formula is DerivedFormula) {
         result = formulaSolver(formula, formula.output.name, inputValues,);
-      //}
-      //else {
-        // TODO: MAYBE ONLY FORMULASOLVER IS NECCESSARY"
-        //final evaluator = FormulaEvaluator();
-        //result = evaluator.evaluate(formula as Formula, inputValues);
-      //}
+      }
+      else {
+        final evaluator = FormulaEvaluator();
+        result = evaluator.evaluate(formula as Formula, inputValues);
+      }
 
       // Convert output to selected unit if needed
       String? unit = formula.output.unit;
@@ -342,7 +341,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           children: [
             // Fixed width for field name
             SizedBox(
-              width: 150,
+              width: 50,
               child: Text(
                 formula.output.name,
                 overflow: TextOverflow.ellipsis,
@@ -353,7 +352,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
             Expanded(
               child: TextFormField(
                 readOnly: true,
-                enabled: false,
+                enabled: true,
                 controller: TextEditingController(text: _result),
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -388,10 +387,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
         children: [
           // Fixed width for field name
           SizedBox(
-            width: 150,
+            width: 50,
             child: Text(
               variable.name,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.fade
             ),
           ),
           const SizedBox(width: 8), // Add some spacing

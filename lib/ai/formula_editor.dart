@@ -9,6 +9,9 @@ import '../database/database_service.dart';
 import '../service_locator.dart';
 import 'formula_screen.dart';
 import 'unit_dropdown.dart';
+import 'package:flutter_code_editor/flutter_code_editor.dart';
+import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:highlight/languages/dart.dart';
 
 /// A screen for editing a Formula's properties including name, description,
 /// input/output variables, and d4rt code.
@@ -17,12 +20,7 @@ class FormulaEditor extends StatefulWidget {
   final Corpus corpus;
   final Function(Formula)? onSave;
 
-  const FormulaEditor({
-    super.key,
-    required this.formula,
-    required this.corpus,
-    this.onSave,
-  });
+  const FormulaEditor({super.key, required this.formula, required this.corpus, this.onSave});
 
   @override
   State<FormulaEditor> createState() => _FormulaEditorState();
@@ -32,14 +30,14 @@ class _FormulaEditorState extends State<FormulaEditor> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
-  late TextEditingController _d4rtCodeController;
-  
+  late CodeController _d4rtCodeController;
+
   // Track input variables
   final List<_InputVariableRowData> _inputVariables = [];
-  
+
   // Output variable
   late _OutputVariableRowData _outputVariable;
-  
+
   bool _isPreviewVisible = false;
 
   @override
@@ -47,17 +45,19 @@ class _FormulaEditorState extends State<FormulaEditor> {
     super.initState();
     _nameController = TextEditingController(text: widget.formula.name);
     _descriptionController = TextEditingController(text: widget.formula.description ?? '');
-    _d4rtCodeController = TextEditingController(text: widget.formula.d4rtCode);
-    
+    _d4rtCodeController = CodeController(language: dart, text: widget.formula.d4rtCode ?? '');
+
     // Initialize input variables
     for (final input in widget.formula.input) {
-      _inputVariables.add(_InputVariableRowData(
-        nameController: TextEditingController(text: input.name),
-        unit: input.unit,
-        values: input.values != null ? List.from(input.values!) : null,
-      ));
+      _inputVariables.add(
+        _InputVariableRowData(
+          nameController: TextEditingController(text: input.name),
+          unit: input.unit,
+          values: input.values != null ? List.from(input.values!) : null,
+        ),
+      );
     }
-    
+
     // Initialize output variable
     _outputVariable = _OutputVariableRowData(
       nameController: TextEditingController(text: widget.formula.output.name),
@@ -79,11 +79,13 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
   void _addInputVariable() {
     setState(() {
-      _inputVariables.add(_InputVariableRowData(
-        nameController: TextEditingController(text: 'var${_inputVariables.length + 1}'),
-        unit: null,
-        values: null,
-      ));
+      _inputVariables.add(
+        _InputVariableRowData(
+          nameController: TextEditingController(text: 'var${_inputVariables.length + 1}'),
+          unit: null,
+          values: null,
+        ),
+      );
     });
   }
 
@@ -117,10 +119,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FormulaScreen(
-          formula: formula,
-          corpus: widget.corpus,
-        ),
+        builder: (context) => FormulaScreen(formula: formula, corpus: widget.corpus),
       ),
     );
   }
@@ -159,17 +158,12 @@ class _FormulaEditorState extends State<FormulaEditor> {
     try {
       final input = <VariableSpec>[];
       for (final variable in _inputVariables) {
-        input.add(VariableSpec(
-          name: variable.nameController.text.trim(),
-          unit: variable.unit,
-          values: variable.values,
-        ));
+        input.add(
+          VariableSpec(name: variable.nameController.text.trim(), unit: variable.unit, values: variable.values),
+        );
       }
 
-      final output = VariableSpec(
-        name: _outputVariable.nameController.text.trim(),
-        unit: _outputVariable.unit,
-      );
+      final output = VariableSpec(name: _outputVariable.nameController.text.trim(), unit: _outputVariable.unit);
 
       return Formula(
         uuid: widget.formula.uuid,
@@ -177,7 +171,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
         description: _descriptionController.text.isEmpty ? null : _descriptionController.text,
         input: input,
         output: output,
-        d4rtCode: _d4rtCodeController.text,
+        d4rtCode: _d4rtCodeController.fullText,
         tags: widget.formula.tags, // Preserve existing tags
       );
     } catch (e) {
@@ -296,21 +290,9 @@ class _FormulaEditorState extends State<FormulaEditor> {
       appBar: AppBar(
         title: const Text('Edit Formula'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.play_arrow),
-            onPressed: _testFormula,
-            tooltip: 'Test Formula',
-          ),
-          IconButton(
-            icon: const Icon(Icons.copy),
-            onPressed: _saveFormulaAsCopy,
-            tooltip: 'Save as copy',
-          ),
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveFormula,
-            tooltip: 'Save',
-          ),
+          IconButton(icon: const Icon(Icons.play_arrow), onPressed: _testFormula, tooltip: 'Test Formula'),
+          IconButton(icon: const Icon(Icons.copy), onPressed: _saveFormulaAsCopy, tooltip: 'Save as copy'),
+          IconButton(icon: const Icon(Icons.save), onPressed: _saveFormula, tooltip: 'Save'),
         ],
       ),
       body: Form(
@@ -363,13 +345,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Description (Markdown)',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const Text('Description (Markdown)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -400,13 +376,8 @@ class _FormulaEditorState extends State<FormulaEditor> {
                 child: Markdown(
                   data: _descriptionController.text,
                   shrinkWrap: true,
-                  builders: {
-                    'latex': LatexElementBuilder(),
-                  },
-                  extensionSet: markdown.ExtensionSet(
-                    [LatexBlockSyntax()],
-                    [LatexInlineSyntax()],
-                  ),
+                  builders: {'latex': LatexElementBuilder()},
+                  extensionSet: markdown.ExtensionSet([LatexBlockSyntax()], [LatexInlineSyntax()]),
                 ),
               ),
               const SizedBox(height: 16),
@@ -432,13 +403,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Input Variables',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            const Text('Input Variables', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             ..._inputVariables.asMap().entries.map((entry) {
               final index = entry.key;
@@ -470,10 +435,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   flex: 2,
                   child: TextFormField(
                     controller: variable.nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -530,7 +492,8 @@ class _FormulaEditorState extends State<FormulaEditor> {
                             final unitSpec = widget.corpus.getUnit(unit);
                             return DropdownMenuItem<String?>(
                               value: unit,
-                              child: Text('${unitSpec.symbol} - ${unit}', 
+                              child: Text(
+                                '${unitSpec.symbol} - ${unit}',
                                 style: const TextStyle(fontSize: 14),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -567,13 +530,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Output Variable',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            const Text('Output Variable', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -581,10 +538,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   flex: 2,
                   child: TextFormField(
                     controller: _outputVariable.nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: const InputDecoration(labelText: 'Name', border: OutlineInputBorder()),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -641,7 +595,8 @@ class _FormulaEditorState extends State<FormulaEditor> {
                             final unitSpec = widget.corpus.getUnit(unit);
                             return DropdownMenuItem<String?>(
                               value: unit,
-                              child: Text('${unitSpec.symbol} - ${unit}', 
+                              child: Text(
+                                '${unitSpec.symbol} - ${unit}',
                                 style: const TextStyle(fontSize: 14),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -667,67 +622,18 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
   Widget _buildD4rtCodeSection() {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'D4RT Code',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+      child: Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: CodeTheme(
+            data: CodeThemeData(styles: monokaiSublimeTheme),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: CodeField(controller: _d4rtCodeController),
               ),
             ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).dividerColor),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        topRight: Radius.circular(4),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.code, size: 16, color: Theme.of(context).colorScheme.primary),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Dart Syntax',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  TextFormField(
-                    controller: _d4rtCodeController,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter D4RT/Dart code here',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(12),
-                    ),
-                    maxLines: 10,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -763,19 +669,12 @@ class _InputVariableRowData {
   String? unit;
   List<dynamic>? values;
 
-  _InputVariableRowData({
-    required this.nameController,
-    this.unit,
-    this.values,
-  });
+  _InputVariableRowData({required this.nameController, this.unit, this.values});
 }
 
 class _OutputVariableRowData {
   final TextEditingController nameController;
   String? unit;
 
-  _OutputVariableRowData({
-    required this.nameController,
-    this.unit,
-  });
+  _OutputVariableRowData({required this.nameController, this.unit});
 }

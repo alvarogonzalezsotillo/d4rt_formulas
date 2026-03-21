@@ -37,7 +37,6 @@ abstract class SetUtils {
   }
 
   /// Escapes special characters in a string for use in D4RT literals
-  @deprecated
   static String escapeD4rtString(String input) {
     return input
         .replaceAll(r'\\', r'\\\\') // escape backslashes first
@@ -75,9 +74,9 @@ abstract class SetUtils {
   /// Uses JSON-like formatting but for Dart language, with proper indentation.
   static String prettyPrint(dynamic value, {int indent = 0}) {
     if (value   is String) {
-      return _prettyPrintString(value, indent);
+      return _prettyPrintString(value);
     } else if (value is num) {
-      return _prettyPrintNumber(value, indent);
+      return _prettyPrintNumber(value);
     } else if (value is Set) {
       return _prettyPrintSet(value, indent);
     } else if (value is List) {
@@ -90,15 +89,15 @@ abstract class SetUtils {
   }
 
   /// Pretty prints a simple string, escaping special characters if needed.
-  static String _prettyPrintString(String s, int indent) {
+  static String _prettyPrintString(String s) {
     // Check if the string needs raw string formatting (newlines, $, backslashes, quotes)
     final needsRawString = s.contains('\n') ||
         s.contains(r'$') ||
         s.contains(r'\\') ||
         s.contains('"');
 
-    if (needsRawString) {
-      return _prettyPrintRawString(s, indent);
+    if (needsRawString && s != '"' ) {
+      return _prettyPrintRawString(s);
     }
 
     // Simple string with escaped quotes
@@ -107,7 +106,7 @@ abstract class SetUtils {
   }
 
   /// Pretty prints a number.
-  static String _prettyPrintNumber(num n, int indent) {
+  static String _prettyPrintNumber(num n) {
     return n.toString();
   }
 
@@ -157,9 +156,16 @@ abstract class SetUtils {
 
   /// Pretty prints a raw string (for strings containing newlines, $, backslashes, etc.)
   /// Uses Dart's raw string syntax r"""..."""
-  static String _prettyPrintRawString(String s, int indent) {
-    // Escape triple quotes by replacing """ with ""\"
-    final escaped = s.replaceAll('"""', r'""\\"');
-    return 'r"""$escaped"""';
+  static String _prettyPrintRawString(String s) {
+    if( s == '"'){
+      return "'\"";
+    }
+    if( s.contains('"""') && s.contains("'''") ){
+      return escapeD4rtString(s);
+    }
+    if( s.contains('"""') ){
+      return "r'''$s'''";
+    }
+    return 'r"""$s"""';
   }
 }

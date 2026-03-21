@@ -7,13 +7,17 @@ import 'formula_screen.dart';
 import 'package:share_plus/share_plus.dart' as share_plus;
 import 'formula_editor.dart';
 import 'package:share_plus/share_plus.dart';
+import 'import_preview_screen.dart';
+import '../services/import_service.dart';
 
 class FormulaList extends StatefulWidget {
   final Corpus corpus;
+  final VoidCallback? onImport;
 
   const FormulaList({
     super.key,
     required this.corpus,
+    this.onImport,
   });
 
   @override
@@ -77,23 +81,6 @@ class _FormulaListState extends State<FormulaList> {
     }
   }
 
-  void _editFormula(Formula formula) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FormulaEditor(
-          formula: formula,
-          corpus: widget.corpus,
-          onSave: (updatedFormula){
-            setState((){
-              // THIS UPDATES THE FORMULA LIST
-            });
-          }
-        ),
-      ),
-    );
-  }
-
   void _copyFormula(Formula formula) async {
     try {
       final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
@@ -133,6 +120,7 @@ class _FormulaListState extends State<FormulaList> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -162,13 +150,9 @@ class _FormulaListState extends State<FormulaList> {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _editFormula(formula),
-                      tooltip: 'Edit Formula',
-                    ),
                     PopupMenuButton(
                       icon: const Icon(Icons.share),
+                      tooltip: 'Share or copy to clipboard',
                       onSelected: (value) {
                         if (value == 'share') {
                           _shareFormula(formula);

@@ -1,6 +1,7 @@
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'ai/import_from_text_screen.dart';
 import 'database/database_service.dart';
 import 'service_locator.dart';
 
@@ -18,8 +19,12 @@ void main() async {
   runApp(const MyApp());
 }
 
+final GlobalKey<_CorpusLoaderState> corpusLoaderKey = GlobalKey<_CorpusLoaderState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  get corpusFuture => corpusLoaderKey.currentState?._corpusFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +35,39 @@ class MyApp extends StatelessWidget {
 }
 
 class CorpusLoader extends StatefulWidget {
+  CorpusLoader({Key? key}) : super(key: corpusLoaderKey);
+
   @override
-  _CorpusLoaderState createState() => _CorpusLoaderState();
+  State<CorpusLoader> createState() => _CorpusLoaderState();
 }
 
 class _CorpusLoaderState extends State<CorpusLoader> {
   late Future<Corpus> _corpusFuture;
 
+
   @override
   void initState() {
     super.initState();
     _corpusFuture = loadCorpusFromDatabaseOrAssets();
+  }
+
+  void _handleImport() {
+    _corpusFuture.then((corpus) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImportFromTextScreen(
+            corpus: corpus,
+          ),
+        ),
+      ).then((result) {
+        if (result) {
+          setState(() {
+            // Refresh the list when returning from import
+          });
+        }
+      });
+    });
   }
 
   @override
@@ -59,9 +86,19 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           // If the corpus is empty (user chose not to load default), we could handle that here
           // For now, just display the formula list
           return Scaffold(
-            appBar: AppBar(title: const Text('Formulas')),
+            appBar: AppBar(
+              title: const Text('Formulas'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.library_add),
+                  tooltip: 'Import formulas',
+                  onPressed: _handleImport,
+                ),
+              ],
+            ),
             body: FormulaList(
               corpus: snapshot.data!,
+              onImport: _handleImport,
             ),
           );
         }
