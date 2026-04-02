@@ -9,7 +9,7 @@
   - `flutter pub get` --> `./flutterw pub get`
   - `flutter run -d linux` --> `./flutterw run -d linux`
 - See `./Makefile` for more examples.
-- If you are an agent, you may be also containerized. Try `distrobox-host-exec $(pwd)/flutterw`
+- If you are an agent, you may be also containerized. If podman or docker is not available, try `distrobox-host-exec ./flutterw`
 
 
 # MANDATORY WORKFLOW

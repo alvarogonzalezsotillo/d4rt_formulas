@@ -16,26 +16,28 @@ void main() async {
   // Setup service locator and initialize the database
   setupLocator();
 
-  runApp(const MyApp());
+  var corpusFuture = loadCorpusFromDatabaseOrAssets();
+
+  runApp( MyApp(corpusFuture));
 }
 
 final GlobalKey<_CorpusLoaderState> corpusLoaderKey = GlobalKey<_CorpusLoaderState>();
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  get corpusFuture => corpusLoaderKey.currentState?._corpusFuture;
+  final Future<Corpus> corpusFuture;
+  MyApp(this.corpusFuture, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CorpusLoader(),
+      home: CorpusLoader(corpusFuture),
     );
   }
 }
 
 class CorpusLoader extends StatefulWidget {
-  CorpusLoader({Key? key}) : super(key: corpusLoaderKey);
+  final Future<Corpus> corpusFuture;
+  CorpusLoader(this.corpusFuture, {Key? key}) : super(key: corpusLoaderKey);
 
   @override
   State<CorpusLoader> createState() => _CorpusLoaderState();
@@ -44,11 +46,10 @@ class CorpusLoader extends StatefulWidget {
 class _CorpusLoaderState extends State<CorpusLoader> {
   late Future<Corpus> _corpusFuture;
 
-
   @override
   void initState() {
     super.initState();
-    _corpusFuture = loadCorpusFromDatabaseOrAssets();
+    _corpusFuture = widget.corpusFuture;
   }
 
   void _handleImport() {

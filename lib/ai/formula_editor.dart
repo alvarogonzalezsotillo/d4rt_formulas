@@ -443,17 +443,17 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Base Unit', style: TextStyle(fontSize: 12)),
                       DropdownButtonFormField<String?>(
                         value: _getBaseUnit(variable.unit),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: "Base unit",
                           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                         ),
                         items: [
                           const DropdownMenuItem<String?>(
                             value: null,
-                            child: Text('None', style: TextStyle(fontSize: 14)),
+                             child: Text('None', style: TextStyle(fontSize: 14)),
                           ),
                           ..._getAllBaseUnits().map((baseUnit) {
                             return DropdownMenuItem<String?>(
@@ -476,11 +476,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Derived Unit', style: TextStyle(fontSize: 12)),
                       DropdownButtonFormField<String?>(
                         value: variable.unit,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: "Derived unit",
                           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                         ),
                         items: [
@@ -546,11 +546,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Base Unit', style: TextStyle(fontSize: 12)),
                       DropdownButtonFormField<String?>(
                         value: _getBaseUnit(_outputVariable.unit),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: "Base unit",
                           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                         ),
                         items: [
@@ -579,11 +579,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Derived Unit', style: TextStyle(fontSize: 12)),
                       DropdownButtonFormField<String?>(
                         value: _outputVariable.unit,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
+                          labelText: "Derived unit",
                           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                         ),
                         items: [
