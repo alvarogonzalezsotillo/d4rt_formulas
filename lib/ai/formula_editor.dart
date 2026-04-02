@@ -439,74 +439,74 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownButtonFormField<String?>(
-                        value: _getBaseUnit(variable.unit),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Base unit",
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                        ),
-                        items: [
-                          const DropdownMenuItem<String?>(
-                            value: null,
-                             child: Text('None', style: TextStyle(fontSize: 14)),
-                          ),
-                          ..._getAllBaseUnits().map((baseUnit) {
-                            return DropdownMenuItem<String?>(
-                              value: baseUnit,
-                              child: Text(baseUnit, style: const TextStyle(fontSize: 14)),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (baseUnit) {
-                          setState(() {
-                            variable.unit = baseUnit;
-                          });
-                        },
+                Flexible(
+                  flex: 1,
+                  child: DropdownButtonFormField<String?>(
+                    isDense: true,
+                    isExpanded: true,
+                    value: _getBaseUnit(variable.unit),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Base unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
+                    dropdownColor: Theme.of(context).colorScheme.surface,
+                    menuMaxHeight: 300,
+                    items: [
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                         child: Text('None', style: TextStyle(fontSize: 11)),
                       ),
+                      ..._getAllBaseUnits().map((baseUnit) {
+                        return DropdownMenuItem<String?>(
+                          value: baseUnit,
+                          child: Text(baseUnit, style: const TextStyle(fontSize: 11)),
+                        );
+                      }).toList(),
                     ],
+                    onChanged: (baseUnit) {
+                      setState(() {
+                        variable.unit = baseUnit;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownButtonFormField<String?>(
-                        value: variable.unit,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Derived unit",
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                        ),
-                        items: [
-                          const DropdownMenuItem<String?>(
-                            value: null,
-                            child: Text('None', style: TextStyle(fontSize: 14)),
-                          ),
-                          ..._getDerivedUnits(variable.unit).map((unit) {
-                            final unitSpec = widget.corpus.getUnit(unit);
-                            return DropdownMenuItem<String?>(
-                              value: unit,
-                              child: Text(
-                                '${unitSpec.symbol} - ${unit}',
-                                style: const TextStyle(fontSize: 14),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (unit) {
-                          setState(() {
-                            variable.unit = unit;
-                          });
-                        },
+                Flexible(
+                  flex: 1,
+                  child: DropdownButtonFormField<String?>(
+                    isDense: true,
+                    isExpanded: true,
+                    value: variable.unit,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
+                    dropdownColor: Theme.of(context).colorScheme.surface,
+                    menuMaxHeight: 300,
+                    items: [
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('None', style: TextStyle(fontSize: 10)),
                       ),
+                      ..._getDerivedUnits(variable.unit).map((unit) {
+                        final unitSpec = widget.corpus.getUnit(unit);
+                        return DropdownMenuItem<String?>(
+                          value: unit,
+                          child: Text(
+                            '${unitSpec.symbol}',
+                            style: const TextStyle(fontSize: 10),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
                     ],
+                    onChanged: (unit) {
+                      setState(() {
+                        variable.unit = unit;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -514,6 +514,8 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   icon: const Icon(Icons.delete, color: Colors.red),
                   onPressed: () => _removeInputVariable(index),
                   tooltip: 'Delete variable',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                 ),
               ],
             ),
@@ -542,74 +544,74 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownButtonFormField<String?>(
-                        value: _getBaseUnit(_outputVariable.unit),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Base unit",
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                        ),
-                        items: [
-                          const DropdownMenuItem<String?>(
-                            value: null,
-                            child: Text('None', style: TextStyle(fontSize: 14)),
-                          ),
-                          ..._getAllBaseUnits().map((baseUnit) {
-                            return DropdownMenuItem<String?>(
-                              value: baseUnit,
-                              child: Text(baseUnit, style: const TextStyle(fontSize: 14)),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (baseUnit) {
-                          setState(() {
-                            _outputVariable.unit = baseUnit;
-                          });
-                        },
+                Flexible(
+                  flex: 1,
+                  child: DropdownButtonFormField<String?>(
+                    isDense: true,
+                    isExpanded: true,
+                    value: _getBaseUnit(_outputVariable.unit),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Base unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
+                    dropdownColor: Theme.of(context).colorScheme.surface,
+                    menuMaxHeight: 300,
+                    items: [
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('None', style: TextStyle(fontSize: 11)),
                       ),
+                      ..._getAllBaseUnits().map((baseUnit) {
+                        return DropdownMenuItem<String?>(
+                          value: baseUnit,
+                          child: Text(baseUnit, style: const TextStyle(fontSize: 11)),
+                        );
+                      }).toList(),
                     ],
+                    onChanged: (baseUnit) {
+                      setState(() {
+                        _outputVariable.unit = baseUnit;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DropdownButtonFormField<String?>(
-                        value: _outputVariable.unit,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Derived unit",
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                        ),
-                        items: [
-                          const DropdownMenuItem<String?>(
-                            value: null,
-                            child: Text('None', style: TextStyle(fontSize: 14)),
-                          ),
-                          ..._getDerivedUnits(_outputVariable.unit).map((unit) {
-                            final unitSpec = widget.corpus.getUnit(unit);
-                            return DropdownMenuItem<String?>(
-                              value: unit,
-                              child: Text(
-                                '${unitSpec.symbol} - ${unit}',
-                                style: const TextStyle(fontSize: 14),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (unit) {
-                          setState(() {
-                            _outputVariable.unit = unit;
-                          });
-                        },
+                Flexible(
+                  flex: 1,
+                  child: DropdownButtonFormField<String?>(
+                    isDense: true,
+                    isExpanded: true,
+                    value: _outputVariable.unit,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
+                    dropdownColor: Theme.of(context).colorScheme.surface,
+                    menuMaxHeight: 300,
+                    items: [
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('None', style: TextStyle(fontSize: 10)),
                       ),
+                      ..._getDerivedUnits(_outputVariable.unit).map((unit) {
+                        final unitSpec = widget.corpus.getUnit(unit);
+                        return DropdownMenuItem<String?>(
+                          value: unit,
+                          child: Text(
+                            '${unitSpec.symbol}',
+                            style: const TextStyle(fontSize: 10),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
                     ],
+                    onChanged: (unit) {
+                      setState(() {
+                        _outputVariable.unit = unit;
+                      });
+                    },
                   ),
                 ),
               ],
@@ -622,18 +624,23 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
   Widget _buildD4rtCodeSection() {
     return Card(
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: CodeTheme(
-            data: CodeThemeData(styles: monokaiSublimeTheme),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: CodeField(controller: _d4rtCodeController),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('D4RT Code (Dart syntax)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 200),
+              child: CodeTheme(
+                data: CodeThemeData(styles: monokaiSublimeTheme),
+                child: SingleChildScrollView(
+                  child: CodeField(controller: _d4rtCodeController),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

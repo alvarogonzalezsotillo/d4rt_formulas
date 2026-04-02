@@ -57,16 +57,15 @@ class _CorpusLoaderState extends State<CorpusLoader> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ImportFromTextScreen(
-            corpus: corpus,
-          ),
+          builder: (context) =>
+              ImportFromTextScreen(
+                corpus: corpus,
+              ),
         ),
       ).then((result) {
-        if (result) {
-          setState(() {
-            // Refresh the list when returning from import
-          });
-        }
+        setState(() {
+          // Refresh the list when returning from import
+        });
       });
     });
   }

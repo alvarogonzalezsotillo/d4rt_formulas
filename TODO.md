@@ -79,6 +79,7 @@
   - It will show a screen with a text editor with dart syntax and a button "paste".
   - The "paste" button will copy the clipboard into the text editor.
   - A second button "import" will use the import preview screen
+ -[R] Launch test app_test.dart. Iterate until the test pass.
 - [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.
 - [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
 - [ ] When importing FormulaElements, save the FormulaElements in the database (currently, they are only added to the Corpus in memory).
