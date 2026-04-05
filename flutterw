@@ -7,6 +7,8 @@ BUILDCACHE=./.build-container-cache
 DOCKERFILE=./docker/Dockerfile
 IMAGE=d4rt-formulas-builder
 
+ALL_ARGS="$@"
+
 detect_container_manager(){
 
     if [ "$DOCKER" != "" ]
@@ -18,6 +20,12 @@ detect_container_manager(){
     elif command -v docker > /dev/null 2>&1
     then     
         DOCKER=docker
+    elif [ -n "$DISTROBOX_HOST_HOME" ]
+    then
+        echo "Detected distrobox, as DISTROBOX_HOST_HOME is defined"
+        echo "Please try to run this script as: "
+        echo "  distrobox-host-exec $0 $ALL_ARGS"
+        exit 3
     else
         echo "Error: no container manager detected (like 'docker' or 'podman'), please define DOCKER variable"
         exit 2
