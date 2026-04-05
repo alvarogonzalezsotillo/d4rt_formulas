@@ -7,8 +7,12 @@ import 'package:uuid/uuid.dart';
 
 typedef Number = double;
 
+String _generateUuidV4() => Uuid().v4();
+
 /// Abstract base class for formula elements
 abstract class FormulaElement {
+  String get uuid;
+
   Map<String, dynamic> toMap();
 
   String toStringLiteral() {
@@ -18,6 +22,8 @@ abstract class FormulaElement {
 }
 
 class UnitSpec extends FormulaElement {
+  @override
+  final String uuid;
   final String name;
   final String baseUnit;
   final String symbol;
@@ -28,6 +34,7 @@ class UnitSpec extends FormulaElement {
   @override
   Map<String, dynamic> toMap() {
     return {
+      'uuid': uuid,
       "name": name,
       "baseUnit": baseUnit,
       "symbol": symbol,
@@ -38,32 +45,35 @@ class UnitSpec extends FormulaElement {
   }
 
   UnitSpec({
+    String? uuid,
     required this.name,
     required this.baseUnit,
     required this.symbol,
     this.factorFromUnitToBase,
     this.codeFromBaseToUnit,
     this.codeFromUnitToBase,
-  });
+  }) : uuid = uuid ?? _generateUuidV4();
 
   factory UnitSpec.fromSet(Map<Object?, Object?> theSet) {
+    String? uuid = theSet['uuid'] as String?;
     String name = SetUtils.stringValue(theSet, "name");
     String symbol = SetUtils.stringValue(theSet, "symbol");
 
     if (theSet.containsKey("isBase")) {
-      return UnitSpec(name: name, baseUnit: name, symbol: symbol, factorFromUnitToBase: 1);
+      return UnitSpec(uuid: uuid, name: name, baseUnit: name, symbol: symbol, factorFromUnitToBase: 1);
     }
 
     String baseUnit = SetUtils.stringValue(theSet, "baseUnit");
 
     if (theSet.containsKey("factor")) {
       Number factorFromUnitToBase = SetUtils.numberValue(theSet, "factor");
-      return UnitSpec(name: name, baseUnit: baseUnit, symbol: symbol, factorFromUnitToBase: factorFromUnitToBase);
+      return UnitSpec(uuid: uuid, name: name, baseUnit: baseUnit, symbol: symbol, factorFromUnitToBase: factorFromUnitToBase);
     } else if (theSet.containsKey("toBase")) {
       String codeFromBaseToUnit = SetUtils.stringValue(theSet, "fromBase");
       String codeFromUnitToBase = SetUtils.stringValue(theSet, "toBase");
 
       return UnitSpec(
+        uuid: uuid,
         name: name,
         baseUnit: baseUnit,
         symbol: symbol,
@@ -84,7 +94,7 @@ class UnitSpec extends FormulaElement {
   }
 }
 
-class VariableSpec extends FormulaElement {
+class VariableSpec{
   final String name;
   final String? unit;
   final List<dynamic>? values;
@@ -98,7 +108,7 @@ class VariableSpec extends FormulaElement {
     };
   }
 
-  VariableSpec({required this.name, this.unit, this.values}) {
+  VariableSpec({required this.name, this.unit, this.values}){
     validate();
   }
 
@@ -127,8 +137,6 @@ class VariableSpec extends FormulaElement {
   @override
   int get hashCode => Object.hash(unit, name, values != null ? const DeepCollectionEquality().hash(values!) : 0);
 }
-
-String _generateUuidV4() => Uuid().v4();
 
 abstract class FormulaInterface {
   String get uuid;

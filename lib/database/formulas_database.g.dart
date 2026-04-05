@@ -9,18 +9,14 @@ class $FormulaElementsTable extends FormulaElements
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $FormulaElementsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _uuidMeta = const VerificationMeta('uuid');
   @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
+  late final GeneratedColumn<String> uuid = GeneratedColumn<String>(
+    'uuid',
     aliasedName,
     false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _elementTextMeta = const VerificationMeta(
     'elementText',
@@ -34,7 +30,7 @@ class $FormulaElementsTable extends FormulaElements
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [id, elementText];
+  List<GeneratedColumn> get $columns => [uuid, elementText];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -47,8 +43,13 @@ class $FormulaElementsTable extends FormulaElements
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    if (data.containsKey('uuid')) {
+      context.handle(
+        _uuidMeta,
+        uuid.isAcceptableOrUnknown(data['uuid']!, _uuidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uuidMeta);
     }
     if (data.containsKey('element_text')) {
       context.handle(
@@ -65,14 +66,14 @@ class $FormulaElementsTable extends FormulaElements
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
+  Set<GeneratedColumn> get $primaryKey => {uuid};
   @override
   FormulaElement map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FormulaElement(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
+      uuid: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}uuid'],
       )!,
       elementText: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -88,20 +89,20 @@ class $FormulaElementsTable extends FormulaElements
 }
 
 class FormulaElement extends DataClass implements Insertable<FormulaElement> {
-  final int id;
+  final String uuid;
   final String elementText;
-  const FormulaElement({required this.id, required this.elementText});
+  const FormulaElement({required this.uuid, required this.elementText});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
+    map['uuid'] = Variable<String>(uuid);
     map['element_text'] = Variable<String>(elementText);
     return map;
   }
 
   FormulaElementsCompanion toCompanion(bool nullToAbsent) {
     return FormulaElementsCompanion(
-      id: Value(id),
+      uuid: Value(uuid),
       elementText: Value(elementText),
     );
   }
@@ -112,7 +113,7 @@ class FormulaElement extends DataClass implements Insertable<FormulaElement> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FormulaElement(
-      id: serializer.fromJson<int>(json['id']),
+      uuid: serializer.fromJson<String>(json['uuid']),
       elementText: serializer.fromJson<String>(json['elementText']),
     );
   }
@@ -120,18 +121,19 @@ class FormulaElement extends DataClass implements Insertable<FormulaElement> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
+      'uuid': serializer.toJson<String>(uuid),
       'elementText': serializer.toJson<String>(elementText),
     };
   }
 
-  FormulaElement copyWith({int? id, String? elementText}) => FormulaElement(
-    id: id ?? this.id,
-    elementText: elementText ?? this.elementText,
-  );
+  FormulaElement copyWith({String? uuid, String? elementText}) =>
+      FormulaElement(
+        uuid: uuid ?? this.uuid,
+        elementText: elementText ?? this.elementText,
+      );
   FormulaElement copyWithCompanion(FormulaElementsCompanion data) {
     return FormulaElement(
-      id: data.id.present ? data.id.value : this.id,
+      uuid: data.uuid.present ? data.uuid.value : this.uuid,
       elementText: data.elementText.present
           ? data.elementText.value
           : this.elementText,
@@ -141,61 +143,72 @@ class FormulaElement extends DataClass implements Insertable<FormulaElement> {
   @override
   String toString() {
     return (StringBuffer('FormulaElement(')
-          ..write('id: $id, ')
+          ..write('uuid: $uuid, ')
           ..write('elementText: $elementText')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, elementText);
+  int get hashCode => Object.hash(uuid, elementText);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FormulaElement &&
-          other.id == this.id &&
+          other.uuid == this.uuid &&
           other.elementText == this.elementText);
 }
 
 class FormulaElementsCompanion extends UpdateCompanion<FormulaElement> {
-  final Value<int> id;
+  final Value<String> uuid;
   final Value<String> elementText;
+  final Value<int> rowid;
   const FormulaElementsCompanion({
-    this.id = const Value.absent(),
+    this.uuid = const Value.absent(),
     this.elementText = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   FormulaElementsCompanion.insert({
-    this.id = const Value.absent(),
+    required String uuid,
     required String elementText,
-  }) : elementText = Value(elementText);
+    this.rowid = const Value.absent(),
+  }) : uuid = Value(uuid),
+       elementText = Value(elementText);
   static Insertable<FormulaElement> custom({
-    Expression<int>? id,
+    Expression<String>? uuid,
     Expression<String>? elementText,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
+      if (uuid != null) 'uuid': uuid,
       if (elementText != null) 'element_text': elementText,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   FormulaElementsCompanion copyWith({
-    Value<int>? id,
+    Value<String>? uuid,
     Value<String>? elementText,
+    Value<int>? rowid,
   }) {
     return FormulaElementsCompanion(
-      id: id ?? this.id,
+      uuid: uuid ?? this.uuid,
       elementText: elementText ?? this.elementText,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
+    if (uuid.present) {
+      map['uuid'] = Variable<String>(uuid.value);
     }
     if (elementText.present) {
       map['element_text'] = Variable<String>(elementText.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
     }
     return map;
   }
@@ -203,8 +216,9 @@ class FormulaElementsCompanion extends UpdateCompanion<FormulaElement> {
   @override
   String toString() {
     return (StringBuffer('FormulaElementsCompanion(')
-          ..write('id: $id, ')
-          ..write('elementText: $elementText')
+          ..write('uuid: $uuid, ')
+          ..write('elementText: $elementText, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -225,13 +239,15 @@ abstract class _$FormulasDatabase extends GeneratedDatabase {
 
 typedef $$FormulaElementsTableCreateCompanionBuilder =
     FormulaElementsCompanion Function({
-      Value<int> id,
+      required String uuid,
       required String elementText,
+      Value<int> rowid,
     });
 typedef $$FormulaElementsTableUpdateCompanionBuilder =
     FormulaElementsCompanion Function({
-      Value<int> id,
+      Value<String> uuid,
       Value<String> elementText,
+      Value<int> rowid,
     });
 
 class $$FormulaElementsTableFilterComposer
@@ -243,8 +259,8 @@ class $$FormulaElementsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnFilters<String> get uuid => $composableBuilder(
+    column: $table.uuid,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -263,8 +279,8 @@ class $$FormulaElementsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
+  ColumnOrderings<String> get uuid => $composableBuilder(
+    column: $table.uuid,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -283,8 +299,8 @@ class $$FormulaElementsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<String> get uuid =>
+      $composableBuilder(column: $table.uuid, builder: (column) => column);
 
   GeneratedColumn<String> get elementText => $composableBuilder(
     column: $table.elementText,
@@ -329,16 +345,23 @@ class $$FormulaElementsTableTableManager
               $$FormulaElementsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                Value<String> uuid = const Value.absent(),
                 Value<String> elementText = const Value.absent(),
-              }) => FormulaElementsCompanion(id: id, elementText: elementText),
+                Value<int> rowid = const Value.absent(),
+              }) => FormulaElementsCompanion(
+                uuid: uuid,
+                elementText: elementText,
+                rowid: rowid,
+              ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
+                required String uuid,
                 required String elementText,
+                Value<int> rowid = const Value.absent(),
               }) => FormulaElementsCompanion.insert(
-                id: id,
+                uuid: uuid,
                 elementText: elementText,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
