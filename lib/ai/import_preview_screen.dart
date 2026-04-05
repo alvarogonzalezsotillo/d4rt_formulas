@@ -4,6 +4,7 @@ import 'package:d4rt_formulas/formula_models.dart';
 import 'package:d4rt_formulas/corpus.dart';
 import 'package:d4rt_formulas/ai/formula_editor.dart';
 import 'package:d4rt_formulas/services/import_service.dart';
+import 'package:d4rt_formulas/service_locator.dart';
 
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
@@ -28,11 +29,7 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     super.initState();
     // Select all by default
     for (final element in widget.elements) {
-      if (element is Formula) {
-        _selectedUuids.add(element.uuid);
-      } else if (element is UnitSpec) {
-        _selectedUuids.add(element.name);
-      }
+      _selectedUuids.add(element.uuid);
     }
   }
 
@@ -59,14 +56,9 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     }
   }
 
-  void _importSelected() {
+  Future<void> _importSelected() async {
     final selectedElements = widget.elements.where((element) {
-      if (element is Formula) {
-        return _selectedUuids.contains(element.uuid);
-      } else if (element is UnitSpec) {
-        return _selectedUuids.contains(element.name);
-      }
-      return false;
+      return _selectedUuids.contains(element.uuid);
     }).toList();
 
     if (selectedElements.isEmpty) {
@@ -78,6 +70,17 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
 
     try {
       widget.corpus.loadFormulaElements(selectedElements, true);
+
+      // Save imported elements to the database
+      final database = getDatabase();
+      for (final element in selectedElements) {
+        final existingElement = await database.getFormulaElementByUuid(element.uuid);
+        if (existingElement != null) {
+          await database.updateFormulaElement(element.uuid, element.toStringLiteral());
+        } else {
+          await database.insertFormulaElement(element.uuid, element.toStringLiteral());
+        }
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -186,7 +189,7 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
   }
 
   Widget _buildUnitTile(UnitSpec unit) {
-    final isSelected = _selectedUuids.contains(unit.name);
+    final isSelected = _selectedUuids.contains(unit.uuid);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -196,9 +199,9 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
           onChanged: (value) {
             setState(() {
               if (value == true) {
-                _selectedUuids.add(unit.name);
+                _selectedUuids.add(unit.uuid);
               } else {
-                _selectedUuids.remove(unit.name);
+                _selectedUuids.remove(unit.uuid);
               }
             });
           },

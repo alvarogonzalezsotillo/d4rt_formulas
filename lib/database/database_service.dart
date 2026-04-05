@@ -31,64 +31,39 @@ extension CorpusDatabaseExtension on FormulasDatabase {
     // Clear existing elements first
     await delete(formulaElements).go();
 
-    // Insert new elements
+    // Insert new elements with their UUIDs
     for (final element in elements) {
-      await insertFormulaElement(element.toStringLiteral());
+      await insertFormulaElement(element.uuid, element.toStringLiteral());
     }
   }
 
   // Method to update a formula in the database by UUID
   Future<bool> updateFormula(models.Formula formula) async {
-    final elements = await getAllFormulaElements();
-
-    for (final element in elements) {
-      try {
-        final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
-        if (parsed.isNotEmpty && parsed.first is models.Formula) {
-          final existingFormula = parsed.first as models.Formula;
-          if (existingFormula.uuid == formula.uuid) {
-            // Update this element
-            await updateFormulaElement(
-              element.id,
-              formula.toStringLiteral()
-            );
-            return true;
-          }
-        }
-      } catch (e) {
-        print('Error parsing database element during update: $e');
-        continue;
-      }
+    final existingElement = await getFormulaElementByUuid(formula.uuid);
+    if (existingElement != null) {
+      await updateFormulaElement(formula.uuid, formula.toStringLiteral());
+      return true;
     }
-
-    return false; // Formula not found
+    return false;
   }
 
   // Method to add a new formula to the database
   Future<void> addFormula(models.Formula formula) async {
-    await insertFormulaElement(formula.toStringLiteral());
+    await insertFormulaElement(formula.uuid, formula.toStringLiteral());
   }
 
-  // Method to delete a formula from the database by name
+  // Method to add a new formula element (formula or unit) to the database
+  Future<void> addFormulaElement(models.FormulaElement element) async {
+    await insertFormulaElement(element.uuid, element.toStringLiteral());
+  }
+
+  // Method to delete a formula from the database by UUID
   Future<bool> deleteFormula(String uuid) async {
-    final elements = await getAllFormulaElements();
-    
-    for (final element in elements) {
-      try {
-        final parsed = SetUtils.parseCorpusElements('[${element.elementText}]');
-        if (parsed.isNotEmpty && parsed.first is models.Formula) {
-          final existingFormula = parsed.first as models.Formula;
-          if (existingFormula.uuid == uuid) {
-            await deleteFormulaElement(element.id);
-            return true;
-          }
-        }
-      } catch (e) {
-        print('Error parsing database element during delete: $e');
-        continue;
-      }
+    final existingElement = await getFormulaElementByUuid(uuid);
+    if (existingElement != null) {
+      await deleteFormulaElement(uuid);
+      return true;
     }
-    
-    return false; // Formula not found
+    return false;
   }
 }

@@ -80,6 +80,10 @@
   - The "paste" button will copy the clipboard into the text editor.
   - A second button "import" will use the import preview screen
  -[R] Launch test app_test.dart. Iterate until the test pass.
-- [ ] Add a uuid column to the table or FormulaElements, so it is not necessary to load all the formulas to find a formula by uuid. This will improve performance when updating and deleting.
-- [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
+- [R] Unify UUID and id of FormulaElement
+  - UUID is in memory
+  - id is in database
+  - remove id from database, add UUID to database
+- [ ] Solve exception in _CorpusLoaderState.build() when GetIt.instance.registerSingleton<Corpus>(corpus) after importing formula, since there is already registeted.  
 - [ ] When importing FormulaElements, save the FormulaElements in the database (currently, they are only added to the Corpus in memory).
+- [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
