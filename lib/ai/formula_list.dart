@@ -164,20 +164,22 @@ class _FormulaListState extends State<FormulaList> {
                         PopupMenuItem(
                           value: 'share',
                           child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.share),
-                              SizedBox(width: 8),
-                              Text('Share'),
+                              const Icon(Icons.share, size: 20),
+                              const SizedBox(width: 8),
+                              Flexible(child: Text('Share', softWrap: false)),
                             ],
                           ),
                         ),
                         PopupMenuItem(
                           value: 'copy',
                           child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.copy),
-                              SizedBox(width: 8),
-                              Text('Copy to clipboard'),
+                              const Icon(Icons.copy, size: 20),
+                              const SizedBox(width: 8),
+                              Flexible(child: Text('Copy to clipboard', softWrap: false)),
                             ],
                           ),
                         ),

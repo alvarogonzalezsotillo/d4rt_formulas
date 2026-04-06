@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:d4rt_formulas/formula_models.dart';
@@ -76,8 +77,10 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
       for (final element in selectedElements) {
         final existingElement = await database.getFormulaElementByUuid(element.uuid);
         if (existingElement != null) {
+          // Update existing element
           await database.updateFormulaElement(element.uuid, element.toStringLiteral());
         } else {
+          // Insert new element
           await database.insertFormulaElement(element.uuid, element.toStringLiteral());
         }
       }
@@ -90,7 +93,8 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
       );
 
       Navigator.pop(context, true);
-    } catch (e) {
+    } catch (e,st) {
+      errorHandler.notify('Error importing formula elements: $e', st);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Error importing: $e'), backgroundColor: Colors.red));

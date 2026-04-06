@@ -81,10 +81,8 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           }
 
           var corpus = snapshot.data!;
-          GetIt.instance.registerSingleton<Corpus>(corpus);
+          _registerCorpusInstance(corpus);
 
-          // If the corpus is empty (user chose not to load default), we could handle that here
-          // For now, just display the formula list
           return Scaffold(
             appBar: AppBar(
               title: const Text('Formulas'),
@@ -105,6 +103,20 @@ class _CorpusLoaderState extends State<CorpusLoader> {
         return const Center(child: CircularProgressIndicator());
       },
     );
+  }
+
+  void _registerCorpusInstance(Corpus corpus) {
+    var existingCorpus = GetIt.instance.isRegistered<Corpus>() ? GetIt.instance.get<Corpus>() : null;
+    if (existingCorpus == null ) {
+      print( "Registering corpus in GetIt for the first time." );
+      GetIt.instance.registerSingleton<Corpus>(corpus);
+    }
+    else if( existingCorpus == corpus ){
+      print( "The corpus was already registered and is the same instance, no need to re-register." );
+    }
+    else if( existingCorpus != corpus ){
+      throw Exception( "The corpus was already registered but is a different instance. This should not happen." );
+    }
   }
 }
 
