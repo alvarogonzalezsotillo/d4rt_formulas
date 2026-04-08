@@ -86,5 +86,10 @@
   - id is in database
   - remove id from database, add UUID to database
 - [X] Solve exception in _CorpusLoaderState.build() when GetIt.instance.registerSingleton<Corpus>(corpus) after importing formula, since there is already registeted.
-- [ ] When importing FormulaElements, save the FormulaElements in the database (currently, they are only added to the Corpus in memory).
-- [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
+- [R] When importing FormulaElements, save the FormulaElements in the database (currently, they are only added to the Corpus in memory).
+- [ ] Include an http server in the application (linux and android).
+  - Add a rule in Makefile to create a zip file  with the contents of ./build/web in the ./assets/generated directory -> ./assets/generated/webapp.zip
+  - Add webapp.zip as a flutter asset
+  - In the /static path, serve the files contained in webapp.zip
+- [ ] Ensure database is loaded if the file exist, and not use default corpus allways.
+- [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator inside the output variable while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
