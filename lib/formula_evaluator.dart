@@ -415,6 +415,7 @@ Number functionSolver(
 
     while (iter < maxNewtonIters) {
       final Number y = f(x);
+      print( "iter: $iter x: $x y: $y");
       if (y == 0 || y.abs() <= maxDelta) {
         return x;
       }
@@ -446,9 +447,16 @@ Number functionSolver(
 
   try {
     return searchNewton();
-  } catch (e) {
-    var approx = searchApproximately(hint, hint + step);
-    return binarySearch(approx[0], approx[1]);
+  } catch (e1) {
+    try {
+      var approx = searchApproximately(hint, hint + step);
+      return binarySearch(approx[0], approx[1]);
+    }
+    catch( e2 ){
+      errorHandler.notify(e1);
+      errorHandler.notify(e2);
+      throw NoSolutionException("Failed to find a root using both Newton-Raphson and approximate search: $e1 -- $e2");
+    }
   }
 
 }
