@@ -19,7 +19,7 @@ This law combines Boyle's, Charles's and Avogadro's laws.
 """,
     "input": [
       {"name": "n", "unit": "mole"},
-      {"name": "T", "unit": "kelvin"},
+      {"name": "T", "unit": "Kelvin"},
       {"name": "V", "unit": "cubic meter"}
     ],
     "output": {"name": "P", "unit": "pascal"},

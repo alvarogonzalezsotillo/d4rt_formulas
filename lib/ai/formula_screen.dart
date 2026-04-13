@@ -7,6 +7,7 @@ import '../formula_models.dart';
 import '../formula_evaluator.dart';
 import '../corpus.dart';
 import '../error_handler.dart';
+import '../value_formatter.dart';
 import 'd4rt_editing_controller.dart';
 import 'unit_dropdown.dart';
 import 'formula_editor.dart';
@@ -133,7 +134,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       String? unit = formula.output.unit;
       if (unit != null && result is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
-        _result = converted.toStringAsFixed(2);
+        _result = formatOutput(converted);
       } else {
         _result = result?.toString();
       }
@@ -353,7 +354,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
               child: TextFormField(
                 readOnly: true,
                 enabled: true,
-                controller: TextEditingController(text: _result),
+                controller: TextEditingController(text: formatOutput(_result)),
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   filled: true,

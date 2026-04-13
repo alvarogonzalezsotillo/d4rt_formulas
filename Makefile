@@ -10,7 +10,7 @@ build-container:
 
 clean:
 	flutter clean
-	[ -f $(DATABASEFILE) ] && rm $(DATABASEFILE)
+	[ -f $(DATABASEFILE) ] && rm $(DATABASEFILE) || true
 
 clean-container:
 	rm -r .build-container-cache

@@ -112,6 +112,7 @@ class Corpus{
         throw ArgumentError("Duplicate unit:$unit");
       }
       _allUnits[unit.name] = unit;
+      _baseToUnits[unit.baseUnit]?.remove(unit.name);
       _baseToUnits[unit.baseUnit]?.add(unit.name);
     }
   }
