@@ -245,13 +245,6 @@ class Corpus{
     loadFormulas(formulas, replaceOnDuplicates: replaceOnDuplicates, checkUnits: true);
   }
 
-  /// Loads corpus from database elements
-  static Future<Corpus> fromDatabaseElements(List<FormulaElement> elements) async {
-    final corpus = Corpus();
-    corpus.loadFormulaElements(elements);
-    return corpus;
-  }
-
   /// Returns the formula, the units of the formula, and all the units from the corpus with the same base unit.
   List<FormulaElement> withDependencies(Formula formula) {
     final result = <FormulaElement>{};
