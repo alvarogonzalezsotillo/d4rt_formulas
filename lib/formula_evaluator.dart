@@ -423,7 +423,7 @@ Number functionSolver(
       final Number dy = numericalDerivative(x);
 
       if (dy == 0 || dy.abs() < 1e-12) {
-        throw NoSolutionException("Derivative is zero or too small, cannot continue Newton-Raphson.");
+        throw NoSolutionException("Derivative is zero or too small, cannot continue Newton-Raphson: $dy");
       }
 
       final Number delta = y / dy;
@@ -436,7 +436,7 @@ Number functionSolver(
       // If step exploded, cap the step to a reasonable multiple of `step`
       final Number maxStepAllowed = step * 1e6;
       if ((xNew - x).abs() > maxStepAllowed) {
-        xNew = x + (delta.isNegative ? -maxStepAllowed : maxStepAllowed);
+        xNew = x - (delta.isNegative ? -maxStepAllowed : maxStepAllowed);
       }
 
       x = xNew;

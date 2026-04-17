@@ -9,6 +9,7 @@ import '../corpus.dart';
 import '../error_handler.dart';
 import '../value_formatter.dart';
 import 'd4rt_editing_controller.dart';
+import 'formula_list.dart';
 import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 
@@ -157,6 +158,42 @@ class _FormulaScreenState extends State<FormulaScreen> {
       appBar: AppBar(
         title: Text(formula.name),
         actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.share),
+            tooltip: 'Share or copy to clipboard',
+            onSelected: (value) {
+              if (value == 'share') {
+                FormulaList.shareFormula(formula.originalFormula);
+              } else if (value == 'copy') {
+                FormulaList.copyFormula(context, formula.originalFormula);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'share',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.share, size: 20),
+                    const SizedBox(width: 8),
+                    Flexible(child: Text('Share', softWrap: false)),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'copy',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.copy, size: 20),
+                    const SizedBox(width: 8),
+                    Flexible(child: Text('Copy to clipboard', softWrap: false)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: formula is DerivedFormula
