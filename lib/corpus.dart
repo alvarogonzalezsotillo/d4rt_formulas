@@ -275,4 +275,11 @@ class Corpus{
     return result.toList();
   }
 
+  void forgetFormula(Formula formula) {
+    for (final tag in formula.tags) {
+      _tags[tag]?.remove(formula);
+    }
+    _allFormulas.remove(formula.uuid);
+  }
+
 }

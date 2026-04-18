@@ -156,41 +156,7 @@ class _FormulaListState extends State<FormulaList> {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    PopupMenuButton(
-                      icon: const Icon(Icons.share),
-                      tooltip: 'Share or copy to clipboard',
-                      onSelected: (value) {
-                        if (value == 'share') {
-                          FormulaList.shareFormula(formula);
-                        } else if (value == 'copy') {
-                          FormulaList.copyFormula(context, formula);
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: 'share',
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.share, size: 20),
-                              const SizedBox(width: 8),
-                              Flexible(child: Text('Share', softWrap: false)),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 'copy',
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.copy, size: 20),
-                              const SizedBox(width: 8),
-                              Flexible(child: Text('Copy to clipboard', softWrap: false)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    // TOTHINK: Add buttons here, but I don't know which ones
                   ],
                 ),
                 onTap: () {

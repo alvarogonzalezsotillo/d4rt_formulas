@@ -1,4 +1,5 @@
 // dart
+import 'package:d4rt_formulas/database/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
@@ -7,6 +8,7 @@ import '../formula_models.dart';
 import '../formula_evaluator.dart';
 import '../corpus.dart';
 import '../error_handler.dart';
+import '../service_locator.dart';
 import '../value_formatter.dart';
 import 'd4rt_editing_controller.dart';
 import 'formula_list.dart';
@@ -195,27 +197,68 @@ class _FormulaScreenState extends State<FormulaScreen> {
           ),
 
           IconButton(
+            icon: const Icon(Icons.delete_forever),
+            onPressed: () {
+              print( "Borrando");
+              showAlertDialog(BuildContext context) {
+                // set up the buttons
+                Widget cancelButton = TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+                Widget deleteButton = TextButton(
+                  child: Text("Delete"),
+                  onPressed: () {
+                    widget.corpus.forgetFormula(formula.originalFormula);
+                    getDatabase().deleteFormula(formula.originalFormula.uuid);
+                    Navigator.of(context)
+                      ..pop()..pop();
+                  },
+                );
+
+                // set up the AlertDialog
+                AlertDialog alert = AlertDialog(
+                  title: Text("Delete Formula"),
+                  content: Text("Please confirm deletion of formula ${formula.name}"),
+                  actions: [
+                    cancelButton,
+                    deleteButton,
+                  ],
+                );
+                return alert;
+              }
+              // show the dialog
+              showDialog(
+                context: context,
+                builder: showAlertDialog
+              );
+            },
+            tooltip: "Delete formula"
+          ),
+          IconButton(
             icon: const Icon(Icons.edit),
             onPressed: formula is DerivedFormula
                 ? null
                 : () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            FormulaEditor(
-                              formula: formula as Formula,
-                              corpus: widget.corpus,
-                              onSave: (updatedFormula) {
-                                widget.onSave?.call(updatedFormula);
-                                setState(() {
-                                  formula = updatedFormula;
-                                });
-                              },
-                            ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FormulaEditor(
+                        formula: formula as Formula,
+                        corpus: widget.corpus,
+                        onSave: (updatedFormula) {
+                          widget.onSave?.call(updatedFormula);
+                          setState(() {
+                            formula = updatedFormula;
+                          });
+                        },
                       ),
-                    );
-                  },
+                ),
+              );
+            },
             tooltip: formula is DerivedFormula
                 ? 'Cannot edit derived formula'
                 : 'Edit Formula',

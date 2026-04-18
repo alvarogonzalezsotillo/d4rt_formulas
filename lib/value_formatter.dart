@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 String? formatOutput(dynamic result) {
   if (result == null) return null;
+  return result.toString();
 
   // Try to parse as number to format with commas
   if (result is num) {
