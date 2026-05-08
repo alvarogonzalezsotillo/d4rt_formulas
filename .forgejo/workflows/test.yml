@@ -9,9 +9,6 @@ jobs:
   run-script:
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
-      # - name: Run script 1
-      #  run: ./test.sh
       - name: Run script 1
         run: uname -a
       - name: Run script 2
@@ -24,3 +21,6 @@ jobs:
         run: hostname -I
       - name: Run script 6
         run: hostname
+      - uses: actions/checkout@v4
+      - name: Run script 1
+        run: ./test.sh
