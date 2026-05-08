@@ -1,0 +1,11 @@
+name: run-on-push
+on:
+  push:
+    branches: [ main ]
+jobs:
+  run-script:
+    runs-on: self-hosted  # or the label your runner provides
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run script
+        run: ./test.sh
