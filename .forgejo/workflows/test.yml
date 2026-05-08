@@ -11,4 +11,10 @@ jobs:
     steps:
       # - uses: actions/checkout@v4
       - name: Run script
-        run: ./test.sh
+      #  run: ./test.sh
+        run: uname -a
+        run: date
+        run: whoami
+        run: pwd
+        run: hostname -I
+        run: hostname
