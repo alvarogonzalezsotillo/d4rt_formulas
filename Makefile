@@ -20,7 +20,7 @@ clean-container:
 pub-get-container:
 	$(FLUTTERW) pub get
 
-test:
+run-test:
 	$(FLUTTERW) test
 
 build-builders:
