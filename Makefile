@@ -10,7 +10,7 @@ build-container:
 
 clean:
 	flutter clean
-	[ -f $(DATABASEFILE) ] && rm $(DATABASEFILE)
+	[ -f $(DATABASEFILE) ] && rm $(DATABASEFILE) || true
 
 clean-container:
 	rm -r .build-container-cache
@@ -34,6 +34,13 @@ build-linux-debug-container:
 
 build-web-debug-container:
 	$(FLUTTERW) build web --debug
+
+# Zip web build for embedding as asset
+assets/generated/webapp.zip: build/web
+	mkdir -p assets/generated
+	cd build/web && zip -r ../../assets/generated/webapp.zip .
+
+build-webapp-zip: assets/generated/webapp.zip
 
 run-linux-debug-container:
 	$(FLUTTERW) run -d linux

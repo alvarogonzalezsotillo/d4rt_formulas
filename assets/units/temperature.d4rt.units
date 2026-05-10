@@ -1,6 +1,5 @@
 [
   {"name": "Kelvin", "symbol": "K", "isBase": true},
-  {"name": "kelvin", "symbol": "K", "baseUnit": "Kelvin", "factor": 1},
   {
     "name": "Celsius",
     "symbol": "°C",

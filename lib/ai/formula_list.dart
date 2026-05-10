@@ -1,6 +1,8 @@
+import 'package:d4rt_formulas/error_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For Clipboard
 import 'package:d4rt_formulas/formula_models.dart';
+import 'package:get_it/get_it.dart';
 import '../corpus.dart';
 import '../set_utils.dart';
 import 'formula_screen.dart';
@@ -22,6 +24,53 @@ class FormulaList extends StatefulWidget {
 
   @override
   State<FormulaList> createState() => _FormulaListState();
+
+  static String _formulaAndDependenciesToExportStringLiteral(Formula formula) {
+    final corpus = GetIt.instance.get<Corpus>();
+    final dependencies = corpus.withDependencies(formula);
+    final dependenciesAsMap = dependencies.map((f) => f.toMap()).toList();
+    for( final f in dependenciesAsMap ){
+      f.remove("uuid");
+    }
+    return SetUtils.prettyPrint(dependenciesAsMap);
+  }
+
+
+  static void shareFormula(Formula formula) async {
+    try {
+      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
+
+      // Share the string
+      await share_plus.SharePlus.instance.share(
+        share_plus.ShareParams(
+          text: exportString,
+          subject: 'Sharing formula: ${formula.name}',
+        ),
+      );
+    } catch (e, st) {
+      errorHandler.notify(e, st);
+    }
+  }
+
+  static void copyFormula(BuildContext context, Formula formula) async {
+    try {
+      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
+
+      // Copy to clipboard
+      await Clipboard.setData(ClipboardData(text: exportString));
+
+      // Show a snackbar to confirm
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Formula and dependencies copied to clipboard!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e, st) {
+      errorHandler.notify(e, st);
+    }
+  }
+
 }
 
 class _FormulaListState extends State<FormulaList> {
@@ -56,49 +105,6 @@ class _FormulaListState extends State<FormulaList> {
     }).toList();
   }
 
-  String _formulaAndDependenciesToExportStringLiteral(Formula formula) {
-    final dependencies = widget.corpus.withDependencies(formula);
-    final dependenciesAsMap = dependencies.map((f) => f.toMap()).toList();
-    for( final f in dependenciesAsMap ){
-      f.remove("uuid");
-    }
-    return SetUtils.prettyPrint(dependenciesAsMap);
-  }
-
-  void _shareFormula(Formula formula) async {
-    try {
-      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
-
-      // Share the string
-      await share_plus.SharePlus.instance.share(
-        share_plus.ShareParams(
-          text: exportString,
-          subject: 'Sharing formula: ${formula.name}',
-        ),
-      );
-    } catch (e) {
-      _showErrorDialog('Error sharing formula: $e');
-    }
-  }
-
-  void _copyFormula(Formula formula) async {
-    try {
-      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
-      
-      // Copy to clipboard
-      await Clipboard.setData(ClipboardData(text: exportString));
-      
-      // Show a snackbar to confirm
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Formula and dependencies copied to clipboard!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      _showErrorDialog('Error copying formula: $e');
-    }
-  }
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -150,41 +156,7 @@ class _FormulaListState extends State<FormulaList> {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    PopupMenuButton(
-                      icon: const Icon(Icons.share),
-                      tooltip: 'Share or copy to clipboard',
-                      onSelected: (value) {
-                        if (value == 'share') {
-                          _shareFormula(formula);
-                        } else if (value == 'copy') {
-                          _copyFormula(formula);
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: 'share',
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.share, size: 20),
-                              const SizedBox(width: 8),
-                              Flexible(child: Text('Share', softWrap: false)),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: 'copy',
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.copy, size: 20),
-                              const SizedBox(width: 8),
-                              Flexible(child: Text('Copy to clipboard', softWrap: false)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    // TOTHINK: Add buttons here, but I don't know which ones
                   ],
                 ),
                 onTap: () {

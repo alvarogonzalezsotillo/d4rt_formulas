@@ -91,5 +91,7 @@
   - Add a rule in Makefile to create a zip file  with the contents of ./build/web in the ./assets/generated directory -> ./assets/generated/webapp.zip
   - Add webapp.zip as a flutter asset
   - In the /static path, serve the files contained in webapp.zip
-- [ ] Ensure database is loaded if the file exist, and not use default corpus allways.
+- [X] Ensure database is loaded if the file exist, and not use default corpus allways.
+- [ ] Ensure more room for formula title in FormulaScreen. Maybe a marquee or another row for buttons or both.
+- [ ] In android, images in description are not shown.
 - [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator inside the output variable while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.

@@ -1,4 +1,5 @@
 // dart
+import 'package:d4rt_formulas/database/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
@@ -7,7 +8,10 @@ import '../formula_models.dart';
 import '../formula_evaluator.dart';
 import '../corpus.dart';
 import '../error_handler.dart';
+import '../service_locator.dart';
+import '../value_formatter.dart';
 import 'd4rt_editing_controller.dart';
+import 'formula_list.dart';
 import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 
@@ -133,7 +137,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       String? unit = formula.output.unit;
       if (unit != null && result is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
-        _result = converted.toStringAsFixed(2);
+        _result = formatOutput(converted);
       } else {
         _result = result?.toString();
       }
@@ -156,28 +160,105 @@ class _FormulaScreenState extends State<FormulaScreen> {
       appBar: AppBar(
         title: Text(formula.name),
         actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.share),
+            tooltip: 'Share or copy to clipboard',
+            onSelected: (value) {
+              if (value == 'share') {
+                FormulaList.shareFormula(formula.originalFormula);
+              } else if (value == 'copy') {
+                FormulaList.copyFormula(context, formula.originalFormula);
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'share',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.share, size: 20),
+                    const SizedBox(width: 8),
+                    Flexible(child: Text('Share', softWrap: false)),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'copy',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.copy, size: 20),
+                    const SizedBox(width: 8),
+                    Flexible(child: Text('Copy to clipboard', softWrap: false)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          IconButton(
+            icon: const Icon(Icons.delete_forever),
+            onPressed: () {
+              print( "Borrando");
+              showAlertDialog(BuildContext context) {
+                // set up the buttons
+                Widget cancelButton = TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+                Widget deleteButton = TextButton(
+                  child: Text("Delete"),
+                  onPressed: () {
+                    widget.corpus.forgetFormula(formula.originalFormula);
+                    getDatabase().deleteFormula(formula.originalFormula.uuid);
+                    Navigator.of(context)
+                      ..pop()..pop();
+                  },
+                );
+
+                // set up the AlertDialog
+                AlertDialog alert = AlertDialog(
+                  title: Text("Delete Formula"),
+                  content: Text("Please confirm deletion of formula ${formula.name}"),
+                  actions: [
+                    cancelButton,
+                    deleteButton,
+                  ],
+                );
+                return alert;
+              }
+              // show the dialog
+              showDialog(
+                context: context,
+                builder: showAlertDialog
+              );
+            },
+            tooltip: "Delete formula"
+          ),
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: formula is DerivedFormula
                 ? null
                 : () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            FormulaEditor(
-                              formula: formula as Formula,
-                              corpus: widget.corpus,
-                              onSave: (updatedFormula) {
-                                widget.onSave?.call(updatedFormula);
-                                setState(() {
-                                  formula = updatedFormula;
-                                });
-                              },
-                            ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      FormulaEditor(
+                        formula: formula as Formula,
+                        corpus: widget.corpus,
+                        onSave: (updatedFormula) {
+                          widget.onSave?.call(updatedFormula);
+                          setState(() {
+                            formula = updatedFormula;
+                          });
+                        },
                       ),
-                    );
-                  },
+                ),
+              );
+            },
             tooltip: formula is DerivedFormula
                 ? 'Cannot edit derived formula'
                 : 'Edit Formula',
@@ -353,7 +434,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
               child: TextFormField(
                 readOnly: true,
                 enabled: true,
-                controller: TextEditingController(text: _result),
+                controller: TextEditingController(text: formatOutput(_result)),
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   filled: true,

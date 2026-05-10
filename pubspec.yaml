@@ -53,6 +53,7 @@ dependencies:
   collection: 
   share_plus:
   receive_sharing_intent:
+  archive: ^4.0.9
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +89,7 @@ flutter:
   assets:
     - assets/units/
     - assets/formulas/
+    - assets/generated/webapp.zip
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

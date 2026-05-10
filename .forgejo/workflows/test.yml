@@ -1,0 +1,26 @@
+name: run-on-push
+on:
+  push:
+    branches:
+      - master
+      # - feature/embed-http-server
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run script 1
+        run: uname -a
+      - name: Run script 2
+        run: date
+      - name: Run script 3
+        run: whoami
+      - name: Run script 4
+        run: pwd
+      - name: Run script 5
+        run: hostname -I
+      - name: Run script 6
+        run: hostname
+      - uses: actions/checkout@v4
+      - name: Run script 1
+        run: ./test.sh

@@ -142,7 +142,9 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
       return defaultCorpus;
     } else {
       // Load corpus from database elements
-      return await Corpus.fromDatabaseElements(dbElements);
+      final corpus = Corpus();
+      corpus.loadFormulaElements(dbElements, true);
+      return corpus;
     }
   } catch (e, st) {
     // If there's an error loading from database, fall back to default corpus

@@ -1,7 +1,8 @@
+import 'dart:math' as Math;
+
 import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'dart:math' as Math;
 
 
 void main() {
@@ -22,6 +23,20 @@ void main() {
       expect( solution, closeTo(5, 1e-10));
     });
 
+
+    test("Solve x formula", () {
+      final formula = Formula(
+        name: 'Test x',
+        input: [
+          VariableSpec(name: 'x', unit: 'scalar'),
+        ],
+        output: VariableSpec(name: 'y', unit: 'scalar'),
+        d4rtCode: 'y = x;',
+      );
+
+      var solution = formulaSolver(formula, "x", {"y": 123456789}, maxDelta: 1e-10);
+      expect(solution, closeTo(123456789, 1e-10));
+    });
   });
 
   group('Native functions', () {
@@ -75,5 +90,4 @@ void main() {
       expect(root, closeTo(Math.log(2), 0.01));
     });
   });
-
 }
