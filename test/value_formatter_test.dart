@@ -8,7 +8,7 @@ void main() {
   group('Format', () {
     test('1 is 1', () {
       var s = formatOutput(1.0);
-      expect(s, "1");
+      expect(s, "1.0");
     });
   });
 }

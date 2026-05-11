@@ -1,4 +1,4 @@
-name: run-on-push
+name: run-test-on-push
 on:
   push:
     branches:
@@ -21,6 +21,8 @@ jobs:
         run: hostname -I
       - name: Run script 6
         run: hostname
+      - name: Run script 7
+        run: env
       - uses: actions/checkout@v4
-      - name: Run script 1
+      - name: Run a script of repository
         run: ./test.sh
