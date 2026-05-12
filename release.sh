@@ -18,6 +18,7 @@ get_release_files(){
 
 main(){
   TAG=${GITHUB_REF#refs/tags/}
+  VERSION=${TAG#version-}
   build_release_files
   FILES="$(get_release_files)"
   gh release create $TAG $FILES
