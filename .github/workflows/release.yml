@@ -1,0 +1,25 @@
+name: Create release from tag
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'release-*'
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # needed to create releases
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Doit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: env
+
+      - name: Testgh
+        run: gh repo list
