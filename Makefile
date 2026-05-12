@@ -27,7 +27,7 @@ build-builders:
 	$(FLUTTERW) pub run build_runner build --delete-conflicting-outputs
 
 build-android-release-container:
-	$(FLUTTERW) build apk --releasetest
+	$(FLUTTERW) build apk --release
 
 build-linux-debug-container:
 	$(FLUTTERW) build linux --debug
