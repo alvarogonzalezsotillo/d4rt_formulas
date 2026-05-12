@@ -1,16 +1,18 @@
-#|/bin/bash -x
+#!/bin/bash -x
 echo "Ejecutando $0 en directorio $(pwd)"
 
 build_release_files(){
   make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container
+
+  echo " ----> Listando archivos en ./build"
+  find build/
+  echo " <----"
+
+  pushd build/web && zip -r ../../webapp.zip * && popd
+  pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
 }
 
 get_release_files(){
-  echo "---->Obteniendo archivos de release"
-  find build/
-  echo "<----"
-  pushd build/web && zip -r ../../webapp.zip * && popd
-  pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
   echo ./build/app/outputs/flutter-apk/app-release.apk linux-bin.zip webapp.zip
 }
 
