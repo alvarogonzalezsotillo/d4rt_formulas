@@ -6,6 +6,8 @@ build_release_files(){
 }
 
 get_release_files(){
+  find build/web
+  find build/linux/x64/release/bundle
   pushd build/web && zip -r ../../webapp.zip * && popd
   pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
   echo ./build/app/outputs/flutter-apk/app-release.apk linux-bin.zip webapp.zip
