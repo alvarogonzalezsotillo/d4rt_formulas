@@ -39,6 +39,10 @@ build-linux-release-container:
 build-web-debug-container:
 	$(FLUTTERW) build web --debug
 
+build-web-release-container:
+	$(FLUTTERW) build web --release
+
+
 run-linux-debug-container:
 	$(FLUTTERW) run -d linux
 
