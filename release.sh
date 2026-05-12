@@ -1,4 +1,4 @@
-#|/bin/bash
+#|/bin/bash -x
 echo "Ejecutando $0 en directorio $(pwd)"
 
 build_release_files(){
@@ -6,8 +6,8 @@ build_release_files(){
 }
 
 get_release_files(){
-  cd build/web && zip -r ../webapp.zip
-  zip --recurse-paths linux-bin.zip build/linux/x64/release/bundle/*
+  pushd build/web && zip -r ../../webapp.zip * && popd
+  pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
   echo ./build/app/outputs/flutter-apk/app-release.apk linux-bin.zip webapp.zip
 }
 
