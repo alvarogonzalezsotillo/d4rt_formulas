@@ -32,6 +32,10 @@ build-android-release-container:
 build-linux-debug-container:
 	$(FLUTTERW) build linux --debug
 
+build-linux-release-container:
+	$(FLUTTERW) build linux --release
+
+
 build-web-debug-container:
 	$(FLUTTERW) build web --debug
 
