@@ -21,5 +21,4 @@ main(){
   gh release create $TAG $FILES
 }
 
-get_release_files
-#main
+main
