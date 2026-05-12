@@ -20,14 +20,14 @@ clean-container:
 pub-get-container:
 	$(FLUTTERW) pub get
 
-run-test: build-container build-builders
+test:
 	$(FLUTTERW) test
 
 build-builders:
 	$(FLUTTERW) pub run build_runner build --delete-conflicting-outputs
 
 build-android-release-container:
-	$(FLUTTERW) build apk --release
+	$(FLUTTERW) build apk --releasetest
 
 build-linux-debug-container:
 	$(FLUTTERW) build linux --debug

@@ -1,13 +1,13 @@
 #|/bin/bash
-echo "Ejecutando $0 en directorio $(PWD)"
+echo "Ejecutando $0 en directorio $(pwd)"
 
 build_release_files(){
-  make build-android-release-container
+  make build-container build-builders test build-android-release-container
 }
 
 get_release_files(){
-  #find . | grep apk$
-  echo ./release.sh
+  #find . | grep flutter-apk | apk$
+  echo ./build/app/outputs/flutter-apk/app-release.apk
 }
 
 main(){
