@@ -24,12 +24,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: echo "Estoy en $(pwd)"; find $(pwd)
 
+
       - name: Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.38.9
-        run: |
+      - run: |
             flutter build apk --release
             flutter build linux --release
             flutter build web --release
