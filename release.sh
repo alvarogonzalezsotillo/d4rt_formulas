@@ -5,6 +5,8 @@ build_release_files(){
   (
     docker ps
     make build-container
+    pwd
+    ls -la
     ./flutterw --exec ls -la
   )
 
