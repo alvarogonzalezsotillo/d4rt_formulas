@@ -19,6 +19,7 @@ get_release_files(){
 main(){
   TAG=${GITHUB_REF#refs/tags/}
   VERSION=${TAG#version-}
+  apt update
   apt install -y podman
   build_release_files
   FILES="$(get_release_files)"
