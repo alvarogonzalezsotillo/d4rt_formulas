@@ -2,6 +2,8 @@
 echo "Ejecutando $0 en directorio $(pwd)"
 
 build_release_files(){
+  docker ps 
+  ./flutterw --exec ls -la
   make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container
 
   echo " ----> Listando archivos en ./build"
@@ -19,8 +21,6 @@ get_release_files(){
 main(){
   TAG=${GITHUB_REF#refs/tags/}
   VERSION=${TAG#version-}
-  apt update
-  apt install -y podman
   build_release_files
   FILES="$(get_release_files)"
   # gh release create $TAG $FILES
