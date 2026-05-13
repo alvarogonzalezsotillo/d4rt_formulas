@@ -21,3 +21,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./release.sh
+
+      - name: Create release
+        uses: https://code.forgejo.org/actions/forgejo-release@v2
+        with:
+          direction: upload
+          release-dir: .
+          tag: ${{ github.ref_name }}
+          files: |
+            ./build/app/outputs/flutter-apk/app-release.apk 
+            ./linux-bin.zip 
+            ./webapp.zip
+          env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -21,7 +21,7 @@ main(){
   VERSION=${TAG#version-}
   build_release_files
   FILES="$(get_release_files)"
-  gh release create $TAG $FILES
+  # gh release create $TAG $FILES
 }
 
 main
