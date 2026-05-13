@@ -24,10 +24,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: echo "Estoy en $(pwd)"; find $(pwd)
 
-      - name: Make
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./release.sh
+      - name: Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.38.9
+        run: |
+            flutter build apk --release
+            flutter build linux --release
+            flutter build web --release
+            pushd build/web && zip -r ../../webapp.zip * && popd
+            pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
 
       - name: Create release
         env:
