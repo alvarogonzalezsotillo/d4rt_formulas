@@ -2,7 +2,7 @@
 echo "Ejecutando $0 en directorio $(pwd)"
 
 build_release_files(){
-  docker ps 
+  docker ps
   ./flutterw --exec ls -la
   make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container
 
