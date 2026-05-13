@@ -2,8 +2,7 @@ name: run-test-on-push
 on:
   push:
     branches:
-      - master
-      # - feature/embed-http-server
+      - test
 
 jobs:
   run-script:

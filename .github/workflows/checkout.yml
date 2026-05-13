@@ -1,0 +1,21 @@
+name: Create release from tag
+
+on:
+  push:
+    tags:
+      - 'test*'
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # needed to create releases
+    steps:
+      - name: Environment Variables
+        run: pwd; env
+      - name: Checkout
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh repo clone $GITHUB_REPOSITORY -- --depth 1
+      - name: List files
+        run: find .
