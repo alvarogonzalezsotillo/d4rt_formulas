@@ -1,0 +1,21 @@
+name: Test checkout
+
+on:
+  push:
+    tags:
+      - 'test*'
+
+jobs:
+  test_checkout_no_actions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write     # needed to create releases
+    steps:
+      - name: Environment Variables
+        run: pwd; env
+      - name: Checkout
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh repo clone $GITHUB_REPOSITORY . -- --depth 1
+      - name: List files
+        run: find $(pwd)
