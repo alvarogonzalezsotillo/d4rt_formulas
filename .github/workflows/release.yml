@@ -19,6 +19,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: env
 
+      - name: Files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "Estoy en $(pwd)"; find $(pwd)
+
       - name: Make
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
