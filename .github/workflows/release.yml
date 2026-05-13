@@ -31,6 +31,7 @@ jobs:
           channel: stable
           flutter-version: 3.38.9
       - run: |
+            apt get -y cmake ninja-build
             flutter build linux --release
             flutter build web --release
             pushd build/web && zip -r ../../webapp.zip * && popd
