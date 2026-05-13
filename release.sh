@@ -7,7 +7,7 @@ build_release_files(){
     make build-container
     pwd
     ls -la
-    ./flutterw --exec ls -la
+    ./flutterw --exec sh -c "pwd; ls -la"
   )
 
   make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container

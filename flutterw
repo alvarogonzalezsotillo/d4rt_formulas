@@ -138,7 +138,7 @@ exec_in_container(){
             $GRAPHICOPTIONS \
             $SPIOPTIONS \
             -p ${WEBPORT:-8081}:8081 \
-            -v $BUILDCACHE:/cache:z \
+            -v $BUILDCACHE/sdks-flutter-bin-cache:/cache:z \
             -v .:/app:z \
             -e FLUTTER_FLAVOR=prod \
             d4rt-formulas-builder \
