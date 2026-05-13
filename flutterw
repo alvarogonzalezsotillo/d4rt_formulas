@@ -139,7 +139,7 @@ exec_in_container(){
             $SPIOPTIONS \
             -p ${WEBPORT:-8081}:8081 \
             -v $BUILDCACHE/sdks-flutter-bin-cache:/cache:z \
-            -v /workspace/alvaro/d4t_formulas:/app:z,rshared,shared \
+            -v .:/app:z,rshared \
             -e FLUTTER_FLAVOR=prod \
             d4rt-formulas-builder \
             "$@"
