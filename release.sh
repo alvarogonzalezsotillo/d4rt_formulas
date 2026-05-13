@@ -13,8 +13,8 @@ build_release_files(){
 
   make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container
 
-  echo " ----> Listando archivos en ./build"
-  find build/
+  echo " ----> Listando archivos en pwd"
+  find $(pwd)
   echo " <----"
 
   pushd build/web && zip -r ../../webapp.zip * && popd
