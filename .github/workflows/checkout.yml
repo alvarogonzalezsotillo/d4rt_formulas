@@ -18,4 +18,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh repo clone $GITHUB_REPOSITORY -- --depth 1
       - name: List files
-        run: find .
+        run: find $(pwd)
