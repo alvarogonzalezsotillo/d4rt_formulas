@@ -111,8 +111,17 @@ docker_options(){
     fi
 }
 
+tty_options(){
+  if sh -c ": >/dev/tty" >/dev/null 2>/dev/null; then
+      echo "-it"
+  else
+      echo ""
+  fi
+}
+
 exec_in_container(){
     local SPIOPTIONS=$(spi_options)
+    local TTYOPTIONS=$(tty_options)
     local GRAPHICOPTIONS=$(graphic_options)
     local DOCKEROPTIONS=$(docker_options)
     mkdir -p $BUILDCACHE/root-home/.config
@@ -120,7 +129,7 @@ exec_in_container(){
     mkdir -p $BUILDCACHE/sdks-flutter-bin-cache
 
     $DOCKER run \
-            -it \
+            $TTYOPTIONS \
             --init \
             --rm \
             -v $BUILDCACHE/root-home/.config:/root/.config \
@@ -129,8 +138,8 @@ exec_in_container(){
             $GRAPHICOPTIONS \
             $SPIOPTIONS \
             -p ${WEBPORT:-8081}:8081 \
-            -v $BUILDCACHE:/cache:z \
-            -v .:/app:z \
+            -v $BUILDCACHE/sdks-flutter-bin-cache:/cache:z \
+            -v .:/app:z,rshared \
             -e FLUTTER_FLAVOR=prod \
             d4rt-formulas-builder \
             "$@"
