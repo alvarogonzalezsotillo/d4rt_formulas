@@ -40,14 +40,10 @@ jobs:
             mkdir -p release-dir
             mv webapp.zip linux-bin.zip release-dir
 
-      - name: Create release
-        uses: actions/forgejo-release@v2.12.0
+      - name: 'Upload Release'
+        uses: https://codeberg.org/cssnr/upload-release-action@v1
         with:
-          direction: upload
-          url: https://my-forgejo-instance.net
-          repo: myuser/myrepo
-          token: ${{ secrets.WRITE_TOKEN_TO_MYREPO }}
-          tag: $GITHUB_REF_NAME
-          release-dir: dist/release
-          release-notes: "MY RELEASE NOTES"
+          files: |
+            ./release-dir/webapp.zip
+            ./release-dir/linux-bin.zip
 
