@@ -37,16 +37,17 @@ jobs:
             flutter build web --release
             pushd build/web && zip -r ../../webapp.zip * && popd
             pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
+            mkdir -p release-dir
+            mv webapp.zip linux-bin.zip release-dir
 
       - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: https://code.forgejo.org/actions/forgejo-release@v2
+        uses: actions/forgejo-release@v2.12.0
         with:
           direction: upload
-          release-dir: .
-          tag: ${{ github.ref_name }}
-          files: |
-            ./linux-bin.zip 
-            ./webapp.zip
+          url: https://my-forgejo-instance.net
+          repo: myuser/myrepo
+          token: ${{ secrets.WRITE_TOKEN_TO_MYREPO }}
+          tag: $GITHUB_REF_NAME
+          release-dir: dist/release
+          release-notes: "MY RELEASE NOTES"
+
