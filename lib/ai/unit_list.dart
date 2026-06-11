@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:d4rt_formulas/ai/unit_editor.dart';
 import 'package:d4rt_formulas/error_handler.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class _UnitListState extends State<UnitList> {
   }
 
   List<UnitSpec> get _filteredUnits {
-    var allUnits = widget.corpus.getUnits();
+    var allUnits = widget.corpus.getUnits().sortedBy((u) => u.name.toLowerCase());
     if (_searchQuery.isEmpty) return allUnits;
 
     return allUnits.where((unit){

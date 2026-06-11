@@ -43,7 +43,7 @@ class _UnitEditorState extends State<UnitEditor> {
     _nameController = TextEditingController(text: widget.unit.name);
     _symbolController = TextEditingController(text: widget.unit.symbol);
     _baseUnit = widget.unit.baseUnit;
-    _isBase = (widget.unit.baseUnit == widget.unit.name && (widget.unit.factorFromUnitToBase == 1));
+    _isBase = widget.unit.isBase();
 
     if (widget.unit.factorFromUnitToBase != null) {
       _useFactor = true;
@@ -214,6 +214,7 @@ class _UnitEditorState extends State<UnitEditor> {
                                     _isBase = v ?? false;
                                     if (_isBase) {
                                       _baseUnit = widget.unit.name;
+                                      _useFactor = true;
                                     }
                                   });
                                 },
@@ -239,14 +240,15 @@ class _UnitEditorState extends State<UnitEditor> {
                         children: [
                           ChoiceChip(
                             label: const Text('Factor'),
+
                             selected: _useFactor,
-                            onSelected: (s) => setState(() => _useFactor = true),
+                            onSelected:  _isBase ? null : (s) => setState(() => _useFactor = true),
                           ),
                           const SizedBox(width: 8),
                           ChoiceChip(
                             label: const Text('Code'),
                             selected: !_useFactor,
-                            onSelected: (s) => setState(() => _useFactor = false),
+                            onSelected: _isBase ? null : (s) => setState(() => _useFactor = false),
                           ),
                         ],
                       ),
@@ -254,6 +256,7 @@ class _UnitEditorState extends State<UnitEditor> {
                       if (_useFactor) ...[
                         TextFormField(
                           controller: _factorController,
+                          readOnly: _isBase,
                           decoration: const InputDecoration(labelText: 'Factor (unit -> base)', border: OutlineInputBorder()),
                           keyboardType: const TextInputType.numberWithOptions(decimal: true),
                           validator: (v) {
@@ -264,7 +267,7 @@ class _UnitEditorState extends State<UnitEditor> {
                           },
                         ),
                       ] else ...[
-                        const Text('To convert using code, provide Dart expression or statements that compute x.'),
+                        const Text('To convert using code, provide Dart expression or statements that convert the value x.'),
                         const SizedBox(height: 8),
                         const Text('Code (unit -> base):', style: TextStyle(fontWeight: FontWeight.bold)),
                         ConstrainedBox(

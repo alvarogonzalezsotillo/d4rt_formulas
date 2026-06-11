@@ -6,6 +6,7 @@ import 'database/database_service.dart';
 import 'service_locator.dart';
 
 import 'ai/formula_list.dart';
+import 'ai/unit_list.dart';
 import 'corpus.dart';
 import 'defaults/default_corpus.dart';
 import 'formula_models.dart' as models;
@@ -83,20 +84,37 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           var corpus = snapshot.data!;
           _registerCorpusInstance(corpus);
 
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Formulas'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.library_add),
-                  tooltip: 'Import formulas',
-                  onPressed: _handleImport,
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text('Formulas'),
+                bottom: const TabBar(
+                  tabs: [
+                    Tab(text: 'Formulas'),
+                    Tab(text: 'Units'),
+                  ],
                 ),
-              ],
-            ),
-            body: FormulaList(
-              corpus: snapshot.data!,
-              onImport: _handleImport,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.library_add),
+                    tooltip: 'Import formulas',
+                    onPressed: _handleImport,
+                  ),
+                ],
+              ),
+              body: TabBarView(
+                children: [
+                  FormulaList(
+                    corpus: snapshot.data!,
+                    onImport: _handleImport,
+                  ),
+                  UnitList(
+                    corpus: snapshot.data!,
+                    onImport: _handleImport,
+                  ),
+                ],
+              ),
             ),
           );
         }

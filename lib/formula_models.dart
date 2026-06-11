@@ -9,6 +9,14 @@ typedef Number = double;
 
 String _generateUuidV4() => Uuid().v4();
 
+String _stripMargin(String s){
+  final lines = s.split("\n");
+  final nonEmptyLines = lines.where((line) => line.trim().isNotEmpty).toList();
+  final marginLength = nonEmptyLines.map( (line) => line.length - line.trimLeft().length).reduce((a, b) => a < b ? a : b);
+  final ret = lines.map( (line) => line.substring( min(marginLength,line.length) ) ).join("\n");
+  return ret;
+}
+
 /// Abstract base class for formula elements
 abstract class FormulaElement {
   String get uuid;
@@ -101,6 +109,10 @@ class UnitSpec extends FormulaElement {
     final units = list.map((set) => UnitSpec.fromSet(set as Map));
 
     return units.toList(growable: false);
+  }
+
+  bool isBase() {
+    return name == baseUnit;
   }
 }
 
@@ -270,12 +282,12 @@ class Formula extends FormulaElement implements FormulaInterface {
   Formula({
     String? uuid,
     required this.name,
-    this.description,
+    String? description,
     required this.input,
     required this.output,
     required this.d4rtCode,
     this.tags = const [],
-  }) : uuid = uuid ?? _generateUuidV4() {
+  }) : uuid = uuid ?? _generateUuidV4(), description = _stripMargin(description ?? "") {
     validate();
   }
 
