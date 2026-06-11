@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/ai/unit_editor.dart';
 import 'package:d4rt_formulas/error_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For Clipboard
@@ -12,39 +13,43 @@ import 'package:share_plus/share_plus.dart';
 import 'import_preview_screen.dart';
 import '../services/import_service.dart';
 
-class FormulaList extends StatefulWidget {
+class UnitList extends StatefulWidget {
   final Corpus corpus;
   final VoidCallback? onImport;
 
-  const FormulaList({
+  const UnitList({
     super.key,
     required this.corpus,
     this.onImport,
   });
 
   @override
-  State<FormulaList> createState() => _FormulaListState();
+  State<UnitList> createState() => _UnitListState();
 
-  static String _formulaAndDependenciesToExportStringLiteral(Formula formula) {
+  static String _unitToExportStringLiteral(UnitSpec unit) {
     final corpus = GetIt.instance.get<Corpus>();
-    final dependencies = corpus.withDependencies(formula);
+    final dependencies = corpus.withDependencies(unit);
     final dependenciesAsMap = dependencies.map((f) => f.toMap()).toList();
     for( final f in dependenciesAsMap ){
       f.remove("uuid");
     }
-    return SetUtils.prettyPrint(dependenciesAsMap);
+
+    final map = unit.toMap();
+    map.remove("uuid");
+
+    return SetUtils.prettyPrint(map);
   }
 
 
-  static void shareFormula(Formula formula) async {
+  static void shareUnit(UnitSpec unit) async {
     try {
-      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
+      final exportString = _unitToExportStringLiteral(unit);
 
       // Share the string
       await share_plus.SharePlus.instance.share(
         share_plus.ShareParams(
           text: exportString,
-          subject: 'Sharing formula: ${formula.name}',
+          subject: 'Sharing unit: ${unit.name}',
         ),
       );
     } catch (e, st) {
@@ -52,9 +57,9 @@ class FormulaList extends StatefulWidget {
     }
   }
 
-  static void copyFormula(BuildContext context, Formula formula) async {
+  static void copyFormula(BuildContext context, UnitSpec unit) async {
     try {
-      final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
+      final exportString = _unitToExportStringLiteral(unit);
 
       // Copy to clipboard
       await Clipboard.setData(ClipboardData(text: exportString));
@@ -62,7 +67,7 @@ class FormulaList extends StatefulWidget {
       // Show a snackbar to confirm
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Formula and dependencies copied to clipboard'),
+          content: Text('Unit and dependencies copied to clipboard'),
           duration: Duration(seconds: 2),
         ),
       );
@@ -73,7 +78,7 @@ class FormulaList extends StatefulWidget {
 
 }
 
-class _FormulaListState extends State<FormulaList> {
+class _UnitListState extends State<UnitList> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -95,39 +100,18 @@ class _FormulaListState extends State<FormulaList> {
     super.dispose();
   }
 
-  List<Formula> get _filteredFormulas {
-    if (_searchQuery.isEmpty) return widget.corpus.getFormulas();
+  List<UnitSpec> get _filteredUnits {
+    var allUnits = widget.corpus.getUnits();
+    if (_searchQuery.isEmpty) return allUnits;
 
-    return widget.corpus.getFormulas().where((formula) {
-      final nameMatch = formula.name.toLowerCase().contains(_searchQuery);
-      final tagMatch = formula.tags.any((tag) => tag.toLowerCase().contains(_searchQuery));
+    return allUnits.where((unit){
+      final nameMatch = unit.name.toLowerCase().contains(_searchQuery);
+      final tagMatch = unit.symbol.toLowerCase().contains(_searchQuery);
       return nameMatch || tagMatch;
-    }).toList();
+    }).toList(growable: false);
   }
 
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -136,8 +120,8 @@ class _FormulaListState extends State<FormulaList> {
           child: TextField(
             controller: _searchController,
             decoration: const InputDecoration(
-              labelText: 'Search formulas',
-              hintText: 'Search by name or tag...',
+              labelText: 'Search untis',
+              hintText: 'Search by name or symbol...',
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
             ),
@@ -145,14 +129,11 @@ class _FormulaListState extends State<FormulaList> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: _filteredFormulas.length,
+            itemCount: _filteredUnits.length,
             itemBuilder: (context, index) {
-              final formula = _filteredFormulas[index];
+              final unit = _filteredUnits[index];
               return ListTile(
-                title: Text(formula.name),
-                subtitle: formula.tags.isNotEmpty
-                    ? Text('Tags: ${formula.tags.join(', ')}')
-                    : null,
+                title: Text(unit.name + " " + unit.symbol ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -163,10 +144,10 @@ class _FormulaListState extends State<FormulaList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FormulaScreen(
-                        formula: formula,
+                      builder: (context) => UnitEditor(
+                        unit: unit,
                         corpus: widget.corpus,
-                        onSave: (formula){
+                        onSave: (unit){
                           setState(() {
                             // Refresh the list when returning from the formula screen
                           });

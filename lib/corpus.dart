@@ -60,6 +60,10 @@ class Corpus{
     return _allFormulas.values.toList(growable:false);
   }
 
+  List<UnitSpec> getUnits(){
+    return _allUnits.values.toList(growable:false);
+  }
+
   /// Returns first formula with the given name (preserves old API semantics).
   Formula? getFormula(String name) {
     try {
@@ -72,6 +76,22 @@ class Corpus{
   /// Returns formula by uuid
   Formula? getFormulaByUuid(String uuid) {
     return _allFormulas[uuid];
+  }
+
+  void updateUnit(UnitSpec unit) {
+    if (!_allUnits.containsKey(unit.name)) {
+      throw ArgumentError("Unit not found: ${unit.name}");
+    }
+
+    // Remove old base unit mapping
+    final oldUnit = _allUnits[unit.name]!;
+    _baseToUnits[oldUnit.baseUnit]?.remove(unit.name);
+
+    // Update the unit
+    _allUnits[unit.name] = unit;
+
+    // Add new base unit mapping
+    _baseToUnits[unit.baseUnit]?.add(unit.name);
   }
 
   /// Updates a formula in the corpus
@@ -247,11 +267,11 @@ class Corpus{
   }
 
   /// Returns the formula, the units of the formula, and all the units from the corpus with the same base unit.
-  List<FormulaElement> withDependencies(Formula formula) {
+  List<FormulaElement> withDependencies(FormulaElement element) {
     final result = <FormulaElement>{};
 
     // Add the formula itself
-    result.add(formula);
+    result.add(element);
 
     // Helper function to add units and their base equivalents
     void addUnitsAndBaseEquivalents(String? unitName) {
@@ -264,13 +284,15 @@ class Corpus{
       }
     }
 
-    // Process input variable units
-    formula.input.where((inputVar) => inputVar.unit != null).forEach((inputVar) {
-      addUnitsAndBaseEquivalents(inputVar.unit);
-    });
+    if( element is Formula ) {
+      // Process input variable units
+      element.input.where((inputVar) => inputVar.unit != null).forEach((inputVar) {
+        addUnitsAndBaseEquivalents(inputVar.unit);
+      });
 
-    // Process output variable unit
-    addUnitsAndBaseEquivalents(formula.output.unit);
+      // Process output variable unit
+      addUnitsAndBaseEquivalents(element.output.unit);
+    }
 
     return result.toList();
   }

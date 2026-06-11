@@ -60,6 +60,16 @@ class UnitSpec extends FormulaElement {
     String symbol = SetUtils.stringValue(theSet, "symbol");
 
     if (theSet.containsKey("isBase")) {
+      if( theSet["baseUnit"] != null  ){
+        throw ArgumentError("A unit can't be both base and have a base unit");
+      }
+      if( theSet["factor"] != null  ){
+        throw ArgumentError("A unit can't be both base and have a factor");
+      }
+      if( theSet["fromBase"] != null || theSet["toBase"] != null ){
+        throw ArgumentError("A unit can't be both base and have code converters");
+      }
+
       return UnitSpec(uuid: uuid, name: name, baseUnit: name, symbol: symbol, factorFromUnitToBase: 1);
     }
 
