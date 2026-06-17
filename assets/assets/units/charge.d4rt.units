@@ -1,0 +1,14 @@
+[
+  {"name": "coulomb", "symbol": "C", "isBase": true},
+  {"name": "millicoulomb", "symbol": "mC", "baseUnit": "coulomb", "factor": 0.001},
+  {"name": "microcoulomb", "symbol": "µC", "baseUnit": "coulomb", "factor": 0.000001},
+  {"name": "nanocoulomb", "symbol": "nC", "baseUnit": "coulomb", "factor": 0.000000001},
+  {"name": "picocoulomb", "symbol": "pC", "baseUnit": "coulomb", "factor": 0.000000000001},
+  {"name": "elementary charge", "symbol": "e", "baseUnit": "coulomb", "factor": 1.602176634e-19},
+  {"name": "faraday", "symbol": "F", "baseUnit": "coulomb", "factor": 96485.33212},
+  {"name": "ampere hour", "symbol": "A·h", "baseUnit": "coulomb", "factor": 3600},
+  {"name": "milliampere hour", "symbol": "mA·h", "baseUnit": "coulomb", "factor": 3.6},
+  {"name": "abcoulomb", "symbol": "abC", "baseUnit": "coulomb", "factor": 10},
+  {"name": "statcoulomb", "symbol": "statC", "baseUnit": "coulomb", "factor": 3.33564095198152e-10},
+  {"name": "franklin", "symbol": "Fr", "baseUnit": "coulomb", "factor": 3.33564095198152e-10}
+]

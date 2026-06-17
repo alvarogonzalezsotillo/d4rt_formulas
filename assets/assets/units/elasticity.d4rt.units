@@ -1,0 +1,19 @@
+[
+  {
+    "name": "newton per meter",
+    "symbol": "N/m",
+    "isBase": true
+  },
+  {
+    "name": "newton per centimeter",
+    "symbol": "N/cm",
+    "baseUnit": "newton per meter",
+    "factor": 100
+  },
+  {
+    "name": "kilonewton per meter",
+    "symbol": "kN/m",
+    "baseUnit": "newton per meter",
+    "factor": 1000
+  }
+]

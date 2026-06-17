@@ -1,0 +1,44 @@
+[
+  {
+    "name": "meters per second", 
+    "symbol": "m/s",
+    "isBase": true
+  },
+
+  {
+    "name": "meters per square second", 
+    "symbol": "m/s²",
+    "isBase": true
+  },
+ 
+  {
+    "name": "kilometers per hour",
+    "symbol": "km/h",
+    "baseUnit": "meters per second",
+    "factor": 0.277778
+  },
+  {
+    "name": "miles per hour",
+    "symbol": "mph",
+    "baseUnit": "meters per second",
+    "factor": 0.44704
+  },
+  {
+    "name": "feet per second",
+    "symbol": "ft/s",
+    "baseUnit": "meters per second",
+    "factor": 0.3048
+  },
+  {
+    "name": "knot",
+    "symbol": "kn",
+    "baseUnit": "meters per second", 
+    "factor": 0.514444
+  },
+  {
+    "name": "mach",
+    "symbol": "M",
+    "baseUnit": "meters per second",
+    "factor": 343.0
+  }
+]

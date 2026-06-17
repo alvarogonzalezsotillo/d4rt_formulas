@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Network Address from Host IP",
+    "description": r"""Calculates the network address from a host IP/MASK notation.
+
+Given a host IP address and subnet mask in CIDR notation (e.g., 192.168.1.100/24),
+this formula extracts the network address (e.g., 192.168.1.0/24).
+
+Where:
+- Host IP/MASK: IP address with CIDR subnet mask (e.g., 192.168.1.100/24)
+- Network: The resulting network address in IP/MASK format (e.g., 192.168.1.0/24)
+
+The network address is calculated by applying the subnet mask to zero out the host bits.""",
+    "input": [
+      {"name": "hostIP", "unit": "string"}
+    ],
+    "output": {"name": "network", "unit": "string"},
+    "d4rtCode": r"""
+       hostIP = hostIP.toString();
+       var parts = hostIP.split('/');
+       if( parts.length != 2 ) {
+         signal('Invalid input format. Expected format: IP/MASK');
+       }
+       var ip = parts[0];
+       var mask = int.tryParse(parts[1]);
+       if( mask == null || mask < 0 || mask > 32 ) {
+         signal('Invalid subnet mask. Must be an integer between 0 and 32.');
+       }
+       var octets = ip.split('.').map((e) => int.tryParse(e)).toList();
+       if( octets.length != 4 ) {
+         signal('Invalid IP address format. Expected 4 octets separated by dots.');
+       }
+       var hostBits = 32 - mask;
+       var shiftAmount = hostBits;
+       var networkValue = 0;
+       for (var i = 0; i < 4; i++) {
+         if (octets[i] == null || octets[i] < 0 || octets[i] > 255) {
+           signal('Invalid IP address. Each octet must be between 0 and 255.');
+         }
+         networkValue = (networkValue << 8) | octets[i];
+       }
+       networkValue = (networkValue >> shiftAmount) << shiftAmount;
+       var networkOctets = [];
+       for (var i = 0; i < 4; i++) {
+         networkOctets.insert(0, networkValue & 0xFF);
+         networkValue = networkValue >> 8;
+       }
+       network = networkOctets.join('.') + '/' + mask.toString();
+    """,
+    "tags": ["networking", "ip", "subnetting", "cidr", "network"]
+  }
+]

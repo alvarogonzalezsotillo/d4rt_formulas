@@ -1,0 +1,14 @@
+[
+  {"name": "joule", "symbol": "J", "isBase": true},
+  {"name": "kilojoule", "symbol": "kJ", "baseUnit": "joule", "factor": 1000},
+  {"name": "megajoule", "symbol": "MJ", "baseUnit": "joule", "factor": 1000000},
+  {"name": "calorie", "symbol": "cal", "baseUnit": "joule", "factor": 4.184},
+  {"name": "kilocalorie", "symbol": "kcal", "baseUnit": "joule", "factor": 4184},
+  {"name": "electronvolt", "symbol": "eV", "baseUnit": "joule", "factor": 1.602176634e-19},
+  {"name": "british thermal unit", "symbol": "BTU", "baseUnit": "joule", "factor": 1055.06},
+  {"name": "foot-pound", "symbol": "ft·lb", "baseUnit": "joule", "factor": 1.35582},
+  {"name": "watt hour", "symbol": "Wh", "baseUnit": "joule", "factor": 3600},
+  {"name": "kilowatt hour", "symbol": "kWh", "baseUnit": "joule", "factor": 3.6e6},
+  {"name": "therm", "symbol": "thm", "baseUnit": "joule", "factor": 1.055e8},
+  {"name": "erg", "symbol": "erg", "baseUnit": "joule", "factor": 1e-7}
+]

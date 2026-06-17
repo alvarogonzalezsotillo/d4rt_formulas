@@ -1,0 +1,41 @@
+[
+  {"name": "meter", "symbol": "m", "isBase": true},
+  {"name": "inch", "symbol": "in", "baseUnit": "meter", "factor" : 0.0254 },
+  {"name": "kilometer", "symbol": "km", "baseUnit": "meter", "factor": 1000},
+  {
+    "name": "nautical mile",
+    "symbol": "Nm",
+    "baseUnit": "meter",
+    "factor": 1852,
+  },
+  {
+    "name": "light-year",
+    "symbol": "ly",
+    "baseUnit": "meter",
+    "factor": 9.461e15,
+  },
+  {
+    "name": "astronomical unit",
+    "symbol": "AU",
+    "baseUnit": "meter",
+    "factor": 1.496e11,
+  },
+  {"name": "rod", "symbol": "rd", "baseUnit": "meter", "factor": 5.0292},
+  {"name": "chain", "symbol": "ch", "baseUnit": "meter", "factor": 20.1168},
+  {"name": "furlong", "symbol": "fur", "baseUnit": "meter", "factor": 201.168},
+  {"name": "league", "symbol": "lea", "baseUnit": "meter", "factor": 4828.032},
+  {"name": "elbow", "symbol": "elb", "baseUnit": "meter", "factor": 0.4572},
+  {"name": "hand", "symbol": "hh", "baseUnit": "meter", "factor": 0.1016},
+  {"name": "cubit", "symbol": "cub", "baseUnit": "meter", "factor": 0.4572},
+  {"name": "span", "symbol": "sp", "baseUnit": "meter", "factor": 0.2286},
+  {"name": "fathom", "symbol": "ftm", "baseUnit": "meter", "factor": 1.8288},
+  {"name": "finger", "symbol": "fng", "baseUnit": "meter", "factor": 0.0222},
+  {
+    "name": "Roman mile",
+    "symbol": "mil.rom",
+    "baseUnit": "meter",
+    "factor": 1479.5,
+  },
+  {"name": "Chinese li", "symbol": "li", "baseUnit": "meter", "factor": 500},
+  {"name": "Japanese ri", "symbol": "ri", "baseUnit": "meter", "factor": 3927}
+]

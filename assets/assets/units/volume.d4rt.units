@@ -1,0 +1,22 @@
+[
+  {"name": "cubic meter", "symbol": "m³", "isBase": true},
+  {"name": "cubic kilometer", "symbol": "km³", "baseUnit": "cubic meter", "factor": 1000000000},
+  {"name": "cubic centimeter", "symbol": "cm³", "baseUnit": "cubic meter", "factor": 0.000001},
+  {"name": "cubic millimeter", "symbol": "mm³", "baseUnit": "cubic meter", "factor": 0.000000001},
+  {"name": "cubic inch", "symbol": "in³", "baseUnit": "cubic meter", "factor": 0.000016387064},
+  {"name": "cubic foot", "symbol": "ft³", "baseUnit": "cubic meter", "factor": 0.028316846592},
+  {"name": "cubic yard", "symbol": "yd³", "baseUnit": "cubic meter", "factor": 0.764554857984},
+  {"name": "liter", "symbol": "L", "baseUnit": "cubic meter", "factor": 0.001},
+  {"name": "milliliter", "symbol": "mL", "baseUnit": "cubic meter", "factor": 0.000001},
+  {"name": "gallon (US)", "symbol": "gal (US)", "baseUnit": "cubic meter", "factor": 0.003785411784},
+  {"name": "gallon (UK)", "symbol": "gal (UK)", "baseUnit": "cubic meter", "factor": 0.00454609},
+  {"name": "quart (US)", "symbol": "qt (US)", "baseUnit": "cubic meter", "factor": 0.000946352946},
+  {"name": "pint (US)", "symbol": "pt (US)", "baseUnit": "cubic meter", "factor": 0.000473176473},
+  {"name": "cup (US)", "symbol": "cup (US)", "baseUnit": "cubic meter", "factor": 0.000236588236},
+  {"name": "fluid ounce (US)", "symbol": "fl oz (US)", "baseUnit": "cubic meter", "factor": 0.000029573529},
+  {"name": "tablespoon (US)", "symbol": "tbsp (US)", "baseUnit": "cubic meter", "factor": 0.000014786764},
+  {"name": "teaspoon (US)", "symbol": "tsp (US)", "baseUnit": "cubic meter", "factor": 0.000004928921},
+  {"name": "barrel (oil)", "symbol": "bbl", "baseUnit": "cubic meter", "factor": 0.158987294928},
+  {"name": "bushel (US)", "symbol": "bu (US)", "baseUnit": "cubic meter", "factor": 0.035239070166},
+  {"name": "peck (US)", "symbol": "pk (US)", "baseUnit": "cubic meter", "factor": 0.008809767541}
+]
