@@ -25,17 +25,18 @@ create_release_in_github(){
 }
 
 update_gh_pages(){
-  if [[ ! -d ./gh-pages ]]
+  local GHPAGESDIR=gh-pages-worktree
+  if [[ ! -d $GHPAGESDIR ]]
   then
-    git worktree add gh-pages origin/gh-pages
+    git worktree add $GHPAGESDIR gh-pages
   fi
 
-  cp -r build/web/* gh-pages/
+  cp -r build/web/* $GHPAGESDIR
   (
-    pushd gh-pages
+    pushd $GHPAGESDIR
     git add .
     git commit -m "Update webapp from release $TAG"
-    git push --force
+    #git push --force
     popd
   )
 
