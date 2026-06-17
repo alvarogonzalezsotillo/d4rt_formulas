@@ -1,15 +1,15 @@
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'ai/import_from_text_screen.dart';
-import 'database/database_service.dart';
-import 'service_locator.dart';
 
 import 'ai/formula_list.dart';
+import 'ai/import_from_text_screen.dart';
 import 'ai/unit_list.dart';
 import 'corpus.dart';
+import 'database/database_service.dart';
 import 'defaults/default_corpus.dart';
 import 'formula_models.dart' as models;
+import 'service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +31,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.transparent,
+            brightness: MediaQuery.platformBrightnessOf(context)
+        ),
+      ),
       home: CorpusLoader(corpusFuture),
     );
   }
