@@ -17,7 +17,7 @@ jobs:
       - name: Environment Variables
         run: env
 
-      - name: Make
+      - name: Do release on my own, actions are not nerd enough, maybe works even in other CI/CD systems
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./release.sh

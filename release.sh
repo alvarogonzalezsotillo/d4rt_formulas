@@ -3,7 +3,7 @@ echo "Ejecutando $0 en directorio $(pwd)"
 
 build_release_files(){
   #make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container
-  #make build-container build-builders test                                 build-linux-release-container build-web-release-container
+  make build-container build-builders test build-web-release-container
 
   echo " ----> Listando archivos en pwd"
   find $(pwd)
@@ -18,8 +18,6 @@ get_release_files(){
 }
 
 create_release_in_github(){
-    echo "Building release for TAG:$TAG VERSION:$VERSION"
-    build_release_files
     FILES="$(get_release_files)"
     gh release create $TAG --notes "Automatic release" $FILES
 }
@@ -36,7 +34,7 @@ update_gh_pages(){
     pushd $GHPAGESDIR
     git add .
     git commit -m "Update webapp from release $TAG"
-    #git push --force
+    git push --force
     popd
   )
 
@@ -58,6 +56,10 @@ main(){
     exit 0
   fi
   VERSION=${TAG#version-}
+
+  echo "Building release for TAG:$TAG VERSION:$VERSION"
+  build_release_files
+
   #create_release_in_github
   update_gh_pages
 
