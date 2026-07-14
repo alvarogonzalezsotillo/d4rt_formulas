@@ -11,8 +11,17 @@ import 'defaults/default_corpus.dart';
 import 'formula_models.dart' as models;
 import 'service_locator.dart';
 
+
+void dontMinimize() {
+  List<String> parts = "1.2.3.4/5".split("/");
+
+  print('********************* Parts: $parts ${parts.length} ${parts.runtimeType}');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  dontMinimize();
 
   // Setup service locator and initialize the database
   setupLocator();

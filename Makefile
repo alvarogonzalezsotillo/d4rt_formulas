@@ -49,11 +49,18 @@ run-linux-debug-container:
 run-web-debug-container:
 	$(FLUTTERW) run --web-port $${WEB_PORT:-8081} -d web-server
 
+run-web-release-container:
+	$(FLUTTERW) run --release --web-port $${WEB_PORT:-8081} -d web-server
+
 run-linux-debug-native:
 	flutter run -d linux
 
 run-web-debug-native:
 	flutter run --web-port $${WEB_PORT:-8081} -d web-server
+
+run-web-release-native:
+	flutter run --release --web-port $${WEB_PORT:-8081} -d web-server
+
 
 ai:
 	qwen --prompt-interactive --yolo "Read CLAUDE.md. Implement first task not already done in TODO.md"

@@ -93,5 +93,6 @@
   - In the /static path, serve the files contained in webapp.zip
 - [X] Ensure database is loaded if the file exist, and not use default corpus allways.
 - [ ] Ensure more room for formula title in FormulaScreen. Maybe a marquee or another row for buttons or both.
-- [ ] In android, images in description are not shown.
+- [X] In android, images in description are not shown.
 - [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator inside the output variable while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
+- [ ] web version, in ip network formula, minified:D<String> resulting from String.split() has no length property, but is a List<String>
