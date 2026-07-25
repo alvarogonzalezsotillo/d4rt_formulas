@@ -25,7 +25,7 @@ build_release_files(){
 build_release_files(){
 
     build_web()(
-        make build-web-debug-container
+        make build-web-release-container
         pushd build/web && zip -r ../../webapp.zip * && popd
     )
 
