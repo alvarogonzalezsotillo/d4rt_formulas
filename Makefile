@@ -37,10 +37,10 @@ build-linux-release-container:
 
 
 build-web-debug-container:
-	$(FLUTTERW) build web --debug
+	$(FLUTTERW) build web --debug  --base-href $${FLUTTER_BASE_HREF:-/d4rt_formulas/}
 
 build-web-release-container:
-	$(FLUTTERW) build web --release
+	$(FLUTTERW) build web --release  --base-href $${FLUTTER_BASE_HREF:-/d4rt_formulas/}
 
 
 run-linux-debug-container:
@@ -60,10 +60,6 @@ run-web-debug-native:
 
 run-web-release-native:
 	flutter run --release --web-port $${WEB_PORT:-8081} -d web-server
-
-
-ai:
-	qwen --prompt-interactive --yolo "Read CLAUDE.md. Implement first task not already done in TODO.md"
 
 run-emulator:
 	flutter emulators --launch Medium_Phone

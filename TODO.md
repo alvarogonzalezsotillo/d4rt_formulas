@@ -96,3 +96,4 @@
 - [X] In android, images in description are not shown.
 - [ ] Make formulaSolver() asyncronous, and show a CircularProgressIndicator inside the output variable while the formula is being solved. Honor a new optinal parameter "timeout" in formulaSolver, that will throw a TimeoutException.
 - [ ] web version, in ip network formula, minified:D<String> resulting from String.split() has no length property, but is a List<String>
+- [ ] Delete native versions from makefile. Makefile will only work with ./flutterw wrapper, not with local flutter installation
