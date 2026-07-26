@@ -87,21 +87,22 @@ update_gh_pages(){
 }
 
 main(){
+    local COMMIT_HASH=$(git rev-parse HEAD)
+    local COMMIT=${COMMIT_HASH:0:7}
+    
     if [[ ! ${GITHUB_REF+x} ]]
     then
         echo "Not running in GitHub Actions, using local commit hash"
-        COMMIT_HASH=$(git rev-parse HEAD)
-        COMMIT=${COMMIT_HASH:0:7}
-        TAG=version-$COMMIT
+        TAG=release-$COMMIT
     else
-        TAG=${GITHUB_REF#refs/tags/}
+        TAG=${GITHUB_REF#refs/tags/}-$COMMIT
     fi
-    if [[ ! $TAG == version-* ]]
+    if [[ ! $TAG == release-* ]]
     then
-        echo "Not a release tag, it should start with 'version-', skipping release"
+        echo "Not a release tag, it should start with 'release-', skipping release"
         exit 0
     fi
-    VERSION=${TAG#version-}
+    VERSION=${TAG#release-}
 
     echo "Building release for TAG:$TAG VERSION:$VERSION"
     build_release_files
