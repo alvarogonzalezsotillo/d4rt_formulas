@@ -75,6 +75,8 @@ update_gh_pages(){
     if is_github_action
     then
         git fetch origin gh-pages:gh-pages
+        git config user.name "$GITHUB_ACTOR"
+        git config user.email "$GITHUB_ACTOR@automatic-release"
     fi
     
     if [[ ! -d $GHPAGESDIR ]]
@@ -83,18 +85,13 @@ update_gh_pages(){
     fi
 
     cp -r build/web/* $GHPAGESDIR
-    (
-        pushd $GHPAGESDIR
-        git add .
-        if is_github_action; then
-            git config user.name "$GITHUB_ACTOR"
-            git config user.email "$GITHUB_ACTOR@automatic-release"
-        fi
-        git commit -m "Update webapp from release $TAG"
-        git push --force
-        popd
-    )
 
+    
+    pushd $GHPAGESDIR
+    git add .
+    git commit -m "Update webapp from release $TAG"
+    git push --force
+    popd
 }
 
 is_github_action(){
