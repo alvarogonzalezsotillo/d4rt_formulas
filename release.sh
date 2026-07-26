@@ -70,6 +70,13 @@ create_release_in_github(){
 
 update_gh_pages(){
     local GHPAGESDIR=gh-pages-worktree
+    git fetch origin gh-pages:gh-pages
+
+    if is_github_action
+    then
+        git fetch origin gh-pages:gh-pages
+    fi
+    
     if [[ ! -d $GHPAGESDIR ]]
     then
         git worktree add $GHPAGESDIR gh-pages
@@ -86,11 +93,16 @@ update_gh_pages(){
 
 }
 
+is_github_action(){
+    [ ! ${GITHUB_REF+x} ]
+}
+
+
 main(){
     local COMMIT_HASH=$(git rev-parse HEAD)
     local COMMIT=${COMMIT_HASH:0:7}
     
-    if [[ ! ${GITHUB_REF+x} ]]
+    if is_github_action
     then
         echo "Not running in GitHub Actions, using local commit hash"
         TAG=release-$COMMIT
@@ -107,7 +119,7 @@ main(){
     echo "Building release for TAG:$TAG VERSION:$VERSION"
     build_release_files
 
-    #create_release_in_github
+    create_release_in_github
     update_gh_pages
 
 }
