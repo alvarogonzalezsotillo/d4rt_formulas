@@ -11,11 +11,12 @@ jobs:
     permissions:
       contents: write     # needed to create releases
     steps:
-      - name: Environment Variables
-        run: env
 
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Environment Variables
+        run: env
 
       - name: Do release on my own, actions are not nerd enough, maybe works even in other CI/CD systems
         env:

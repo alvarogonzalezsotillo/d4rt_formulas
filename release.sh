@@ -74,9 +74,9 @@ update_gh_pages(){
 
     if is_github_action
     then
-        git fetch origin gh-pages:gh-pages
         git config user.name "$GITHUB_ACTOR"
         git config user.email "$GITHUB_ACTOR@automatic-release"
+        git fetch origin gh-pages:gh-pages
     fi
     
     if [[ ! -d $GHPAGESDIR ]]
