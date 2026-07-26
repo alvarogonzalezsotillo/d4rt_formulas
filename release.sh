@@ -86,6 +86,10 @@ update_gh_pages(){
     (
         pushd $GHPAGESDIR
         git add .
+        if is_github_action; then
+            git config user.name "$GITHUB_ACTOR"
+            git config user.email "$GITHUB_ACTOR@automatic-release"
+        fi
         git commit -m "Update webapp from release $TAG"
         git push --force
         popd
