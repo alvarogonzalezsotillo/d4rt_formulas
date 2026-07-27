@@ -1,3 +1,4 @@
+// -*- mode: dart -*-
 [
 
   // Projectile Motion Range
@@ -61,6 +62,8 @@ Where:
 - $m$: Mass of object (kilograms)
 - $v$: Velocity (m/s)
 - $r$: Radius of circular path (meters)
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Force_acting_as_centripetal_force.svg/500px-Force_acting_as_centripetal_force.svg.png)
 
 This force acts toward the center of the circle.""",
     "input": [
