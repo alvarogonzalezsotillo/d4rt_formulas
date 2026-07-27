@@ -74,9 +74,13 @@ update_gh_pages(){
 
     if is_github_action
     then
+        echo "VOY A HACER ESO DEL USER.NAME"
         git config user.name "$GITHUB_ACTOR"
         git config user.email "$GITHUB_ACTOR@automatic-release"
         git fetch origin gh-pages:gh-pages
+    else
+        echo "NO VOY A HACER ESO DEL USER.NAME, ESTOY EN LOCAL"
+
     fi
     
     if [[ ! -d $GHPAGESDIR ]]
