@@ -70,8 +70,7 @@ create_release_in_github(){
 
 update_gh_pages(){
     local GHPAGESDIR=gh-pages-worktree
-    git fetch origin gh-pages:gh-pages
-
+ 
     if is_github_action
     then
         echo "VOY A HACER ESO DEL USER.NAME"
@@ -99,7 +98,7 @@ update_gh_pages(){
 }
 
 is_github_action(){
-    [ ! ${GITHUB_REF+x} ]
+    [ ${GITHUB_REF+x} ]
 }
 
 
@@ -107,7 +106,7 @@ main(){
     local COMMIT_HASH=$(git rev-parse HEAD)
     local COMMIT=${COMMIT_HASH:0:7}
     
-    if is_github_action
+    if ! is_github_action
     then
         echo "Not running in GitHub Actions, using local commit hash"
         TAG=release-$COMMIT
