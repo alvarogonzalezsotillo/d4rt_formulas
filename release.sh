@@ -93,7 +93,7 @@ update_gh_pages(){
     pushd $GHPAGESDIR
     git add .
     git commit -m "Update webapp from release $TAG"
-    git push --force origin github
+    git push --force origin gh-pages
     popd
 }
 
