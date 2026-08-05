@@ -9,9 +9,15 @@ typedef Number = double;
 
 String _generateUuidV4() => Uuid().v4();
 
-String _stripMargin(String s){
+String? _stripMargin(String? s){
+  if (s == null ){
+    return null;
+  }
   final lines = s.split("\n");
   final nonEmptyLines = lines.where((line) => line.trim().isNotEmpty).toList();
+  if( nonEmptyLines.length == 0 ){
+    return "";
+  }
   final marginLength = nonEmptyLines.map( (line) => line.length - line.trimLeft().length).reduce((a, b) => a < b ? a : b);
   final ret = lines.map( (line) => line.substring( min(marginLength,line.length) ) ).join("\n");
   return ret;

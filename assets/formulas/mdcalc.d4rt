@@ -1,0 +1,834 @@
+// -*- mode: dart; -*-
+[
+  // Mean Arterial Pressure (MAP) - MDCalc
+  {
+    "name": "Mean Arterial Pressure (MAP)",
+    "description": r"""
+      Calculates the mean arterial pressure, the average arterial pressure during a single cardiac cycle.
+
+      $$MAP = \frac{SBP + 2 \cdot DBP}{3}$$
+
+      Where:
+      - $SBP$: Systolic blood pressure ($\mathrm{mmHg}$)
+      - $DBP$: Diastolic blood pressure ($\mathrm{mmHg}$)
+
+      A MAP ≥ 60 mmHg is generally needed to maintain adequate tissue perfusion. A MAP ≥ 65 mmHg is recommended in patients with severe sepsis and septic shock (Surviving Sepsis Campaign).
+
+      Source: [MDCalc - Mean Arterial Pressure](https://www.mdcalc.com/calc/74/mean-arterial-pressure-map)
+
+      ![Stethoscope](https://commons.wikimedia.org/wiki/Special:FilePath/Stethoscope.svg?width=800)
+    """,
+    "input": [
+      {"name": "SystolicBP", "unit": "millimeter of mercury"},
+      {"name": "DiastolicBP", "unit": "millimeter of mercury"}
+    ],
+    "output": {"name": "MAP", "unit": "millimeter of mercury"},
+    "d4rtCode": "MAP = (SystolicBP + 2 * DiastolicBP) / 3;",
+    "tags": ["medical", "cardiology", "hemodynamics", "mdcalc"]
+  },
+
+  // Pulse Pressure - MDCalc
+  {
+    "name": "Pulse Pressure",
+    "description": r"""
+      Calculates the pulse pressure, the difference between systolic and diastolic blood pressure. It is proportional to stroke volume and inversely proportional to arterial compliance.
+
+      $$PP = SBP - DBP$$
+
+      Where:
+      - $SBP$: Systolic blood pressure ($\mathrm{mmHg}$)
+      - $DBP$: Diastolic blood pressure ($\mathrm{mmHg}$)
+
+      A normal pulse pressure is about 40 mmHg. Wide pulse pressure (> 60 mmHg) may occur in aortic regurgitation, arteriovenous fistulas, and hyperthyroidism; narrow pulse pressure may occur in cardiac tamponade and heart failure.
+
+      Source: [MDCalc - Pulse Pressure](https://www.mdcalc.com/calc/1303/pulse-pressure)
+
+      ![Stethoscope](https://commons.wikimedia.org/wiki/Special:FilePath/Stethoscope.svg?width=800)
+    """,
+    "input": [
+      {"name": "SystolicBP", "unit": "millimeter of mercury"},
+      {"name": "DiastolicBP", "unit": "millimeter of mercury"}
+    ],
+    "output": {"name": "PulsePressure", "unit": "millimeter of mercury"},
+    "d4rtCode": "PulsePressure = SystolicBP - DiastolicBP;",
+    "tags": ["medical", "cardiology", "hemodynamics", "mdcalc"]
+  },
+
+  // QTc Interval (Bazett) - MDCalc
+  {
+    "name": "QTc Interval (Bazett)",
+    "description": r"""
+      Corrects the QT interval for heart rate using the Bazett formula, to identify QT prolongation.
+
+      $$QTc = \frac{QT}{\sqrt{RR}}$$
+
+      Where:
+      - $QT$: Measured QT interval ($\mathrm{ms}$)
+      - $RR$: RR interval ($\mathrm{ms}$), the time between two consecutive R waves
+
+      A normal QTc is approximately 350–450 ms for men and 360–460 ms for women. QTc > 500 ms is associated with a significantly increased risk of torsades de pointes.
+
+      Source: [MDCalc - QTc Interval](https://www.mdcalc.com/calc/58/qtc-interval)
+
+      ![ECG paper](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/ECG_paper_12_leads.svg/960px-ECG_paper_12_leads.svg.png)
+    """,
+    "input": [
+      {"name": "QT", "unit": "millisecond"},
+      {"name": "RR", "unit": "millisecond"}
+    ],
+    "output": {"name": "QTc", "unit": "millisecond"},
+    "d4rtCode": r"""
+      if (QT <= 0 || RR <= 0) {
+        signal("QT and RR must be greater than 0");
+      }
+      QTc = QT / sqrt(RR / 1000);
+    """,
+    "tags": ["medical", "cardiology", "ecg", "mdcalc"]
+  },
+
+  // CHA2DS2-VASc Score - MDCalc
+  {
+    "name": "CHA₂DS₂-VASc Score",
+    "description": r"""
+      Estimates the annual risk of stroke in patients with atrial fibrillation, to guide anticoagulation.
+
+      $$CHA_2DS_2{-}VASc = Age + Sex + CHF + Hypertension + Stroke_{history} \cdot 2 + Vascular + Diabetes$$
+
+      Points are assigned as:
+      - $Age$: < 65 = 0, 65–74 = 1, ≥ 75 = 2
+      - $Sex$: Female = 1, Male = 0
+      - Congestive heart failure: 1
+      - Hypertension: 1
+      - Stroke/TIA/thromboembolism history: 2
+      - Vascular disease (prior MI, peripheral artery disease, or aortic plaque): 1
+      - Diabetes mellitus: 1
+
+      Anticoagulation is generally recommended when the score is ≥ 2 in men or ≥ 3 in women.
+
+      Source: [MDCalc - CHA₂DS₂-VASc Score](https://www.mdcalc.com/calc/801/cha2ds2-vasc-score-atrial-fibrillation-stroke-risk)
+
+      ![ECG paper](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/ECG_paper_12_leads.svg/960px-ECG_paper_12_leads.svg.png)
+    """,
+    "input": [
+      {"name": "Age", "values": ["< 65", "65 - 74", ">= 75"]},
+      {"name": "Sex", "values": ["Female", "Male"]},
+      {"name": "CHF", "values": ["No", "Yes"]},
+      {"name": "Hypertension", "values": ["No", "Yes"]},
+      {"name": "StrokeTIA", "values": ["No", "Yes"]},
+      {"name": "VascularDisease", "values": ["No", "Yes"]},
+      {"name": "Diabetes", "values": ["No", "Yes"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var score = indexOf("Age") + (indexOf("Sex") == 0 ? 1 : 0) + indexOf("CHF") + indexOf("Hypertension") + indexOf("StrokeTIA") * 2 + indexOf("VascularDisease") + indexOf("Diabetes");
+      var isFemale = indexOf("Sex") == 0;
+      late var recommendation;
+      if ((isFemale && score >= 3) || (!isFemale && score >= 2)) {
+        recommendation = 'Oral anticoagulation recommended';
+      } else if ((isFemale && score == 2) || (!isFemale && score == 1)) {
+        recommendation = 'Anticoagulation can be considered';
+      } else {
+        recommendation = 'Anticoagulation not recommended';
+      }
+      Result = 'Score: $score - $recommendation';
+    """,
+    "tags": ["medical", "cardiology", "atrial fibrillation", "score", "mdcalc"]
+  },
+
+  // CHADS2 Score - MDCalc
+  {
+    "name": "CHADS₂ Score",
+    "description": r"""
+      Estimates the annual stroke risk in patients with nonvalvular atrial fibrillation.
+
+      $$CHADS_2 = CHF + HTN + Age_{\ge 75} + DM + Stroke \cdot 2$$
+
+      Points are assigned as:
+      - Congestive heart failure: 1
+      - Hypertension: 1
+      - Age ≥ 75: 1
+      - Diabetes mellitus: 1
+      - Stroke/TIA history: 2
+
+      Annual stroke risk: score 0 = 1.9%, 1 = 2.8%, 2 = 4.0%, 3 = 5.9%, 4 = 8.5%, 5 = 12.5%, 6 = 18.2%. The CHA₂DS₂-VASc score has largely replaced CHADS₂.
+
+      Source: [MDCalc - CHADS₂ Score](https://www.mdcalc.com/calc/40/chads2-score-stroke-risk-atrial-fibrillation)
+
+      ![ECG paper](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/ECG_paper_12_leads.svg/960px-ECG_paper_12_leads.svg.png)
+    """,
+    "input": [
+      {"name": "CHF", "values": ["No", "Yes"]},
+      {"name": "Hypertension", "values": ["No", "Yes"]},
+      {"name": "Age75", "values": ["< 75", ">= 75"]},
+      {"name": "Diabetes", "values": ["No", "Yes"]},
+      {"name": "StrokeHistory", "values": ["No", "Yes"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var score = indexOf("CHF") + indexOf("Hypertension") + indexOf("Age75") + indexOf("Diabetes") + indexOf("StrokeHistory") * 2;
+      var risks = ['1.9%', '2.8%', '4.0%', '5.9%', '8.5%', '12.5%', '18.2%'];
+      Result = 'CHADS2: $score - annual stroke risk ${risks[score]}';
+    """,
+    "tags": ["medical", "cardiology", "atrial fibrillation", "score", "mdcalc"]
+  },
+
+  // Body Mass Index (BMI) - MDCalc
+  {
+    "name": "Body Mass Index (BMI)",
+    "description": r"""
+      Estimates body fat based on height and weight.
+
+      $$BMI = \frac{Weight}{Height^2}$$
+
+      Where:
+      - $Weight$: Body weight ($\mathrm{kg}$)
+      - $Height$: Height ($\mathrm{m}$)
+
+      Classification (WHO):
+      - Underweight: < 18.5
+      - Normal: 18.5 – 24.9
+      - Overweight: 25.0 – 29.9
+      - Obesity class I: 30.0 – 34.9
+      - Obesity class II: 35.0 – 39.9
+      - Obesity class III: ≥ 40.0
+
+      Source: [MDCalc - BMI](https://www.mdcalc.com/calc/29/bmi-body-mass-index)
+
+      ![BMI chart](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/BMI_chart.svg/960px-BMI_chart.svg.png)
+    """,
+    "input": [
+      {"name": "Weight", "unit": "kilogram"},
+      {"name": "Height", "unit": "meter"}
+    ],
+    "output": {"name": "BMI", "unit": "kilogram per square meter"},
+    "d4rtCode": r"""
+      if (Height <= 0) {
+        signal("Height must be greater than 0");
+      }
+      BMI = Weight / pow(Height, 2);
+    """,
+    "tags": ["medical", "nutrition", "general", "mdcalc"]
+  },
+
+  // Body Surface Area (Mosteller) - MDCalc
+  {
+    "name": "Body Surface Area (Mosteller)",
+    "description": r"""
+      Estimates the total surface area of the human body, used for drug dosing, cardiac output indexing, and fluid management.
+
+      $$BSA = \sqrt{\frac{Height \cdot Weight}{3600}}$$
+
+      Where:
+      - $Height$: Height ($\mathrm{cm}$)
+      - $Weight$: Weight ($\mathrm{kg}$)
+
+      The Mosteller formula is the most commonly used estimate of body surface area.
+
+      Source: [MDCalc - Body Surface Area](https://www.mdcalc.com/calc/56/body-surface-area-bsa)
+
+      ![Body illustration](https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Male_front-back_3d-shaded_human_illustration.svg/960px-Male_front-back_3d-shaded_human_illustration.svg.png)
+    """,
+    "input": [
+      {"name": "Weight", "unit": "kilogram"},
+      {"name": "Height", "unit": "centimeter"}
+    ],
+    "output": {"name": "BSA", "unit": "square meter"},
+    "d4rtCode": "BSA = sqrt(Weight * Height / 3600);",
+    "tags": ["medical", "general", "dosing", "mdcalc"]
+  },
+
+  // Ideal Body Weight (Devine) - MDCalc
+  {
+    "name": "Ideal Body Weight (Devine)",
+    "description": r"""
+      Calculates ideal body weight, commonly used to dose medications and guide weight-based therapy.
+
+      Men:
+      $$IBW = 50 + 2.3 \cdot (H_{in} - 60)$$
+
+      Women:
+      $$IBW = 45.5 + 2.3 \cdot (H_{in} - 60)$$
+
+      Where:
+      - $H_{in}$: Height in inches ($60$ inches = $152.4\ \mathrm{cm}$)
+
+      Source: [MDCalc - Ideal Body Weight](https://www.mdcalc.com/calc/2001/ideal-body-weight-and-adjusted-body-weight)
+
+      ![Weight scale](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/BMI_chart.svg/960px-BMI_chart.svg.png)
+    """,
+    "input": [
+      {"name": "Sex", "values": ["Female", "Male"]},
+      {"name": "Height", "unit": "inch"}
+    ],
+    "output": {"name": "IBW", "unit": "kilogram"},
+    "d4rtCode": r"""
+      var base = 50.0;
+      if (indexOf("Sex") == 0) {
+        base = 45.5;
+      }
+      IBW = base + 2.3 * (Height - 60);
+    """,
+    "tags": ["medical", "general", "dosing", "mdcalc"]
+  },
+
+  // Creatinine Clearance (Cockcroft-Gault) - MDCalc
+  {
+    "name": "Creatinine Clearance (Cockcroft-Gault)",
+    "description": r"""
+      Estimates creatinine clearance, a proxy for glomerular filtration rate, used mainly for medication dosing.
+
+      Men:
+      $$CrCl = \frac{(140 - Age) \cdot Weight}{72 \cdot SCr}$$
+
+      Women:
+      $$CrCl = \frac{(140 - Age) \cdot Weight}{72 \cdot SCr} \times 0.85$$
+
+      Where:
+      - $Age$: Age in years
+      - $Weight$: Body weight ($\mathrm{kg}$)
+      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+
+      The equation assumes stable renal function. It may be inaccurate at extremes of body weight; using ideal body weight is often recommended for patients who are obese or elderly.
+
+      Source: [MDCalc - Creatinine Clearance (Cockcroft-Gault)](https://www.mdcalc.com/calc/43/creatinine-clearance-cockcroft-gault-equation)
+
+      ![Nephron diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Kidney_nephron_molar_transport_diagram.svg/960px-Kidney_nephron_molar_transport_diagram.svg.png)
+    """,
+    "input": [
+      {"name": "Age", "unit": "year"},
+      {"name": "Sex", "values": ["Female", "Male"]},
+      {"name": "Weight", "unit": "kilogram"},
+      {"name": "SerumCreatinine", "unit": "milligram per deciliter"}
+    ],
+    "output": {"name": "CrCl", "unit": "milliliter per minute"},
+    "d4rtCode": r"""
+      if (SerumCreatinine <= 0) {
+        signal("Serum creatinine must be greater than 0");
+      }
+      var crcl = ((140 - Age) * Weight) / (72 * SerumCreatinine);
+      if (indexOf("Sex") == 0) {
+        crcl = crcl * 0.85;
+      }
+      CrCl = crcl;
+    """,
+    "tags": ["medical", "nephrology", "renal", "dosing", "mdcalc"]
+  },
+
+  // MDRD GFR Equation - MDCalc
+  {
+    "name": "MDRD GFR Equation",
+    "description": r"""
+      Estimates glomerular filtration rate in patients with chronic kidney disease (4-variable MDRD equation).
+
+      $$eGFR = 186 \cdot SCr^{-1.154} \cdot Age^{-0.203} \times (0.742\ \text{if female}) \times (1.21\ \text{if African American})$$
+
+      Where:
+      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $Age$: Age in years
+
+      Result is expressed in $\mathrm{mL/min/1.73m^2}$. The 2021 CKD-EPI equation is now the preferred standard for GFR estimation.
+
+      Source: [MDCalc - MDRD GFR Equation](https://www.mdcalc.com/calc/76/mdrd-gfr-equation)
+
+      ![Nephron diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Kidney_nephron_molar_transport_diagram.svg/960px-Kidney_nephron_molar_transport_diagram.svg.png)
+    """,
+    "input": [
+      {"name": "SerumCreatinine", "unit": "milligram per deciliter"},
+      {"name": "Age", "unit": "year"},
+      {"name": "Sex", "values": ["Female", "Male"]},
+      {"name": "Race", "values": ["African American", "Non-African American"]}
+    ],
+    "output": {"name": "MDRD", "unit": "milliliter per minute per 1.73 square meter"},
+    "d4rtCode": r"""
+      if (SerumCreatinine <= 0) {
+        signal("Serum creatinine must be greater than 0");
+      }
+      var egfr = 186 * pow(SerumCreatinine, -1.154) * pow(Age, -0.203);
+      if (indexOf("Sex") == 0) {
+        egfr = egfr * 0.742;
+      }
+      if (indexOf("Race") == 0) {
+        egfr = egfr * 1.21;
+      }
+      MDRD = egfr;
+    """,
+    "tags": ["medical", "nephrology", "renal", "gfr", "mdcalc"]
+  },
+
+  // CKD-EPI 2021 GFR (creatinine) - MDCalc
+  {
+    "name": "CKD-EPI 2021 GFR (creatinine)",
+    "description": r"""
+      Estimates glomerular filtration rate using the 2021 CKD-EPI creatinine equation, which does not include race. Recommended by ASN and NKF for GFR reporting in the United States.
+
+      $$eGFR = 142 \cdot \min(SCr/\kappa, 1)^{\alpha} \cdot \max(SCr/\kappa, 1)^{-1.200} \cdot 0.9938^{Age} \times (1.012\ \text{if female})$$
+
+      Where:
+      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $\kappa$ = 0.7 (female), 0.9 (male)
+      - $\alpha$ = -0.241 (female), -0.302 (male)
+
+      Result is expressed in $\mathrm{mL/min/1.73m^2}$.
+
+      Source: [MDCalc - CKD-EPI Equations for GFR](https://www.mdcalc.com/calc/3939/ckd-epi-equations-glomerular-filtration-rate-gfr)
+
+      ![Nephron diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Kidney_nephron_molar_transport_diagram.svg/960px-Kidney_nephron_molar_transport_diagram.svg.png)
+    """,
+    "input": [
+      {"name": "SerumCreatinine", "unit": "milligram per deciliter"},
+      {"name": "Age", "unit": "year"},
+      {"name": "Sex", "values": ["Female", "Male"]}
+    ],
+    "output": {"name": "CKDEPI", "unit": "milliliter per minute per 1.73 square meter"},
+    "d4rtCode": r"""
+      if (SerumCreatinine <= 0) {
+        signal("Serum creatinine must be greater than 0");
+      }
+      var kappa = 0.9;
+      var alpha = -0.302;
+      if (indexOf("Sex") == 0) {
+        kappa = 0.7;
+        alpha = -0.241;
+      }
+      var scrOverKappa = SerumCreatinine / kappa;
+      var egfr = 142 * pow(min(scrOverKappa, 1.0), alpha) * pow(max(scrOverKappa, 1.0), -1.200) * pow(0.9938, Age);
+      if (indexOf("Sex") == 0) {
+        egfr = egfr * 1.012;
+      }
+      CKDEPI = egfr;
+    """,
+    "tags": ["medical", "nephrology", "renal", "gfr", "mdcalc"]
+  },
+
+  // Revised Schwartz eGFR (pediatric) - MDCalc
+  {
+    "name": "Revised Schwartz eGFR (Pediatric)",
+    "description": r"""
+      Estimates glomerular filtration rate in children using the revised Schwartz equation (2009).
+
+      $$eGFR = \frac{0.413 \cdot H}{SCr}$$
+
+      Where:
+      - $H$: Height ($\mathrm{cm}$)
+      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+
+      Result is expressed in $\mathrm{mL/min/1.73m^2}$. Valid for children aged 1 year and older.
+
+      Source: [MDCalc - Revised Schwartz Equation](https://www.mdcalc.com/calc/10008/revised-schwartz-equation-2009)
+
+      ![Nephron diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Kidney_nephron_molar_transport_diagram.svg/960px-Kidney_nephron_molar_transport_diagram.svg.png)
+    """,
+    "input": [
+      {"name": "Height", "unit": "centimeter"},
+      {"name": "SerumCreatinine", "unit": "milligram per deciliter"}
+    ],
+    "output": {"name": "Schwartz", "unit": "milliliter per minute per 1.73 square meter"},
+    "d4rtCode": r"""
+      if (SerumCreatinine <= 0) {
+        signal("Serum creatinine must be greater than 0");
+      }
+      Schwartz = 0.413 * Height / SerumCreatinine;
+    """,
+    "tags": ["medical", "nephrology", "pediatrics", "gfr", "mdcalc"]
+  },
+
+  // Anion Gap - MDCalc
+  {
+    "name": "Anion Gap",
+    "description": r"""
+      Calculates the anion gap, used to evaluate metabolic acidosis.
+
+      $$AG = Na^+ - (Cl^- + HCO_3^-)$$
+
+      Where:
+      - $Na^+$: Serum sodium ($\mathrm{mEq/L}$)
+      - $Cl^-$: Serum chloride ($\mathrm{mEq/L}$)
+      - $HCO_3^-$: Serum bicarbonate ($\mathrm{mEq/L}$)
+
+      Normal range is approximately 3–11 mEq/L (depending on the laboratory). Causes of high anion gap metabolic acidosis include the classic mnemonic MUDPILES (Methanol, Uremia, DKA, Propylene glycol, Isoniazid, Lactic acidosis, Ethylene glycol, Salicylates). A normal anion gap acidosis can be caused by diarrhea, renal tubular acidosis, and hyperchloremia.
+
+      Source: [MDCalc - Anion Gap](https://www.mdcalc.com/calc/1889/anion-gap)
+
+      ![Anion Gap](https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Anion_Gap.svg/960px-Anion_Gap.svg.png)
+    """,
+    "input": [
+      {"name": "Sodium", "unit": "millimole per liter"},
+      {"name": "Chloride", "unit": "millimole per liter"},
+      {"name": "Bicarbonate", "unit": "millimole per liter"}
+    ],
+    "output": {"name": "AnionGap", "unit": "millimole per liter"},
+    "d4rtCode": "AnionGap = Sodium - (Chloride + Bicarbonate);",
+    "tags": ["medical", "electrolytes", "acid-base", "mdcalc"]
+  },
+
+  // Osmolar Gap - MDCalc
+  {
+    "name": "Osmolar Gap",
+    "description": r"""
+      Calculates the osmolar gap, the difference between measured and calculated serum osmolality. It helps detect unmeasured osmotically active solutes such as ethanol, methanol, ethylene glycol, and isopropanol.
+
+      $$Osm_{calc} = 2 \cdot Na^+ + \frac{Glucose}{18} + \frac{BUN}{2.8}$$
+
+      $$Osmolar\ Gap = Osm_{measured} - Osm_{calc}$$
+
+      Where:
+      - $Na^+$: Serum sodium ($\mathrm{mEq/L}$)
+      - $Glucose$: Serum glucose ($\mathrm{mg/dL}$)
+      - $BUN$: Blood urea nitrogen ($\mathrm{mg/dL}$)
+
+      A normal osmolar gap is < 10 mOsm/kg. An elevated gap suggests ingestion of a toxic alcohol.
+
+      Source: [MDCalc - Osmolar Gap](https://www.mdcalc.com/calc/1921/osmolar-gap)
+    """,
+    "input": [
+      {"name": "Sodium", "unit": "millimole per liter"},
+      {"name": "Glucose", "unit": "milligram per deciliter"},
+      {"name": "BUN", "unit": "milligram per deciliter"},
+      {"name": "MeasuredOsmolality", "unit": "milliosmole per kilogram"}
+    ],
+    "output": {"name": "OsmolarGap", "unit": "milliosmole per kilogram"},
+    "d4rtCode": r"""
+      var calcOsm = 2 * Sodium + Glucose / 18 + BUN / 2.8;
+      OsmolarGap = MeasuredOsmolality - calcOsm;
+    """,
+    "tags": ["medical", "electrolytes", "toxicology", "mdcalc"]
+  },
+
+  // Corrected Calcium - MDCalc
+  {
+    "name": "Corrected Calcium (Albumin-Adjusted)",
+    "description": r"""
+      Adjusts total serum calcium for hypoalbuminemia, since calcium bound to albumin is measured with total calcium.
+
+      $$Ca_{corrected} = Ca_{measured} + 0.8 \cdot (4.0 - Albumin)$$
+
+      Where:
+      - $Ca_{measured}$: Measured total calcium ($\mathrm{mg/dL}$)
+      - $Albumin$: Serum albumin ($\mathrm{g/dL}$)
+
+      For every 1 g/dL decrease in albumin below 4 g/dL, total calcium is corrected upward by approximately 0.8 mg/dL.
+
+      Source: [MDCalc - Corrected Calcium](https://www.mdcalc.com/calc/2045/corrected-calcium)
+    """,
+    "input": [
+      {"name": "Calcium", "unit": "milligram per deciliter"},
+      {"name": "Albumin", "unit": "gram per deciliter"}
+    ],
+    "output": {"name": "CorrectedCalcium", "unit": "milligram per deciliter"},
+    "d4rtCode": "CorrectedCalcium = Calcium + 0.8 * (4.0 - Albumin);",
+    "tags": ["medical", "electrolytes", "calcium", "mdcalc"]
+  },
+
+  // Alveolar-arterial (A-a) Gradient - MDCalc
+  {
+    "name": "A-a Gradient",
+    "description": r"""
+      Calculates the alveolar-arterial oxygen gradient, a measure of the difference between the oxygen pressure in the alveoli and that in arterial blood. It helps distinguish pulmonary (intrapulmonary shunt) from extrapulmonary (hypoventilation) causes of hypoxemia.
+
+      $$P_AO_2 = (P_{atm} - P_{H_2O}) \cdot FiO_2 - \frac{P_aCO_2}{RQ}$$
+
+      $$A{-}a\ Gradient = P_AO_2 - P_aO_2$$
+
+      With $P_{atm} = 760\ \mathrm{mmHg}$, $P_{H_2O} = 47\ \mathrm{mmHg}$, and $RQ = 0.8$:
+      $$A{-}a = 713 \cdot FiO_2 - \frac{PaCO_2}{0.8} - PaO_2$$
+
+      Where:
+      - $FiO_2$: Fraction of inspired oxygen ($\%$; 21% on room air)
+      - $PaCO_2$: Arterial carbon dioxide partial pressure ($\mathrm{mmHg}$)
+      - $PaO_2$: Arterial oxygen partial pressure ($\mathrm{mmHg}$)
+
+      Source: [MDCalc - A-a Gradient](https://www.mdcalc.com/calc/110/aa-o2-gradient)
+    """,
+    "input": [
+      {"name": "FiO2", "unit": "percent"},
+      {"name": "PaCO2", "unit": "millimeter of mercury"},
+      {"name": "PaO2", "unit": "millimeter of mercury"}
+    ],
+    "output": {"name": "AaGradient", "unit": "millimeter of mercury"},
+    "d4rtCode": r"""
+      var pio2 = (760.0 - 47.0) * (FiO2 / 100);
+      var pao2Alveolar = pio2 - (PaCO2 / 0.8);
+      AaGradient = pao2Alveolar - PaO2;
+    """,
+    "tags": ["medical", "pulmonology", "oxygenation", "mdcalc"]
+  },
+
+  // PaO2/FiO2 (P/F) Ratio - MDCalc
+  {
+    "name": "PaO₂/FiO₂ (P/F) Ratio",
+    "description": r"""
+      Calculates the ratio of arterial oxygen partial pressure to the fraction of inspired oxygen. It is used to assess the severity of acute respiratory distress syndrome (ARDS) and hypoxemia.
+
+      $$P/F = \frac{PaO_2}{FiO_2}$$
+
+      Where:
+      - $PaO_2$: Arterial oxygen partial pressure ($\mathrm{mmHg}$)
+      - $FiO_2$: Fraction of inspired oxygen, entered as percentage (e.g., 21% on room air)
+
+      Severity of ARDS (Berlin criteria): mild 200–300, moderate 100–200, severe < 100.
+
+      Source: [MDCalc - SpO₂/FiO₂ Ratio](https://www.mdcalc.com/calc/10570/spo2-fio2-ratio)
+    """,
+    "input": [
+      {"name": "PaO2", "unit": "millimeter of mercury"},
+      {"name": "FiO2", "unit": "percent"}
+    ],
+    "output": {"name": "PFRatio", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (FiO2 <= 0) {
+        signal("FiO2 must be greater than 0");
+      }
+      PFRatio = PaO2 / (FiO2 / 100);
+    """,
+    "tags": ["medical", "pulmonology", "oxygenation", "mdcalc"]
+  },
+
+  // MELD Score - MDCalc
+  {
+    "name": "MELD Score",
+    "description": r"""
+      Model for End-Stage Liver Disease score, used to prioritize liver transplantation and predict 3-month mortality in patients with end-stage liver disease.
+
+      $$MELD = 3.78 \cdot \ln(Bilirubin) + 11.2 \cdot \ln(INR) + 9.57 \cdot \ln(Creatinine) + 6.43$$
+
+      Where:
+      - $Bilirubin$: Total bilirubin ($\mathrm{mg/dL}$)
+      - $INR$: International normalized ratio
+      - $Creatinine$: Serum creatinine ($\mathrm{mg/dL}$)
+
+      Creatinine is capped at 4.0 mg/dL for patients on dialysis. The score is rounded to the nearest integer. MELD ≥ 15 is typically required for transplant listing; scores ≥ 40 carry a 3-month mortality above 70%.
+
+      Source: [MDCalc - MELD Score](https://www.mdcalc.com/calc/2052/meld-score-model-end-stage-liver-disease-12-older)
+
+      ![Liver](https://commons.wikimedia.org/wiki/Special:FilePath/Liver.svg?width=800)
+    """,
+    "input": [
+      {"name": "Bilirubin", "unit": "milligram per deciliter"},
+      {"name": "INR", "unit": "scalar"},
+      {"name": "Creatinine", "unit": "milligram per deciliter"},
+      {"name": "Dialysis", "values": ["No", "Yes"]}
+    ],
+    "output": {"name": "MELD", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (Bilirubin <= 0 || INR <= 0) {
+        signal("Bilirubin and INR must be greater than 0");
+      }
+      var scr = Creatinine;
+      if (indexOf("Dialysis") == 1) {
+        scr = 4.0;
+      }
+      var meld = 3.78 * log(Bilirubin) + 11.2 * log(INR) + 9.57 * log(scr) + 6.43;
+      MELD = meld.roundToDouble();
+    """,
+    "tags": ["medical", "hepatology", "liver", "score", "mdcalc"]
+  },
+
+  // Child-Pugh Score - MDCalc
+  {
+    "name": "Child-Pugh Score",
+    "description": r"""
+      Classifies the severity of liver disease to predict prognosis and guide management, including candidacy for liver transplantation.
+
+      The score sums 5 components (1–3 points each), yielding a total of 5–15 points:
+
+      - $Bilirubin$: < 2 = 1, 2–3 = 2, > 3 mg/dL = 3
+      - $Albumin$: > 3.5 = 1, 2.8–3.5 = 2, < 2.8 g/dL = 3
+      - $INR$: < 1.7 = 1, 1.7–2.3 = 2, > 2.3 = 3
+      - $Ascites$: None = 1, slight = 2, moderate/severe = 3
+      - $Encephalopathy$: None = 1, grade I–II = 2, grade III–IV = 3
+
+      Class A (5–6): good hepatic function; Class B (7–9): significant compromise; Class C (10–15): advanced dysfunction.
+
+      Source: [MDCalc - Child-Pugh Score](https://www.mdcalc.com/calc/2523/child-pugh-score-cirrhosis-mortality)
+
+      ![Liver cirrhosis](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Liver_Cirrhosis.png/960px-Liver_Cirrhosis.png)
+    """,
+    "input": [
+      {"name": "Bilirubin", "values": ["< 2 mg/dL", "2 - 3 mg/dL", "> 3 mg/dL"]},
+      {"name": "Albumin", "values": ["> 3.5 g/dL", "2.8 - 3.5 g/dL", "< 2.8 g/dL"]},
+      {"name": "INR", "values": ["< 1.7", "1.7 - 2.3", "> 2.3"]},
+      {"name": "Ascites", "values": ["None", "Slight (controlled with diuretics)", "Moderate to severe"]},
+      {"name": "Encephalopathy", "values": ["None", "Grade I - II (or suppressed)", "Grade III - IV (or refractory)"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var score = indexOf("Bilirubin") + indexOf("Albumin") + indexOf("INR") + indexOf("Ascites") + indexOf("Encephalopathy") + 5;
+      late var childClass;
+      if (score <= 6) {
+        childClass = 'A (good hepatic function, 1-year survival ~100%)';
+      } else if (score <= 9) {
+        childClass = 'B (significant functional compromise, 1-year survival ~80%)';
+      } else {
+        childClass = 'C (advanced dysfunction, 1-year survival ~45%)';
+      }
+      Result = 'Child-Pugh: $score - Class $childClass';
+    """,
+    "tags": ["medical", "hepatology", "liver", "score", "mdcalc"]
+  },
+
+  // CURB-65 Score - MDCalc
+  {
+    "name": "CURB-65 Score",
+    "description": r"""
+      Predicts mortality in community-acquired pneumonia and guides the decision to treat as an outpatient, in hospital, or in the ICU.
+
+      One point is assigned for each of:
+      - $C$: Confusion (new-onset)
+      - $U$: Urea > 19 mg/dL (BUN > 19)
+      - $R$: Respiratory rate ≥ 30 breaths/min
+      - $B$: Blood pressure low (SBP < 90 or DBP ≤ 60 mmHg)
+      - $65$: Age ≥ 65
+
+      Mortality risk: score 0 = 0.7% (low, treat as outpatient), 1 = 3.2% (low, outpatient or short admission), 2 = 13% (intermediate, hospital), 3 = 17% (intermediate, consider ICU), 4–5 = 41.5% (high, ICU).
+
+      Source: [MDCalc - CURB-65 Score](https://www.mdcalc.com/calc/467/curb-65-score-pneumonia-severity)
+
+      ![Pneumonia x-ray](https://upload.wikimedia.org/wikipedia/commons/a/a6/Pneumonia_x-ray.jpg)
+    """,
+    "input": [
+      {"name": "Confusion", "values": ["No", "Yes"]},
+      {"name": "UreaBUN", "values": ["<= 19 mg/dL", "> 19 mg/dL"]},
+      {"name": "RespiratoryRate", "values": ["< 30 breaths/min", ">= 30 breaths/min"]},
+      {"name": "BloodPressure", "values": ["Normal", "Low (SBP < 90 or DBP <= 60 mmHg)"]},
+      {"name": "Age65", "values": ["< 65 years", ">= 65 years"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var score = indexOf("Confusion") + indexOf("UreaBUN") + indexOf("RespiratoryRate") + indexOf("BloodPressure") + indexOf("Age65");
+      late var risk;
+      if (score == 0) {
+        risk = '0.7% mortality - low risk, consider outpatient treatment';
+      } else if (score == 1) {
+        risk = '3.2% mortality - low risk';
+      } else if (score == 2) {
+        risk = '13.0% mortality - intermediate risk, hospital admission';
+      } else if (score == 3) {
+        risk = '17.0% mortality - intermediate risk, consider ICU';
+      } else {
+        risk = '41.5% mortality - high risk, ICU admission';
+      }
+      Result = 'CURB-65: $score - $risk';
+    """,
+    "tags": ["medical", "pulmonology", "pneumonia", "score", "mdcalc"]
+  },
+
+  // qSOFA Score - MDCalc
+  {
+    "name": "qSOFA Score",
+    "description": r"""
+      Quick SOFA score, a bedside screening tool to identify patients with suspected infection who are at greater risk of poor outcomes (sepsis).
+
+      One point is assigned for each of:
+      - Respiratory rate ≥ 22 breaths/min
+      - Systolic blood pressure ≤ 100 mmHg
+      - Altered mental status (Glasgow Coma Scale < 15)
+
+      A score ≥ 2 in a patient with suspected infection is associated with a greater risk of in-hospital mortality and may prompt ICU admission and further evaluation for organ dysfunction.
+
+      Source: [MDCalc - qSOFA](https://www.mdcalc.com/calc/3575/qsofa-quick-sofa-score-sepsis)
+    """,
+    "input": [
+      {"name": "RespiratoryRate", "values": ["< 22 breaths/min", ">= 22 breaths/min"]},
+      {"name": "SystolicBP", "values": ["> 100 mmHg", "<= 100 mmHg"]},
+      {"name": "AlteredMentation", "values": ["No", "Yes"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var score = indexOf("RespiratoryRate") + indexOf("SystolicBP") + indexOf("AlteredMentation");
+      late var risk;
+      if (score >= 2) {
+        risk = 'high risk - suspect sepsis, consider ICU admission';
+      } else {
+        risk = 'low risk';
+      }
+      Result = 'qSOFA: $score - $risk';
+    """,
+    "tags": ["medical", "sepsis", "score", "mdcalc"]
+  },
+
+  // Wells Criteria for PE - MDCalc
+  {
+    "name": "Wells Criteria for Pulmonary Embolism",
+    "description": r"""
+      Estimates the clinical probability of pulmonary embolism (PE) to guide further testing.
+
+      Points are assigned as:
+      - Clinical signs of DVT: +3
+      - PE is the most likely diagnosis: +3
+      - Heart rate > 100 bpm: +1.5
+      - Immobilization (≥ 3 days) or surgery in the previous 4 weeks: +1.5
+      - Previous DVT/PE: +1.5
+      - Hemoptysis: +1
+      - Malignancy (treatment within 6 months or palliative): +1
+
+      Three-tier interpretation: < 2 = low probability, 2–6 = moderate, > 6 = high.
+
+      Source: [MDCalc - Wells Criteria for PE](https://www.mdcalc.com/calc/95/wells-criteria-pulmonary-embolism)
+
+      ![Pulmonary embolism](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/3D_Medical_Animation_still_shot_Pulmonary_Embolism.jpg/960px-3D_Medical_Animation_still_shot_Pulmonary_Embolism.jpg)
+    """,
+    "input": [
+      {"name": "ClinicalSignsDVT", "values": ["No", "Yes"]},
+      {"name": "PEmainDiagnosis", "values": ["No", "Yes"]},
+      {"name": "HeartRate", "values": ["<= 100 bpm", "> 100 bpm"]},
+      {"name": "Immobilization", "values": ["No", "Yes"]},
+      {"name": "PreviousPEorDVT", "values": ["No", "Yes"]},
+      {"name": "Hemoptysis", "values": ["No", "Yes"]},
+      {"name": "Malignancy", "values": ["No", "Yes"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var score = indexOf("ClinicalSignsDVT") * 3.0 + indexOf("PEmainDiagnosis") * 3.0 + indexOf("HeartRate") * 1.5 + indexOf("Immobilization") * 1.5 + indexOf("PreviousPEorDVT") * 1.5 + indexOf("Hemoptysis") * 1.0 + indexOf("Malignancy") * 1.0;
+      late var probability;
+      if (score < 2) {
+        probability = 'low probability';
+      } else if (score <= 6) {
+        probability = 'moderate probability';
+      } else {
+        probability = 'high probability';
+      }
+      Result = 'Wells PE score: $score - $probability';
+    """,
+    "tags": ["medical", "thromboembolism", "score", "mdcalc"]
+  },
+
+  // Holliday-Segar Maintenance Fluids - MDCalc
+  {
+    "name": "Holliday-Segar Maintenance Fluids",
+    "description": r"""
+      Estimates daily maintenance fluid requirements in children using the 4-2-1 (Holliday-Segar) rule.
+
+      For each 24 hours:
+      - First 10 kg: 100 mL/kg
+      - Next 10 kg (11–20 kg): 50 mL/kg
+      - Above 20 kg: 20 mL/kg
+
+      $$V_{mL/day} =
+      \begin{cases}
+      100 \cdot W & W \le 10 \\
+      1000 + 50 \cdot (W - 10) & 10 < W \le 20 \\
+      1500 + 20 \cdot (W - 20) & W > 20
+      \end{cases}$$
+
+      Where $W$ is body weight in kg.
+
+      Source: [MDCalc - Pediatric Maintenance Fluids](https://www.mdcalc.com/calc/3162/maintenance-fluids-calculations)
+    """,
+    "input": [
+      {"name": "Weight", "unit": "kilogram"}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+      var mlPerDay = 0.0;
+      if (Weight <= 10) {
+        mlPerDay = 100 * Weight;
+      } else if (Weight <= 20) {
+        mlPerDay = 1000 + 50 * (Weight - 10);
+      } else {
+        mlPerDay = 1500 + 20 * (Weight - 20);
+      }
+      Result = 'Maintenance: ${mlPerDay.round()} mL/day';
+    """,
+    "tags": ["medical", "pediatrics", "fluids", "mdcalc"]
+  }
+]

@@ -1,5 +1,7 @@
 [
   {"name": "meter", "symbol": "m", "isBase": true},
+  {"name": "centimeter", "symbol": "cm", "baseUnit": "meter", "factor": 0.01},
+  {"name": "foot", "symbol": "ft", "baseUnit": "meter", "factor": 0.3048},
   {"name": "inch", "symbol": "in", "baseUnit": "meter", "factor" : 0.0254 },
   {"name": "kilometer", "symbol": "km", "baseUnit": "meter", "factor": 1000},
   {
