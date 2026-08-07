@@ -1,9 +1,14 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
+
 import 'formula_models.dart';
 import 'error_handler.dart';
 import 'd4rt_bridge.dart';
+
+import 'package:d4rt/src/module_loader.dart';
+import 'package:d4rt/src/stdlib/core/list.dart';
+
 
 /// Exception thrown when formula evaluation fails
 class FormulaEvaluationException implements Exception {
@@ -54,6 +59,24 @@ class FormulaEvaluator {
   }
 
   static void prepareInterpreter(D4rt interpreter) {
+
+    // Workarround for https://github.com/kodjodevf/d4rt/issues/8
+    BridgedClass jsarrayDefinition(){
+      BridgedClass listcore = ListCore.definition;
+      return BridgedClass(
+        nativeNames: [ "List", "JSArray"],
+        nativeType: listcore.nativeType,
+        name: listcore.name,
+        typeParameterCount:  listcore.typeParameterCount,
+        staticMethods: listcore.staticMethods,
+        methods: listcore.methods,
+        getters: listcore.getters,
+        setters: listcore.setters
+      );
+    }
+    //interpreter._moduleLoader.globalEnvironment.defineBridge(jsarrayDefinition());
+    interpreter.registerBridgedClass(jsarrayDefinition(), "package:fake_package/jsarray.dart");
+    
     final myMathDefinition = BridgedClass(
       nativeType: MyMath,
       name: 'MyMath',
@@ -252,7 +275,7 @@ class FormulaEvaluator {
       // If return type is int, there is an error converting double to int 🤷‍
       dynamic indexOf(String inputName) {
         String value = variableValues[inputName];
-        String allowedValues = variableAllowedValues[inputName];
+        List<String> allowedValues = variableAllowedValues[inputName];
         dynamic ret = allowedValues.indexOf(value) as int;
         return ret as int;
       }
