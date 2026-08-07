@@ -9,18 +9,6 @@ set -o pipefail
 echo "Ejecutando $0 en directorio $(pwd)"
 
 
-build_release_files(){
-    #make build-container build-builders test build-android-release-container build-linux-release-container build-web-release-container
-    make build-container build-builders  clean-container test build-web-debug-container
-
-    echo " ----> Listando archivos en pwd"
-    find $(pwd)
-    echo " <----"
-
-    pushd build/web && zip -r ../../webapp.zip * && popd
-    pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
-}
-
 
 build_release_files(){
 
@@ -65,7 +53,7 @@ get_release_files(){
 
 create_release_in_github(){
     FILES="$(get_release_files)"
-    gh release create $TAG --notes "Automatic release" $FILES
+    gh release create $RELEASE_NAME --notes "Automatic release" $FILES
 }
 
 update_gh_pages(){
@@ -115,12 +103,12 @@ main(){
     fi
     if [[ ! $TAG == release-* ]]
     then
-        echo "Not a release tag, it should start with 'release-', skipping release"
+        echo "Not a release tag, it should start with 'release-', skipping build"
         exit 0
     fi
-    VERSION=${TAG#release-}
+    RELEASE_NAME=${TAG#release-}
 
-    echo "Building release for TAG:$TAG VERSION:$VERSION"
+    echo "Building release for TAG:$TAG RELEASE_NAME:$RELEASE_NAME"
     build_release_files
 
     create_release_in_github
