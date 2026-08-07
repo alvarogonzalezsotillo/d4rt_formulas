@@ -35,8 +35,8 @@ Force equals mass times acceleration
 $$F = m \cdot a$$
 
 Where:
-- $m$: Mass of object ($\mathrm{kg}$)
-- $a$: Acceleration ($\mathrm{m/s^2}$)
+- $m$: Mass of object ( $\mathrm{kg}$ )
+- $a$: Acceleration ( $\mathrm{m/s^2}$ )
 
 ![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)""",
     "input": [
@@ -230,7 +230,7 @@ Quantity of motion possessed by a moving object
 $$p = mv$$
 
 Where:
-- $p$: Momentum ($\mathrm{kg \cdot m/s}$)
+- $p$: Momentum ( $\mathrm{kg \cdot m/s}$ )
 - $m$: Mass (kilograms)
 - $v$: Velocity (m/s)
 
@@ -255,7 +255,7 @@ $$V = \frac{4}{3}\pi r^3$$
 Where:
 - $V$: Volume (cubic meters)
 - $r$: Radius (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 The volume is proportional to the cube of the radius.""",
     "input": [
@@ -277,7 +277,7 @@ $$A = 4\pi r^2$$
 Where:
 - $A$: Surface area (square meters)
 - $r$: Radius (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 The surface area is four times the area of a circle with the same radius.""",
     "input": [
@@ -300,7 +300,7 @@ Where:
 - $V$: Volume (cubic meters)
 - $r$: Radius of base (meters)
 - $h$: Height (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 The volume is the area of the base times the height.""",
     "input": [
@@ -324,7 +324,7 @@ Where:
 - $A$: Total surface area (square meters)
 - $r$: Radius of base (meters)
 - $h$: Height (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 This includes the lateral surface plus the two circular ends.""",
     "input": [
@@ -348,7 +348,7 @@ Where:
 - $V$: Volume (cubic meters)
 - $r$: Radius of base (meters)
 - $h$: Height (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 The volume is one-third the volume of a cylinder with the same base and height.""",
     "input": [

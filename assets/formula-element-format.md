@@ -353,8 +353,8 @@ Force equals mass times acceleration.
 $$F = m \cdot a$$
 
 Where:
-- $m$: Mass of object ($\mathrm{kg}$)
-- $a$: Acceleration ($\mathrm{m/s^2}$)
+- $m$: Mass of object ( $\mathrm{kg}$ )
+- $a$: Acceleration ( $\mathrm{m/s^2}$ )
 
 ![Newton's Second Law](https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Newtonslawsofmotion.jpg/800px-Newtonslawsofmotion.jpg)""",
   "input": [

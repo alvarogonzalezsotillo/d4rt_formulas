@@ -9,8 +9,8 @@
       $$MAP = \frac{SBP + 2 \cdot DBP}{3}$$
 
       Where:
-      - $SBP$: Systolic blood pressure ($\mathrm{mmHg}$)
-      - $DBP$: Diastolic blood pressure ($\mathrm{mmHg}$)
+      - $SBP$: Systolic blood pressure ( $\mathrm{mmHg}$ )
+      - $DBP$: Diastolic blood pressure ( $\mathrm{mmHg}$ )
 
       A MAP ≥ 60 mmHg is generally needed to maintain adequate tissue perfusion. A MAP ≥ 65 mmHg is recommended in patients with severe sepsis and septic shock (Surviving Sepsis Campaign).
 
@@ -36,8 +36,8 @@
       $$PP = SBP - DBP$$
 
       Where:
-      - $SBP$: Systolic blood pressure ($\mathrm{mmHg}$)
-      - $DBP$: Diastolic blood pressure ($\mathrm{mmHg}$)
+      - $SBP$: Systolic blood pressure ( $\mathrm{mmHg}$ )
+      - $DBP$: Diastolic blood pressure ( $\mathrm{mmHg}$ )
 
       A normal pulse pressure is about 40 mmHg. Wide pulse pressure (> 60 mmHg) may occur in aortic regurgitation, arteriovenous fistulas, and hyperthyroidism; narrow pulse pressure may occur in cardiac tamponade and heart failure.
 
@@ -63,8 +63,8 @@
       $$QTc = \frac{QT}{\sqrt{RR}}$$
 
       Where:
-      - $QT$: Measured QT interval ($\mathrm{ms}$)
-      - $RR$: RR interval ($\mathrm{ms}$), the time between two consecutive R waves
+      - $QT$: Measured QT interval ( $\mathrm{ms}$ )
+      - $RR$: RR interval ( $\mathrm{ms}$ ), the time between two consecutive R waves
 
       A normal QTc is approximately 350–450 ms for men and 360–460 ms for women. QTc > 500 ms is associated with a significantly increased risk of torsades de pointes.
 
@@ -181,8 +181,8 @@
       $$BMI = \frac{Weight}{Height^2}$$
 
       Where:
-      - $Weight$: Body weight ($\mathrm{kg}$)
-      - $Height$: Height ($\mathrm{m}$)
+      - $Weight$: Body weight ( $\mathrm{kg}$ )
+      - $Height$: Height ( $\mathrm{m}$ )
 
       Classification (WHO):
       - Underweight: < 18.5
@@ -219,8 +219,8 @@
       $$BSA = \sqrt{\frac{Height \cdot Weight}{3600}}$$
 
       Where:
-      - $Height$: Height ($\mathrm{cm}$)
-      - $Weight$: Weight ($\mathrm{kg}$)
+      - $Height$: Height ( $\mathrm{cm}$ )
+      - $Weight$: Weight ( $\mathrm{kg}$ )
 
       The Mosteller formula is the most commonly used estimate of body surface area.
 
@@ -250,7 +250,7 @@
       $$IBW = 45.5 + 2.3 \cdot (H_{in} - 60)$$
 
       Where:
-      - $H_{in}$: Height in inches ($60$ inches = $152.4\ \mathrm{cm}$)
+      - $H_{in}$: Height in inches ($60$ inches = $152.4\ \mathrm{cm}$ )
 
       Source: [MDCalc - Ideal Body Weight](https://www.mdcalc.com/calc/2001/ideal-body-weight-and-adjusted-body-weight)
 
@@ -285,8 +285,8 @@
 
       Where:
       - $Age$: Age in years
-      - $Weight$: Body weight ($\mathrm{kg}$)
-      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $Weight$: Body weight ( $\mathrm{kg}$ )
+      - $SCr$: Serum creatinine ( $\mathrm{mg/dL}$ )
 
       The equation assumes stable renal function. It may be inaccurate at extremes of body weight; using ideal body weight is often recommended for patients who are obese or elderly.
 
@@ -323,7 +323,7 @@
       $$eGFR = 186 \cdot SCr^{-1.154} \cdot Age^{-0.203} \times (0.742\ \text{if female}) \times (1.21\ \text{if African American})$$
 
       Where:
-      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $SCr$: Serum creatinine ( $\mathrm{mg/dL}$ )
       - $Age$: Age in years
 
       Result is expressed in $\mathrm{mL/min/1.73m^2}$. The 2021 CKD-EPI equation is now the preferred standard for GFR estimation.
@@ -364,7 +364,7 @@
       $$eGFR = 142 \cdot \min(SCr/\kappa, 1)^{\alpha} \cdot \max(SCr/\kappa, 1)^{-1.200} \cdot 0.9938^{Age} \times (1.012\ \text{if female})$$
 
       Where:
-      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $SCr$: Serum creatinine ( $\mathrm{mg/dL}$ )
       - $\kappa$ = 0.7 (female), 0.9 (male)
       - $\alpha$ = -0.241 (female), -0.302 (male)
 
@@ -409,8 +409,8 @@
       $$eGFR = \frac{0.413 \cdot H}{SCr}$$
 
       Where:
-      - $H$: Height ($\mathrm{cm}$)
-      - $SCr$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $H$: Height ( $\mathrm{cm}$ )
+      - $SCr$: Serum creatinine ( $\mathrm{mg/dL}$ )
 
       Result is expressed in $\mathrm{mL/min/1.73m^2}$. Valid for children aged 1 year and older.
 
@@ -441,9 +441,9 @@
       $$AG = Na^+ - (Cl^- + HCO_3^-)$$
 
       Where:
-      - $Na^+$: Serum sodium ($\mathrm{mEq/L}$)
-      - $Cl^-$: Serum chloride ($\mathrm{mEq/L}$)
-      - $HCO_3^-$: Serum bicarbonate ($\mathrm{mEq/L}$)
+      - $Na^+$: Serum sodium ( $\mathrm{mEq/L}$ )
+      - $Cl^-$: Serum chloride ( $\mathrm{mEq/L}$ )
+      - $HCO_3^-$: Serum bicarbonate ( $\mathrm{mEq/L}$ )
 
       Normal range is approximately 3–11 mEq/L (depending on the laboratory). Causes of high anion gap metabolic acidosis include the classic mnemonic MUDPILES (Methanol, Uremia, DKA, Propylene glycol, Isoniazid, Lactic acidosis, Ethylene glycol, Salicylates). A normal anion gap acidosis can be caused by diarrhea, renal tubular acidosis, and hyperchloremia.
 
@@ -472,9 +472,9 @@
       $$Osmolar\ Gap = Osm_{measured} - Osm_{calc}$$
 
       Where:
-      - $Na^+$: Serum sodium ($\mathrm{mEq/L}$)
-      - $Glucose$: Serum glucose ($\mathrm{mg/dL}$)
-      - $BUN$: Blood urea nitrogen ($\mathrm{mg/dL}$)
+      - $Na^+$: Serum sodium ( $\mathrm{mEq/L}$ )
+      - $Glucose$: Serum glucose ( $\mathrm{mg/dL}$ )
+      - $BUN$: Blood urea nitrogen ( $\mathrm{mg/dL}$ )
 
       A normal osmolar gap is < 10 mOsm/kg. An elevated gap suggests ingestion of a toxic alcohol.
 
@@ -503,8 +503,8 @@
       $$Ca_{corrected} = Ca_{measured} + 0.8 \cdot (4.0 - Albumin)$$
 
       Where:
-      - $Ca_{measured}$: Measured total calcium ($\mathrm{mg/dL}$)
-      - $Albumin$: Serum albumin ($\mathrm{g/dL}$)
+      - $Ca_{measured}$: Measured total calcium ( $\mathrm{mg/dL}$ )
+      - $Albumin$: Serum albumin ( $\mathrm{g/dL}$ )
 
       For every 1 g/dL decrease in albumin below 4 g/dL, total calcium is corrected upward by approximately 0.8 mg/dL.
 
@@ -534,8 +534,8 @@
 
       Where:
       - $FiO_2$: Fraction of inspired oxygen ($\%$; 21% on room air)
-      - $PaCO_2$: Arterial carbon dioxide partial pressure ($\mathrm{mmHg}$)
-      - $PaO_2$: Arterial oxygen partial pressure ($\mathrm{mmHg}$)
+      - $PaCO_2$: Arterial carbon dioxide partial pressure ( $\mathrm{mmHg}$ )
+      - $PaO_2$: Arterial oxygen partial pressure ( $\mathrm{mmHg}$ )
 
       Source: [MDCalc - A-a Gradient](https://www.mdcalc.com/calc/110/aa-o2-gradient)
     """,
@@ -562,7 +562,7 @@
       $$P/F = \frac{PaO_2}{FiO_2}$$
 
       Where:
-      - $PaO_2$: Arterial oxygen partial pressure ($\mathrm{mmHg}$)
+      - $PaO_2$: Arterial oxygen partial pressure ( $\mathrm{mmHg}$ )
       - $FiO_2$: Fraction of inspired oxygen, entered as percentage (e.g., 21% on room air)
 
       Severity of ARDS (Berlin criteria): mild 200–300, moderate 100–200, severe < 100.
@@ -592,9 +592,9 @@
       $$MELD = 3.78 \cdot \ln(Bilirubin) + 11.2 \cdot \ln(INR) + 9.57 \cdot \ln(Creatinine) + 6.43$$
 
       Where:
-      - $Bilirubin$: Total bilirubin ($\mathrm{mg/dL}$)
+      - $Bilirubin$: Total bilirubin ( $\mathrm{mg/dL}$ )
       - $INR$: International normalized ratio
-      - $Creatinine$: Serum creatinine ($\mathrm{mg/dL}$)
+      - $Creatinine$: Serum creatinine ( $\mathrm{mg/dL}$ )
 
       Creatinine is capped at 4.0 mg/dL for patients on dialysis. The score is rounded to the nearest integer. MELD ≥ 15 is typically required for transplant listing; scores ≥ 40 carry a 3-month mortality above 70%.
 

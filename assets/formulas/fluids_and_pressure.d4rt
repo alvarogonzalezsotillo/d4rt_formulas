@@ -8,7 +8,7 @@ Mass per unit volume of a substance.
 $$\rho = \frac{m}{V}$$
 
 Where:
-- $\rho$: Density ($\mathrm{kg/m^3}$)
+- $\rho$: Density ( $\mathrm{kg/m^3}$ )
 - $m$: Mass (kilograms)
 - $V$: Volume (cubic meters)
 
@@ -59,8 +59,8 @@ $$F_b = \rho g V$$
 
 Where:
 - $F_b$: Buoyant force (Newtons)
-- $\rho$: Fluid density ($\mathrm{kg/m^3}$)
-- $g$: Gravitational acceleration ($\mathrm{m/s^2}$)
+- $\rho$: Fluid density ( $\mathrm{kg/m^3}$ )
+- $g$: Gravitational acceleration ( $\mathrm{m/s^2}$ )
 - $V$: Displaced volume (cubic meters)
 
 An object floats when buoyant force equals its weight.

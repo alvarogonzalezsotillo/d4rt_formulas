@@ -10,7 +10,7 @@ $$A = \pi r^2$$
 Where:
 - $A$: Area (square meters)
 - $r$: Radius (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 The area is proportional to the square of the radius.""",
     "input": [
@@ -32,7 +32,7 @@ $$C = 2\pi r$$
 Where:
 - $C$: Circumference (meters)
 - $r$: Radius (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 The circumference is proportional to the radius.""",
     "input": [
@@ -125,7 +125,7 @@ Where:
 - $A$: Area (square meters)
 - $n$: Number of sides
 - $s$: Side length (meters)
-- $\pi$: Pi ($\approx 3.14159$)
+- $\pi$: Pi ( $\approx 3.14159$ )
 
 This formula works for any regular polygon (equal sides and angles).""",
     "input": [
