@@ -13,7 +13,7 @@ echo "Ejecutando $0 en directorio $(pwd)"
 build_release_files(){
 
     build_web()(
-        make build-web-release-container
+        make build-web-debug-container
         pushd build/web && zip -r ../../webapp.zip * && popd
     )
 
@@ -22,9 +22,8 @@ build_release_files(){
     )
 
     build_linux()(
-        make 
+        make build-linux-release-container
         pushd build/linux/x64/release/bundle && zip -r ../../../../../linux-bin.zip * && popd
-        build-linux-release-container
     )
 
     build_common()(
