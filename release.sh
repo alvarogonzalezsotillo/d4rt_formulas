@@ -33,8 +33,8 @@ build_release_files(){
 
     build_common
     build_web
-    # build_android
-    # build_linux
+    build_android
+    build_linux
 
 }
 
