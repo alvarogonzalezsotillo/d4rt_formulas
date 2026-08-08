@@ -16,9 +16,8 @@ class CompileConstants {
       var read = SetUtils.parseD4rtLiteral("[$arrayStringLiteral]");
       print(read);
       var map = read[0] as Map;
-      return map.cast<String,String>();
-    }
-    catch (e, st) {
+      return map.cast<String, String>();
+    } catch (e, st) {
       print(e);
       print(st);
       return {};
@@ -54,7 +53,7 @@ class CompileConstants {
   }
 
   static bool useDatabase() {
-    return false;
+    return !isWeb();
   }
 
   static bool isWeb() {

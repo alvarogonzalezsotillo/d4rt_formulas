@@ -68,6 +68,33 @@ class _CorpusLoaderState extends State<CorpusLoader> {
     _corpusFuture = widget.corpusFuture;
   }
 
+  void _handleAbout() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('About'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Release: ${CompileConstants.release()}'),
+              Text('Build timestamp: ${CompileConstants.buildTimestamp()}'),
+              Text('Build host: ${CompileConstants.buildHost()}'),
+              Text('Corpus backend: ${CompileConstants.useDatabase() ? "Database" : "Memory"}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _handleImport() {
     _corpusFuture.then((corpus) {
       Navigator.push(
@@ -115,6 +142,11 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                     icon: const Icon(Icons.library_add),
                     tooltip: 'Import formulas',
                     onPressed: _handleImport,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.info_outline),
+                    tooltip: 'About',
+                    onPressed: _handleAbout,
                   ),
                 ],
               ),

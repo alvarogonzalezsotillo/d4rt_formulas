@@ -87,6 +87,7 @@
   - remove id from database, add UUID to database
 - [X] Solve exception in _CorpusLoaderState.build() when GetIt.instance.registerSingleton<Corpus>(corpus) after importing formula, since there is already registeted.
 - [R] When importing FormulaElements, save the FormulaElements in the database (currently, they are only added to the Corpus in memory).
+- [R] Add an "about" button next to "Import formulas" in CorpusLoader. It shows a dialog with the CompileConstants information (release, build timestamp, build host).
 - [ ] Include an http server in the application (linux and android).
   - Add a rule in Makefile to create a zip file  with the contents of ./build/web in the ./assets/generated directory -> ./assets/generated/webapp.zip
   - Add webapp.zip as a flutter asset
