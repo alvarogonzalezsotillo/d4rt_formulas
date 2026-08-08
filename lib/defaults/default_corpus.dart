@@ -1,18 +1,17 @@
 import 'dart:async';
 import 'dart:convert' show utf8;
-import 'package:flutter/services.dart' show rootBundle;
-
 import 'package:resource_portable/resource_portable.dart' show Resource;
 
 import '../corpus.dart';
 import '../formula_models.dart';
+import '../compile_constants.dart';
 
 
 Future<Corpus> createDefaultCorpus() async{
   final corpus = Corpus();
 
   Future<String> loadResourceAsString(String path) async {
-    return await rootBundle.loadString(path, cache: false);
+    return CompileConstants.loadResourceAsString(path);
   }
 
 

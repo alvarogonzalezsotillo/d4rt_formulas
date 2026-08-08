@@ -35,6 +35,8 @@ build-linux-debug-container:
 build-linux-release-container:
 	$(FLUTTERW) build linux --release
 
+generate-build-info:
+	./generate_build_info.sh
 
 build-web-debug-container:
 	$(FLUTTERW) build web --debug  --base-href $${FLUTTER_BASE_HREF:-/d4rt_formulas/}

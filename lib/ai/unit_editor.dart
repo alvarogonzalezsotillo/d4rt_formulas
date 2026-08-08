@@ -7,7 +7,10 @@ import '../formula_models.dart';
 import '../corpus.dart';
 import '../database/database_service.dart';
 import '../service_locator.dart';
+import '../main.dart';
 import 'unit_dropdown.dart';
+import '../compile_constants.dart';
+
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/languages/dart.dart';
@@ -106,17 +109,18 @@ class _UnitEditorState extends State<UnitEditor> {
         newUnit = UnitSpec(name: name, baseUnit: _baseUnit ?? 'scalar', symbol: symbol, codeFromUnitToBase: toBase, codeFromBaseToUnit: fromBase);
       }
 
-      final database = getDatabase();
-
       // Update corpus
       widget.corpus.updateUnit(newUnit);
 
-      // Persist to DB
-      final existing = await database.getFormulaElementByUuid(newUnit.uuid);
-      if (existing != null) {
-        await database.updateFormulaElement(newUnit.uuid, newUnit.toStringLiteral());
-      } else {
-        await database.insertFormulaElement(newUnit.uuid, newUnit.toStringLiteral());
+      if (CompileConstants.useDatabase() ) {
+        // Persist to DB
+        final database = getDatabase();
+        final existing = await database.getFormulaElementByUuid(newUnit.uuid);
+        if (existing != null) {
+          await database.updateFormulaElement(newUnit.uuid, newUnit.toStringLiteral());
+        } else {
+          await database.insertFormulaElement(newUnit.uuid, newUnit.toStringLiteral());
+        }
       }
 
       widget.onSave?.call(newUnit);

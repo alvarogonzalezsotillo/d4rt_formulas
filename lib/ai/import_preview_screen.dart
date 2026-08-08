@@ -6,10 +6,14 @@ import 'package:d4rt_formulas/corpus.dart';
 import 'package:d4rt_formulas/ai/formula_editor.dart';
 import 'package:d4rt_formulas/services/import_service.dart';
 import 'package:d4rt_formulas/service_locator.dart';
+import 'package:d4rt_formulas/main.dart';
 
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/languages/dart.dart';
+
+import '../compile_constants.dart';
+
 
 /// Screen to preview and import formula elements
 class ImportPreviewScreen extends StatefulWidget {
@@ -72,16 +76,18 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     try {
       widget.corpus.loadFormulaElements(selectedElements, true);
 
-      // Save imported elements to the database
-      final database = getDatabase();
-      for (final element in selectedElements) {
-        final existingElement = await database.getFormulaElementByUuid(element.uuid);
-        if (existingElement != null) {
-          // Update existing element
-          await database.updateFormulaElement(element.uuid, element.toStringLiteral());
-        } else {
-          // Insert new element
-          await database.insertFormulaElement(element.uuid, element.toStringLiteral());
+      if (CompileConstants.useDatabase() ) {
+        // Save imported elements to the database
+        final database = getDatabase();
+        for (final element in selectedElements) {
+          final existingElement = await database.getFormulaElementByUuid(element.uuid);
+          if (existingElement != null) {
+            // Update existing element
+            await database.updateFormulaElement(element.uuid, element.toStringLiteral());
+          } else {
+            // Insert new element
+            await database.insertFormulaElement(element.uuid, element.toStringLiteral());
+          }
         }
       }
 

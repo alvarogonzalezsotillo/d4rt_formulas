@@ -10,21 +10,19 @@ import 'database/database_service.dart';
 import 'defaults/default_corpus.dart';
 import 'formula_models.dart' as models;
 import 'service_locator.dart';
+import 'compile_constants.dart';
 
-
-void dontMinimize() {
-  List<String> parts = "1.2.3.4/5".split("/");
-
-  print('********************* Parts: $parts ${parts.length} ${parts.runtimeType}');
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  dontMinimize();
-
   // Setup service locator and initialize the database
   setupLocator();
+
+  await CompileConstants.init();
+  print( "release: ${CompileConstants.release()}" );
+  print( "build timestamp: ${CompileConstants.buildTimestamp()}" );
+  print( "build host: ${CompileConstants.buildHost()}" );
 
   var corpusFuture = loadCorpusFromDatabaseOrAssets();
 
@@ -155,8 +153,12 @@ class _CorpusLoaderState extends State<CorpusLoader> {
   }
 }
 
-/// Attempts to load corpus from database first, falls back to default corpus if database is empty
 Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
+  final useDatabase = CompileConstants.useDatabase();
+  if (!useDatabase) {
+    return createDefaultCorpus();
+  }
+
   final database = getDatabase();
   
   try {
@@ -166,7 +168,6 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
     if (dbElements.isEmpty) {
       // Database is empty, load default corpus and save to database
       final defaultCorpus = await createDefaultCorpus();
-      
       // Convert corpus to elements and save to database
       final elements = <models.FormulaElement>[];
       elements.addAll(defaultCorpus.allUnits().cast<models.FormulaElement>());
@@ -184,7 +185,7 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
   } catch (e, st) {
     // If there's an error loading from database, fall back to default corpus
     errorHandler.notify(e,st);
-    return await createDefaultCorpus();
+    return createDefaultCorpus();
   }
 }
 

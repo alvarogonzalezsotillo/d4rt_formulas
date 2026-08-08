@@ -7,8 +7,12 @@ import '../formula_models.dart';
 import '../corpus.dart';
 import '../database/database_service.dart';
 import '../service_locator.dart';
+import '../main.dart';
 import 'formula_screen.dart';
 import 'unit_dropdown.dart';
+import '../compile_constants.dart';
+
+
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/languages/dart.dart';
@@ -189,17 +193,18 @@ class _FormulaEditorState extends State<FormulaEditor> {
     if (formula == null) return;
 
     try {
-      final database = getDatabase();
-
       // Update corpus in memory
       widget.corpus.updateFormula(formula);
 
-      // Update database
-      final updated = await database.updateFormula(formula);
+      if (CompileConstants.useDatabase() ) {
+        // Update database
+        final database = getDatabase();
+        final updated = await database.updateFormula(formula);
 
-      if (!updated) {
-        // If formula wasn't found (e.g., name changed), add it as new
-        await database.addFormula(formula);
+        if (!updated) {
+          // If formula wasn't found (e.g., name changed), add it as new
+          await database.addFormula(formula);
+        }
       }
 
       // Call the onSave callback if provided
@@ -227,8 +232,6 @@ class _FormulaEditorState extends State<FormulaEditor> {
     if (formula == null) return;
 
     try {
-      final database = getDatabase();
-
       // Create a copy with a new UUID
       final formulaCopy = Formula(
         name: '${formula.name} (Copy)',
@@ -242,8 +245,10 @@ class _FormulaEditorState extends State<FormulaEditor> {
       // Add to corpus
       widget.corpus.addFormula(formulaCopy);
 
-      // Add to database
-      await database.addFormula(formulaCopy);
+      if (CompileConstants.useDatabase() ) {
+        // Add to database
+        await getDatabase().addFormula(formulaCopy);
+      }
 
       // Call the onSave callback if provided
       widget.onSave?.call(formulaCopy);

@@ -14,6 +14,8 @@ import 'd4rt_editing_controller.dart';
 import 'formula_list.dart';
 import 'unit_dropdown.dart';
 import 'formula_editor.dart';
+import '../main.dart';
+import '../compile_constants.dart';
 
 class FormulaScreen extends StatefulWidget {
   final FormulaInterface initialFormula;
@@ -212,7 +214,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   child: Text("Delete"),
                   onPressed: () {
                     widget.corpus.forgetFormula(formula.originalFormula);
-                    getDatabase().deleteFormula(formula.originalFormula.uuid);
+                    if (CompileConstants.useDatabase() ) {
+                      getDatabase().deleteFormula(formula.originalFormula.uuid);
+                    }
                     Navigator.of(context)
                       ..pop()..pop();
                   },

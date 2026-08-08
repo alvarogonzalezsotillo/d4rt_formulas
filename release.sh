@@ -27,7 +27,7 @@ build_release_files(){
     )
 
     build_common()(
-        make build-container build-builders clean-container test
+        make generate-build-info build-container build-builders clean-container test
     )
 
     build_common
