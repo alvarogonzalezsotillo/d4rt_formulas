@@ -109,7 +109,7 @@ class FormulaEvaluator {
         result = $code;
         return result;
       }""";
-    print("evaluateExpression:\n$d4rtCode");
+    //print("evaluateExpression:\n$d4rtCode");
     final result = d4rtInterpreter.execute(source: d4rtCode);
     switch (result) {
       case int value:

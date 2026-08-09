@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 
 import '../formula_evaluator.dart';
 
-//// Start of D4rtEditingController class ////
 class D4rtEditingController extends TextEditingController {
   String? _lastError;
   String? get lastError => _lastError;
@@ -13,7 +12,7 @@ class D4rtEditingController extends TextEditingController {
   D4rtEditingController({super.text, this.isString = false});
 
   bool validate() {
-    if( _validateAsNumberExpression(text) ){
+    if( !isString && _validateAsNumberExpression(text) ){
       return true;
     }
     if( isString && _validateAsStringExpression(text) ){
