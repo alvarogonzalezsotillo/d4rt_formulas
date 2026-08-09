@@ -87,6 +87,8 @@
   - remove id from database, add UUID to database
 - [X] Solve exception in _CorpusLoaderState.build() when GetIt.instance.registerSingleton<Corpus>(corpus) after importing formula, since there is already registeted.
 - [R] When importing FormulaElements, save the FormulaElements in the database (currently, they are only added to the Corpus in memory).
+- [R] Create formula "Time elapsed since a date" in assets/formulas/date_time.d4rt. Input: a date. Output: years, months and days elapsed until today.
+- [R] Create formula "Age at end of current year" in assets/formulas/date_time.d4rt. Input: birth date. Output: age at the end of the current year.
 - [R] Add an "about" button next to "Import formulas" in CorpusLoader. It shows a dialog with the CompileConstants information (release, build timestamp, build host).
 - [ ] Include an http server in the application (linux and android).
   - Add a rule in Makefile to create a zip file  with the contents of ./build/web in the ./assets/generated directory -> ./assets/generated/webapp.zip

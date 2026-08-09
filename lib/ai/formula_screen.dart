@@ -22,12 +22,16 @@ class FormulaScreen extends StatefulWidget {
   final Corpus corpus;
   final Function(Formula)? onSave; // Callback when formula is saved
 
-  FormulaScreen({super.key, required formula, required this.corpus, this.onSave}) : initialFormula = formula;
+  FormulaScreen({
+    super.key,
+    required formula,
+    required this.corpus,
+    this.onSave,
+  }) : initialFormula = formula;
 
   @override
   State<FormulaScreen> createState() => _FormulaScreenState();
 }
-
 
 class _FormulaScreenState extends State<FormulaScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -50,18 +54,20 @@ class _FormulaScreenState extends State<FormulaScreen> {
     for (final input in formula.input) {
       _selectedUnits[input.name] = input.unit;
       if (input.values != null && input.values!.isNotEmpty) {
-        // string/categorical variable -> use dropdown
+        // some possible values
         _selectedValues[input.name] = input.values!.first;
       } else {
-        // numeric variable -> use D4rtEditingController
-        _inputControllers[input.name] = D4rtEditingController(isString: input.unit == "string");
+        // free string or numeric expression
+        _inputControllers[input.name] = D4rtEditingController(
+          isString: input.unit == "string",
+        );
         _inputControllers[input.name]!.addListener(_evaluateFormula);
       }
     }
     _selectedOutputUnit = formula.output.unit;
   }
 
-  void _initInputs( Map<String,dynamic> inputValues ){
+  void _initInputs(Map<String, dynamic> inputValues) {
     // TODO: FIND WIDGETS AND SET VALUES
   }
 
@@ -85,7 +91,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     try {
       final inputValues = <String, dynamic>{};
       for (final input in formula.input) {
-        // string/categorical variable
+        // categorical variable
         if (input.values != null && input.values!.isNotEmpty) {
           final selected = _selectedValues[input.name];
           if (selected == null) {
@@ -96,15 +102,18 @@ class _FormulaScreenState extends State<FormulaScreen> {
           continue;
         }
 
-        // numeric variable - must have controller
         final controller = _inputControllers[input.name]!;
         final val = controller.d4rtValue;
+
+        // numeric variable - must have controller
         if (val == null) {
           _result = "";
           return;
         }
 
         dynamic convertedValue;
+        print("ELAPSED: ${input.name}: ${val}");
+
         if (val is NumberResult) {
           if (input.unit != null) {
             convertedValue = widget.corpus.convert(
@@ -127,20 +136,29 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       late final dynamic result;
-      if( formula is DerivedFormula) {
-        result = formulaSolver(formula, formula.output.name, inputValues,);
-      }
-      else {
+      print("ELAPSED: inputValues: $inputValues");
+      if (formula is DerivedFormula) {
+        result = formulaSolver(formula, formula.output.name, inputValues);
+      } else {
         final evaluator = FormulaEvaluator();
         result = evaluator.evaluate(formula as Formula, inputValues);
       }
 
       // Convert output to selected unit if needed
       String? unit = formula.output.unit;
+      print(
+        "ELAPSED: output unit: $unit selectedOutputUnit:$_selectedOutputUnit   result: $result  ${result.runtimeType}  ${result is Number}",
+      );
       if (unit != null && result is Number) {
-        final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
+        print("ELAPSED: lo convierto de unidad");
+        final converted = widget.corpus.convert(
+          result,
+          unit,
+          _selectedOutputUnit!,
+        );
         _result = formatOutput(converted);
       } else {
+        print("ELAPSED: lo paso a String");
         _result = result?.toString();
       }
 
@@ -201,7 +219,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
           IconButton(
             icon: const Icon(Icons.delete_forever),
             onPressed: () {
-              print( "Borrando");
+              print("Borrando");
               showAlertDialog(BuildContext context) {
                 // set up the buttons
                 Widget cancelButton = TextButton(
@@ -214,55 +232,52 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   child: Text("Delete"),
                   onPressed: () {
                     widget.corpus.forgetFormula(formula.originalFormula);
-                    if (CompileConstants.useDatabase() ) {
+                    if (CompileConstants.useDatabase()) {
                       getDatabase().deleteFormula(formula.originalFormula.uuid);
                     }
                     Navigator.of(context)
-                      ..pop()..pop();
+                      ..pop()
+                      ..pop();
                   },
                 );
 
                 // set up the AlertDialog
                 AlertDialog alert = AlertDialog(
                   title: Text("Delete Formula"),
-                  content: Text("Please confirm deletion of formula ${formula.name}"),
-                  actions: [
-                    cancelButton,
-                    deleteButton,
-                  ],
+                  content: Text(
+                    "Please confirm deletion of formula ${formula.name}",
+                  ),
+                  actions: [cancelButton, deleteButton],
                 );
                 return alert;
               }
+
               // show the dialog
-              showDialog(
-                context: context,
-                builder: showAlertDialog
-              );
+              showDialog(context: context, builder: showAlertDialog);
             },
-            tooltip: "Delete formula"
+            tooltip: "Delete formula",
           ),
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: formula is DerivedFormula
                 ? null
                 : () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      FormulaEditor(
-                        formula: formula as Formula,
-                        corpus: widget.corpus,
-                        onSave: (updatedFormula) {
-                          widget.onSave?.call(updatedFormula);
-                          setState(() {
-                            formula = updatedFormula;
-                          });
-                        },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FormulaEditor(
+                          formula: formula as Formula,
+                          corpus: widget.corpus,
+                          onSave: (updatedFormula) {
+                            widget.onSave?.call(updatedFormula);
+                            setState(() {
+                              formula = updatedFormula;
+                            });
+                          },
+                        ),
                       ),
-                ),
-              );
-            },
+                    );
+                  },
             tooltip: formula is DerivedFormula
                 ? 'Cannot edit derived formula'
                 : 'Edit Formula',
@@ -288,8 +303,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   Widget _buildDescriptionSection() {
-    if (formula.description == null ||
-        formula.description!.isEmpty) {
+    if (formula.description == null || formula.description!.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -298,13 +312,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       child: ExpansionTile(
         title: Text(
           'Description',
-          style: Theme
-              .of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         initiallyExpanded: _isDescriptionExpanded,
         onExpansionChanged: (bool expanded) {
@@ -318,18 +328,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Markdown(
                 data: formula.description!,
                 shrinkWrap: true,
-                builders: {
-                  'latex': LatexElementBuilder(),
-                },
+                builders: {'latex': LatexElementBuilder()},
                 extensionSet: markdown.ExtensionSet(
                   [LatexBlockSyntax()],
                   [LatexInlineSyntax()],
@@ -393,13 +398,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Input Variables',
-          style: Theme
-              .of(
+          style: Theme.of(
             context,
-          )
-              .textTheme
-              .titleMedium
-              ?.copyWith(fontWeight: FontWeight.bold),
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         ...formula.input.map((variable) => _buildVariableRow(variable)),
@@ -413,13 +414,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       children: [
         Text(
           'Result',
-          style: Theme
-              .of(
+          style: Theme.of(
             context,
-          )
-              .textTheme
-              .titleMedium
-              ?.copyWith(fontWeight: FontWeight.bold),
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Row(
@@ -427,10 +424,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
             // Fixed width for field name
             SizedBox(
               width: 50,
-              child: Text(
-                formula.output.name,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: Text(formula.output.name, overflow: TextOverflow.ellipsis),
             ),
             const SizedBox(width: 8), // Add some spacing
             // Flexible space for result field
@@ -451,10 +445,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
               variable: formula.output,
               selectedUnit: _selectedOutputUnit,
               onUnitChanged: (unit) {
-                _selectedOutputUnit = unit;
-                _evaluateFormula();
-                print("En output unit changed to $unit: $_result");
-                setState(() {});
+                setState(() {
+                  _selectedOutputUnit = unit;
+                  _evaluateFormula();
+                  print("ELAPSED: En output unit changed to $unit: $_result");
+                });
               },
             ),
           ],
@@ -464,7 +459,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   Widget _buildVariableRow(VariableSpec variable) {
-    final isCategorical = variable.values != null && variable.values!.isNotEmpty;
+    final isCategorical =
+        variable.values != null && variable.values!.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -473,50 +469,52 @@ class _FormulaScreenState extends State<FormulaScreen> {
           // Fixed width for field name
           SizedBox(
             width: 50,
-            child: Text(
-              variable.name,
-              overflow: TextOverflow.fade
-            ),
+            child: Text(variable.name, overflow: TextOverflow.fade),
           ),
           const SizedBox(width: 8), // Add some spacing
           // Flexible space for input field
           Expanded(
             child: isCategorical
                 ? DropdownButtonFormField<String>(
-              initialValue: _selectedValues[variable.name],
-              items: variable.values!
-                  .map((v) => DropdownMenuItem<String>(value: v, child: Text(v)))
-                  .toList(),
-              onChanged: (v) {
-                _selectedValues[variable.name] = v;
-                _evaluateFormula();
-                setState(() {});
-              },
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Required';
-                return null;
-              },
-            )
+                    initialValue: _selectedValues[variable.name],
+                    items: variable.values!
+                        .map(
+                          (v) => DropdownMenuItem<String>(
+                            value: v,
+                            child: Text(v),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (v) {
+                      _selectedValues[variable.name] = v;
+                      _evaluateFormula();
+                      setState(() {});
+                    },
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return 'Required';
+                      return null;
+                    },
+                  )
                 : TextFormField(
-              controller: _inputControllers[variable.name],
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
-              ],
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-              ),
-              autovalidateMode: AutovalidateMode.always,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Required';
-                }
-                return _inputControllers[variable.name]!.lastError;
-              },
-            ),
+                    controller: _inputControllers[variable.name],
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
+                    ],
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                    ),
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      return _inputControllers[variable.name]!.lastError;
+                    },
+                  ),
           ),
           const SizedBox(width: 8),
           if (variable.unit != null && !isCategorical)
@@ -545,14 +543,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   void _solveForVariable(VariableSpec variable) {
-
     var rootFormula = FormulaInterface.getRootFormula(formula);
 
     // Check if the formula can be derived
     if (!DerivedFormula.isDerivable(rootFormula)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('This formula cannot be derived because it contains non number variables'),
+          content: Text(
+            'This formula cannot be derived because it contains non number variables',
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -561,22 +560,21 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
     try {
       late final FormulaInterface derivedFormula;
-      if( variable.name == rootFormula.output.name) {
+      if (variable.name == rootFormula.output.name) {
         derivedFormula = rootFormula;
-      }
-      else {
+      } else {
         derivedFormula = DerivedFormula(
-            outputName: variable.name,
-            originalFormula: rootFormula
+          outputName: variable.name,
+          originalFormula: rootFormula,
         );
       }
 
       // Replace the current FormulaScreen with the new DerivedFormula screen
-      setState( (){
+      setState(() {
         formula = derivedFormula;
       });
     } catch (e, st) {
-      errorHandler.notify(e,st);
+      errorHandler.notify(e, st);
     }
   }
 }

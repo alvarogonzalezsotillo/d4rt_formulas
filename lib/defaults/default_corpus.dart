@@ -52,6 +52,7 @@ Future<Corpus> createDefaultCorpus() async{
   Future<void> loadFormulas() async {
     final formulaResources = [
       "assets/formulas/conversions_and_constants.d4rt",
+      "assets/formulas/date_time.d4rt",
       "assets/formulas/electromagnetism.d4rt",
       "assets/formulas/energy_and_power.d4rt",
       "assets/formulas/fluids_and_pressure.d4rt",
