@@ -46,6 +46,10 @@ class CompileConstants {
     return _generatedCompileConstants?["release"] ?? "no release info";
   }
 
+  static bool isDebugBuild() {
+    return kDebugMode;
+  }
+
   static String buildTimestamp() {
     _checkInit();
     return _generatedCompileConstants?["buildTimestamp"] ??

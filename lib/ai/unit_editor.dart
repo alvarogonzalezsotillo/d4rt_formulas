@@ -112,7 +112,7 @@ class _UnitEditorState extends State<UnitEditor> {
       // Update corpus
       widget.corpus.updateUnit(newUnit);
 
-      if (CompileConstants.useDatabase() ) {
+      if (CompileConstants.isDatabaseBackend() ) {
         // Persist to DB
         final database = getDatabase();
         final existing = await database.getFormulaElementByUuid(newUnit.uuid);

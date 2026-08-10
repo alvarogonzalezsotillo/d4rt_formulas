@@ -81,7 +81,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
               Text('Release: ${CompileConstants.release()}'),
               Text('Build timestamp: ${CompileConstants.buildTimestamp()}'),
               Text('Build host: ${CompileConstants.buildHost()}'),
-              Text('Corpus backend: ${CompileConstants.useDatabase() ? "Database" : "Memory"}'),
+              Text('Corpus backend: ${CompileConstants.isDatabaseBackend() ? "Database" : "Memory"}'),
             ],
           ),
           actions: [
@@ -186,7 +186,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
 }
 
 Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
-  final useDatabase = CompileConstants.useDatabase();
+  final useDatabase = CompileConstants.isDatabaseBackend();
   if (!useDatabase) {
     return createDefaultCorpus();
   }

@@ -76,7 +76,7 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     try {
       widget.corpus.loadFormulaElements(selectedElements, true);
 
-      if (CompileConstants.useDatabase() ) {
+      if (CompileConstants.isDatabaseBackend() ) {
         // Save imported elements to the database
         final database = getDatabase();
         for (final element in selectedElements) {

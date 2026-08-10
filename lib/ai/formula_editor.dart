@@ -196,7 +196,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
       // Update corpus in memory
       widget.corpus.updateFormula(formula);
 
-      if (CompileConstants.useDatabase() ) {
+      if (CompileConstants.isDatabaseBackend() ) {
         // Update database
         final database = getDatabase();
         final updated = await database.updateFormula(formula);
@@ -245,7 +245,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
       // Add to corpus
       widget.corpus.addFormula(formulaCopy);
 
-      if (CompileConstants.useDatabase() ) {
+      if (CompileConstants.isDatabaseBackend() ) {
         // Add to database
         await getDatabase().addFormula(formulaCopy);
       }
