@@ -1,4 +1,5 @@
 import 'package:d4rt_formulas/d4rt_formulas.dart';
+import 'package:d4rt_formulas/database/formulas_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -69,20 +70,53 @@ class _CorpusLoaderState extends State<CorpusLoader> {
   }
 
   void _handleAbout() {
+    final corpus = GetIt.instance.get<Corpus>();
+    final aboutInfo = [
+      ['Release', CompileConstants.release()],
+      ['Build timestamp', CompileConstants.buildTimestamp()],
+      ['Build host', CompileConstants.buildHost()],
+      ['Corpus backend', CompileConstants.isDatabaseBackend() ? FormulasDatabase.underlyingStorage() : "Memory"],
+      ['# of formulas', corpus.getFormulas().length ],
+      ['# of units', corpus.getUnits().length ]
+      
+    ];
+
+    final defaultFontSize = Theme.of(context) .textTheme .bodyMedium ?.fontSize ?? 14;
+    final smallFontSize = defaultFontSize - 2;
+    
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('About'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Release: ${CompileConstants.release()}'),
-              Text('Build timestamp: ${CompileConstants.buildTimestamp()}'),
-              Text('Build host: ${CompileConstants.buildHost()}'),
-              Text('Corpus backend: ${CompileConstants.useDatabase() ? "Database" : "Memory"}'),
-            ],
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Table(
+              border: TableBorder(
+                top: BorderSide(color: Colors.grey.shade300),
+                bottom: BorderSide(color: Colors.grey.shade300),
+                horizontalInside: BorderSide(color: Colors.grey.shade300),
+              ),
+              columnWidths: {
+                0: IntrinsicColumnWidth(),
+                1: FlexColumnWidth(),
+              },
+              children: aboutInfo.map<TableRow>((row) {
+                return TableRow(
+                  children: row.indexed.map<Padding>( ((int, Object) entry) {
+                    final (int index, Object cellO) = entry;
+                    final cell = cellO.toString();
+                    return Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Text(
+                        cell,
+                        style: TextStyle(fontSize: (index == 0 ? defaultFontSize: smallFontSize) )
+                      ),
+                    );
+                  }).toList(),
+                );
+              }).toList(),
+            ),
           ),
           actions: [
             TextButton(
@@ -90,6 +124,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
               child: const Text('OK'),
             ),
           ],
+
         );
       },
     );
@@ -186,7 +221,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
 }
 
 Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
-  final useDatabase = CompileConstants.useDatabase();
+  final useDatabase = CompileConstants.isDatabaseBackend();
   if (!useDatabase) {
     return createDefaultCorpus();
   }

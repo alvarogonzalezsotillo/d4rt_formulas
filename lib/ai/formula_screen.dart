@@ -232,7 +232,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   child: Text("Delete"),
                   onPressed: () {
                     widget.corpus.forgetFormula(formula.originalFormula);
-                    if (CompileConstants.useDatabase()) {
+                    if (CompileConstants.isDatabaseBackend()) {
                       getDatabase().deleteFormula(formula.originalFormula.uuid);
                     }
                     Navigator.of(context)

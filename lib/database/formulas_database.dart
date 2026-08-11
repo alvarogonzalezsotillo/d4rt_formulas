@@ -16,8 +16,15 @@ class FormulaElements extends Table {
   Set<Column> get primaryKey => {uuid};
 }
 
+
+
 @DriftDatabase(tables: [FormulaElements])
 class FormulasDatabase extends _$FormulasDatabase {
+
+  static String underlyingStorage(){
+    return openConnectionStorage();
+  }
+  
   FormulasDatabase() : super(openConnection());
 
   @override

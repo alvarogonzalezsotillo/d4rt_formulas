@@ -46,13 +46,17 @@ class CompileConstants {
     return _generatedCompileConstants?["release"] ?? "no release info";
   }
 
+  static bool isDebugBuild() {
+    return kDebugMode;
+  }
+
   static String buildTimestamp() {
     _checkInit();
     return _generatedCompileConstants?["buildTimestamp"] ??
         "no build timestamp info";
   }
 
-  static bool useDatabase() {
+  static bool isDatabaseBackend() {
     return !isWeb();
   }
 

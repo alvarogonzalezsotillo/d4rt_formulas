@@ -6,7 +6,7 @@ import 'database/formulas_database.dart';
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
-  final useDatabase = CompileConstants.useDatabase();
+  final useDatabase = CompileConstants.isDatabaseBackend();
   if (useDatabase) {
     locator.registerSingleton<FormulasDatabase>(getDatabase());
   }
