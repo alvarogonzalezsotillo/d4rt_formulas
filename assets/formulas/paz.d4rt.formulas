@@ -1,0 +1,26 @@
+// -*- mode: dart; -*-
+[
+  {
+    "name": "Índice lipídico para Paz",
+    "description": r"""
+      Calcula un índice lipídico para Paz
+
+      $$Indice = \frac{Trigliceridos}{ColesterolHDL}$$
+
+      Where:
+      - $Trigliceridos$: Los triglicéridos
+      - $ColesterolHDL$: Colesterol HDL, el bueno
+
+      Cuanto más bajo, mejor
+
+      Source: Algo en Instagram
+    """,
+    "input": [
+      {"name": "Trigliceridos", "unit": "scalar"},
+      {"name": "ColesterolHDL", "unit": "scalar"}
+    ],
+    "output": {"name": "Indice", "unit": "scalar"},
+    "d4rtCode": "Indice = Trigliceridos/ColesterolHDL;",
+    "tags": ["medical", "cardiology", "paz"]
+  },
+]
