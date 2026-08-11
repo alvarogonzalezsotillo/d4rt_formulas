@@ -1,22 +1,19 @@
 import 'dart:async';
-import 'dart:convert' show utf8;
-import 'package:resource_portable/resource_portable.dart' show Resource;
+import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 
 import '../corpus.dart';
 import '../formula_models.dart';
 import '../compile_constants.dart';
 
-
-Future<Corpus> createDefaultCorpus() async{
+Future<Corpus> createDefaultCorpus() async {
   final corpus = Corpus();
 
   Future<String> loadResourceAsString(String path) async {
     return CompileConstants.loadResourceAsString(path);
   }
 
-
-  Future<void> loadUnits() async {
-    final unitResources = [
+  Future<List<String>> listUnitAssets() async {
+    return [
       "assets/units/amount.d4rt.units",
       "assets/units/angle.d4rt.units",
       "assets/units/area.d4rt.units",
@@ -40,17 +37,15 @@ Future<Corpus> createDefaultCorpus() async{
       "assets/units/volume.d4rt.units",
     ];
 
-    for (final unitRes in unitResources) {
-      print( "Loading units from $unitRes");
-      final literal = await loadResourceAsString(unitRes);
-      final units = UnitSpec.fromArrayStringLiteral(literal);
-      final formulaElements = units.cast<FormulaElement>();
-      corpus.loadFormulaElements(formulaElements);
-    }
+    final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    return assetManifest
+        .listAssets()
+        .where((s) => s.startsWith("assets/units/") && s.endsWith("d4rt.units"))
+        .toList();
   }
 
-  Future<void> loadFormulas() async {
-    final formulaResources = [
+  Future<List<String>> listFormulaAssets() async {
+    return [
       "assets/formulas/conversions_and_constants.d4rt",
       "assets/formulas/date_time.d4rt",
       "assets/formulas/electromagnetism.d4rt",
@@ -68,15 +63,37 @@ Future<Corpus> createDefaultCorpus() async{
       "assets/formulas/optics.d4rt",
       "assets/formulas/thermodynamics.d4rt",
       "assets/formulas/trigonometry.d4rt",
-
     ];
 
+    final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    return assetManifest
+        .listAssets()
+        .where(
+          (s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt.units"),
+        )
+        .toList();
+  }
+
+  Future<void> loadUnits() async {
+    final unitResources = await listUnitAssets();
+    for (final unitRes in unitResources) {
+      print("Loading units from $unitRes");
+      final literal = await loadResourceAsString(unitRes);
+      final units = UnitSpec.fromArrayStringLiteral(literal);
+      final formulaElements = units.cast<FormulaElement>();
+      corpus.loadFormulaElements(formulaElements);
+    }
+  }
+
+  Future<void> loadFormulas() async {
+    final formulaResources = await listFormulaAssets();
+
     for (final formRes in formulaResources) {
-      print( "Loading formulas from $formRes ...");
+      print("Loading formulas from $formRes ...");
       final literal = await loadResourceAsString(formRes);
-      print( "Loaded $formRes");
+      print("Loaded $formRes");
       final formulas = Formula.fromArrayStringLiteral(literal);
-      print( "Parsed $formRes");
+      print("Parsed $formRes");
       final formulaElements = formulas.cast<FormulaElement>();
       corpus.loadFormulaElements(formulaElements);
     }
