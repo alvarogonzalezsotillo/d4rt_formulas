@@ -25,7 +25,7 @@ Future<Corpus> createDefaultCorpus() async {
     return assetManifest
         .listAssets()
         .where(
-          (s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt"),
+          (s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt.formulas"),
         )
         .toList();
   }
