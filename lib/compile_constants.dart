@@ -56,7 +56,7 @@ class CompileConstants {
         "no build timestamp info";
   }
 
-  static bool useDatabase() {
+  static bool isDatabaseBackend() {
     return !isWeb();
   }
 
