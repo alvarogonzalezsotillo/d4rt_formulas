@@ -13,30 +13,6 @@ Future<Corpus> createDefaultCorpus() async {
   }
 
   Future<List<String>> listUnitAssets() async {
-    return [
-      "assets/units/amount.d4rt.units",
-      "assets/units/angle.d4rt.units",
-      "assets/units/area.d4rt.units",
-      "assets/units/charge.d4rt.units",
-      "assets/units/currency.d4rt.units",
-      "assets/units/derived.d4rt.units",
-      "assets/units/distance.d4rt.units",
-      "assets/units/elasticity.d4rt.units",
-      "assets/units/electricity.d4rt.units",
-      "assets/units/energy.d4rt.units",
-      "assets/units/frequency.d4rt.units",
-      "assets/units/force.d4rt.units",
-      "assets/units/mass.d4rt.units",
-      "assets/units/medical.d4rt.units",
-      "assets/units/power.d4rt.units",
-      "assets/units/pressure.d4rt.units",
-      "assets/units/scalar.d4rt.units",
-      "assets/units/temperature.d4rt.units",
-      "assets/units/time.d4rt.units",
-      "assets/units/velocity.d4rt.units",
-      "assets/units/volume.d4rt.units",
-    ];
-
     final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
     return assetManifest
         .listAssets()
@@ -45,31 +21,11 @@ Future<Corpus> createDefaultCorpus() async {
   }
 
   Future<List<String>> listFormulaAssets() async {
-    return [
-      "assets/formulas/conversions_and_constants.d4rt",
-      "assets/formulas/date_time.d4rt",
-      "assets/formulas/electromagnetism.d4rt",
-      "assets/formulas/energy_and_power.d4rt",
-      "assets/formulas/fluids_and_pressure.d4rt",
-      "assets/formulas/formulas.d4rt",
-      "assets/formulas/geometry.d4rt",
-      "assets/formulas/gravity.d4rt",
-      "assets/formulas/it-networking.d4rt",
-      "assets/formulas/kinematics_and_dynamics.d4rt",
-      "assets/formulas/materials_elasticity.d4rt",
-      "assets/formulas/mdcalc.d4rt",
-      "assets/formulas/medical_and_bio.d4rt",
-      "assets/formulas/misc_math.d4rt",
-      "assets/formulas/optics.d4rt",
-      "assets/formulas/thermodynamics.d4rt",
-      "assets/formulas/trigonometry.d4rt",
-    ];
-
     final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
     return assetManifest
         .listAssets()
         .where(
-          (s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt.units"),
+          (s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt"),
         )
         .toList();
   }
