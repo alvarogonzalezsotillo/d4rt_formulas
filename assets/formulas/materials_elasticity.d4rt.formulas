@@ -22,4 +22,7 @@ The negative sign indicates the force opposes the displacement.""",
     "tags": ["physics", "elasticity", "oscillations"]
   }
 ]
-
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

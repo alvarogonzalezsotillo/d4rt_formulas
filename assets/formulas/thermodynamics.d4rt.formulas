@@ -27,3 +27,7 @@ This law combines Boyle's, Charles's and Avogadro's laws.
     "tags": ["physics", "thermodynamics", "gas"]
   }
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

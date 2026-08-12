@@ -1,3 +1,7 @@
 [
   {"name": "currency", "symbol": "¤", "isBase": true},
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

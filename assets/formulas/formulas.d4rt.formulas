@@ -448,3 +448,7 @@ The perimeter is the sum of all three sides.""",
     "tags": ["geometry", "triangle", "perimeter"]
   }
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

@@ -12,3 +12,7 @@
   {"name": "statcoulomb", "symbol": "statC", "baseUnit": "coulomb", "factor": 3.33564095198152e-10},
   {"name": "franklin", "symbol": "Fr", "baseUnit": "coulomb", "factor": 3.33564095198152e-10}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

@@ -2,3 +2,7 @@
   {"name": "scalar", "symbol": "㊷", "isBase": true},
   {"name": "string", "symbol": "🔤", "isBase": true}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

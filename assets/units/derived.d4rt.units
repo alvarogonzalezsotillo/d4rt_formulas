@@ -27,3 +27,7 @@
   {"name": "newton second", "symbol": "N·s", "baseUnit": "kilogram meter per second", "factor": 1},
   {"name": "dyne second", "symbol": "dyn·s", "baseUnit": "kilogram meter per second", "factor": 0.00001}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

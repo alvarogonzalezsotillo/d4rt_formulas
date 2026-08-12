@@ -57,3 +57,7 @@ Output: power `P` in watts (W).""",
     "tags": ["physics", "electricity", "electronics"]
   }
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

@@ -40,7 +40,7 @@ class ImportService {
     }
   }
 
-  /// Parses a .d4rtf file content as formula elements
+  /// Parses a .d4rt file content as formula elements
   List<FormulaElement> parseD4rtfFile(String filePath) {
     try {
       final file = File(filePath);
@@ -52,7 +52,7 @@ class ImportService {
       return parseSharedText(content);
     } catch (e, stack) {
       errorHandler.notify(e, stack);
-      throw FormatException('Failed to parse .d4rtf file: $e');
+      throw FormatException('Failed to parse .d4rt file: $e');
     }
   }
 
