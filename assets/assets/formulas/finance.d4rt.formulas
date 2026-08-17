@@ -1,0 +1,987 @@
+// -*- mode: dart; -*-
+[
+  // Simple Interest
+  {
+    "name": "Simple Interest",
+    "description": r"""
+      Calculates the amount of interest earned or paid on an original principal when compounding is not applied. Because there is no compounding, interest is never earned on previously earned interest.
+
+      $$I = P \cdot r \cdot t$$
+
+      Where:
+      - $P$: Principal, the original balance (currency)
+      - $r$: Annual interest rate (percent)
+      - $t$: Time (years)
+
+      Example: a 3-year savings account at a 10% annual rate with an original balance of $1000 earns $1000 × 10% × 3 = $300 of interest.
+
+      The rate and the time must be measured in matching units: if the time is in years, the rate must be the annual rate.
+
+      Source: [FinanceFormulas - Simple Interest](https://www.financeformulas.net/Simple_Interest.html)
+
+      ![US one dollar bill](https://commons.wikimedia.org/wiki/Special:FilePath/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg?width=800)
+    """,
+    "input": [
+      {"name": "P", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "t", "unit": "year"}
+    ],
+    "output": {"name": "I", "unit": "currency"},
+    "d4rtCode": "I = P * (r / 100) * t;",
+    "tags": ["finance", "interest", "simple interest"]
+  },
+
+  // Compound Interest (interest earned)
+  {
+    "name": "Compound Interest",
+    "description": r"""
+      Calculates the amount of interest earned on an account or investment where the amount earned is reinvested, so that interest is earned on prior interest (compounding). The ending balance is the principal plus this interest.
+
+      $$I = P \cdot \left[(1 + r)^n - 1\right]$$
+
+      Where:
+      - $P$: Principal, the original balance (currency)
+      - $r$: Rate per period (percent)
+      - $n$: Number of periods
+
+      The rate per period and the number of periods must match how often the account is compounded. For example, an account compounded monthly uses the monthly rate and the number of months as $n$.
+
+      Example: an account with an original balance of $1000 earning 12% per year, compounded monthly, earns $1000 × [(1.01)^12 − 1] = $126.83. With simple interest it would have earned only $120; the extra $6.83 comes from compounding.
+
+      Source: [FinanceFormulas - Compound Interest](https://www.financeformulas.net/Compound_Interest.html)
+
+      ![Compound interest under different compounding frequencies](https://commons.wikimedia.org/wiki/Special:FilePath/Compound_Interest_with_Varying_Frequencies.svg?width=800)
+    """,
+    "input": [
+      {"name": "P", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "I", "unit": "currency"},
+    "d4rtCode": "I = P * (pow(1 + r / 100, n) - 1);",
+    "tags": ["finance", "interest", "compound interest", "compounding"]
+  },
+
+  // Future Value
+  {
+    "name": "Future Value",
+    "description": r"""
+      Calculates the value of a cash flow at a later date than originally received, based on the time value of money and the effect of compounding.
+
+      $$FV = PV \cdot (1 + r)^n$$
+
+      Where:
+      - $PV$: Present value, the initial cash flow (currency)
+      - $r$: Rate per period (percent)
+      - $n$: Number of periods
+
+      The rate per period and the number of periods must match: earning 0.5% per month is not the same as earning 6% per year, because the monthly earnings are reinvested.
+
+      Example: an account with a balance of $1000 that earns 0.5% per month, compounded monthly, has a balance of $1000 × (1.005)^12 = $1061.68 after one year. The additional $1.68 over simple 6% interest is due to compounding.
+
+      Source: [FinanceFormulas - Future Value](https://www.financeformulas.net/Future_Value.html)
+
+      ![Dollar sign](https://commons.wikimedia.org/wiki/Special:FilePath/Dollar_Sign.svg?width=800)
+    """,
+    "input": [
+      {"name": "PV", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "FV", "unit": "currency"},
+    "d4rtCode": "FV = PV * pow(1 + r / 100, n);",
+    "tags": ["finance", "future value", "time value of money"]
+  },
+
+  // Present Value
+  {
+    "name": "Present Value",
+    "description": r"""
+      Calculates the present day value of an amount that is received at a future date, based on the premise that there is a "time value of money": receiving something today is worth more than receiving the same amount in the future.
+
+      $$PV = \frac{FV}{(1 + r)^n}$$
+
+      Where:
+      - $FV$: Future value, the amount received in the future (currency)
+      - $r$: Rate per period (percent)
+      - $n$: Number of periods
+
+      Example: an individual who wants to have $100 one year from today, earning 5% on a money market account, needs to put $100 / 1.05 = $95.24 in the account today.
+
+      Source: [FinanceFormulas - Present Value](https://www.financeformulas.net/Present_Value.html)
+
+      ![US one dollar bill](https://commons.wikimedia.org/wiki/Special:FilePath/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg?width=800)
+    """,
+    "input": [
+      {"name": "FV", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "PV", "unit": "currency"},
+    "d4rtCode": "PV = FV / pow(1 + r / 100, n);",
+    "tags": ["finance", "present value", "time value of money", "discounting"]
+  },
+
+  // Solve for Number of Periods (PV & FV)
+  {
+    "name": "Number of Periods",
+    "description": r"""
+      Calculates the length of time required for a single cash flow (present value) to reach a certain amount (future value) at a given interest rate. It is derived from the future value formula by taking the natural logarithm of both sides.
+
+      $$n = \frac{\ln(FV / PV)}{\ln(1 + r)}$$
+
+      Where:
+      - $PV$: Present value (currency)
+      - $FV$: Future value (currency)
+      - $r$: Rate per period (percent)
+
+      The number of periods and the periodic rate must match one another. Example: a $1500 balance reaching $2000 in an account that pays 6% per year compounded monthly (0.5% monthly) takes ln(2000/1500) / ln(1.005) = 57.68 months.
+
+      Source: [FinanceFormulas - Solve for Number of Periods](https://www.financeformulas.net/Solve-for-Number-of-Periods-PV-and-FV.html)
+
+      ![Compound interest under different compounding frequencies](https://commons.wikimedia.org/wiki/Special:FilePath/Compound_Interest_with_Varying_Frequencies.svg?width=800)
+    """,
+    "input": [
+      {"name": "PV", "unit": "currency"},
+      {"name": "FV", "unit": "currency"},
+      {"name": "r", "unit": "percent"}
+    ],
+    "output": {"name": "n", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (PV <= 0 || FV <= 0) {
+        signal("PV and FV must be greater than 0");
+      }
+      if (r <= -100) {
+        signal("Rate must be greater than -100%");
+      }
+      n = ln(FV / PV) / ln(1 + r / 100);
+    """,
+    "tags": ["finance", "time value of money", "number of periods"]
+  },
+
+  // Continuous Compounding
+  {
+    "name": "Continuous Compounding",
+    "description": r"""
+      Calculates the ending balance of an account that is compounded continuously, which is the limit of compounding interest over an infinite number of compounding periods.
+
+      $$FV = PV \cdot e^{r \cdot t}$$
+
+      Where:
+      - $PV$: Present value, the initial balance (currency)
+      - $r$: Annual interest rate (percent)
+      - $t$: Time (years)
+
+      Example: an account with an initial balance of $1000 and an annual rate of 10%, continuously compounded for 2 years, grows to $1000 × e^{0.2} = $1221.40. For comparison, monthly compounding would return $1220.39. Although the concept of infinite compounding seems to imply a very large amount, the effect of each additional compound becomes smaller every time.
+
+      Source: [FinanceFormulas - Continuous Compounding](https://www.financeformulas.net/Continuous_Compounding.html)
+
+      ![Compound interest under different compounding frequencies](https://commons.wikimedia.org/wiki/Special:FilePath/Compound_Interest_with_Varying_Frequencies.svg?width=800)
+    """,
+    "input": [
+      {"name": "PV", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "t", "unit": "year"}
+    ],
+    "output": {"name": "FV", "unit": "currency"},
+    "d4rtCode": "FV = PV * exp(r / 100 * t);",
+    "tags": ["finance", "continuous compounding", "exponential"]
+  },
+
+  // Annual Percentage Yield (APY)
+  {
+    "name": "Annual Percentage Yield",
+    "description": r"""
+      Calculates the annual percentage yield (APY), also referenced as the effective annual rate, which is the rate of interest actually earned when taking into consideration the effect of compounding.
+
+      $$APY = \left(1 + \frac{r}{n}\right)^n - 1$$
+
+      Where:
+      - $r$: Stated (nominal) annual interest rate (percent)
+      - $n$: Number of compounding periods per year
+
+      The nominal rate, also called the stated annual interest rate or APR, does not consider compounding. Example: an account that states its rate as 6% compounded monthly has an APY of (1 + 0.06/12)^12 − 1 = 6.168%.
+
+      Source: [FinanceFormulas - Annual Percentage Yield](https://www.financeformulas.net/Annual_Percentage_Yield.html)
+
+      ![Dollar sign](https://commons.wikimedia.org/wiki/Special:FilePath/Dollar_Sign.svg?width=800)
+    """,
+    "input": [
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "APY", "unit": "percent"},
+    "d4rtCode": r"""
+      if (n <= 0) {
+        signal("Number of compounding periods must be greater than 0");
+      }
+      APY = (pow(1 + r / 100 / n, n) - 1) * 100;
+    """,
+    "tags": ["finance", "apy", "effective annual rate", "interest"]
+  },
+
+  // Future Value of Annuity
+  {
+    "name": "Future Value of Annuity",
+    "description": r"""
+      Calculates the value at a future date of a series of equal periodic payments (an ordinary annuity). The formula assumes that the rate does not change, the first payment is one period away, and the periodic payment does not change.
+
+      $$FV = PMT \cdot \frac{(1 + r)^n - 1}{r}$$
+
+      Where:
+      - $PMT$: Periodic payment (currency)
+      - $r$: Rate per period (percent)
+      - $n$: Number of periods
+
+      Example: an individual saves $1000 per year for 5 years into an account with a 2% effective annual rate. The first deposit occurs at the end of the first year. The balance after the 5th year is $1000 × ((1.02)^5 − 1) / 0.02 = $5204.04.
+
+      Source: [FinanceFormulas - Future Value of Annuity](https://www.financeformulas.net/Future_Value_of_Annuity.html)
+
+      ![US one dollar bill](https://commons.wikimedia.org/wiki/Special:FilePath/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg?width=800)
+    """,
+    "input": [
+      {"name": "PMT", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "FV", "unit": "currency"},
+    "d4rtCode": r"""
+      if (r == 0) {
+        signal("Rate cannot be 0 for an annuity");
+      }
+      FV = PMT * (pow(1 + r / 100, n) - 1) / (r / 100);
+    """,
+    "tags": ["finance", "annuity", "future value", "savings"]
+  },
+
+  // Present Value of Annuity
+  {
+    "name": "Present Value of Annuity",
+    "description": r"""
+      Determines the value today of a series of future periodic payments, relying on the concept of the time value of money: one dollar today is worth more than the same dollar at a future date. The formula assumes a constant periodic payment, a constant rate, and that the first payment is one period away.
+
+      $$PV = PMT \cdot \frac{1 - (1 + r)^{-n}}{r}$$
+
+      Where:
+      - $PMT$: Periodic payment (currency)
+      - $r$: Rate per period (percent)
+      - $n$: Number of periods
+
+      As with any formula that involves a rate, the rate must be consistent with the other variables: if the payment is monthly, the rate must be the monthly rate.
+
+      Source: [FinanceFormulas - Present Value of Annuity](https://www.financeformulas.net/Present_Value_of_Annuity.html)
+
+      ![Euro banknotes](https://commons.wikimedia.org/wiki/Special:FilePath/Euro_Series_Banknotes_%282019%29.jpg?width=800)
+    """,
+    "input": [
+      {"name": "PMT", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "PV", "unit": "currency"},
+    "d4rtCode": r"""
+      if (r == 0) {
+        signal("Rate cannot be 0 for an annuity");
+      }
+      PV = PMT * (1 - pow(1 + r / 100, -n)) / (r / 100);
+    """,
+    "tags": ["finance", "annuity", "present value"]
+  },
+
+  // Loan Payment
+  {
+    "name": "Loan Payment",
+    "description": r"""
+      Calculates the periodic payment on a fixed-rate loan amortized for a specific period of time. The payment on a loan is exactly the same as the payment on an ordinary annuity; the present value (PV) is the original loan amount.
+
+      $$PMT = \frac{PV \cdot r}{1 - (1 + r)^{-n}}$$
+
+      Where:
+      - $PV$: Original loan amount, the present value of the future payments (currency)
+      - $r$: Rate per period (percent)
+      - $n$: Number of payment periods
+
+      It is important to keep the rate per period and the number of periods consistent with one another. If the payments are made monthly, use the monthly rate and the number of months. The formula applies to conventional mortgage, consumer, and business loans; it does not apply to graduated-payment, interest-only, option, or balloon loans.
+
+      Source: [FinanceFormulas - Loan Payment](https://www.financeformulas.net/Loan_Payment_Formula.html)
+
+      ![Euro banknotes](https://commons.wikimedia.org/wiki/Special:FilePath/Euro_Series_Banknotes_%282019%29.jpg?width=800)
+    """,
+    "input": [
+      {"name": "PV", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "n", "unit": "scalar"}
+    ],
+    "output": {"name": "PMT", "unit": "currency"},
+    "d4rtCode": r"""
+      if (r == 0) {
+        signal("Rate cannot be 0 for a loan payment");
+      }
+      PMT = PV * (r / 100) / (1 - pow(1 + r / 100, -n));
+    """,
+    "tags": ["finance", "loan", "payment", "mortgage", "amortization"]
+  },
+
+  // Doubling Time
+  {
+    "name": "Doubling Time",
+    "description": r"""
+      Calculates the length of time required to double an investment or money in an interest bearing account.
+
+      $$t = \frac{\ln(2)}{\ln(1 + r)}$$
+
+      Where:
+      - $r$: Rate per period (percent)
+
+      The rate in the doubling time formula is the rate per period. If the money is in an account compounded monthly, use the monthly rate and the result will be the number of months; alternatively use the effective annual rate (APY) and the result will be in years.
+
+      Example: an account earning 6% per year, compounded monthly, has a monthly rate of 0.5% and a doubling time of ln(2) / ln(1.005) = 138.98 months, or 11.58 years.
+
+      Source: [FinanceFormulas - Doubling Time](https://www.financeformulas.net/Doubling_Time.html)
+
+      ![Compound interest under different compounding frequencies](https://commons.wikimedia.org/wiki/Special:FilePath/Compound_Interest_with_Varying_Frequencies.svg?width=800)
+    """,
+    "input": [
+      {"name": "r", "unit": "percent"}
+    ],
+    "output": {"name": "t", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (r <= 0) {
+        signal("Rate must be greater than 0");
+      }
+      t = ln(2) / ln(1 + r / 100);
+    """,
+    "tags": ["finance", "doubling time", "investment"]
+  },
+
+  // Rule of 72
+  {
+    "name": "Rule of 72",
+    "description": r"""
+      Estimates the length of time required to double an investment by dividing 72 by the rate of interest expressed as a whole number. It is primarily used for quick, off-the-cuff calculations when a fast estimate is preferred over the exact doubling time formula.
+
+      $$n \approx \frac{72}{r}$$
+
+      Where:
+      - $r$: Annual interest rate entered as a whole number percent (e.g. 6 for 6%)
+
+      Example: an individual earning 6% on a money market account estimates it will take 72 / 6 = 12 years to double the current balance (the exact doubling time is 11.90 years).
+
+      The rule of 72 is most accurate for rates in the several percent range, roughly near 8%; as the rate gets too low or too high, the estimate becomes less accurate. The same rule can be rearranged to estimate the rate needed to double an investment within a specific time period.
+
+      Source: [FinanceFormulas - Rule of 72](https://www.financeformulas.net/Rule_of_72.html)
+
+      ![Compound interest under different compounding frequencies](https://commons.wikimedia.org/wiki/Special:FilePath/Compound_Interest_with_Varying_Frequencies.svg?width=800)
+    """,
+    "input": [
+      {"name": "r", "unit": "percent"}
+    ],
+    "output": {"name": "n", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (r <= 0) {
+        signal("Rate must be greater than 0");
+      }
+      n = 72 / r;
+    """,
+    "tags": ["finance", "rule of 72", "estimate", "investment"]
+  },
+
+  // Net Present Value (NPV)
+  {
+    "name": "Net Present Value",
+    "description": r"""
+      Determines the present value of an investment by summing the discounted cash flows received from the project and subtracting the initial investment. When a company or investor takes on a project, it is important to estimate how profitable it will be.
+
+      $$NPV = -C_0 + \sum_{t=1}^{T} \frac{CF_t}{(1 + r)^t}$$
+
+      Where (this implementation uses 3 yearly cash flows):
+      - $C_0$: Initial investment, entered as a positive number (currency)
+      - $r$: Discount rate (percent)
+      - $CF_1, CF_2, CF_3$: Net cash flows received in each of the next 3 years (currency)
+
+      The initial investment is a negative cash flow (money going out). A positive NPV means the project is estimated to add value and be a worthwhile investment.
+
+      Example: an investment of $500,000 with yearly cash flows of $200,000, $300,000 and $200,000 discounted at 10% yields an NPV of −$500,000 + $181,818.18 + $247,933.88 + $150,262.96 = $80,015.02.
+
+      Source: [FinanceFormulas - Net Present Value](https://www.financeformulas.net/Net_Present_Value.html)
+
+      ![Dow Jones Industrial Average chart](https://commons.wikimedia.org/wiki/Special:FilePath/Dow_Jones_Industrial_Average.svg?width=800)
+    """,
+    "input": [
+      {"name": "C0", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "CF1", "unit": "currency"},
+      {"name": "CF2", "unit": "currency"},
+      {"name": "CF3", "unit": "currency"}
+    ],
+    "output": {"name": "NPV", "unit": "currency"},
+    "d4rtCode": r"""
+      if (r <= -100) {
+        signal("Discount rate must be greater than -100%");
+      }
+      NPV = -C0 + CF1 / (1 + r / 100) + CF2 / pow(1 + r / 100, 2) + CF3 / pow(1 + r / 100, 3);
+    """,
+    "tags": ["finance", "net present value", "capital budgeting", "investment"]
+  },
+
+  // Payback Period
+  {
+    "name": "Payback Period",
+    "description": r"""
+      Determines the length of time it will take to recoup the initial amount invested on a project or investment when the periodic cash flows are equal.
+
+      $$PP = \frac{InitialInvestment}{CashFlowPerPeriod}$$
+
+      Where:
+      - $InitialInvestment$: Initial cash outflow (currency)
+      - $CashFlowPerPeriod$: Cash inflow received each period (currency)
+
+      The result of the formula will match how often the cash flows are received. An example would be an initial outflow of $5000 with $1000 cash inflows per month, which results in a 5 month payback period.
+
+      The payback period formula does not look at the value of all future returns and does not factor in the time value of money; the net present value or discounted payback period methods may be used to evaluate long term profitability. It is nevertheless useful for cash flow analysis and short term budgeting.
+
+      Source: [FinanceFormulas - Payback Period](https://www.financeformulas.net/Payback_Period.html)
+
+      ![Frankfurt Stock Exchange](https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Stock_Exchange_%28Ank_Kumar%2C_Infosys%29_02.jpg?width=800)
+    """,
+    "input": [
+      {"name": "InitialInvestment", "unit": "currency"},
+      {"name": "CashFlow", "unit": "currency"}
+    ],
+    "output": {"name": "PP", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (CashFlow <= 0) {
+        signal("Cash flow must be greater than 0");
+      }
+      PP = InitialInvestment / CashFlow;
+    """,
+    "tags": ["finance", "payback period", "capital budgeting"]
+  },
+
+  // Return on Investment (ROI)
+  {
+    "name": "Return on Investment",
+    "description": r"""
+      Measures the percentage return on a particular investment, sometimes referred to as ROI or rate of return. It is mechanically similar to other rate of change formulas, and measures the rate of change of money due to investing.
+
+      $$ROI = \frac{Gain - Cost}{Cost} \times 100$$
+
+      Where:
+      - $Cost$: Amount invested (currency)
+      - $Gain$: Amount returned from the investment, including the original amount (currency)
+
+      The formula can be applied to any form of investment, including corporate projects, a company as a whole, a personal investment, or an investment in an appreciable asset. One issue is that it does not account for the time value of money; the net present value method may be preferred when the timing of cash flows matters.
+
+      Source: [FinanceFormulas - Return on Investment](https://www.financeformulas.net/Return_on_Investment.html)
+
+      ![NYSE trading floor](https://commons.wikimedia.org/wiki/Special:FilePath/NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg?width=800)
+    """,
+    "input": [
+      {"name": "Cost", "unit": "currency"},
+      {"name": "Gain", "unit": "currency"}
+    ],
+    "output": {"name": "ROI", "unit": "percent"},
+    "d4rtCode": r"""
+      if (Cost == 0) {
+        signal("Cost cannot be 0");
+      }
+      ROI = (Gain - Cost) / Cost * 100;
+    """,
+    "tags": ["finance", "return on investment", "roi", "profitability"]
+  },
+
+  // Break-Even Point (Units)
+  {
+    "name": "Break-Even Point (Units)",
+    "description": r"""
+      Calculates the number of units that must be sold so that total revenue equals total costs, i.e., the point at which the company neither makes a profit nor a loss.
+
+      $$BE = \frac{FixedCosts}{Price - VariableCostPerUnit}$$
+
+      Where:
+      - $FixedCosts$: Total fixed costs (currency)
+      - $Price$: Selling price per unit (currency)
+      - $VariableCostPerUnit$: Variable cost per unit (currency)
+
+      The difference between the price and the variable cost per unit is the contribution margin per unit, which contributes to covering the fixed costs. Selling more units than the break-even point generates profit.
+
+      Source: [FinanceFormulas - Break-Even](https://www.financeformulas.net/Break-Even-Point.html)
+
+      ![Dollar sign](https://commons.wikimedia.org/wiki/Special:FilePath/Dollar_Sign.svg?width=800)
+    """,
+    "input": [
+      {"name": "FixedCosts", "unit": "currency"},
+      {"name": "Price", "unit": "currency"},
+      {"name": "VariableCostPerUnit", "unit": "currency"}
+    ],
+    "output": {"name": "BE", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (Price - VariableCostPerUnit <= 0) {
+        signal("Price must be greater than the variable cost per unit");
+      }
+      BE = FixedCosts / (Price - VariableCostPerUnit);
+    """,
+    "tags": ["finance", "break-even", "cost", "business"]
+  },
+
+  // Contribution Margin
+  {
+    "name": "Contribution Margin",
+    "description": r"""
+      Calculates the contribution margin per unit, the amount left from the selling price after subtracting the variable cost per unit. This amount contributes to covering the fixed costs and, once they are covered, to profit.
+
+      $$CM = Price - VariableCostPerUnit$$
+
+      Where:
+      - $Price$: Selling price per unit (currency)
+      - $VariableCostPerUnit$: Variable cost per unit (currency)
+
+      The contribution margin is a key concept in cost-volume-profit analysis and is used to compute the break-even point.
+
+      Source: [FinanceFormulas - Contribution Margin](https://www.financeformulas.net/Contribution-Margin.html)
+
+      ![Dollar sign](https://commons.wikimedia.org/wiki/Special:FilePath/Dollar_Sign.svg?width=800)
+    """,
+    "input": [
+      {"name": "Price", "unit": "currency"},
+      {"name": "VariableCostPerUnit", "unit": "currency"}
+    ],
+    "output": {"name": "CM", "unit": "currency"},
+    "d4rtCode": "CM = Price - VariableCostPerUnit;",
+    "tags": ["finance", "contribution margin", "cost"]
+  },
+
+  // Current Ratio
+  {
+    "name": "Current Ratio",
+    "description": r"""
+      Provides a calculable means of determining a company's short term liquidity. The current assets and current liabilities refer to assets that can be realized, and liabilities payable, in less than a year.
+
+      $$Current\ Ratio = \frac{CurrentAssets}{CurrentLiabilities}$$
+
+      Where:
+      - $CurrentAssets$: Assets that can be realized within one year (currency)
+      - $CurrentLiabilities$: Liabilities payable within one year (currency)
+
+      A company that cannot maintain its short term debt will quickly become inoperable even if it expects payment on its sales in the future. Comparing the current ratio of a company with itself or a comparable company over many years is generally the advised method, rather than comparing across different industries.
+
+      Source: [FinanceFormulas - Current Ratio](https://www.financeformulas.net/Current_Ratio.html)
+
+      ![Dow Jones Industrial Average chart](https://commons.wikimedia.org/wiki/Special:FilePath/Dow_Jones_Industrial_Average.svg?width=800)
+    """,
+    "input": [
+      {"name": "CurrentAssets", "unit": "currency"},
+      {"name": "CurrentLiabilities", "unit": "currency"}
+    ],
+    "output": {"name": "Ratio", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (CurrentLiabilities == 0) {
+        signal("Current liabilities cannot be 0");
+      }
+      Ratio = CurrentAssets / CurrentLiabilities;
+    """,
+    "tags": ["finance", "current ratio", "liquidity", "ratio"]
+  },
+
+  // Quick Ratio
+  {
+    "name": "Quick Ratio",
+    "description": r"""
+      Determines a company's ability to cover its short term debt with assets that can readily be transferred into cash, or quick assets. It provides an idea of how solvent a company is without requiring sales to cover the short term debt, which differentiates it from the current ratio.
+
+      $$Quick\ Ratio = \frac{CurrentAssets - Inventory}{CurrentLiabilities}$$
+
+      Where:
+      - $CurrentAssets$: Assets that can be realized within one year (currency)
+      - $Inventory$: Inventory value, excluded because it cannot be readily converted to cash (currency)
+      - $CurrentLiabilities$: Liabilities payable within one year (currency)
+
+      Inventory, which is included in the current ratio, is excluded in the quick ratio.
+
+      Source: [FinanceFormulas - Quick Ratio](https://www.financeformulas.net/Quick_Ratio.html)
+
+      ![Dow Jones Industrial Average chart](https://commons.wikimedia.org/wiki/Special:FilePath/Dow_Jones_Industrial_Average.svg?width=800)
+    """,
+    "input": [
+      {"name": "CurrentAssets", "unit": "currency"},
+      {"name": "Inventory", "unit": "currency"},
+      {"name": "CurrentLiabilities", "unit": "currency"}
+    ],
+    "output": {"name": "Ratio", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (CurrentLiabilities == 0) {
+        signal("Current liabilities cannot be 0");
+      }
+      Ratio = (CurrentAssets - Inventory) / CurrentLiabilities;
+    """,
+    "tags": ["finance", "quick ratio", "liquidity", "ratio"]
+  },
+
+  // Debt to Equity Ratio
+  {
+    "name": "Debt to Equity Ratio",
+    "description": r"""
+      Measures a company's financial leverage by comparing its total liabilities with its total equity. Both debt and equity are found on a company's balance sheet.
+
+      $$Debt\ to\ Equity = \frac{TotalLiabilities}{TotalEquity}$$
+
+      Where:
+      - $TotalLiabilities$: Total debt of the company (currency)
+      - $TotalEquity$: Total stockholders' equity (currency)
+
+      A company's value, as denoted based on assets, is its liabilities plus stockholders' equity. As a company increases its leverage or debt, it is considered a higher risk, and the debt to equity ratio increases. The ratio is also used to calculate levered (equity) beta.
+
+      Source: [FinanceFormulas - Debt to Equity Ratio](https://www.financeformulas.net/Debt-to-Equity-Ratio.html)
+
+      ![Frankfurt Stock Exchange](https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Stock_Exchange_%28Ank_Kumar%2C_Infosys%29_02.jpg?width=800)
+    """,
+    "input": [
+      {"name": "TotalLiabilities", "unit": "currency"},
+      {"name": "TotalEquity", "unit": "currency"}
+    ],
+    "output": {"name": "Ratio", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (TotalEquity == 0) {
+        signal("Total equity cannot be 0");
+      }
+      Ratio = TotalLiabilities / TotalEquity;
+    """,
+    "tags": ["finance", "debt to equity", "leverage", "ratio"]
+  },
+
+  // Interest Coverage Ratio
+  {
+    "name": "Interest Coverage Ratio",
+    "description": r"""
+      Measures a company's earnings relative to the amount of interest it pays on its debt, analyzing one aspect of the company's financial viability. It is considered a financial leverage ratio.
+
+      $$Interest\ Coverage = \frac{EBIT}{InterestExpense}$$
+
+      Where:
+      - $EBIT$: Earnings before interest and taxes, also called operating income (currency)
+      - $InterestExpense$: Amount of interest the company pays on its debt (currency)
+
+      Both EBIT and interest expense can be found on a company's income statement. Earnings can fluctuate more than interest expense, so it is important to look at the trends of a particular company; as with any financial formula, no single ratio should be used in isolation.
+
+      Source: [FinanceFormulas - Interest Coverage Ratio](https://www.financeformulas.net/Interest_Coverage_Ratio.html)
+
+      ![Frankfurt Stock Exchange](https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Stock_Exchange_%28Ank_Kumar%2C_Infosys%29_02.jpg?width=800)
+    """,
+    "input": [
+      {"name": "EBIT", "unit": "currency"},
+      {"name": "InterestExpense", "unit": "currency"}
+    ],
+    "output": {"name": "Ratio", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (InterestExpense == 0) {
+        signal("Interest expense cannot be 0");
+      }
+      Ratio = EBIT / InterestExpense;
+    """,
+    "tags": ["finance", "interest coverage", "leverage", "ratio"]
+  },
+
+  // Net Profit Margin
+  {
+    "name": "Net Profit Margin",
+    "description": r"""
+      Looks at how much of a company's revenues are kept as net income, and is generally expressed as a percentage. Both net income and revenues can be found on a company's income statement.
+
+      $$Net\ Profit\ Margin = \frac{NetIncome}{Revenue} \times 100$$
+
+      Where:
+      - $NetIncome$: Net income after taxes (currency)
+      - $Revenue$: Operating revenues (currency)
+
+      As a company grows, its expenses may grow along with it, perhaps at a greater rate than sales, causing the net profit margin to shrink. Example: a company with a net income of $1 million and operating revenues of $25 million has a net profit margin of 1,000,000 / 25,000,000 = 4%.
+
+      Source: [FinanceFormulas - Net Profit Margin](https://www.financeformulas.net/Net_Profit_Margin.html)
+
+      ![NYSE trading floor](https://commons.wikimedia.org/wiki/Special:FilePath/NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg?width=800)
+    """,
+    "input": [
+      {"name": "NetIncome", "unit": "currency"},
+      {"name": "Revenue", "unit": "currency"}
+    ],
+    "output": {"name": "Margin", "unit": "percent"},
+    "d4rtCode": r"""
+      if (Revenue == 0) {
+        signal("Revenue cannot be 0");
+      }
+      Margin = NetIncome / Revenue * 100;
+    """,
+    "tags": ["finance", "net profit margin", "profitability", "margin"]
+  },
+
+  // Gross Profit Margin
+  {
+    "name": "Gross Profit Margin",
+    "description": r"""
+      Measures the percentage of revenue that a company retains after incurring the direct costs associated with producing its goods and services (cost of goods sold).
+
+      $$Gross\ Profit\ Margin = \frac{GrossProfit}{Revenue} \times 100$$
+
+      Where:
+      - $GrossProfit$: Revenue minus the cost of goods sold (currency)
+      - $Revenue$: Total revenue (currency)
+
+      A higher gross profit margin indicates that the company is efficient at producing and selling its products. It is closely related to the net profit margin, which also subtracts operating and other expenses.
+
+      Source: [FinanceFormulas - Gross Profit Margin](https://www.financeformulas.net/Gross-Profit-Margin.html)
+
+      ![NYSE trading floor](https://commons.wikimedia.org/wiki/Special:FilePath/NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg?width=800)
+    """,
+    "input": [
+      {"name": "GrossProfit", "unit": "currency"},
+      {"name": "Revenue", "unit": "currency"}
+    ],
+    "output": {"name": "Margin", "unit": "percent"},
+    "d4rtCode": r"""
+      if (Revenue == 0) {
+        signal("Revenue cannot be 0");
+      }
+      Margin = GrossProfit / Revenue * 100;
+    """,
+    "tags": ["finance", "gross profit margin", "profitability", "margin"]
+  },
+
+  // Return on Equity (ROE)
+  {
+    "name": "Return on Equity",
+    "description": r"""
+      Evaluates how well a company is turning a profit relative to its stockholders' equity. It is a company's net income divided by its average stockholders' equity.
+
+      $$ROE = \frac{NetIncome}{AverageEquity} \times 100$$
+
+      Where:
+      - $NetIncome$: Company's net income (currency)
+      - $AverageEquity$: Average stockholders' equity over the period, i.e., assets minus liabilities (currency)
+
+      The return on equity is the same as the return on assets except that it does not include liabilities in the denominator. The formula can also be expressed as Profit Margin × Asset Turnover × Equity Multiplier (the DuPont decomposition).
+
+      Source: [FinanceFormulas - Return on Equity](https://www.financeformulas.net/Return-on-Equity.html)
+
+      ![Frankfurt Stock Exchange](https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Stock_Exchange_%28Ank_Kumar%2C_Infosys%29_02.jpg?width=800)
+    """,
+    "input": [
+      {"name": "NetIncome", "unit": "currency"},
+      {"name": "AverageEquity", "unit": "currency"}
+    ],
+    "output": {"name": "ROE", "unit": "percent"},
+    "d4rtCode": r"""
+      if (AverageEquity == 0) {
+        signal("Average equity cannot be 0");
+      }
+      ROE = NetIncome / AverageEquity * 100;
+    """,
+    "tags": ["finance", "return on equity", "roe", "profitability"]
+  },
+
+  // Return on Assets (ROA)
+  {
+    "name": "Return on Assets",
+    "description": r"""
+      Looks at the ability of a company to utilize its assets to gain a net profit. It is a company's net income divided by its average total assets.
+
+      $$ROA = \frac{NetIncome}{AverageTotalAssets} \times 100$$
+
+      Where:
+      - $NetIncome$: Amount earned after subtracting expenses, including depreciation and taxes (currency)
+      - $AverageTotalAssets$: Average of the beginning and ending total assets for the period (currency)
+
+      The difference between return on assets and asset turnover is that return on assets uses net income, which factors in the company's expenses. A company's return on assets can vary depending on which industry it does business in.
+
+      Source: [FinanceFormulas - Return on Assets](https://www.financeformulas.net/Return_on_Assets.html)
+
+      ![Frankfurt Stock Exchange](https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Stock_Exchange_%28Ank_Kumar%2C_Infosys%29_02.jpg?width=800)
+    """,
+    "input": [
+      {"name": "NetIncome", "unit": "currency"},
+      {"name": "AverageTotalAssets", "unit": "currency"}
+    ],
+    "output": {"name": "ROA", "unit": "percent"},
+    "d4rtCode": r"""
+      if (AverageTotalAssets == 0) {
+        signal("Average total assets cannot be 0");
+      }
+      ROA = NetIncome / AverageTotalAssets * 100;
+    """,
+    "tags": ["finance", "return on assets", "roa", "profitability"]
+  },
+
+  // Earnings Per Share (EPS)
+  {
+    "name": "Earnings Per Share",
+    "description": r"""
+      Expresses a company's net income on a per common share basis. Any preferred stock dividends are subtracted from the net income, if applicable.
+
+      $$EPS = \frac{NetIncome - PreferredDividends}{WeightedAverageShares}$$
+
+      Where:
+      - $NetIncome$: Company's net income (currency)
+      - $PreferredDividends$: Dividends paid to preferred stockholders (currency)
+      - $WeightedAverageShares$: Weighted average number of outstanding common shares
+
+      When the amount of common shares changes mid-year, the per share portion is weighted based on the length of time each number of shares is in effect. Earnings and dividends are not the same: companies may retain some earnings for future growth. Earnings per share is used in other formulas such as the price to earnings ratio.
+
+      Source: [FinanceFormulas - Earnings Per Share](https://www.financeformulas.net/Earnings_Per_Share.html)
+
+      ![NYSE trading floor](https://commons.wikimedia.org/wiki/Special:FilePath/NY_stock_exchange_traders_floor_LC-U9-10548-6.jpg?width=800)
+    """,
+    "input": [
+      {"name": "NetIncome", "unit": "currency"},
+      {"name": "PreferredDividends", "unit": "currency"},
+      {"name": "Shares", "unit": "scalar"}
+    ],
+    "output": {"name": "EPS", "unit": "currency"},
+    "d4rtCode": r"""
+      if (Shares <= 0) {
+        signal("Number of shares must be greater than 0");
+      }
+      EPS = (NetIncome - PreferredDividends) / Shares;
+    """,
+    "tags": ["finance", "earnings per share", "eps", "stocks"]
+  },
+
+  // Price to Earnings (P/E) Ratio
+  {
+    "name": "Price to Earnings Ratio",
+    "description": r"""
+      Serves as a quick calculation of how a company's stock is perceived by the market to be worth relative to the company's earnings. It is the price per share divided by earnings per share.
+
+      $$P/E = \frac{PricePerShare}{EarningsPerShare}$$
+
+      Where:
+      - $PricePerShare$: Current market price of a share (currency)
+      - $EarningsPerShare$: Earnings per share (currency)
+
+      A higher price to earnings ratio implies that the market values the stock as a better investment, ceteris paribus. The ratio varies across industries and countries, so it should be compared within the same industry and country. It also depends on the company's accounting methods, and companies with a net loss cannot use the formula because earnings per share would be negative.
+
+      Source: [FinanceFormulas - Price to Earnings Ratio](https://www.financeformulas.net/Price_Earnings_Ratio.html)
+
+      ![Dow Jones Industrial Average chart](https://commons.wikimedia.org/wiki/Special:FilePath/Dow_Jones_Industrial_Average.svg?width=800)
+    """,
+    "input": [
+      {"name": "PricePerShare", "unit": "currency"},
+      {"name": "EarningsPerShare", "unit": "currency"}
+    ],
+    "output": {"name": "Ratio", "unit": "scalar"},
+    "d4rtCode": r"""
+      if (EarningsPerShare == 0) {
+        signal("Earnings per share cannot be 0");
+      }
+      Ratio = PricePerShare / EarningsPerShare;
+    """,
+    "tags": ["finance", "price to earnings", "pe ratio", "stocks"]
+  },
+
+  // Dividend Yield
+  {
+    "name": "Dividend Yield",
+    "description": r"""
+      Calculates the percentage return on a stock based solely on dividends, without considering the appreciation of the stock price. The total return on a stock is the combination of dividends and appreciation.
+
+      $$Dividend\ Yield = \frac{AnnualDividendsPerShare}{PricePerShare} \times 100$$
+
+      Where:
+      - $AnnualDividendsPerShare$: Total annual dividends paid per share (currency)
+      - $PricePerShare$: Current price per share (currency)
+
+      Example: a stock that paid total annual dividends per share of $1.12, with a price of $28, has a dividend yield of 1.12 / 28 = 4%. A lower dividend yield does not necessarily imply lower dividends, as the price could have substantially increased.
+
+      Source: [FinanceFormulas - Dividend Yield](https://www.financeformulas.net/Dividend_Yield.html)
+
+      ![US one dollar bill](https://commons.wikimedia.org/wiki/Special:FilePath/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg?width=800)
+    """,
+    "input": [
+      {"name": "AnnualDividends", "unit": "currency"},
+      {"name": "PricePerShare", "unit": "currency"}
+    ],
+    "output": {"name": "Yield", "unit": "percent"},
+    "d4rtCode": r"""
+      if (PricePerShare == 0) {
+        signal("Price per share cannot be 0");
+      }
+      Yield = AnnualDividends / PricePerShare * 100;
+    """,
+    "tags": ["finance", "dividend yield", "stocks", "dividends"]
+  },
+
+  // Weighted Average Cost of Capital (WACC)
+  {
+    "name": "Weighted Average Cost of Capital",
+    "description": r"""
+      Calculates the weighted average cost of capital (WACC), the average cost that a company has incurred or will incur for access to capital. It is used internally by companies for capital budgeting, for example to decide the best capital mix to reduce the company's WACC, or to evaluate new projects: a project must return more than the cost of capital to be worthwhile.
+
+      $$WACC = \frac{E}{V} \cdot Re + \frac{D}{V} \cdot Rd \cdot (1 - t)$$
+
+      Where:
+      - $E$: Market value of equity (currency)
+      - $D$: Market value of debt (currency)
+      - $V$: Total value, $V = E + D$ (currency)
+      - $Re$: Cost of equity (percent)
+      - $Rd$: Cost of debt, the rate the company pays on its debt (percent)
+      - $t$: Marginal tax rate (percent)
+
+      The cost of debt is adjusted by $(1 - t)$ to reflect the tax deduction of debt from revenues (after-tax cost of debt). If a company has no debt, the WACC is equal to the cost of equity. The weights are the proportion of each source of capital relative to the total capital, and all weights must add up to 1 (100%).
+
+      Source: [FinanceFormulas - Weighted Average Cost of Capital](https://www.financeformulas.net/Weighted-Average-Cost-of-Capital.html)
+
+      ![Frankfurt Stock Exchange](https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Stock_Exchange_%28Ank_Kumar%2C_Infosys%29_02.jpg?width=800)
+    """,
+    "input": [
+      {"name": "EquityValue", "unit": "currency"},
+      {"name": "DebtValue", "unit": "currency"},
+      {"name": "CostOfEquity", "unit": "percent"},
+      {"name": "CostOfDebt", "unit": "percent"},
+      {"name": "TaxRate", "unit": "percent"}
+    ],
+    "output": {"name": "WACC", "unit": "percent"},
+    "d4rtCode": r"""
+      var V = EquityValue + DebtValue;
+      if (V <= 0) {
+        signal("Total capital (equity + debt) must be greater than 0");
+      }
+      WACC = ((EquityValue / V) * (CostOfEquity / 100) + (DebtValue / V) * (CostOfDebt / 100) * (1 - TaxRate / 100)) * 100;
+    """,
+    "tags": ["finance", "wacc", "cost of capital", "corporate finance"]
+  },
+
+  // Zero Coupon Bond Value
+  {
+    "name": "Zero Coupon Bond Value",
+    "description": r"""
+      Calculates the value, or original price, of a zero coupon bond, sometimes referred to as a pure discount bond or simply discount bond. This bond does not pay coupon payments and instead pays one lump sum, the face value, at maturity. It is sold originally at a discount from its face value.
+
+      $$Price = \frac{FaceValue}{(1 + r)^t}$$
+
+      Where:
+      - $FaceValue$: Amount paid at maturity (currency)
+      - $r$: Annual yield (percent)
+      - $t$: Time to maturity (years)
+
+      After the zero coupon bond is issued, its value may fluctuate as the current interest rates of the market change. Example: a 5 year zero coupon bond with a face value of $100 and a rate of 6% has a price of $100 / (1.06)^5 = $74.73.
+
+      Source: [FinanceFormulas - Zero Coupon Bond Value](https://www.financeformulas.net/Zero_Coupon_Bond_Value.html)
+
+      ![Euro banknotes](https://commons.wikimedia.org/wiki/Special:FilePath/Euro_Series_Banknotes_%282019%29.jpg?width=800)
+    """,
+    "input": [
+      {"name": "FaceValue", "unit": "currency"},
+      {"name": "r", "unit": "percent"},
+      {"name": "t", "unit": "year"}
+    ],
+    "output": {"name": "Price", "unit": "currency"},
+    "d4rtCode": r"""
+      if (r <= -100) {
+        signal("Rate must be greater than -100%");
+      }
+      Price = FaceValue / pow(1 + r / 100, t);
+    """,
+    "tags": ["finance", "bonds", "zero coupon bond", "present value"]
+  }
+]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

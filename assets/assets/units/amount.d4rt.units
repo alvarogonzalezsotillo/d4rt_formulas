@@ -8,3 +8,7 @@
   {"name": "pound-mole", "symbol": "lb-mol", "baseUnit": "mole", "factor": 453.59237},
   {"name": "kilopound-mole", "symbol": "kip-mol", "baseUnit": "mole", "factor": 453592.37}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

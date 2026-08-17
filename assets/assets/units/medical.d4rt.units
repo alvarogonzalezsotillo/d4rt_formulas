@@ -1,0 +1,17 @@
+[
+  {"name": "milligram per deciliter", "symbol": "mg/dL", "baseUnit": "kilogram per cubic meter", "factor": 0.01},
+  {"name": "milligram per liter", "symbol": "mg/L", "baseUnit": "kilogram per cubic meter", "factor": 0.001},
+  {"name": "gram per deciliter", "symbol": "g/dL", "baseUnit": "kilogram per cubic meter", "factor": 10},
+  {"name": "millimole per liter", "symbol": "mmol/L", "isBase": true},
+  {"name": "milliequivalent per liter", "symbol": "mEq/L", "baseUnit": "millimole per liter", "factor": 1},
+  {"name": "milliosmole per kilogram", "symbol": "mOsm/kg", "isBase": true},
+  {"name": "percent", "symbol": "%", "baseUnit": "scalar", "factor": 0.01},
+  {"name": "beats per minute", "symbol": "bpm", "baseUnit": "hertz", "factor": 0.0166666667},
+  {"name": "kilogram per square meter", "symbol": "kg/m²", "isBase": true},
+  {"name": "milliliter per minute", "symbol": "mL/min", "isBase": true},
+  {"name": "milliliter per minute per 1.73 square meter", "symbol": "mL/min/1.73m²", "isBase": true}
+]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

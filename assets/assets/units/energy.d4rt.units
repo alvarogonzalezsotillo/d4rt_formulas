@@ -12,3 +12,7 @@
   {"name": "therm", "symbol": "thm", "baseUnit": "joule", "factor": 1.055e8},
   {"name": "erg", "symbol": "erg", "baseUnit": "joule", "factor": 1e-7}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

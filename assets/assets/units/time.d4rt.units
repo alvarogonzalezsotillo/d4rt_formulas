@@ -5,6 +5,12 @@
     "isBase": true
   },
   {
+    "name": "millisecond",
+    "symbol": "ms",
+    "baseUnit": "second",
+    "factor": 0.001
+  },
+  {
     "name": "minute",
     "symbol": "min",
     "baseUnit": "second",
@@ -27,5 +33,15 @@
     "symbol": "wk",
     "baseUnit": "second",
     "factor": 604800
+  },
+  {
+    "name": "year",
+    "symbol": "yr",
+    "baseUnit": "second",
+    "factor": 31557600
   }
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

@@ -1,0 +1,78 @@
+[
+  {
+    "name":"Apgar Score",
+    "description":r"""
+      Newborn health assessment scoring system performed at 1 and 5 minutes after birth.
+
+      The Apgar score sums five categories (0–2 points each):
+      1. Heart rate
+      2. Respiratory effort
+      3. Muscle tone
+      4. Reflex response
+      5. Color
+
+      Total score ranges from 0 to 10. Higher scores indicate better newborn condition.
+
+      ![Apgar score (illustration) (Wikipedia)](https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Apgar_scale.svg/800px-Apgar_scale.svg.png)
+    """,
+    "input":[
+      {"name":"HeartRate","values":["Absent","< 100 bpm>","> 100 bpm"]},
+      {"name":"Breathing","values":["Absent","Weak, irregular","Strong, robust cry"]},
+      {"name":"MuscleTone","values":["None","Some","Flexed arms/leg, resists extension"]},
+      {"name":"Reflexes","values":["No response","Grimace on aggressive stimulation","Cry on stimulation"]},
+      {"name":"SkinColor","values":["Blue or pale","Blue extremities, pink body","Pink"]}
+    ],
+    "output":{"name":"Result","unit":"string"},
+    "d4rtCode":r"""
+      var total = indexOf("HeartRate") + indexOf("Breathing") + indexOf("MuscleTone") + indexOf("Reflexes") + indexOf("SkinColor");
+      late var interpretation;
+      if( total < 4 ) {
+        interpretation = 'Critical condition';
+      }
+      else if( total < 7 ){
+        interpretation = 'Needs assistance';
+      }
+      else {
+        interpretation = 'Normal';
+      }
+      Result = 'Score: $total - $interpretation';
+    """,
+    "tags":["medical","pediatrics","assessment"]
+   },
+  {
+    "name": "Glasgow Coma Scale",
+    "description": r"""
+      Glasgow Coma Scale (GCS) assesses level of consciousness using three components: Eye opening, Verbal response and Motor response.
+
+      Total score ranges from 3 to 15. Interpretation:
+      - 13–15: Mild
+      - 9–12: Moderate
+      - ≤8: Severe
+      """,
+    "input": [
+      {"name": "Eye", "values": ["No eye opening", "To pain", "To voice", "Spontaneous"]},
+      {"name": "Verbal", "values": ["None", "Incomprehensible sounds", "Inappropriate words", "Confused", "Oriented"]},
+      {"name": "Motor", "values": ["No motor response", "Extension to pain (decerebrate)", "Abnormal flexion to pain (decorticate)", "Withdraws from pain", "Localizes pain", "Obeys commands"]}
+    ],
+    "output": {"name": "Result", "unit": "string"},
+    "d4rtCode": r"""
+     var total = indexOf("Eye") + indexOf("Verbal") + indexOf("Motor") + 3;
+     late var interpretation;
+     if( total <= 8 ) {
+        interpretation = 'Severe (<=8)';
+     }
+     else if( total <= 12 ) {
+        interpretation = 'Moderate (9-12)';
+     }
+     else {
+        interpretation = 'Mild (13-15)';
+     }
+     Result = 'GCS Score: $total - $interpretation';
+     """,
+    "tags": ["medical", "neurology", "assessment"]
+  }
+]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

@@ -1,0 +1,76 @@
+[
+  // Time elapsed since a date
+  {
+    "name": "Time elapsed since a date",
+    "description": r"""Calculates the years, months and days elapsed since a given date until today.
+
+Given a date in YYYY-MM-DD format (e.g. 1990-05-10), this formula
+computes how many years, months and days have passed from that date
+until the current date.
+
+Where:
+- Date: the start date in YYYY-MM-DD format
+- Elapsed: a text like "35 years, 2 months, 4 days" with the elapsed time""",
+    "input": [
+      {"name": "date", "unit": "string"}
+    ],
+    "output": {"name": "elapsed", "unit": "string"},
+    "d4rtCode": """
+       var from = DateTime.tryParse(date);
+       if (from == null) {
+         signal('Invalid date format. Expected: YYYY-MM-DD');
+       }
+       var to = DateTime.now();
+       if (from.isAfter(to)) {
+         signal('The date must not be in the future');
+       }
+       var years = to.year - from.year;
+       var months = to.month - from.month;
+       var days = to.day - from.day;
+       if (days < 0) {
+         months -= 1;
+         days += DateTime(to.year, to.month, 0).day;
+       }
+       if (months < 0) {
+         years -= 1;
+         months += 12;
+       }
+       var parts = [];
+       if (years > 0) parts.add(years == 1 ? '1 year' : '\${years} years');
+       if (months > 0) parts.add(months == 1 ? '1 month' : '\${months} months');
+       if (days > 0) parts.add(days == 1 ? '1 day' : '\${days} days');
+       if (parts.isEmpty) parts.add('0 days');
+       elapsed = parts.join(', ');
+    """,
+    "tags": ["date", "time", "elapsed", "age"]
+  },
+  // Age at the end of the current year
+  {
+    "name": "Age at end of current year",
+    "description": r"""Given a birth date, calculates the age the person will have at the end of the current year.
+
+Where:
+- Birth date: the birth date in YYYY-MM-DD format
+- Age: the age in years that the person will reach during the current year""",
+    "input": [
+      {"name": "birthdate", "unit": "string"}
+    ],
+    "output": {"name": "age", "unit": "string"},
+    "d4rtCode": """
+       var born = DateTime.tryParse(birthdate);
+       if (born == null) {
+         signal('Invalid birth date format. Expected: YYYY-MM-DD');
+       }
+       var now = DateTime.now();
+       if (born.year > now.year) {
+         signal('Birth date must not be in the future');
+       }
+       age = now.year - born.year;
+    """,
+    "tags": ["date", "age", "birthday", "time"]
+  }
+]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

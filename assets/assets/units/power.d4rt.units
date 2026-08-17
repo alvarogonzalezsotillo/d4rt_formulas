@@ -21,3 +21,7 @@
   {"name": "foot-pound per second", "symbol": "ft·lb/s", "baseUnit": "watt", "factor": 1.3558179483314004},
   {"name": "foot-pound per minute", "symbol": "ft·lb/min", "baseUnit": "watt", "factor": 0.02259696580552334}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

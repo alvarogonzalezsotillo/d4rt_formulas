@@ -10,3 +10,7 @@
   {"name": "sextant", "symbol": "sextant", "baseUnit": "radian", "factor": 1.0471975511965976},
   {"name": "octant", "symbol": "octant", "baseUnit": "radian", "factor": 0.7853981633974483}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

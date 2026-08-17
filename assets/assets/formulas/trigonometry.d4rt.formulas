@@ -1,5 +1,4 @@
 [
-  {"name": "currency", "symbol": "¤", "isBase": true},
 ]
 // Local Variables:
 // mode: dart
