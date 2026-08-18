@@ -48,6 +48,7 @@ class NumberResult extends FormulaResult {
 class FormulaEvaluator {
   final D4rt _interpreter;
 
+  // TODO: extract to a new class, since this is used in formula evaluation, unit conversions, and calculator
   static D4rt createDefaultInterpreter() => D4rt();
 
   FormulaEvaluator([D4rt? interpreter]) : _interpreter = interpreter ?? createDefaultInterpreter() {

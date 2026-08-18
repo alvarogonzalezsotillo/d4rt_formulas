@@ -165,7 +165,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
             length: 2,
             child: Scaffold(
               appBar: AppBar(
-                title: const Text('Formulas'),
+                title: const Text('D4rt Formulas'),
                 bottom: const TabBar(
                   tabs: [
                     Tab(text: 'Formulas'),
