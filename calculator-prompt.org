@@ -15,4 +15,4 @@ Create a calculator similar to maxima
 * Future goals (not now)
 - FormulaResult.evaluateStatement: code is body of an anonimous function with no parameters.
 - D4rtEditingController.validate also tries evaluateStatement
-- FormulaEvaluator.prepareInterpreter() inserts variables ansN, and also an array ans[] with the ansN values.
+- [X] FormulaEvaluator.prepareInterpreter() inserts variables ansN, and also an array ans[] with the ansN values.

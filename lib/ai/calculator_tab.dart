@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'd4rt_editing_controller.dart';
+import 'package:get_it/get_it.dart';
+
+import '../calculator_state.dart';
 import '../formula_evaluator.dart';
 import '../value_formatter.dart';
+import 'd4rt_editing_controller.dart';
 
 class _CalculatorEntry {
   final int index;
@@ -23,10 +26,12 @@ class _CalculatorTabState extends State<CalculatorTab> {
   final int maxEntries = 100;
   
   final List<_CalculatorEntry> _entries = [];
+  late final CalculatorState _calculatorState;
 
   @override
   void initState() {
     super.initState();
+    _calculatorState = GetIt.instance<CalculatorState>();
     _entries.add(_CalculatorEntry(index: 1));
   }
 
@@ -43,8 +48,16 @@ class _CalculatorTabState extends State<CalculatorTab> {
     print( "CALC: onInputChanged");
     print( "CALC: ${entry.index}/${_entries.length} --> ${entry.inputController.text}");
     setState(() {
-      final formatted = _formatResult(entry.inputController);
-      entry.outputController.text = formatted ?? '';
+      _updateEntryOutput(entry);
+
+      // Re-evaluate all subsequent entries since they may depend on ansN
+      final changedIndex = entry.index;
+      for (final e in _entries) {
+        if (e.index > changedIndex && e.inputController.text.trim().isNotEmpty) {
+          e.inputController.validate();
+          _updateEntryOutput(e);
+        }
+      }
 
       final lastEntry = _entries.last;
       final lastHasOutput = lastEntry.inputController.d4rtValue != null &&
@@ -57,6 +70,19 @@ class _CalculatorTabState extends State<CalculatorTab> {
         }
       }
     });
+  }
+
+  void _updateEntryOutput(_CalculatorEntry entry) {
+    final formatted = _formatResult(entry.inputController);
+    entry.outputController.text = formatted ?? '';
+
+    _calculatorState.setInput(entry.index, entry.inputController.text);
+    final d4rtValue = entry.inputController.d4rtValue;
+    if (d4rtValue is NumberResult && entry.inputController.text.trim().isNotEmpty) {
+      _calculatorState.setAnswer(entry.index, d4rtValue.value);
+    } else {
+      _calculatorState.removeAnswer(entry.index);
+    }
   }
 
   String? _formatResult(D4rtEditingController controller) {

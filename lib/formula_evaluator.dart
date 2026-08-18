@@ -1,7 +1,9 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
+import 'package:get_it/get_it.dart';
 
+import 'calculator_state.dart';
 import 'formula_models.dart';
 import 'error_handler.dart';
 import 'd4rt_bridge.dart';
@@ -101,9 +103,14 @@ class FormulaEvaluator {
   static FormulaResult evaluateExpression(String code, [D4rt? interpreter]) {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
+
+    // Inject calculator ansN variables and ans[] array
+    final ansDeclarations = _buildAnsDeclarations();
+
     final d4rtCode =
         """
       $preamble
+      $ansDeclarations
       main()
       {
         late var result;
@@ -121,6 +128,16 @@ class FormulaEvaluator {
         return StringResult(value);
       default:
         throw FormulaEvaluationException("Unexpected result type: ${result.runtimeType} -- $result");
+    }
+  }
+
+  static String _buildAnsDeclarations() {
+    try {
+      final calculatorState = GetIt.instance<CalculatorState>();
+      return calculatorState.generateAnsDeclarations() ?? '';
+    } catch (ex,st) {
+      errorHandler.notify(ex,st);
+      return "";
     }
   }
 
