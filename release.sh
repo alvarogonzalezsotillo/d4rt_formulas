@@ -34,7 +34,6 @@ build_release_files(){
     build_web
     build_android
     build_linux
-
 }
 
 get_release_files(){

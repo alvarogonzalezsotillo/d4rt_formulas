@@ -500,7 +500,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                   )
                 : TextFormField(
                     controller: _inputControllers[variable.name],
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.multiline,
                     inputFormatters: [
                       //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
                     ],
