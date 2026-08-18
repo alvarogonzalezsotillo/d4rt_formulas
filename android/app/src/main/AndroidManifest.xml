@@ -42,7 +42,7 @@
                 <data android:scheme="file" />
                 <data android:mimeType="*/*" />
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.d4rtf" />
+                <data android:pathPattern=".*\\.d4rt.*" />
             </intent-filter>
 
         </activity>

@@ -10,3 +10,7 @@
   {"name": "square yard", "symbol": "yd²", "baseUnit": "square meter", "factor": 0.83612736},
   {"name": "square mile", "symbol": "mi²", "baseUnit": "square meter", "factor": 2589988.110336}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

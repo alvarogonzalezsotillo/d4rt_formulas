@@ -20,3 +20,7 @@
   {"name": "bushel (US)", "symbol": "bu (US)", "baseUnit": "cubic meter", "factor": 0.035239070166},
   {"name": "peck (US)", "symbol": "pk (US)", "baseUnit": "cubic meter", "factor": 0.008809767541}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

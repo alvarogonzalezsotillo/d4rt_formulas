@@ -50,3 +50,7 @@ The network address is calculated by applying the subnet mask to zero out the ho
     "tags": ["networking", "ip", "subnetting", "cidr", "network"]
   }
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

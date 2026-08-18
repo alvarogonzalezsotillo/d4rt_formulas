@@ -190,3 +190,7 @@ This formula is useful when height is unknown.
     "tags": ["geometry", "triangle", "area"]
   }
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:

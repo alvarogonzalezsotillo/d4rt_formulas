@@ -11,3 +11,7 @@
   {"name": "carat", "symbol": "ct", "baseUnit": "kilogram", "factor": 0.0002},
   {"name": "atomic mass unit", "symbol": "u", "baseUnit": "kilogram", "factor": 1.660539e-27}
 ]
+// Local Variables:
+// mode: dart
+// d4rt-formulas-imenu-mode: t
+// End:
