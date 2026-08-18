@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 # exit on error
 set -e
 # exit on undefined
@@ -31,9 +31,18 @@ build_release_files(){
     )
 
     build_common
-    build_web
-    build_android
-    build_linux
+    if $BUILD_WEBPAGE
+    then
+        build_web
+    fi
+    if $BUILD_ANDROID
+    then
+        build_android
+    fi
+    if $BUILD_LINUX
+    then
+        build_linux
+    fi
 }
 
 get_release_files(){
@@ -97,11 +106,86 @@ parse_args(){
     # -r --release -> CREATE_RELEASE
     #    --all     -> BUILD_WEBPAGE BUILD_LINUX BUILD_ANDROID BUILD_GHPAGES CREATE_RELEASE
     # -h --help -> Show help and exit
-    :
+    BUILD_WEBPAGE=false
+    BUILD_LINUX=false
+    BUILD_ANDROID=false
+    BUILD_GHPAGES=false
+    CREATE_RELEASE=false
+
+    if [[ $# -eq 0 ]]; then
+        set -- --all
+    fi
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -w|--webpage)
+                BUILD_WEBPAGE=true
+                shift
+                ;;
+            -l|--linux)
+                BUILD_LINUX=true
+                shift
+                ;;
+            -a|--android)
+                BUILD_ANDROID=true
+                shift
+                ;;
+            -g|--gh-pages)
+                BUILD_GHPAGES=true
+                BUILD_WEBPAGE=true
+                shift
+                ;;
+            -r|--release)
+                CREATE_RELEASE=true
+                shift
+                ;;
+            --all)
+                BUILD_WEBPAGE=true
+                BUILD_LINUX=true
+                BUILD_ANDROID=true
+                BUILD_GHPAGES=true
+                CREATE_RELEASE=true
+                shift
+                ;;
+            -h|--help)
+                echo "Usage: $0 [options]"
+                echo ""
+                echo "Options:"
+                echo "  -w, --webpage    Build web version"
+                echo "  -l, --linux      Build Linux version"
+                echo "  -a, --android    Build Android version"
+                echo "  -g, --gh-pages   Update gh-pages (implies --webpage)"
+                echo "  -r, --release    Create GitHub release (needs at least one build)"
+                echo "      --all        Build everything and create release and gh-pages (default)"
+                echo "  -h, --help       Show this help message"
+                exit 0
+                ;;
+            *)
+                echo "Error: Unknown option '$1'"
+                echo "Run '$0 --help' for usage information"
+                exit 1
+                ;;
+        esac
+    done
+
+    echo "BUILD_WEBPAGE=$BUILD_WEBPAGE"
+    echo "BUILD_LINUX=$BUILD_LINUX"
+    echo "BUILD_ANDROID=$BUILD_ANDROID"
+    echo "BUILD_GHPAGES=$BUILD_GHPAGES"
+    echo "CREATE_RELEASE=$CREATE_RELEASE"
+
+    if $CREATE_RELEASE && !($BUILD_WEBPAGE || $BUILD_LINUX || $BUILD_ANDROID)
+    then
+        echo "Error: a release needs at least one type of build"
+        echo "Run '$0 --help' for usage information"
+        exit 2
+    fi    
 }
 
 
 main(){
+    parse_args "$@"
+
     local COMMIT_HASH=$(git rev-parse HEAD)
     local COMMIT=${COMMIT_HASH:0:7}
     
@@ -120,11 +204,18 @@ main(){
     RELEASE_NAME=${TAG#release-}
 
     echo "Building release for TAG:$TAG RELEASE_NAME:$RELEASE_NAME"
-    build_release_files
 
-    create_release_in_github
-    update_gh_pages
+    if $BUILD_WEBPAGE || $BUILD_LINUX || $BUILD_ANDROID; then
+        build_release_files
+    fi
 
+    if $CREATE_RELEASE; then
+        create_release_in_github
+    fi
+
+    if $BUILD_GHPAGES; then
+        update_gh_pages
+    fi
 }
 
-main
+main "$@"
