@@ -14,7 +14,6 @@ import 'd4rt_editing_controller.dart';
 import 'formula_list.dart';
 import 'unit_dropdown.dart';
 import 'formula_editor.dart';
-import '../main.dart';
 import '../compile_constants.dart';
 
 class FormulaScreen extends StatefulWidget {
@@ -112,7 +111,6 @@ class _FormulaScreenState extends State<FormulaScreen> {
         }
 
         dynamic convertedValue;
-        print("ELAPSED: ${input.name}: ${val}");
 
         if (val is NumberResult) {
           if (input.unit != null) {
@@ -136,7 +134,6 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
 
       late final dynamic result;
-      print("ELAPSED: inputValues: $inputValues");
       if (formula is DerivedFormula) {
         result = formulaSolver(formula, formula.output.name, inputValues);
       } else {
@@ -146,19 +143,14 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
       // Convert output to selected unit if needed
       String? unit = formula.output.unit;
-      print(
-        "ELAPSED: output unit: $unit selectedOutputUnit:$_selectedOutputUnit   result: $result  ${result.runtimeType}  ${result is Number}",
-      );
       if (unit != null && result is Number) {
-        print("ELAPSED: lo convierto de unidad");
-        final converted = widget.corpus.convert(
+       final converted = widget.corpus.convert(
           result,
           unit,
           _selectedOutputUnit!,
         );
         _result = formatOutput(converted);
       } else {
-        print("ELAPSED: lo paso a String");
         _result = result?.toString();
       }
 
@@ -448,7 +440,6 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 setState(() {
                   _selectedOutputUnit = unit;
                   _evaluateFormula();
-                  print("ELAPSED: En output unit changed to $unit: $_result");
                 });
               },
             ),
