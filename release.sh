@@ -87,6 +87,19 @@ is_github_action(){
     [ ${GITHUB_REF+x} ]
 }
 
+parse_args(){
+    # Parse scripts params and set global variables. If no parameters, defaults to --all
+    # called from main()
+    # -w --webpage -> BUILD_WEBPAGE
+    # -l --linux -> BUILD_LINUX
+    # -a --android -> BUILD_ANDROID
+    # -g --gh-pages -> BUILD_GHPAGES BUILD_WEBPAGE
+    # -r --release -> CREATE_RELEASE
+    #    --all     -> BUILD_WEBPAGE BUILD_LINUX BUILD_ANDROID BUILD_GHPAGES CREATE_RELEASE
+    # -h --help -> Show help and exit
+    :
+}
+
 
 main(){
     local COMMIT_HASH=$(git rev-parse HEAD)
