@@ -1,6 +1,7 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
+import 'package:d4rt_formulas/variables.dart';
 import 'package:get_it/get_it.dart';
 
 import 'calculator_state.dart';
@@ -39,6 +40,12 @@ class StringResult extends FormulaResult {
   final String value;
 
   const StringResult(this.value);
+}
+
+class FunctionResult extends FormulaResult {
+  final InterpretedFunction value;
+
+  const FunctionResult(this.value);
 }
 
 class NumberResult extends FormulaResult {
@@ -117,7 +124,7 @@ class FormulaEvaluator {
         result = $code;
         return result;
       }""";
-    //print("evaluateExpression:\n$d4rtCode");
+    print("EVALUATEEXPRESSION:\n$d4rtCode");
     final result = d4rtInterpreter.execute(source: d4rtCode);
     switch (result) {
       case int value:
@@ -133,8 +140,8 @@ class FormulaEvaluator {
 
   static String _buildAnsDeclarations() {
     try {
-      final calculatorState = GetIt.instance<CalculatorState>();
-      return calculatorState.generateAnsDeclarations() ?? '';
+      final vars = GetIt.instance<GlobalVariables>();
+      return vars.d4rtDeclarations();
     } catch (ex,st) {
       errorHandler.notify(ex,st);
       return "";

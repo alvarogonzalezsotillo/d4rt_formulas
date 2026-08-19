@@ -1,54 +1,46 @@
-import 'formula_models.dart';
+import 'package:d4rt_formulas/formula_evaluator.dart';
+import 'package:d4rt_formulas/variables.dart';
+import 'package:get_it/get_it.dart';
 
 class CalculatorState {
-  final Map<int, String> _inputs = {};
-  final Map<int, Number> _answers = {};
+  final GlobalVariables _variables = GetIt.instance.get<GlobalVariables>();
 
-  Map<int, String> get inputs => Map.unmodifiable(_inputs);
-  Map<int, Number> get answers => Map.unmodifiable(_answers);
-
-  int get maxIndex {
-    if (_inputs.isEmpty) return 0;
-    return _inputs.keys.reduce((a, b) => a > b ? a : b);
-  }
+  static inputName(int index) => "input$index";
+  static outputName(int index) => "ans$index";
 
   void setInput(int index, String value) {
-    _inputs[index] = value;
+    _variables[inputName(index)] = StringResult(value);
   }
 
   void removeInput(int index) {
-    _inputs.remove(index);
+    _variables.deleteKey(inputName(index));
   }
 
-  void setAnswer(int index, Number value) {
-    _answers[index] = value;
+  String getInput(int index) => (_variables[inputName(index)] as StringResult).value;
+
+
+  void setAnswer(int index, FormulaResult value) {
+    _variables[outputName(index)] = value;
   }
 
   void removeAnswer(int index) {
-    _answers.remove(index);
+    _variables.deleteKey(outputName(index));
+  }
+
+  int get minIndex => 1;
+
+  int get maxIndex {
+    var index = minIndex;
+    while (_variables.containsKey(inputName(index))) {
+      index += 1;
+    }
+    return index - 1;
   }
 
   void clear() {
-    _inputs.clear();
-    _answers.clear();
-  }
-
-  String? generateAnsDeclarations() {
-    if (_answers.isEmpty) return null;
-
-    final buffer = StringBuffer();
-
-    // Declare individual ansN variables (sorted by index)
-    final sortedIndices = _answers.keys.toList()..sort();
-    for (final index in sortedIndices) {
-      final value = _answers[index];
-      buffer.writeln('final ans$index = $value;');
+    for (var index = minIndex; index <= maxIndex; index += 1) {
+      removeInput(index);
+      removeAnswer(index);
     }
-
-    // Declare ans[] array with all answer values
-    final ansValues = sortedIndices.map((i) => _answers[i]).toList();
-    buffer.writeln('final ans = <dynamic>[${ansValues.join(', ')}];');
-
-    return buffer.toString();
   }
 }

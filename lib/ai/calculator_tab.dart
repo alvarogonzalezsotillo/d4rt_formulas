@@ -25,15 +25,31 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   final int maxEntries = 100;
   
-  final List<_CalculatorEntry> _entries = [];
-  late final CalculatorState _calculatorState;
+  late final List<_CalculatorEntry> _entries;
+  final CalculatorState _calculatorState = CalculatorState();
 
   @override
   void initState() {
     super.initState();
-    _calculatorState = GetIt.instance<CalculatorState>();
-    _entries.add(_CalculatorEntry(index: 1));
+    _restoreState();
   }
+
+  void _restoreState(){
+    _entries = [];
+    final maxIndex = _calculatorState.maxIndex;
+    final minIndex = _calculatorState.minIndex;
+    
+    for( var index = minIndex; index <= maxIndex ; index += 1 ){
+      final entry = _CalculatorEntry(index: index);
+      entry.inputController.text = _calculatorState.getInput(index);
+      _entries.add(entry);
+    }
+
+    _entries.forEach(_updateEntryOutput);
+
+    _entries.add(_CalculatorEntry(index: maxIndex+1));
+  }
+  
 
   @override
   void dispose() {
@@ -73,19 +89,19 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   void _updateEntryOutput(_CalculatorEntry entry) {
-    final formatted = _formatResult(entry.inputController);
+    final formatted = _getD4rtValue(entry.inputController);
     entry.outputController.text = formatted ?? '';
 
     _calculatorState.setInput(entry.index, entry.inputController.text);
     final d4rtValue = entry.inputController.d4rtValue;
-    if (d4rtValue is NumberResult && entry.inputController.text.trim().isNotEmpty) {
-      _calculatorState.setAnswer(entry.index, d4rtValue.value);
+    if (d4rtValue != null ) {
+      _calculatorState.setAnswer(entry.index, d4rtValue);
     } else {
       _calculatorState.removeAnswer(entry.index);
     }
   }
 
-  String? _formatResult(D4rtEditingController controller) {
+  String? _getD4rtValue(D4rtEditingController controller) {
     final value = controller.d4rtValue;
     if (value == null || controller.text.trim().isEmpty) return null;
     if (value is NumberResult) {
@@ -134,7 +150,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   Widget _buildOutputRow(_CalculatorEntry entry) {
-    final formatted = _formatResult(entry.inputController);
+    final formatted = _getD4rtValue(entry.inputController);
     print( "CALC: buildOutputRow: ${entry.index} --> $formatted ");
 
     return Padding(

@@ -37,6 +37,7 @@ class D4rtEditingController extends TextEditingController {
     } catch (e, s) {
       //errorHandler.notify(e, s);
       _lastError = e.toString();
+      _lastValue = null;
       return false;
     }
   }
@@ -55,7 +56,7 @@ class D4rtEditingController extends TextEditingController {
   }
 
 
-  FormulaResult? get d4rtValue => _lastValue;
+  FormulaResult? get d4rtValue => _lastError == null ? _lastValue : null;
 
   @override
   set text(String newText) {
