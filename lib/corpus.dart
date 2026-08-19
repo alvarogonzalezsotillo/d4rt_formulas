@@ -1,15 +1,14 @@
 import 'package:d4rt/d4rt.dart';
 import 'package:collection/collection.dart';
 import 'package:d4rt_formulas/d4rt_formulas.dart';
-import 'formula_models.dart';
 
-class Multimap<K, V> extends DelegatingMap<K, List<V>> {
+class _Multimap<K, V> extends DelegatingMap<K, List<V>> {
   final Map<K, List<V>> _map;
 
-  Multimap(super.map) : _map = map;
+  _Multimap(super.map) : _map = map;
 
-  factory Multimap.create() {
-    return Multimap({});
+  factory _Multimap.create() {
+    return _Multimap({});
   }
 
   @override
@@ -24,7 +23,7 @@ class Multimap<K, V> extends DelegatingMap<K, List<V>> {
 }
 
 class Corpus{
-  final Multimap<String, Formula> _tags = Multimap.create();
+  final _Multimap<String, Formula> _tags = _Multimap.create();
   // Map formulas by uuid
   final Map<String, Formula> _allFormulas = {};
 
@@ -123,7 +122,7 @@ class Corpus{
     }
   }
 
-  final Multimap<String, String> _baseToUnits = Multimap.create();
+  final _Multimap<String, String> _baseToUnits = _Multimap.create();
   final Map<String, UnitSpec> _allUnits = {};
 
   void loadUnits(List<UnitSpec> units, [bool replaceOnDuplicates = false]) {
