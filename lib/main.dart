@@ -3,6 +3,7 @@ import 'package:d4rt_formulas/database/formulas_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'ai/calculator_tab.dart';
 import 'ai/formula_list.dart';
 import 'ai/import_from_text_screen.dart';
 import 'ai/unit_list.dart';
@@ -162,7 +163,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           _registerCorpusInstance(corpus);
 
           return DefaultTabController(
-            length: 2,
+            length: 3,
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('D4rt Formulas'),
@@ -170,6 +171,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                   tabs: [
                     Tab(text: 'Formulas'),
                     Tab(text: 'Units'),
+                    Tab(text: 'Calculator'),
                   ],
                 ),
                 actions: [
@@ -195,6 +197,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                     corpus: snapshot.data!,
                     onImport: _handleImport,
                   ),
+                  const CalculatorTab(),
                 ],
               ),
             ),

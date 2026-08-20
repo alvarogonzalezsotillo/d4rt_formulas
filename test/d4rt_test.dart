@@ -2,23 +2,36 @@ import 'package:test/test.dart';
 import 'package:d4rt/d4rt.dart';
 import 'dart:math' as Math;
 
-
 void main(){
-  test('Access to Math', () {
+  test("Function literals", () {
+    final source = r"""
+        final fn = () => 5;
+        main(){
+          print( "fn: ${fn()}");
+          return fn;
+        }
+      """;
+    final interpreter = D4rt();
+    final InterpretedFunction result = interpreter.execute(source: source);
+    print("result: $result ${result.runtimeType}"); // <fn <anonymous>> InterpretedFunction
 
-      final completeSource = """
+    var a = interpreter.invokeInterpretedFunction(result, []);
+    print(a);
+  });
+
+  test('Access to Math', () {
+    final completeSource = """
         import  'dart:math';
         main() => sin(42);
 
       """;
-      final interpreter = D4rt();
-      final result = interpreter.execute(source: completeSource);
+    final interpreter = D4rt();
+    final result = interpreter.execute(source: completeSource);
 
-      expect(result, Math.sin(42));
+    expect(result, Math.sin(42));
   });
 
   test('Access to IO', () {
-
     final completeSource = """
        import 'dart:io';
 
@@ -34,5 +47,4 @@ void main(){
 
     expect(result, contains("root"));
   });
-
 }

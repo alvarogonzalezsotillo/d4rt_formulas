@@ -1,4 +1,6 @@
 import 'package:test/test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:d4rt_formulas/calculator_state.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
 
@@ -222,6 +224,57 @@ void main() {
 
         final result = evaluator.evaluate(formula, {'x': 3.14});
         expect(result, closeTo(9.8596, 0.0001));
+      });
+    });
+
+    group('Calculator ans variables injection', () {
+      late CalculatorState calculatorState;
+
+      setUp(() {
+        if (GetIt.instance.isRegistered<CalculatorState>()) {
+          GetIt.instance.unregister<CalculatorState>();
+        }
+        calculatorState = CalculatorState();
+        GetIt.instance.registerSingleton<CalculatorState>(calculatorState);
+      });
+
+      tearDown(() {
+        if (GetIt.instance.isRegistered<CalculatorState>()) {
+          GetIt.instance.unregister<CalculatorState>();
+        }
+      });
+
+      test('evaluateExpression can access ansN variables', () {
+        calculatorState.setAnswer(1, 10.0);
+        calculatorState.setAnswer(2, 20.0);
+
+        final result = FormulaEvaluator.evaluateExpression('ans1 + ans2');
+        expect(result, isA<NumberResult>());
+        expect((result as NumberResult).value, 30.0);
+      });
+
+      test('evaluateExpression can access ans[] array', () {
+        calculatorState.setAnswer(1, 10.0);
+        calculatorState.setAnswer(2, 20.0);
+        calculatorState.setAnswer(3, 30.0);
+
+        final result = FormulaEvaluator.evaluateExpression('ans[0] + ans[1] + ans[2]');
+        expect(result, isA<NumberResult>());
+        expect((result as NumberResult).value, 60.0);
+      });
+
+      test('evaluateExpression works without CalculatorState registered', () {
+        GetIt.instance.unregister<CalculatorState>();
+
+        final result = FormulaEvaluator.evaluateExpression('1 + 2');
+        expect(result, isA<NumberResult>());
+        expect((result as NumberResult).value, 3.0);
+      });
+
+      test('evaluateExpression works with empty CalculatorState', () {
+        final result = FormulaEvaluator.evaluateExpression('1 + 2');
+        expect(result, isA<NumberResult>());
+        expect((result as NumberResult).value, 3.0);
       });
     });
   });

@@ -1,7 +1,10 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
+import 'package:d4rt_formulas/variables.dart';
+import 'package:get_it/get_it.dart';
 
+import 'calculator_state.dart';
 import 'formula_models.dart';
 import 'error_handler.dart';
 import 'd4rt_bridge.dart';
@@ -37,6 +40,13 @@ class StringResult extends FormulaResult {
   final String value;
 
   const StringResult(this.value);
+}
+
+class FunctionResult extends FormulaResult {
+  final InterpretedFunction value;
+  final String code;
+
+  const FunctionResult(this.value, this.code);
 }
 
 class NumberResult extends FormulaResult {
@@ -101,16 +111,21 @@ class FormulaEvaluator {
   static FormulaResult evaluateExpression(String code, [D4rt? interpreter]) {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
+
+    // Inject calculator ansN variables and ans[] array
+    final ansDeclarations = _buildAnsDeclarations();
+
     final d4rtCode =
         """
       $preamble
+      $ansDeclarations
       main()
       {
         late var result;
         result = $code;
         return result;
       }""";
-    //print("evaluateExpression:\n$d4rtCode");
+    print("EVALUATEEXPRESSION:\n$d4rtCode");
     final result = d4rtInterpreter.execute(source: d4rtCode);
     switch (result) {
       case int value:
@@ -119,8 +134,20 @@ class FormulaEvaluator {
         return NumberResult(value);
       case String value:
         return StringResult(value);
+      case InterpretedFunction value:
+        return FunctionResult(value,code);
       default:
         throw FormulaEvaluationException("Unexpected result type: ${result.runtimeType} -- $result");
+    }
+  }
+
+  static String _buildAnsDeclarations() {
+    try {
+      final vars = GetIt.instance<GlobalVariables>();
+      return vars.d4rtDeclarations();
+    } catch (ex,st) {
+      errorHandler.notify(ex,st);
+      return "";
     }
   }
 

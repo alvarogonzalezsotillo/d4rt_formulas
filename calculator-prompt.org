@@ -1,0 +1,18 @@
+* Current Goal
+Create a calculator similar to maxima
+- Runtime is d4rt.
+  - Each input is a D4rtEditingController
+  - It is evaluated and the result is D4rtEditingController.d4rtValue
+- Each input (inputN) leads to an output (ansN). N is 1, 2, ..., 10, ..., 99, 100
+- It is shown as a new tab after "Formulas" and "Units" (see main.dart:170)
+- Initially:
+  - An empty D4rtEditingController is shown, with a label "input1" at rigth.
+  - As soon as user start editing, a texfield with label "output1" appears with the D4rtEditingController.d4rtValue . If the input1 becomes empty, the output1 is removed.
+  - As soon as output1 appears, an empty input2 is created, so user can create inputs at will.
+- The list of inputs and outputs is vertically scrollable.
+
+
+* Future goals (not now)
+- FormulaResult.evaluateStatement: code is body of an anonimous function with no parameters.
+- D4rtEditingController.validate also tries evaluateStatement
+- [X] FormulaEvaluator.prepareInterpreter() inserts variables ansN, and also an array ans[] with the ansN values.
