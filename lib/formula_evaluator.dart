@@ -44,8 +44,9 @@ class StringResult extends FormulaResult {
 
 class FunctionResult extends FormulaResult {
   final InterpretedFunction value;
+  final String code;
 
-  const FunctionResult(this.value);
+  const FunctionResult(this.value, this.code);
 }
 
 class NumberResult extends FormulaResult {
@@ -133,6 +134,8 @@ class FormulaEvaluator {
         return NumberResult(value);
       case String value:
         return StringResult(value);
+      case InterpretedFunction value:
+        return FunctionResult(value,code);
       default:
         throw FormulaEvaluationException("Unexpected result type: ${result.runtimeType} -- $result");
     }

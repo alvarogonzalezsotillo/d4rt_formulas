@@ -89,7 +89,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   void _updateEntryOutput(_CalculatorEntry entry) {
-    final formatted = _getD4rtValue(entry.inputController);
+    final formatted = _getFormattedD4rtValue(entry.inputController);
     entry.outputController.text = formatted ?? '';
 
     _calculatorState.setInput(entry.index, entry.inputController.text);
@@ -101,7 +101,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
     }
   }
 
-  String? _getD4rtValue(D4rtEditingController controller) {
+  String? _getFormattedD4rtValue(D4rtEditingController controller) {
     final value = controller.d4rtValue;
     if (value == null || controller.text.trim().isEmpty) return null;
     if (value is NumberResult) {
@@ -109,6 +109,9 @@ class _CalculatorTabState extends State<CalculatorTab> {
     }
     if (value is StringResult) {
       return formatOutput(value.value);
+    }
+    if (value is FunctionResult) {
+      return formatOutput("D4rt interpreted function: ${value.code}");
     }
     return value.toString();
   }
@@ -150,7 +153,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   Widget _buildOutputRow(_CalculatorEntry entry) {
-    final formatted = _getD4rtValue(entry.inputController);
+    final formatted = _getFormattedD4rtValue(entry.inputController);
     print( "CALC: buildOutputRow: ${entry.index} --> $formatted ");
 
     return Padding(

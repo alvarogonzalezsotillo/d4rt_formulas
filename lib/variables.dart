@@ -48,8 +48,9 @@ class GlobalVariables {
         case NumberResult n:
           declaration = "final $name = ${n.value};";
           break;
-        case FunctionResult _:
-          throw ArgumentError("Variable type not supoorted");
+        case FunctionResult f:
+          declaration = "final $name = ${f.code};";
+          break;
       }
       return declaration;
     });
