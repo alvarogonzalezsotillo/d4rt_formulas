@@ -1,0 +1,15 @@
+Persist GlobalVariables in database, like Corpus
+- Persist at each change
+- honor CompileConstants.isDatabaseBackend()
+- Restore GlobalVariables at startup, like Corpus is restored in loadCorpusFromDatabaseOrAssets() 
+  
+
+Persist values entered in FormulaScreen
+- Create class FormulaVariables.
+  - Singleton managed via GetIt
+  - Contains a hashmap for each formula UUID
+  - it is updated at each change
+  - stores inputs and output    
+- Complete method _FormulaScreenState._initInputs()
+  - only restores inputs, output is recalculated
+- Persist FormulaVariables in database, as GlobalVariables and Corpus

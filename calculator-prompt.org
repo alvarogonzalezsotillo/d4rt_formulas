@@ -11,8 +11,3 @@ Create a calculator similar to maxima
   - As soon as output1 appears, an empty input2 is created, so user can create inputs at will.
 - The list of inputs and outputs is vertically scrollable.
 
-
-* Future goals (not now)
-- FormulaResult.evaluateStatement: code is body of an anonimous function with no parameters.
-- D4rtEditingController.validate also tries evaluateStatement
-- [X] FormulaEvaluator.prepareInterpreter() inserts variables ansN, and also an array ans[] with the ansN values.
