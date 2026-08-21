@@ -140,6 +140,8 @@ class VariableSpec{
     validate();
   }
 
+  bool isStringChoice() => values != null && values!.isNotEmpty;
+
   void validate() {
     if (FormulaEvaluator.reservedVariableNames.contains(name)) {
       throw ArgumentError("$name: is a reserved variable name for FormulaEvaluator");

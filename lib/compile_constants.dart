@@ -57,8 +57,8 @@ class CompileConstants {
   }
 
   static bool isDatabaseBackend() {
-    //return !isWeb();
-    return false;
+    return !isWeb();
+    //return false;
   }
 
   static bool isWeb() {

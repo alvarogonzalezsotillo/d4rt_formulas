@@ -187,10 +187,10 @@ class FormulaEvaluator {
     }
 
     // Validate that input values are in the allowed values list if specified
-    for (final vs in formula.input) {
-      final values = vs.values;
-      if (values != null && values.isNotEmpty) {
-        final inputValue = inputValues[vs.name];
+    for (final input in formula.input) {
+      if (input.isStringChoice()) {
+        final values = input.values!;
+        final inputValue = inputValues[input.name];
         if (inputValue != null) {
           // Convert input value to string for comparison since allowed values are stored as strings
           final inputValueAsString = inputValue.toString();
@@ -198,7 +198,7 @@ class FormulaEvaluator {
 
           if (!containsValue) {
             throw FormulaEvaluationException(
-              'Invalid value for variable "${vs.name}" in formula "${formula.name}". '
+              'Invalid value for variable "${input.name}" in formula "${formula.name}". '
               'Expected one of: [${values.join(', ')}], but got: $inputValue',
             );
           }

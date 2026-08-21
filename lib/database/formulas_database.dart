@@ -16,9 +16,15 @@ class FormulaElements extends Table {
   Set<Column> get primaryKey => {uuid};
 }
 
+class GlobalVariablesTable extends Table {
+  TextColumn get name => text()();
+  TextColumn get valueText => text()();
 
+  @override
+  Set<Column> get primaryKey => {name};
+}
 
-@DriftDatabase(tables: [FormulaElements])
+@DriftDatabase(tables: [FormulaElements, GlobalVariablesTable])
 class FormulasDatabase extends _$FormulasDatabase {
 
   static String underlyingStorage(){
@@ -60,5 +66,21 @@ class FormulasDatabase extends _$FormulasDatabase {
 
   // Additional helper methods for direct access to the table
   SimpleSelectStatement get allFormulaElements => select(formulaElements);
+
+  // GlobalVariablesTable methods
+  Future<void> saveGlobalVariable(String name, String valueText) {
+    return into(globalVariablesTable).insert(
+      GlobalVariablesTableCompanion.insert(name: name, valueText: valueText),
+      mode: InsertMode.replace,
+    );
+  }
+
+  Future<List<GlobalVariablesTableData>> getAllGlobalVariables() {
+    return select(globalVariablesTable).get();
+  }
+
+  Future<void> deleteAllGlobalVariables() {
+    return delete(globalVariablesTable).go();
+  }
 }
 

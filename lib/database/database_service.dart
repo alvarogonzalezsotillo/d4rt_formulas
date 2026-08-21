@@ -67,3 +67,23 @@ extension CorpusDatabaseExtension on FormulasDatabase {
     return false;
   }
 }
+
+// Extension for GlobalVariables persistence
+extension GlobalVariablesDatabaseExtension on FormulasDatabase {
+  Future<Map<String, String>> loadGlobalVariables() async {
+    final rows = await getAllGlobalVariables();
+    final result = <String, String>{};
+    for (final row in rows) {
+      result[row.name] = row.valueText;
+    }
+    return result;
+  }
+
+  Future<void> saveAllGlobalVariables(Map<String, String> data) async {
+    await deleteAllGlobalVariables();
+    for (final entry in data.entries) {
+      await saveGlobalVariable(entry.key, entry.value);
+    }
+  }
+}
+

@@ -224,17 +224,245 @@ class FormulaElementsCompanion extends UpdateCompanion<FormulaElement> {
   }
 }
 
+class $GlobalVariablesTableTable extends GlobalVariablesTable
+    with TableInfo<$GlobalVariablesTableTable, GlobalVariablesTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GlobalVariablesTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _valueTextMeta = const VerificationMeta(
+    'valueText',
+  );
+  @override
+  late final GeneratedColumn<String> valueText = GeneratedColumn<String>(
+    'value_text',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [name, valueText];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'global_variables_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<GlobalVariablesTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('value_text')) {
+      context.handle(
+        _valueTextMeta,
+        valueText.isAcceptableOrUnknown(data['value_text']!, _valueTextMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_valueTextMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {name};
+  @override
+  GlobalVariablesTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GlobalVariablesTableData(
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      valueText: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}value_text'],
+      )!,
+    );
+  }
+
+  @override
+  $GlobalVariablesTableTable createAlias(String alias) {
+    return $GlobalVariablesTableTable(attachedDatabase, alias);
+  }
+}
+
+class GlobalVariablesTableData extends DataClass
+    implements Insertable<GlobalVariablesTableData> {
+  final String name;
+  final String valueText;
+  const GlobalVariablesTableData({required this.name, required this.valueText});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['name'] = Variable<String>(name);
+    map['value_text'] = Variable<String>(valueText);
+    return map;
+  }
+
+  GlobalVariablesTableCompanion toCompanion(bool nullToAbsent) {
+    return GlobalVariablesTableCompanion(
+      name: Value(name),
+      valueText: Value(valueText),
+    );
+  }
+
+  factory GlobalVariablesTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GlobalVariablesTableData(
+      name: serializer.fromJson<String>(json['name']),
+      valueText: serializer.fromJson<String>(json['valueText']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'name': serializer.toJson<String>(name),
+      'valueText': serializer.toJson<String>(valueText),
+    };
+  }
+
+  GlobalVariablesTableData copyWith({String? name, String? valueText}) =>
+      GlobalVariablesTableData(
+        name: name ?? this.name,
+        valueText: valueText ?? this.valueText,
+      );
+  GlobalVariablesTableData copyWithCompanion(
+    GlobalVariablesTableCompanion data,
+  ) {
+    return GlobalVariablesTableData(
+      name: data.name.present ? data.name.value : this.name,
+      valueText: data.valueText.present ? data.valueText.value : this.valueText,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GlobalVariablesTableData(')
+          ..write('name: $name, ')
+          ..write('valueText: $valueText')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(name, valueText);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GlobalVariablesTableData &&
+          other.name == this.name &&
+          other.valueText == this.valueText);
+}
+
+class GlobalVariablesTableCompanion
+    extends UpdateCompanion<GlobalVariablesTableData> {
+  final Value<String> name;
+  final Value<String> valueText;
+  final Value<int> rowid;
+  const GlobalVariablesTableCompanion({
+    this.name = const Value.absent(),
+    this.valueText = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GlobalVariablesTableCompanion.insert({
+    required String name,
+    required String valueText,
+    this.rowid = const Value.absent(),
+  }) : name = Value(name),
+       valueText = Value(valueText);
+  static Insertable<GlobalVariablesTableData> custom({
+    Expression<String>? name,
+    Expression<String>? valueText,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (name != null) 'name': name,
+      if (valueText != null) 'value_text': valueText,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GlobalVariablesTableCompanion copyWith({
+    Value<String>? name,
+    Value<String>? valueText,
+    Value<int>? rowid,
+  }) {
+    return GlobalVariablesTableCompanion(
+      name: name ?? this.name,
+      valueText: valueText ?? this.valueText,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (valueText.present) {
+      map['value_text'] = Variable<String>(valueText.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GlobalVariablesTableCompanion(')
+          ..write('name: $name, ')
+          ..write('valueText: $valueText, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$FormulasDatabase extends GeneratedDatabase {
   _$FormulasDatabase(QueryExecutor e) : super(e);
   $FormulasDatabaseManager get managers => $FormulasDatabaseManager(this);
   late final $FormulaElementsTable formulaElements = $FormulaElementsTable(
     this,
   );
+  late final $GlobalVariablesTableTable globalVariablesTable =
+      $GlobalVariablesTableTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [formulaElements];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    formulaElements,
+    globalVariablesTable,
+  ];
 }
 
 typedef $$FormulaElementsTableCreateCompanionBuilder =
@@ -392,10 +620,171 @@ typedef $$FormulaElementsTableProcessedTableManager =
       FormulaElement,
       PrefetchHooks Function()
     >;
+typedef $$GlobalVariablesTableTableCreateCompanionBuilder =
+    GlobalVariablesTableCompanion Function({
+      required String name,
+      required String valueText,
+      Value<int> rowid,
+    });
+typedef $$GlobalVariablesTableTableUpdateCompanionBuilder =
+    GlobalVariablesTableCompanion Function({
+      Value<String> name,
+      Value<String> valueText,
+      Value<int> rowid,
+    });
+
+class $$GlobalVariablesTableTableFilterComposer
+    extends Composer<_$FormulasDatabase, $GlobalVariablesTableTable> {
+  $$GlobalVariablesTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get valueText => $composableBuilder(
+    column: $table.valueText,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$GlobalVariablesTableTableOrderingComposer
+    extends Composer<_$FormulasDatabase, $GlobalVariablesTableTable> {
+  $$GlobalVariablesTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get valueText => $composableBuilder(
+    column: $table.valueText,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$GlobalVariablesTableTableAnnotationComposer
+    extends Composer<_$FormulasDatabase, $GlobalVariablesTableTable> {
+  $$GlobalVariablesTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get valueText =>
+      $composableBuilder(column: $table.valueText, builder: (column) => column);
+}
+
+class $$GlobalVariablesTableTableTableManager
+    extends
+        RootTableManager<
+          _$FormulasDatabase,
+          $GlobalVariablesTableTable,
+          GlobalVariablesTableData,
+          $$GlobalVariablesTableTableFilterComposer,
+          $$GlobalVariablesTableTableOrderingComposer,
+          $$GlobalVariablesTableTableAnnotationComposer,
+          $$GlobalVariablesTableTableCreateCompanionBuilder,
+          $$GlobalVariablesTableTableUpdateCompanionBuilder,
+          (
+            GlobalVariablesTableData,
+            BaseReferences<
+              _$FormulasDatabase,
+              $GlobalVariablesTableTable,
+              GlobalVariablesTableData
+            >,
+          ),
+          GlobalVariablesTableData,
+          PrefetchHooks Function()
+        > {
+  $$GlobalVariablesTableTableTableManager(
+    _$FormulasDatabase db,
+    $GlobalVariablesTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GlobalVariablesTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GlobalVariablesTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$GlobalVariablesTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> name = const Value.absent(),
+                Value<String> valueText = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GlobalVariablesTableCompanion(
+                name: name,
+                valueText: valueText,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String name,
+                required String valueText,
+                Value<int> rowid = const Value.absent(),
+              }) => GlobalVariablesTableCompanion.insert(
+                name: name,
+                valueText: valueText,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$GlobalVariablesTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$FormulasDatabase,
+      $GlobalVariablesTableTable,
+      GlobalVariablesTableData,
+      $$GlobalVariablesTableTableFilterComposer,
+      $$GlobalVariablesTableTableOrderingComposer,
+      $$GlobalVariablesTableTableAnnotationComposer,
+      $$GlobalVariablesTableTableCreateCompanionBuilder,
+      $$GlobalVariablesTableTableUpdateCompanionBuilder,
+      (
+        GlobalVariablesTableData,
+        BaseReferences<
+          _$FormulasDatabase,
+          $GlobalVariablesTableTable,
+          GlobalVariablesTableData
+        >,
+      ),
+      GlobalVariablesTableData,
+      PrefetchHooks Function()
+    >;
 
 class $FormulasDatabaseManager {
   final _$FormulasDatabase _db;
   $FormulasDatabaseManager(this._db);
   $$FormulaElementsTableTableManager get formulaElements =>
       $$FormulaElementsTableTableManager(_db, _db.formulaElements);
+  $$GlobalVariablesTableTableTableManager get globalVariablesTable =>
+      $$GlobalVariablesTableTableTableManager(_db, _db.globalVariablesTable);
 }

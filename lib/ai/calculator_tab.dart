@@ -22,9 +22,8 @@ class CalculatorTab extends StatefulWidget {
 }
 
 class _CalculatorTabState extends State<CalculatorTab> {
-
   final int maxEntries = 100;
-  
+
   late final List<_CalculatorEntry> _entries;
   final CalculatorState _calculatorState = CalculatorState();
 
@@ -34,12 +33,12 @@ class _CalculatorTabState extends State<CalculatorTab> {
     _restoreState();
   }
 
-  void _restoreState(){
+  void _restoreState() {
     _entries = [];
     final maxIndex = _calculatorState.maxIndex;
     final minIndex = _calculatorState.minIndex;
-    
-    for( var index = minIndex; index <= maxIndex ; index += 1 ){
+
+    for (var index = minIndex; index <= maxIndex; index += 1) {
       final entry = _CalculatorEntry(index: index);
       entry.inputController.text = _calculatorState.getInput(index);
       _entries.add(entry);
@@ -47,9 +46,10 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
     _entries.forEach(_updateEntryOutput);
 
-    _entries.add(_CalculatorEntry(index: maxIndex+1));
+    _entries.add(_CalculatorEntry(index: maxIndex + 1));
+
+    _adjustNumberOfEntries();
   }
-  
 
   @override
   void dispose() {
@@ -60,9 +60,39 @@ class _CalculatorTabState extends State<CalculatorTab> {
     super.dispose();
   }
 
+  void _adjustNumberOfEntries() {
+    void addNewEntryIfNecesary() {
+      final lastEntry = _entries.last;
+      final lastHasOutput = lastEntry.inputController.d4rtValue != null;
+
+      if (lastHasOutput && _entries.length < maxEntries) {
+        final nextIndex = lastEntry.index + 1;
+        if (!_entries.any((e) => e.index == nextIndex)) {
+          _entries.add(_CalculatorEntry(index: nextIndex));
+        }
+      }
+    }
+
+    void removeLastEntryIfNecesary() {
+      if (_entries.length < 2) {
+        return;
+      }
+      final lastEntry = _entries.last;
+      final lastHasOutput = lastEntry.inputController.d4rtValue != null;
+      final beforeLastEntry = _entries[_entries.length - 2];
+      final beforeLastHasOutput = beforeLastEntry.inputController.d4rtValue != null;
+
+      if (!lastHasOutput && !beforeLastHasOutput) {
+        _entries.removeLast();
+        removeLastEntryIfNecesary();
+      }
+    }
+
+    addNewEntryIfNecesary();
+    removeLastEntryIfNecesary();
+  }
+
   void _onInputChanged(_CalculatorEntry entry) {
-    print( "CALC: onInputChanged");
-    print( "CALC: ${entry.index}/${_entries.length} --> ${entry.inputController.text}");
     setState(() {
       _updateEntryOutput(entry);
 
@@ -74,17 +104,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
           _updateEntryOutput(e);
         }
       }
-
-      final lastEntry = _entries.last;
-      final lastHasOutput = lastEntry.inputController.d4rtValue != null &&
-          lastEntry.inputController.text.trim().isNotEmpty;
-
-      if (lastHasOutput && _entries.length < maxEntries) {
-        final nextIndex = lastEntry.index + 1;
-        if (!_entries.any((e) => e.index == nextIndex)) {
-          _entries.add(_CalculatorEntry(index: nextIndex));
-        }
-      }
+      _adjustNumberOfEntries();
     });
   }
 
@@ -94,7 +114,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
     _calculatorState.setInput(entry.index, entry.inputController.text);
     final d4rtValue = entry.inputController.d4rtValue;
-    if (d4rtValue != null ) {
+    if (d4rtValue != null) {
       _calculatorState.setAnswer(entry.index, d4rtValue);
     } else {
       _calculatorState.removeAnswer(entry.index);
@@ -117,7 +137,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   Widget _buildInputRow(_CalculatorEntry entry) {
-    entry.inputController.addListener(()=>_onInputChanged(entry));
+    entry.inputController.addListener(() => _onInputChanged(entry));
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -131,22 +151,15 @@ class _CalculatorTabState extends State<CalculatorTab> {
               validator: (value) {
                 return entry.inputController.lastError;
               },
-              
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                isDense: true,
-              ),
+
+              decoration: const InputDecoration(border: UnderlineInputBorder(), isDense: true),
             ),
           ),
           const SizedBox(width: 8),
           SizedBox(
             width: 80,
-            child: Text(
-              'input${entry.index}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('input${entry.index}', style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
-          
         ],
       ),
     );
@@ -154,7 +167,6 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   Widget _buildOutputRow(_CalculatorEntry entry) {
     final formatted = _getFormattedD4rtValue(entry.inputController);
-    print( "CALC: buildOutputRow: ${entry.index} --> $formatted ");
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -164,10 +176,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
             width: 80,
             child: Text(
               'ans${entry.index}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
             ),
           ),
           const SizedBox(width: 8),
@@ -175,10 +184,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
             child: TextFormField(
               readOnly: true,
               controller: entry.outputController,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                isDense: true,
-              ),
+              decoration: const InputDecoration(border: UnderlineInputBorder(), isDense: true),
             ),
           ),
         ],
@@ -188,18 +194,12 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   @override
   Widget build(BuildContext context) {
-    print( "CALC: build");
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
       itemCount: _entries.length,
       itemBuilder: (context, index) {
         final entry = _entries[index];
-        return Column(
-          children: [
-            _buildInputRow(entry),
-            _buildOutputRow(entry),
-          ],
-        );
+        return Column(children: [_buildInputRow(entry), _buildOutputRow(entry)]);
       },
     );
   }

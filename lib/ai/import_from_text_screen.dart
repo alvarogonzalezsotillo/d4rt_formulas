@@ -1,4 +1,3 @@
-import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
@@ -13,7 +12,9 @@ import '../services/import_service.dart';
 import 'formula_list.dart';
 import '../corpus.dart';
 import '../defaults/default_corpus.dart';
-import '../formula_models.dart' as models;
+import '../formula_models.dart' as models;import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:highlight/languages/dart.dart';
+
 import 'import_preview_screen.dart';
 
 

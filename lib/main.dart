@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:d4rt_formulas/database/formulas_database.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,11 @@ import 'ai/unit_list.dart';
 import 'corpus.dart';
 import 'database/database_service.dart';
 import 'defaults/default_corpus.dart';
+import 'error_handler.dart';
 import 'formula_models.dart' as models;
 import 'service_locator.dart';
 import 'compile_constants.dart';
+import 'variables.dart';
 
 
 void main() async {
@@ -27,6 +31,8 @@ void main() async {
   print( "build host: ${CompileConstants.buildHost()}" );
 
   var corpusFuture = loadCorpusFromDatabaseOrAssets();
+
+  await loadGlobalVariablesFromDatabase();
 
   runApp( MyApp(corpusFuture));
 }
@@ -258,6 +264,22 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
     return createDefaultCorpus();
   }
 }
+
+Future<void> loadGlobalVariablesFromDatabase() async {
+  if (!CompileConstants.isDatabaseBackend()) return;
+  final database = getDatabase();
+  try {
+    final data = await database.loadGlobalVariables();
+    final globals = GetIt.instance<GlobalVariables>();
+    globals.loadFromMap(data);
+    globals.enablePersistence((map) async {
+      await database.saveAllGlobalVariables(map);
+    });
+  } catch (e, st) {
+    errorHandler.notify(e, st);
+  }
+}
+
 
 /// Shows a dialog to ask user if they want to use the default corpus
 Future<bool> showUseDefaultCorpusDialog(BuildContext context) async {

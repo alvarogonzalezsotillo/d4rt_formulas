@@ -52,7 +52,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     // Initialize controllers and units with listeners
     for (final input in formula.input) {
       _selectedUnits[input.name] = input.unit;
-      if (input.values != null && input.values!.isNotEmpty) {
+      if (input.isStringChoice()) {
         // some possible values
         _selectedValues[input.name] = input.values!.first;
       } else {
@@ -67,13 +67,25 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   void _initInputs(Map<String, dynamic> inputValues) {
-    // TODO: FIND WIDGETS AND SET VALUES
+    for (final input in formula.input) {
+      final savedValue = inputValues[input.name];
+      if (savedValue == null) continue;
+
+      if (input.isStringChoice()) {
+        _selectedValues[input.name] = savedValue.toString();
+      } else {
+        _inputControllers[input.name]?.text = savedValue.toString();
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
     formula = widget.initialFormula;
+
+    // TODO: Restore saved inputs calling _initInputs
+    //       From database or from previous formula, if this is a derived formula
   }
 
   @override
