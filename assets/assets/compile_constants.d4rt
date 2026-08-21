@@ -1,5 +1,5 @@
 {
-  "buildHost":"Linux runnervmzvulz 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
-  "release":"release-calculator-1-2e52811",
-  "buildTimestamp":"Thu Aug 20 11:54:21 UTC 2026",
+  "buildHost":"Linux runnervm76f27 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+  "release":"release-calculator-2-9961fec",
+  "buildTimestamp":"Fri Aug 21 12:29:18 UTC 2026",
 }
