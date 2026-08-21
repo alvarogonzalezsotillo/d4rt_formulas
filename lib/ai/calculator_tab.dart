@@ -61,9 +61,13 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   void _adjustNumberOfEntries() {
+    bool entryHasInput(_CalculatorEntry entry) {
+      return entry.inputController.text.trim() != "";
+    }
+
     void addNewEntryIfNecesary() {
       final lastEntry = _entries.last;
-      final lastHasOutput = lastEntry.inputController.d4rtValue != null;
+      final lastHasOutput = entryHasInput(lastEntry);
 
       if (lastHasOutput && _entries.length < maxEntries) {
         final nextIndex = lastEntry.index + 1;
@@ -78,9 +82,9 @@ class _CalculatorTabState extends State<CalculatorTab> {
         return;
       }
       final lastEntry = _entries.last;
-      final lastHasOutput = lastEntry.inputController.d4rtValue != null;
+      final lastHasOutput = entryHasInput(lastEntry);
       final beforeLastEntry = _entries[_entries.length - 2];
-      final beforeLastHasOutput = beforeLastEntry.inputController.d4rtValue != null;
+      final beforeLastHasOutput = entryHasInput(beforeLastEntry);
 
       if (!lastHasOutput && !beforeLastHasOutput) {
         _entries.removeLast();
