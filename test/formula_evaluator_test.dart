@@ -245,8 +245,8 @@ void main() {
       });
 
       test('evaluateExpression can access ansN variables', () {
-        calculatorState.setAnswer(1, 10.0);
-        calculatorState.setAnswer(2, 20.0);
+        calculatorState.setAnswer(1, NumberResult(10.0));
+        calculatorState.setAnswer(2, NumberResult(20.0));
 
         final result = FormulaEvaluator.evaluateExpression('ans1 + ans2');
         expect(result, isA<NumberResult>());
@@ -254,9 +254,9 @@ void main() {
       });
 
       test('evaluateExpression can access ans[] array', () {
-        calculatorState.setAnswer(1, 10.0);
-        calculatorState.setAnswer(2, 20.0);
-        calculatorState.setAnswer(3, 30.0);
+        calculatorState.setAnswer(1, NumberResult(10.0));
+        calculatorState.setAnswer(2, NumberResult(20.0));
+        calculatorState.setAnswer(3, NumberResult(30.0));
 
         final result = FormulaEvaluator.evaluateExpression('ans[0] + ans[1] + ans[2]');
         expect(result, isA<NumberResult>());

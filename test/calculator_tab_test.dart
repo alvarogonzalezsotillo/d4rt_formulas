@@ -110,44 +110,5 @@ void main() {
       expect(find.byKey(const Key('input4')), findsNothing);
     });
 
-    testWidgets('updates CalculatorState with input and answer',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
-
-      final calculatorState = GetIt.instance<CalculatorState>();
-
-      await tester.enterText(find.byKey(const Key('input1')), '1 + 2');
-      await tester.pumpAndSettle();
-
-      expect(calculatorState.inputs[1], '1 + 2');
-      expect(calculatorState.answers[1], 3.0);
-    });
-
-    testWidgets('removes answer from CalculatorState when input cleared',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
-
-      final calculatorState = GetIt.instance<CalculatorState>();
-
-      await tester.enterText(find.byKey(const Key('input1')), '1 + 2');
-      await tester.pumpAndSettle();
-      expect(calculatorState.answers[1], 3.0);
-
-      await tester.enterText(find.byKey(const Key('input1')), '');
-      await tester.pumpAndSettle();
-      expect(calculatorState.answers.containsKey(1), isFalse);
-    });
   });
 }

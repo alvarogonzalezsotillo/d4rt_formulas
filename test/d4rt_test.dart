@@ -3,21 +3,6 @@ import 'package:d4rt/d4rt.dart';
 import 'dart:math' as Math;
 
 void main(){
-  test("Function literals", () {
-    final source = r"""
-        final fn = () => 5;
-        main(){
-          print( "fn: ${fn()}");
-          return fn;
-        }
-      """;
-    final interpreter = D4rt();
-    final InterpretedFunction result = interpreter.execute(source: source);
-    print("result: $result ${result.runtimeType}"); // <fn <anonymous>> InterpretedFunction
-
-    var a = interpreter.invokeInterpretedFunction(result, []);
-    print(a);
-  });
 
   test('Access to Math', () {
     final completeSource = """

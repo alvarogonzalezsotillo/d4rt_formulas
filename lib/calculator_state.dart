@@ -5,8 +5,8 @@ import 'package:get_it/get_it.dart';
 class CalculatorState {
   final GlobalVariables _variables = GetIt.instance.get<GlobalVariables>();
 
-  static inputName(int index) => "input$index";
-  static outputName(int index) => "ans$index";
+  static String inputName(int index) => "input$index";
+  static String outputName(int index) => "ans$index";
 
   void setInput(int index, String value) {
     _variables[inputName(index)] = StringResult(value);
@@ -23,6 +23,7 @@ class CalculatorState {
     _variables[outputName(index)] = value;
   }
 
+  
   void removeAnswer(int index) {
     _variables.deleteKey(outputName(index));
   }
