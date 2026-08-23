@@ -142,26 +142,28 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   Widget _buildInputRow(_CalculatorEntry entry) {
     entry.inputController.addListener(() => _onInputChanged(entry));
-
+    final index = entry.index;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
           SizedBox(
             width: 80,
-            child: Text('input${entry.index}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            child: Text(CalculatorState.inputName(index), style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: TextFormField(
-              key: Key('input${entry.index}'),
+              key: Key(CalculatorState.inputName(index)),
               controller: entry.inputController,
               autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 return entry.inputController.lastError;
               },
-
               decoration: const InputDecoration(border: UnderlineInputBorder(), isDense: true),
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              minLines: 1,
             ),
           ),
         ],
@@ -185,7 +187,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
           ),
           const SizedBox(width: 8),
           Text(
-            'ans${entry.index}',
+            CalculatorState.outputName(entry.index),
             style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
             textAlign: TextAlign.right,
           ),
