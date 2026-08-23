@@ -83,7 +83,7 @@ class GlobalVariables {
       late String declaration;
       switch (value) {
         case StringResult s:
-          declaration = "final $name = ${SetUtils.prettyPrint(s.value)};";
+          declaration = 'final $name = "${SetUtils.escapeD4rtString(s.value)}";';
           break;
         case NumberResult n:
           declaration = "final $name = ${n.value};";

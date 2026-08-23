@@ -147,6 +147,11 @@ class _CalculatorTabState extends State<CalculatorTab> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
+          SizedBox(
+            width: 80,
+            child: Text('input${entry.index}', style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: TextFormField(
               key: Key('input${entry.index}'),
@@ -159,37 +164,30 @@ class _CalculatorTabState extends State<CalculatorTab> {
               decoration: const InputDecoration(border: UnderlineInputBorder(), isDense: true),
             ),
           ),
-          const SizedBox(width: 8),
-          SizedBox(
-            width: 80,
-            child: Text('input${entry.index}', style: const TextStyle(fontWeight: FontWeight.bold)),
-          ),
         ],
       ),
     );
   }
 
   Widget _buildOutputRow(_CalculatorEntry entry) {
-    final formatted = _getFormattedD4rtValue(entry.inputController);
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          SizedBox(
-            width: 80,
-            child: Text(
-              'ans${entry.index}',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
-            ),
-          ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 88),
           Expanded(
             child: TextFormField(
               readOnly: true,
               controller: entry.outputController,
-              decoration: const InputDecoration(border: UnderlineInputBorder(), isDense: true),
+              decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+              textAlign: TextAlign.right,
             ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'ans${entry.index}',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
+            textAlign: TextAlign.right,
           ),
         ],
       ),

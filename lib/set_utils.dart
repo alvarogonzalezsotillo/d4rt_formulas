@@ -38,13 +38,20 @@ abstract class SetUtils {
 
   /// Escapes special characters in a string for use in D4RT literals
   static String escapeD4rtString(String input) {
-    return input
-        .replaceAll(r'\\', r'\\\\') // escape backslashes first
-        .replaceAll('\n', r'\\n')
-        .replaceAll('\r', r'\\r')
-        .replaceAll('\t', r'\\t')
-        .replaceAll('"', r'\"');
+    return _escapePrettyPrintString(input);
   }
+
+  /// Escapes a string for use inside a regular double-quoted Dart literal.
+  static String _escapePrettyPrintString(String s) {
+    return s
+        .replaceAll(r'\', r'\\')
+        .replaceAll(r'$', r'\$')
+        .replaceAll('"', r'\"')
+        .replaceAll('\n', r'\n')
+        .replaceAll('\r', r'\r')
+        .replaceAll('\t', r'\t');
+  }
+  
 
   /// Parses corpus elements from an array string literal.
   /// Determines if each element is a formula or a unit and converts accordingly.
@@ -92,18 +99,23 @@ abstract class SetUtils {
   static String _prettyPrintString(String s) {
     // Check if the string needs raw string formatting (newlines, $, backslashes, quotes)
     final needsRawString = s.contains('\n') ||
+        s.contains('\r') ||
         s.contains(r'$') ||
-        s.contains(r'\\') ||
+        s.contains(r'\') ||
         s.contains('"');
 
-    if (needsRawString && s != '"' ) {
-      return _prettyPrintRawString(s);
+    if (needsRawString) {
+      final raw = _prettyPrintRawString(s);
+      if (raw != null) {
+        return raw;
+      }
     }
 
-    // Simple string with escaped quotes
-    return '"${s.replaceAll('"', r'\"')}"';
+    // Simple string with escapes
+    return '"${_escapePrettyPrintString(s)}"';
     //'
   }
+
 
   /// Pretty prints a number.
   static String _prettyPrintNumber(num n) {

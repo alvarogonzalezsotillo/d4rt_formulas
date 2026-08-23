@@ -7,6 +7,8 @@ class D4rtEditingController extends TextEditingController {
   String? _lastError;
   String? get lastError => _lastError;
   FormulaResult? _lastValue;
+  FormulaResult? get d4rtValue => _lastError == null ? _lastValue : null;
+
   final bool isString;
 
   D4rtEditingController({super.text, this.isString = false});
@@ -25,19 +27,23 @@ class D4rtEditingController extends TextEditingController {
     return _validateAsD4rtExpression(text) && _lastValue is NumberResult;
   }
 
+  void _setValue(FormulaResult? value, Object? error){
+    _lastValue = value;
+    _lastError = error?.toString();
+  }
+
   bool _validateAsD4rtExpression(String text){
     try {
       _lastValue = null;
       if( text.trim().isEmpty ){
+        _setValue(null,null);
         return true;
       }
-      _lastValue = FormulaEvaluator.evaluateExpression(text);
-      _lastError = null;
+      _setValue(FormulaEvaluator.evaluateExpression(text), null );
       return true;
     } catch (e, s) {
       //errorHandler.notify(e, s);
-      _lastError = e.toString();
-      _lastValue = null;
+      _setValue(null,e);
       return false;
     }
   }
@@ -56,7 +62,6 @@ class D4rtEditingController extends TextEditingController {
   }
 
 
-  FormulaResult? get d4rtValue => _lastError == null ? _lastValue : null;
 
   @override
   set text(String newText) {
