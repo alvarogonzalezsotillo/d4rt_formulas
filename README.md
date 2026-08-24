@@ -1,7 +1,8 @@
 # References
-https://github.com/Shahxad-Akram/flutter_tex/blob/master/example/lib/tex_view_markdown_example.dart
-https://onlinetoolkit.co/es/calculadora-ecuaciones/
-https://www.financeformulas.net/Loan_Payment_Formula.html
+- https://github.com/Shahxad-Akram/flutter_tex/blob/master/example/lib/tex_view_markdown_example.dart
+- https://onlinetoolkit.co/es/calculadora-ecuaciones/
+- https://www.financeformulas.net/Loan_Payment_Formula.html
+- https://www.calculatorsoup.com/calculators/statistics/
 
 # Math Formulae Manager
 

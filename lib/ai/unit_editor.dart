@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
@@ -37,8 +38,8 @@ class _UnitEditorState extends State<UnitEditor> {
   // Either factor mode or code mode
   bool _useFactor = true;
   late TextEditingController _factorController;
-  late CodeController _toBaseCodeController;
-  late CodeController _fromBaseCodeController;
+  late DartCodeController _toBaseCodeController;
+  late DartCodeController _fromBaseCodeController;
 
   @override
   void initState() {
@@ -56,8 +57,8 @@ class _UnitEditorState extends State<UnitEditor> {
       _factorController = TextEditingController(text: '');
     }
 
-    _toBaseCodeController = CodeController(language: dart, text: widget.unit.codeFromUnitToBase ?? '');
-    _fromBaseCodeController = CodeController(language: dart, text: widget.unit.codeFromBaseToUnit ?? '');
+    _toBaseCodeController = DartCodeController(text: widget.unit.codeFromUnitToBase ?? '');
+    _fromBaseCodeController = DartCodeController(text: widget.unit.codeFromBaseToUnit ?? '');
   }
 
   @override
@@ -278,7 +279,7 @@ class _UnitEditorState extends State<UnitEditor> {
                           constraints: const BoxConstraints(minHeight: 120),
                           child: CodeTheme(
                             data: CodeThemeData(styles: monokaiSublimeTheme),
-                            child: SingleChildScrollView(child: CodeField(controller: _toBaseCodeController)),
+                            child: SingleChildScrollView(child: DartCodeField(controller: _toBaseCodeController)),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -287,7 +288,7 @@ class _UnitEditorState extends State<UnitEditor> {
                           constraints: const BoxConstraints(minHeight: 120),
                           child: CodeTheme(
                             data: CodeThemeData(styles: monokaiSublimeTheme),
-                            child: SingleChildScrollView(child: CodeField(controller: _fromBaseCodeController)),
+                            child: SingleChildScrollView(child: DartCodeField(controller: _fromBaseCodeController)),
                           ),
                         ),
                       ],

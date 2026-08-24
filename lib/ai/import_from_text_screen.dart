@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
@@ -29,7 +30,7 @@ class ImportFromTextScreen extends StatefulWidget {
 }
 
 class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
-  final CodeController _codeController = CodeController(language: dart, text: "// Insert code here...");
+  final _codeController = DartCodeController(text: "// Insert code here...");
   bool _isLoading = false;
 
   @override
@@ -106,7 +107,7 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
               data: CodeThemeData(styles: monokaiSublimeTheme),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(child: CodeField(controller: _codeController)),
+                child: SingleChildScrollView(child: DartCodeField(controller: _codeController)),
               ),
             ),
           ),

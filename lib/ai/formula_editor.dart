@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
@@ -34,7 +35,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _descriptionController;
-  late CodeController _d4rtCodeController;
+  late DartCodeController _d4rtCodeController;
 
   // Track input variables
   final List<_InputVariableRowData> _inputVariables = [];
@@ -49,7 +50,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
     super.initState();
     _nameController = TextEditingController(text: widget.formula.name);
     _descriptionController = TextEditingController(text: widget.formula.description ?? '');
-    _d4rtCodeController = CodeController(language: dart, text: widget.formula.d4rtCode ?? '');
+    _d4rtCodeController = DartCodeController(text: widget.formula.d4rtCode);
 
     // Initialize input variables
     for (final input in widget.formula.input) {
@@ -641,7 +642,9 @@ class _FormulaEditorState extends State<FormulaEditor> {
               child: CodeTheme(
                 data: CodeThemeData(styles: monokaiSublimeTheme),
                 child: SingleChildScrollView(
-                  child: CodeField(controller: _d4rtCodeController),
+                  child: DartCodeField(
+                    controller: _d4rtCodeController,
+                  ),
                 ),
               ),
             ),
