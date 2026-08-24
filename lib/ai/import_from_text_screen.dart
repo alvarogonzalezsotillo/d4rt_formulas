@@ -107,7 +107,7 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
               data: CodeThemeData(styles: monokaiSublimeTheme),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(child: DartCodeField(controller: _codeController)),
+                child: SingleChildScrollView(child: DartCodeField(controller: _codeController, showLineNumbers: true,)),
               ),
             ),
           ),
