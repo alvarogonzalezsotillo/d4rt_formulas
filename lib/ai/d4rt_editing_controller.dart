@@ -1,7 +1,27 @@
-
 import 'package:flutter/cupertino.dart';
 
 import '../formula_evaluator.dart';
+
+class D4rtEditingValidator {
+  static (FormulaResult?, Object?) validateAsD4rtExpression(String text) {
+    try {
+      if (text.trim().isEmpty) {
+        return (null, null);
+      }
+      return (FormulaEvaluator.evaluateExpression(text), null);
+    } catch (e, s) {
+      return (null, e);
+    }
+  }
+
+  static (FormulaResult?, Object?) validateAsStringExpression(String text) {
+    try {
+      return (FormulaEvaluator.evaluateExpression('"$text"'), null);
+    } catch (_) {
+      return (FormulaEvaluator.evaluateExpression("'$text'"), null);
+    }
+  }
+}
 
 class D4rtEditingController extends TextEditingController {
   String? _lastError;
@@ -14,54 +34,22 @@ class D4rtEditingController extends TextEditingController {
   D4rtEditingController({super.text, this.isString = false});
 
   bool validate() {
-    if( !isString && _validateAsNumberExpression(text) ){
-      return true;
+    if (!isString ){
+      final (value,error) =  D4rtEditingValidator.validateAsD4rtExpression(text);
+      _setValue(value, error);
+      return value != null;
     }
-    if( isString && _validateAsStringExpression(text) ){
-      return true;
+    else{
+      final (value,error) =  D4rtEditingValidator.validateAsStringExpression(text);
+      _setValue(value, error);
+      return value != null;
     }
-    return false;
   }
 
-  bool _validateAsNumberExpression(String text){
-    return _validateAsD4rtExpression(text) && _lastValue is NumberResult;
-  }
-
-  void _setValue(FormulaResult? value, Object? error){
+  void _setValue(FormulaResult? value, Object? error) {
     _lastValue = value;
     _lastError = error?.toString();
   }
-
-  bool _validateAsD4rtExpression(String text){
-    try {
-      _lastValue = null;
-      if( text.trim().isEmpty ){
-        _setValue(null,null);
-        return true;
-      }
-      _setValue(FormulaEvaluator.evaluateExpression(text), null );
-      return true;
-    } catch (e, s) {
-      //errorHandler.notify(e, s);
-      _setValue(null,e);
-      return false;
-    }
-  }
-
-  bool _validateAsStringExpression(String text){
-    if( _validateAsD4rtExpression(text) && _lastValue is StringResult ){
-      return true;
-    }
-    if( _validateAsD4rtExpression('"$text"') && _lastValue is StringResult ){
-      return true;
-    }
-    if( _validateAsD4rtExpression("'$text'") && _lastValue is StringResult ){
-      return true;
-    }
-    return false;
-  }
-
-
 
   @override
   set text(String newText) {
@@ -75,4 +63,5 @@ class D4rtEditingController extends TextEditingController {
     super.notifyListeners();
   }
 }
+
 //// End of D4rtEditingController class ////
