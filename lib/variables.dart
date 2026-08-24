@@ -95,8 +95,8 @@ class GlobalVariables {
       return declaration;
     });
     final ret = declarations.join("\n");
-    print("VARIABLES:");
-    print("$ret");
+    //print("VARIABLES:");
+    //print("$ret");
     return ret;
   }
 }

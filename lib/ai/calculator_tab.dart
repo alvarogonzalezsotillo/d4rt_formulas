@@ -1,3 +1,4 @@
+import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -8,7 +9,7 @@ import 'd4rt_editing_controller.dart';
 
 class _CalculatorEntry {
   final int index;
-  final D4rtEditingController inputController = D4rtEditingController();
+  final DartCodeController inputController = DartCodeController();
   final TextEditingController outputController = TextEditingController();
 
   _CalculatorEntry({required this.index});
@@ -125,7 +126,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
     }
   }
 
-  String? _getFormattedD4rtValue(D4rtEditingController controller) {
+  String? _getFormattedD4rtValue(DartCodeController controller) {
     final value = controller.d4rtValue;
     if (value == null || controller.text.trim().isEmpty) return null;
     if (value is NumberResult) {
@@ -153,17 +154,12 @@ class _CalculatorTabState extends State<CalculatorTab> {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: TextFormField(
+            child: DartCodeField(
               key: Key(CalculatorState.inputName(index)),
               controller: entry.inputController,
-              autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 return entry.inputController.lastError;
               },
-              decoration: const InputDecoration(border: UnderlineInputBorder(), isDense: true),
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              minLines: 1,
             ),
           ),
         ],

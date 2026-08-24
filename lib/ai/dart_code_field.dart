@@ -1,3 +1,5 @@
+import 'package:d4rt_formulas/ai/d4rt_editing_controller.dart';
+import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/github.dart';
@@ -6,26 +8,45 @@ import 'package:highlight/highlight.dart';
 import 'package:highlight/languages/dart.dart';
 
 class DartCodeController extends CodeController {
-  static final aditionalKeywords = [
-    "acos",
-    "asin",
-    "atan",
-    "atan2",
-    "cos",
-    "e",
-    "exp",
-    "log",
-    "max",
-    "min",
-    "pi",
-    "pow",
-    "sin",
-    "sqrt",
-    "sqrt2",
-    "tan",
-  ];
-  DartCodeController({super.text}) : super(language: dart) {
+  static final aditionalKeywords = ["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("];
+  DartCodeController({super.text, this.isString = false}) : super(language: dart) {
     autocompleter.setCustomWords(aditionalKeywords);
+  }
+
+  String? _lastError;
+  String? get lastError => _lastError;
+  FormulaResult? _lastValue;
+  FormulaResult? get d4rtValue => _lastError == null ? _lastValue : null;
+
+  final bool isString;
+
+  bool validate() {
+    if (!isString) {
+      final (value, error) = D4rtEditingValidator.validateAsD4rtExpression(text);
+      _setValue(value, error);
+      return value != null;
+    } else {
+      final (value, error) = D4rtEditingValidator.validateAsStringExpression(text);
+      _setValue(value, error);
+      return value != null;
+    }
+  }
+
+  void _setValue(FormulaResult? value, Object? error) {
+    _lastValue = value;
+    _lastError = error?.toString();
+  }
+
+  @override
+  set text(String newText) {
+    super.text = newText;
+    validate();
+  }
+
+  @override
+  void notifyListeners() {
+    validate();
+    super.notifyListeners();
   }
 }
 
@@ -38,9 +59,12 @@ class DartCodeController extends CodeController {
 /// if it returns a non-null string, that message is shown below the field.
 class DartCodeField extends StatefulWidget {
   final DartCodeController controller;
+
+  final bool showLineNumbers;
+
   final String? Function(String?)? validator;
 
-  const DartCodeField({super.key, required this.controller, this.validator});
+  const DartCodeField({super.key, required this.controller, this.validator, this.showLineNumbers = false});
 
   @override
   State<DartCodeField> createState() => _DartCodeFieldState();
@@ -81,7 +105,9 @@ class _DartCodeFieldState extends State<DartCodeField> {
   }
 
   void _validate() {
-    setState(_runValidator);
+    if (widget.validator != null) {
+      setState(_runValidator);
+    }
   }
 
   void _runValidator() {
@@ -94,9 +120,8 @@ class _DartCodeFieldState extends State<DartCodeField> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final codeField = CodeField(
       controller: widget.controller,
-      textStyle: const TextStyle(
-        fontFamily: 'monospace',
-        fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"]),
+      gutterStyle: GutterStyle(showLineNumbers: widget.showLineNumbers),
+      textStyle: const TextStyle(fontFamily: 'monospace', fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"]),
     );
     return CodeTheme(
       data: CodeThemeData(styles: isDark ? monokaiSublimeTheme : githubTheme),
@@ -111,10 +136,7 @@ class _DartCodeFieldState extends State<DartCodeField> {
               child: Text(
                 _errorText!,
                 key: _errorKey,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
               ),
             ),
         ],
