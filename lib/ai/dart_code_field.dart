@@ -58,6 +58,7 @@ class DartCodeController extends CodeController {
 /// It is called with the current text whenever it changes (and on startup);
 /// if it returns a non-null string, that message is shown below the field.
 class DartCodeField extends StatefulWidget {
+
   final DartCodeController controller;
 
   final bool showLineNumbers;
@@ -106,6 +107,7 @@ class _DartCodeFieldState extends State<DartCodeField> {
 
   void _validate() {
     if (widget.validator != null) {
+      print("DART validate");
       setState(_runValidator);
     }
   }
@@ -118,10 +120,12 @@ class _DartCodeFieldState extends State<DartCodeField> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final gutterStyle = widget.showLineNumbers ? GutterStyle(showLineNumbers: true) : GutterStyle.none;
     final codeField = CodeField(
       controller: widget.controller,
-      gutterStyle: GutterStyle(showLineNumbers: widget.showLineNumbers),
-      textStyle: const TextStyle(fontFamily: 'monospace', fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"]),
+      decoration: BoxDecoration(border: Border.all()),
+      gutterStyle: gutterStyle,
+      textStyle: const TextStyle(fontFamily: 'RobotoMono', fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"]),
     );
     return CodeTheme(
       data: CodeThemeData(styles: isDark ? monokaiSublimeTheme : githubTheme),
@@ -130,6 +134,7 @@ class _DartCodeFieldState extends State<DartCodeField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SingleChildScrollView(child: codeField),
+          //Divider(),
           if (_errorText != null)
             Padding(
               padding: const EdgeInsets.only(top: 4.0),

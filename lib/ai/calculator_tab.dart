@@ -25,6 +25,9 @@ class CalculatorTab extends StatefulWidget {
 class _CalculatorTabState extends State<CalculatorTab> {
   final int maxEntries = 100;
 
+  static const double variableWidth = 50;
+  static const double rowMargin = 12;
+
   late final List<_CalculatorEntry> _entries;
   final CalculatorState _calculatorState = CalculatorState();
 
@@ -136,7 +139,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
       return formatOutput(value.value);
     }
     if (value is FunctionResult) {
-      return formatOutput("D4rt interpreted function: ${value.code}");
+      return formatOutput("D4rt interpreted function: ${value.code.substring(0,value.code.indexOf(')')+1)}");
     }
     return value.toString();
   }
@@ -149,10 +152,10 @@ class _CalculatorTabState extends State<CalculatorTab> {
       child: Row(
         children: [
           SizedBox(
-            width: 80,
-            child: Text(CalculatorState.inputName(index), style: const TextStyle(fontWeight: FontWeight.bold)),
+            width: variableWidth,
+            child: Text(CalculatorState.inputName(index), style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.right),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: rowMargin),
           Expanded(
             child: DartCodeField(
               key: Key(CalculatorState.inputName(index)),
@@ -162,6 +165,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
               },
             ),
           ),
+          const SizedBox(width: variableWidth + rowMargin ),
         ],
       ),
     );
@@ -172,20 +176,26 @@ class _CalculatorTabState extends State<CalculatorTab> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          const SizedBox(width: 88),
+          const SizedBox(width: variableWidth + rowMargin ),
           Expanded(
             child: TextFormField(
               readOnly: true,
               controller: entry.outputController,
-              decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+              decoration: const InputDecoration(
+                border: InputBorder.none, // OutlineInputBorder(),
+                isDense: true
+              ),
               textAlign: TextAlign.right,
             ),
           ),
-          const SizedBox(width: 8),
-          Text(
-            CalculatorState.outputName(entry.index),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
-            textAlign: TextAlign.right,
+          const SizedBox(width: rowMargin),
+          SizedBox(
+            width: variableWidth,
+            child: Text(
+              CalculatorState.outputName(entry.index),
+              style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
+              textAlign: TextAlign.left,
+            ),
           ),
         ],
       ),
@@ -199,8 +209,15 @@ class _CalculatorTabState extends State<CalculatorTab> {
       itemCount: _entries.length,
       itemBuilder: (context, index) {
         final entry = _entries[index];
-        return Column(children: [_buildInputRow(entry), _buildOutputRow(entry)]);
+        return Column(
+          children: [
+            _buildInputRow(entry),
+            _buildOutputRow(entry),
+            Divider(),
+          ]
+        );
       },
     );
   }
 }
+        
