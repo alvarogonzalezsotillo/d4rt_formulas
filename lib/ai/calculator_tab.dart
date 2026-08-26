@@ -132,16 +132,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
   String? _getFormattedD4rtValue(DartCodeController controller) {
     final value = controller.d4rtValue;
     if (value == null || controller.text.trim().isEmpty) return null;
-    if (value is NumberResult) {
-      return formatOutput(value.value);
-    }
-    if (value is StringResult) {
-      return formatOutput(value.value);
-    }
-    if (value is FunctionResult) {
-      return formatOutput("D4rt interpreted function: ${value.code.substring(0,value.code.indexOf(')')+1)}");
-    }
-    return value.toString();
+    return value.toVisibleString();
   }
 
   Widget _buildInputRow(_CalculatorEntry entry) {
@@ -153,7 +144,11 @@ class _CalculatorTabState extends State<CalculatorTab> {
         children: [
           SizedBox(
             width: variableWidth,
-            child: Text(CalculatorState.inputName(index), style: const TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.right),
+            child: Text(
+              CalculatorState.inputName(index),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.right,
+            ),
           ),
           const SizedBox(width: rowMargin),
           Expanded(
@@ -165,7 +160,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
               },
             ),
           ),
-          const SizedBox(width: variableWidth + rowMargin ),
+          const SizedBox(width: variableWidth + rowMargin),
         ],
       ),
     );
@@ -176,7 +171,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          const SizedBox(width: variableWidth + rowMargin ),
+          const SizedBox(width: variableWidth + rowMargin),
           Expanded(
             child: TextFormField(
               readOnly: true,
@@ -210,15 +205,8 @@ class _CalculatorTabState extends State<CalculatorTab> {
       itemCount: _entries.length,
       itemBuilder: (context, index) {
         final entry = _entries[index];
-        return Column(
-          children: [
-            _buildInputRow(entry),
-            _buildOutputRow(entry),
-            Divider(),
-          ]
-        );
+        return Column(children: [_buildInputRow(entry), _buildOutputRow(entry), Divider()]);
       },
     );
   }
 }
-        

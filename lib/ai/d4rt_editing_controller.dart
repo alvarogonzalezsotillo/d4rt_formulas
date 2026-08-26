@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../formula_evaluator.dart';
 
@@ -23,6 +24,21 @@ class D4rtEditingValidator {
   }
 }
 
+
+// other option: DartCodeField
+class D4rtEditingTextField extends TextFormField {
+  D4rtEditingTextField({super.controller, super.validator})
+    : super(
+        keyboardType: TextInputType.multiline,
+        inputFormatters: [
+          //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
+        ],
+        decoration: const InputDecoration(border: UnderlineInputBorder()),
+        autovalidateMode: AutovalidateMode.always,
+      );
+}
+
+// other option: DartCodeController
 class D4rtEditingController extends TextEditingController {
   String? _lastError;
   String? get lastError => _lastError;
@@ -34,13 +50,12 @@ class D4rtEditingController extends TextEditingController {
   D4rtEditingController({super.text, this.isString = false});
 
   bool validate() {
-    if (!isString ){
-      final (value,error) =  D4rtEditingValidator.validateAsD4rtExpression(text);
+    if (!isString) {
+      final (value, error) = D4rtEditingValidator.validateAsD4rtExpression(text);
       _setValue(value, error);
       return value != null;
-    }
-    else{
-      final (value,error) =  D4rtEditingValidator.validateAsStringExpression(text);
+    } else {
+      final (value, error) = D4rtEditingValidator.validateAsStringExpression(text);
       _setValue(value, error);
       return value != null;
     }

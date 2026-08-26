@@ -7,6 +7,8 @@ import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/highlight.dart';
 import 'package:highlight/languages/dart.dart';
 
+
+// older option: D4rtEditingController
 class DartCodeController extends CodeController {
   static final aditionalKeywords = ["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("];
   DartCodeController({super.text, this.isString = false}) : super(language: dart) {
@@ -50,13 +52,7 @@ class DartCodeController extends CodeController {
   }
 }
 
-/// A [CodeField] with a monospace font whose syntax highlighting theme
-/// follows the system brightness: dark theme in dark mode, light theme in
-/// light mode.
-///
-/// An optional [validator] can be provided, like [TextFormField.validator].
-/// It is called with the current text whenever it changes (and on startup);
-/// if it returns a non-null string, that message is shown below the field.
+// older option: D4rtEditingTextField
 class DartCodeField extends StatefulWidget {
 
   final DartCodeController controller;

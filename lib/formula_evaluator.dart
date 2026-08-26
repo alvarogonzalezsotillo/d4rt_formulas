@@ -1,6 +1,7 @@
 import 'dart:math' as Math;
 
 import 'package:d4rt/d4rt.dart';
+import 'package:d4rt_formulas/value_formatter.dart';
 import 'package:d4rt_formulas/variables.dart';
 import 'package:get_it/get_it.dart';
 
@@ -32,14 +33,16 @@ class MyMath {
   static Number myPow(Number b, Number e) => Math.pow(b, e) as Number;
 }
 
-class FormulaResult {
+abstract class FormulaResult {
   const FormulaResult();
+  String toVisibleString();
 }
 
 class StringResult extends FormulaResult {
   final String value;
 
   const StringResult(this.value);
+  @override String toVisibleString() => value;
 }
 
 class FunctionResult extends FormulaResult {
@@ -47,12 +50,14 @@ class FunctionResult extends FormulaResult {
   final String code;
 
   const FunctionResult(this.value, this.code);
+  @override String toVisibleString() => code.substring(0,code.indexOf(')')+1);
 }
 
 class NumberResult extends FormulaResult {
   final Number value;
 
   const NumberResult(this.value);
+  @override String toVisibleString() => formatOutput(value)!;
 }
 
 class FormulaEvaluator {

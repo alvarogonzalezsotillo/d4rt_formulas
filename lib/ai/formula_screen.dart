@@ -1,4 +1,5 @@
 // dart
+import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:d4rt_formulas/database/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
@@ -16,17 +17,14 @@ import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 import '../compile_constants.dart';
 
+
+
 class FormulaScreen extends StatefulWidget {
   final FormulaInterface initialFormula;
   final Corpus corpus;
   final Function(Formula)? onSave; // Callback when formula is saved
 
-  FormulaScreen({
-    super.key,
-    required formula,
-    required this.corpus,
-    this.onSave,
-  }) : initialFormula = formula;
+  FormulaScreen({super.key, required formula, required this.corpus, this.onSave}) : initialFormula = formula;
 
   @override
   State<FormulaScreen> createState() => _FormulaScreenState();
@@ -34,7 +32,7 @@ class FormulaScreen extends StatefulWidget {
 
 class _FormulaScreenState extends State<FormulaScreen> {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, D4rtEditingController> _inputControllers = {};
+  final Map<String, DartCodeController> _inputControllers = {};
   final Map<String, String?> _selectedUnits = {};
   final Map<String, String?> _selectedValues = {}; // for string dropdowns
   String? _result;
@@ -57,9 +55,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _selectedValues[input.name] = input.values!.first;
       } else {
         // free string or numeric expression
-        _inputControllers[input.name] = D4rtEditingController(
-          isString: input.unit == "string",
-        );
+        _inputControllers[input.name] = DartCodeController(isString: input.unit == "string");
         _inputControllers[input.name]!.addListener(_evaluateFormula);
       }
     }
@@ -126,20 +122,14 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
         if (val is NumberResult) {
           if (input.unit != null) {
-            convertedValue = widget.corpus.convert(
-              val.value,
-              _selectedUnits[input.name]!,
-              input.unit as String,
-            );
+            convertedValue = widget.corpus.convert(val.value, _selectedUnits[input.name]!, input.unit as String);
           } else {
             convertedValue = val.value;
           }
         } else if (val is StringResult) {
           convertedValue = val.value;
         } else {
-          throw FormulaEvaluationException(
-            "Field ${input.name} has unsupported type ${val.runtimeType}",
-          );
+          throw FormulaEvaluationException("Field ${input.name} has unsupported type ${val.runtimeType}");
         }
 
         inputValues[input.name] = convertedValue;
@@ -156,11 +146,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       // Convert output to selected unit if needed
       String? unit = formula.output.unit;
       if (unit != null && result is Number) {
-       final converted = widget.corpus.convert(
-          result,
-          unit,
-          _selectedOutputUnit!,
-        );
+        final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
         _result = formatOutput(converted);
       } else {
         _result = result?.toString();
@@ -246,13 +232,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 );
 
                 // set up the AlertDialog
-                AlertDialog alert = AlertDialog(
-                  title: Text("Delete Formula"),
-                  content: Text(
-                    "Please confirm deletion of formula ${formula.name}",
-                  ),
-                  actions: [cancelButton, deleteButton],
-                );
+                AlertDialog alert = AlertDialog(title: Text("Delete Formula"), content: Text("Please confirm deletion of formula ${formula.name}"), actions: [cancelButton, deleteButton]);
                 return alert;
               }
 
@@ -282,9 +262,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                       ),
                     );
                   },
-            tooltip: formula is DerivedFormula
-                ? 'Cannot edit derived formula'
-                : 'Edit Formula',
+            tooltip: formula is DerivedFormula ? 'Cannot edit derived formula' : 'Edit Formula',
           ),
         ],
       ),
@@ -292,15 +270,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView(
-            children: [
-              _buildDescriptionSection(),
-              _buildErrorSection(),
-              _buildInputSection(),
-              const SizedBox(height: 24),
-              _buildOutputSection(),
-            ],
-          ),
+          child: ListView(children: [_buildDescriptionSection(), _buildErrorSection(), _buildInputSection(), const SizedBox(height: 24), _buildOutputSection()]),
         ),
       ),
     );
@@ -314,12 +284,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: ExpansionTile(
-        title: Text(
-          'Description',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
+        title: Text('Description', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         initiallyExpanded: _isDescriptionExpanded,
         onExpansionChanged: (bool expanded) {
           setState(() {
@@ -331,18 +296,12 @@ class _FormulaScreenState extends State<FormulaScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(8),
-              ),
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(8)),
               child: Markdown(
                 data: formula.description!,
                 shrinkWrap: true,
                 builders: {'latex': LatexElementBuilder()},
-                extensionSet: markdown.ExtensionSet(
-                  [LatexBlockSyntax()],
-                  [LatexInlineSyntax()],
-                ),
+                extensionSet: markdown.ExtensionSet([LatexBlockSyntax()], [LatexInlineSyntax()]),
               ),
             ),
           ),
@@ -362,10 +321,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       child: ExpansionTile(
         title: Text(
           '⚠️ There was an error. Show details...',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onErrorContainer,
-          ),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onErrorContainer),
         ),
         initiallyExpanded: _isErrorExpanded,
         onExpansionChanged: (bool expanded) {
@@ -378,16 +334,10 @@ class _FormulaScreenState extends State<FormulaScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(8),
-              ),
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(8)),
               child: SelectableText(
                 _errorMessage!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onErrorContainer,
-                  fontFamily: 'monospace',
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer, fontFamily: 'monospace'),
               ),
             ),
           ),
@@ -400,12 +350,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Input Variables',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
+        Text('Input Variables', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         ...formula.input.map((variable) => _buildVariableRow(variable)),
       ],
@@ -416,20 +361,12 @@ class _FormulaScreenState extends State<FormulaScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Result',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
+        Text('Result', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         Row(
           children: [
             // Fixed width for field name
-            SizedBox(
-              width: 50,
-              child: Text(formula.output.name, overflow: TextOverflow.ellipsis),
-            ),
+            SizedBox(width: 50, child: Text(formula.output.name, overflow: TextOverflow.ellipsis)),
             const SizedBox(width: 8), // Add some spacing
             // Flexible space for result field
             Expanded(
@@ -437,10 +374,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 readOnly: true,
                 enabled: true,
                 controller: TextEditingController(text: formatOutput(_result)),
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  filled: true,
-                ),
+                decoration: const InputDecoration(border: UnderlineInputBorder(), filled: true),
               ),
             ),
             const SizedBox(width: 8),
@@ -462,60 +396,68 @@ class _FormulaScreenState extends State<FormulaScreen> {
   }
 
   Widget _buildVariableRow(VariableSpec variable) {
-    final isCategorical =
-        variable.values != null && variable.values!.isNotEmpty;
+    final isCategorical = variable.values != null && variable.values!.isNotEmpty;
+    final inputController = _inputControllers[variable.name];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
           // Fixed width for field name
-          SizedBox(
-            width: 50,
-            child: Text(variable.name, overflow: TextOverflow.fade),
-          ),
+          SizedBox(width: 50, child: Text(variable.name, overflow: TextOverflow.fade)),
           const SizedBox(width: 8), // Add some spacing
           // Flexible space for input field
           Expanded(
             child: isCategorical
                 ? DropdownButtonFormField<String>(
                     initialValue: _selectedValues[variable.name],
-                    items: variable.values!
-                        .map(
-                          (v) => DropdownMenuItem<String>(
-                            value: v,
-                            child: Text(v),
-                          ),
-                        )
-                        .toList(),
+                    items: variable.values!.map((v) => DropdownMenuItem<String>(value: v, child: Text(v))).toList(),
                     onChanged: (v) {
                       _selectedValues[variable.name] = v;
                       _evaluateFormula();
                       setState(() {});
                     },
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
+                    decoration: const InputDecoration(border: UnderlineInputBorder()),
                     validator: (value) {
                       if (value == null || value.isEmpty) return 'Required';
                       return null;
                     },
                   )
-                : TextFormField(
-                    controller: _inputControllers[variable.name],
-                    keyboardType: TextInputType.multiline,
-                    inputFormatters: [
-                      //FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\-]')),
-                    ],
-                    decoration: const InputDecoration(
-                      border: UnderlineInputBorder(),
-                    ),
-                    autovalidateMode: AutovalidateMode.always,
+                : DartCodeField(
+                    controller: inputController!,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Required';
                       }
-                      return _inputControllers[variable.name]!.lastError;
+                      if (inputController.d4rtValue != null) {
+                        final d4rtValue = inputController.d4rtValue as FormulaResult;
+                        final visible = d4rtValue.toVisibleString();
+                        switch (d4rtValue) {
+                          case StringResult _:
+                            {
+                              if (visible.trim() == value) {
+                                return null;
+                              } else {
+                                return visible;
+                              }
+                            }
+
+                          case NumberResult nr:
+                            {
+                              final dv = double.tryParse(value);
+                              if (dv == nr.value) {
+                                return null;
+                              } else {
+                                return visible;
+                              }
+                            }
+                          case _:
+                            {
+                              return visible;
+                            }
+                        }
+                      }
+                      return inputController!.lastError;
                     },
                   ),
           ),
@@ -550,14 +492,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
     // Check if the formula can be derived
     if (!DerivedFormula.isDerivable(rootFormula)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'This formula cannot be derived because it contains non number variables',
-          ),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('This formula cannot be derived because it contains non number variables'), duration: Duration(seconds: 2)));
       return;
     }
 
@@ -566,10 +501,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       if (variable.name == rootFormula.output.name) {
         derivedFormula = rootFormula;
       } else {
-        derivedFormula = DerivedFormula(
-          outputName: variable.name,
-          originalFormula: rootFormula,
-        );
+        derivedFormula = DerivedFormula(outputName: variable.name, originalFormula: rootFormula);
       }
 
       // Replace the current FormulaScreen with the new DerivedFormula screen
