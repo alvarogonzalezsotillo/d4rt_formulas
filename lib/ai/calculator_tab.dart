@@ -180,10 +180,11 @@ class _CalculatorTabState extends State<CalculatorTab> {
           Expanded(
             child: TextFormField(
               readOnly: true,
+              enabled: true,
               controller: entry.outputController,
               decoration: const InputDecoration(
                 border: InputBorder.none, // OutlineInputBorder(),
-                isDense: true
+                filled: true,
               ),
               textAlign: TextAlign.right,
             ),
