@@ -1,0 +1,14 @@
+name: release
+when:
+  event: tag
+  evaluate: 'ci.commit_tag starts_with "release-"'
+environment:
+  FORGE_TOKEN:
+    from_secret: forge_token
+steps:
+  - name: build-and-release
+    image: ubuntu:latest
+    commands:
+      - apt-get update && apt-get install -y bash curl git make zip
+      - chmod +x ./release.sh
+      - ./release.sh -r
