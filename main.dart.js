@@ -34440,6 +34440,10 @@
       this.index = t0;
       this._name = t1;
     },
+    _CalculatorEntry$(index) {
+      var t1 = A.TextEditingController$(null);
+      return new A._CalculatorEntry(index, A.DartCodeController$(B.List_empty0, false, null), t1);
+    },
     _CalculatorEntry: function _CalculatorEntry(t0, t1, t2) {
       this.index = t0;
       this.inputController = t1;
@@ -34483,7 +34487,7 @@
     _CalculatorTabState_build_closure: function _CalculatorTabState_build_closure(t0) {
       this.$this = t0;
     },
-    DartCodeController$(isString, text) {
+    DartCodeController$(aditionalKeywords, isString, text) {
       var t1 = $.$get$dart(),
         t2 = type$.String,
         t3 = A._setArrayType([], type$.JSArray_TextStyle),
@@ -34494,9 +34498,9 @@
       t2 = new A.DartCodeController(isString, B.C_DefaultLocalAnalyzer, B.AnalysisResult_List_empty, t7, A.LinkedHashSet_LinkedHashSet$_empty(t2), B.Code_XXK, t3, A.LinkedHashMap_LinkedHashMap$_empty(t2, type$.CodeModifier), new A.Autocompleter(t4, t5, A.LinkedHashMap_LinkedHashMap$_empty(t6, type$.AutoComplete), A.LinkedHashMap_LinkedHashMap$_empty(t6, t2), B.Set_empty1), B.SearchResult_List_empty, B.TextEditingValue_Yyo, $.$get$ChangeNotifier__emptyListeners());
       A.ChangeNotifier_maybeDispatchObjectCreation(t2);
       t2.CodeController$11$analysisResult$analyzer$language$modifiers$namedSectionParser$params$patternMap$readOnly$readOnlySectionNames$text$visibleSectionNames(B.AnalysisResult_List_empty, B.C_DefaultLocalAnalyzer, t1, B.List_ty7, null, B.C_EditorParams, null, false, B.Set_empty1, text, B.Set_empty1);
-      type$.List_String._as($.DartCodeController_aditionalKeywords);
+      t1 = type$.List_String._as(B.JSArray_methods.$add($.DartCodeController_defaultAditionalKeywords, aditionalKeywords));
       t4.clearEntries$0();
-      t4.enterList$1($.DartCodeController_aditionalKeywords);
+      t4.enterList$1(t1);
       return t2;
     },
     DartCodeController: function DartCodeController(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11) {
@@ -196055,15 +196059,15 @@
       t2 = _this._calculatorState;
       maxIndex = t2.get$maxIndex();
       for (t2 = t2._variables._variables$_map, t3 = type$.StringResult, index = 1; index <= maxIndex; ++index) {
-        t4 = A.DartCodeController$(false, null);
-        t5 = new A.TextEditingController(B.TextEditingValue_Yyo, $.$get$ChangeNotifier__emptyListeners());
-        A.ChangeNotifier_maybeDispatchObjectCreation(t5);
-        t4.super$TextEditingController$text(0, t3._as(t2.$index(0, "input" + index)).value);
-        t4.validate$0();
-        B.JSArray_methods.add$1(t1, new A._CalculatorEntry(index, t4, t5));
+        t4 = new A.TextEditingController(B.TextEditingValue_Yyo, $.$get$ChangeNotifier__emptyListeners());
+        A.ChangeNotifier_maybeDispatchObjectCreation(t4);
+        t5 = A.DartCodeController$(B.List_empty0, false, null);
+        t5.super$TextEditingController$text(0, t3._as(t2.$index(0, "input" + index)).value);
+        t5.validate$0();
+        B.JSArray_methods.add$1(t1, new A._CalculatorEntry(index, t5, t4));
       }
       B.JSArray_methods.forEach$1(t1, _this.get$_updateEntryOutput());
-      B.JSArray_methods.add$1(t1, new A._CalculatorEntry(maxIndex + 1, A.DartCodeController$(false, null), A.TextEditingController$(null)));
+      B.JSArray_methods.add$1(t1, A._CalculatorEntry$(maxIndex + 1));
       _this._adjustNumberOfEntries$0();
     },
     dispose$0() {
@@ -196142,7 +196146,7 @@
       if (this.entryHasInput.call$1(lastEntry) && t1.length < 100) {
         nextIndex = lastEntry.index + 1;
         if (!B.JSArray_methods.any$1(t1, new A._CalculatorTabState__adjustNumberOfEntries_addNewEntryIfNecesary_closure(nextIndex)))
-          B.JSArray_methods.add$1(t1, new A._CalculatorEntry(nextIndex, A.DartCodeController$(false, null), A.TextEditingController$(null)));
+          B.JSArray_methods.add$1(t1, A._CalculatorEntry$(nextIndex));
       }
     },
     $signature: 0
@@ -196319,7 +196323,7 @@
       _this.___FormulaEditorState__nameController_A = A.TextEditingController$(_this._widget.formula.name);
       t1 = _this._widget.formula.description;
       _this.___FormulaEditorState__descriptionController_A = A.TextEditingController$(t1 == null ? "" : t1);
-      _this.___FormulaEditorState__d4rtCodeController_A = A.DartCodeController$(false, _this._widget.formula.d4rtCode);
+      _this.___FormulaEditorState__d4rtCodeController_A = A.DartCodeController$(B.List_empty0, false, _this._widget.formula.d4rtCode);
       for (t1 = _this._widget.formula.input, t2 = t1.length, t3 = _this._inputVariables, t4 = type$.dynamic, _i = 0; _i < t1.length; t1.length === t2 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
         input = t1[_i];
         t5 = new A.TextEditingController(new A.TextEditingValue(input.name, B.TextSelection_kab, B.TextRange_m1_m1), $.$get$ChangeNotifier__emptyListeners());
@@ -196928,19 +196932,22 @@
   };
   A._FormulaScreenState.prototype = {
     set$formula(newFormula) {
-      var t1, t2, t3, t4, t5, t6, _i, input, t7, t8, t9, _this = this;
+      var variables, t1, t2, t3, t4, t5, t6, t7, t8, t9, _i, input, t10, t11, t12, _this = this;
       _this.___FormulaScreenState__formula_A = newFormula;
-      for (t1 = newFormula.get$input(), t2 = t1.length, t3 = _this._inputControllers, t4 = _this.get$_evaluateFormula(), t5 = _this._selectedUnits, t6 = _this._selectedValues, _i = 0; _i < t1.length; t1.length === t2 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
+      variables = $.$get$GetIt__instance().$get$1$0(0, type$.GlobalVariables);
+      for (t1 = _this.___FormulaScreenState__formula_A.get$input(), t2 = t1.length, t3 = _this._inputControllers, t4 = _this.get$_evaluateFormula(), t5 = variables._variables$_map, t6 = A._instanceType(t5)._eval$1("LinkedHashMapKeysIterable<1>"), t7 = t6._eval$1("Iterable.E"), t8 = _this._selectedUnits, t9 = _this._selectedValues, _i = 0; _i < t1.length; t1.length === t2 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
         input = t1[_i];
-        t7 = input.name;
-        t8 = input.unit;
-        t5.$indexSet(0, t7, t8);
-        t9 = input.values;
-        if (t9 != null && t9.length !== 0)
-          t6.$indexSet(0, t7, A._asStringQ(B.JSArray_methods.get$first(t9)));
+        t10 = input.name;
+        t11 = input.unit;
+        t8.$indexSet(0, t10, t11);
+        t12 = input.values;
+        if (t12 != null && t12.length !== 0)
+          t9.$indexSet(0, t10, A._asStringQ(B.JSArray_methods.get$first(t12)));
         else {
-          t3.$indexSet(0, t7, A.DartCodeController$(t8 === "string", null));
-          t3.$index(0, t7).addListener$1(0, t4);
+          t12 = A.List_List$_of(new A.LinkedHashMapKeysIterable(t5, t6), t7);
+          B.JSArray_methods.sort$0(t12);
+          t3.$indexSet(0, t10, A.DartCodeController$(t12, t11 === "string", null));
+          t3.$index(0, t10).addListener$1(0, t4);
         }
       }
       _this._selectedOutputUnit = _this.___FormulaScreenState__formula_A.get$output().unit;
@@ -197429,7 +197436,7 @@
   };
   A.ImportFromTextScreen.prototype = {
     createState$0() {
-      return new A._ImportFromTextScreenState(A.DartCodeController$(false, "// Insert code here..."), B._StateLifecycle_0);
+      return new A._ImportFromTextScreenState(A.DartCodeController$(B.List_empty0, false, "// Insert code here..."), B._StateLifecycle_0);
     }
   };
   A._ImportFromTextScreenState.prototype = {
@@ -197905,9 +197912,9 @@
         _this.___UnitEditorState__factorController_A = A.TextEditingController$("");
       }
       t1 = _this._widget.unit.codeFromUnitToBase;
-      _this.___UnitEditorState__toBaseCodeController_A = A.DartCodeController$(false, t1 == null ? "" : t1);
+      _this.___UnitEditorState__toBaseCodeController_A = A.DartCodeController$(B.List_empty0, false, t1 == null ? "" : t1);
       t1 = _this._widget.unit.codeFromBaseToUnit;
-      _this.___UnitEditorState__fromBaseCodeController_A = A.DartCodeController$(false, t1 == null ? "" : t1);
+      _this.___UnitEditorState__fromBaseCodeController_A = A.DartCodeController$(B.List_empty0, false, t1 == null ? "" : t1);
     },
     dispose$0() {
       var _this = this,
@@ -199690,12 +199697,16 @@
       if (t1 != null)
         t1.requestPersist$0();
     },
-    d4rtDeclarations$0() {
+    variableNames$0() {
       var t1 = this._variables$_map,
-        t2 = A._instanceType(t1)._eval$1("LinkedHashMapKeysIterable<1>"),
-        variables = A.List_List$_of(new A.LinkedHashMapKeysIterable(t1, t2), t2._eval$1("Iterable.E"));
-      B.JSArray_methods.sort$0(variables);
-      t1 = A._arrayInstanceType(variables);
+        t2 = A._instanceType(t1)._eval$1("LinkedHashMapKeysIterable<1>");
+      t1 = A.List_List$_of(new A.LinkedHashMapKeysIterable(t1, t2), t2._eval$1("Iterable.E"));
+      B.JSArray_methods.sort$0(t1);
+      return t1;
+    },
+    d4rtDeclarations$0() {
+      var variables = this.variableNames$0(),
+        t1 = A._arrayInstanceType(variables);
       return new A.MappedListIterable(variables, t1._eval$1("String(1)")._as(new A.GlobalVariables_d4rtDeclarations_closure(this)), t1._eval$1("MappedListIterable<1,String>")).join$1(0, "\n");
     }
   };
@@ -365668,7 +365679,7 @@
     $.KeywordStateHelper__table = null;
     $.sharedAnalyzerCodes = A._setArrayType([B.ParserErrorWithoutArguments_N0t, B.ParserErrorWithoutArguments_e52, B.ParserErrorWithoutArguments_uzA, B.ParserErrorWithoutArguments_BUc, B.ParserErrorWithoutArguments_xl7, B.ParserErrorWithoutArguments_1gQ, B.ParserErrorWithoutArguments_NkJ, B.ParserErrorWithoutArguments_m5C, B.ParserErrorWithoutArguments_Vmw, B.ParserErrorWithoutArguments_A5N, B.ParserErrorWithoutArguments_9kt, B.ParserErrorWithoutArguments_guI, B.ParserErrorTemplate_UAG, B.ParserErrorWithoutArguments_4mr, B.ParserErrorWithoutArguments_HDv, B.ParserErrorWithoutArguments_2Z5, B.ParserErrorWithoutArguments_kKv, B.ParserErrorWithoutArguments_AuV, B.ParserErrorTemplate_SAT, B.ParserErrorWithoutArguments_yUU, B.ParserErrorWithoutArguments_Tov, B.ParserErrorWithoutArguments_RLw, B.ParserErrorWithoutArguments_WxZ, B.ParserErrorWithoutArguments_afy, B.ParserErrorWithoutArguments_0Z3, B.ParserErrorWithoutArguments_gTN, B.ParserErrorWithoutArguments_sfB, B.ParserErrorWithoutArguments_5gp, B.ParserErrorWithoutArguments_Usw, B.ParserErrorWithoutArguments_Ee1, B.ParserErrorWithoutArguments_3YO, B.ParserErrorWithoutArguments_1g0, B.ParserErrorCode_lYX, B.ParserErrorWithoutArguments_klQ, B.ParserErrorCode_cR1, B.ParserErrorWithoutArguments_tFH, B.ParserErrorWithoutArguments_bZB, B.ParserErrorWithoutArguments_Z7S, B.ParserErrorWithoutArguments_tBx, B.ParserErrorWithoutArguments_VRB, B.ParserErrorWithoutArguments_yR6, B.ParserErrorWithoutArguments_8Sm, B.ParserErrorWithoutArguments_8Uk, B.ParserErrorWithoutArguments_mlQ, B.ParserErrorWithoutArguments_oPA, B.ParserErrorWithoutArguments_lGm, B.ParserErrorWithoutArguments_iWA, B.ParserErrorCode_6Tg, B.ParserErrorTemplate_P5Q, B.ParserErrorWithoutArguments_PRx, B.ParserErrorWithoutArguments_jaP, B.ParserErrorWithoutArguments_Wbd, B.ParserErrorWithoutArguments_Emg, B.ParserErrorTemplate_jR8, B.ParserErrorTemplate_8OE, B.ParserErrorWithoutArguments_Ln9, B.ParserErrorWithoutArguments_KGr, B.ParserErrorWithoutArguments_mC7, B.ParserErrorWithoutArguments_Nab, B.ParserErrorWithoutArguments_VtH, B.ParserErrorWithoutArguments_rY8, B.ParserErrorWithoutArguments_ERf, B.ParserErrorWithoutArguments_ldz, B.ParserErrorWithoutArguments_lq6, B.ParserErrorWithoutArguments_aHW, B.ParserErrorWithoutArguments_UcZ, B.ParserErrorWithoutArguments_dLO, B.ParserErrorWithoutArguments_0wF, B.ParserErrorWithoutArguments_MrW, B.ParserErrorWithoutArguments_lfz, B.ParserErrorCode_qWN, B.ParserErrorCode_xeT, B.ParserErrorCode_ZWj, B.ParserErrorWithoutArguments_rsP, B.ParserErrorWithoutArguments_8ZT, B.ParserErrorWithoutArguments_06s, B.ParserErrorWithoutArguments_Yys, B.ParserErrorWithoutArguments_tLr, B.ParserErrorWithoutArguments_jMg, B.ParserErrorWithoutArguments_E5x, B.ParserErrorWithoutArguments_kR5, B.ParserErrorWithoutArguments_mih, B.ParserErrorWithoutArguments_8eE, B.ParserErrorWithoutArguments_2Gp, B.ParserErrorWithoutArguments_lc5, B.ParserErrorCode_U3x, B.ParserErrorCode_yZC, B.ParserErrorCode_oe0, B.ParserErrorWithoutArguments_s2I, B.ParserErrorWithoutArguments_bix, B.ParserErrorWithoutArguments_wWz, B.ParserErrorWithoutArguments_LEo, B.ParserErrorWithoutArguments_YHr, B.ParserErrorWithoutArguments_7pa, B.ParserErrorWithoutArguments_HqL, B.ParserErrorWithoutArguments_Tub, B.ParserErrorWithoutArguments_wcZ, B.ParserErrorWithoutArguments_okk, B.ParserErrorCode_6du, B.ParserErrorWithoutArguments_7Lt, B.ParserErrorWithoutArguments_79l, B.ParserErrorWithoutArguments_qFW, B.ParserErrorWithoutArguments_xLR, B.ParserErrorCode_UOD, B.ParserErrorWithoutArguments_Ev2, B.ParserErrorWithoutArguments_9oe, B.ParserErrorWithoutArguments_MfN, B.ParserErrorWithoutArguments_nzc, B.ParserErrorCode_P6M, B.ParserErrorWithoutArguments_GIz, B.ParserErrorWithoutArguments_9se, B.ParserErrorWithoutArguments_k03, B.ParserErrorWithoutArguments_5I3, B.ParserErrorWithoutArguments_Mh7, B.ParserErrorWithoutArguments_OzI, B.ParserErrorWithoutArguments_swJ, B.ParserErrorCode_fa9, B.ParserErrorWithoutArguments_08W, B.ParserErrorWithoutArguments_uvN, B.ParserErrorCode_9e5, B.ParserErrorCode_giY, B.ParserErrorWithoutArguments_lCA, B.ParserErrorWithoutArguments_mKt, B.ParserErrorWithoutArguments_9Sf, B.ParserErrorWithoutArguments_GmI, B.ParserErrorWithoutArguments_rTL, B.ParserErrorWithoutArguments_Kgf, B.ParserErrorWithoutArguments_GKe, B.ParserErrorWithoutArguments_VTk, B.ParserErrorWithoutArguments_uMY, B.ParserErrorWithoutArguments_VHT, B.ParserErrorWithoutArguments_RAm, B.ParserErrorWithoutArguments_Jjt, B.ParserErrorWithoutArguments_4kB, B.ParserErrorWithoutArguments_y8c, B.ParserErrorWithoutArguments_mY0, B.ParserErrorTemplate_38z, B.ParserErrorTemplate_4kp, B.ParserErrorWithoutArguments_kz7, B.ParserErrorWithoutArguments_TNj, B.ParserErrorWithoutArguments_rUc, B.ParserErrorWithoutArguments_gz3, B.ParserErrorWithoutArguments_7sQ, B.ParserErrorWithoutArguments_Wz4, B.ParserErrorWithoutArguments_1dT, B.ParserErrorWithoutArguments_IGE, B.ParserErrorTemplate_BRK, B.ParserErrorCode_nEG, B.ParserErrorWithoutArguments_Due, B.ParserErrorWithoutArguments_RaT, B.ParserErrorWithoutArguments_SKo, B.ParserErrorWithoutArguments_5Ov, B.ParserErrorWithoutArguments_vGQ, B.ParserErrorWithoutArguments_PfA, B.ParserErrorWithoutArguments_v53, B.ParserErrorWithoutArguments_4g8, B.ParserErrorWithoutArguments_Qj4, B.ParserErrorWithoutArguments_9cF, B.ParserErrorWithoutArguments_VJI, B.ParserErrorWithoutArguments_Sc9, B.ParserErrorWithoutArguments_hrX, B.ParserErrorWithoutArguments_3vR, B.ParserErrorWithoutArguments_fKm, B.ParserErrorWithoutArguments_oW5, B.ParserErrorWithoutArguments_H7j, B.ParserErrorCode_Ouz, B.ParserErrorWithoutArguments_WHb, B.ParserErrorWithoutArguments_Adz, B.ParserErrorWithoutArguments_wm1, B.ParserErrorWithoutArguments_812, B.ParserErrorWithoutArguments_nVg, B.ParserErrorWithoutArguments_SNG, B.ParserErrorWithoutArguments_ZI4, B.ParserErrorWithoutArguments_OLl, B.ParserErrorWithoutArguments_Sgo, B.ParserErrorWithoutArguments_22I], A.findType("JSArray<DiagnosticCode>"));
     $._InfoString__infoStrings = A.LinkedHashSet_LinkedHashSet$_empty(type$.String);
-    $.DartCodeController_aditionalKeywords = A._setArrayType(["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("], type$.JSArray_String);
+    $.DartCodeController_defaultAditionalKeywords = A._setArrayType(["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("], type$.JSArray_String);
     $.CompileConstants__generatedCompileConstants = null;
     $.FormulaEvaluator_preamble = '      import \'dart:math\';\n      import "package:d4rt_formulas.dart";\n      import "package:formulas/runtime_bridge.dart";\n      void signal( String msg ) => throw Exception("###$msg");\n      dynamic fn(String formulaName, Map<String, dynamic> inputValues) => D4rtBridgeImpl.fn(formulaName, inputValues);\n              \n  ';
     $.EquatableConfig__stringify = null;
