@@ -10,9 +10,9 @@ import 'package:highlight/languages/dart.dart';
 
 // older option: D4rtEditingController
 class DartCodeController extends CodeController {
-  static final aditionalKeywords = ["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("];
-  DartCodeController({super.text, this.isString = false}) : super(language: dart) {
-    autocompleter.setCustomWords(aditionalKeywords);
+  static final defaultAditionalKeywords = ["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("];
+  DartCodeController({super.text, this.isString = false, List<String> aditionalKeywords = const []}) : super(language: dart) {
+    autocompleter.setCustomWords(defaultAditionalKeywords + aditionalKeywords);
   }
 
   String? _lastError;

@@ -9,10 +9,12 @@ import 'd4rt_editing_controller.dart';
 
 class _CalculatorEntry {
   final int index;
-  final DartCodeController inputController = DartCodeController();
+  final List<String> aditionalKeywords;
+  final DartCodeController inputController;
   final TextEditingController outputController = TextEditingController();
 
-  _CalculatorEntry({required this.index});
+  // TODO: Update aditionalKeywords when adding or removing globalVariables
+  _CalculatorEntry({required this.index, this.aditionalKeywords = const [] }): inputController = DartCodeController(aditionalKeywords: aditionalKeywords);
 }
 
 class CalculatorTab extends StatefulWidget {

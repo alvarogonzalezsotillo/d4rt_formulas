@@ -1,9 +1,11 @@
 // dart
 import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:d4rt_formulas/database/database_service.dart';
+import 'package:d4rt_formulas/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:get_it/get_it.dart';
 import 'package:markdown/markdown.dart' as markdown;
 import '../formula_models.dart';
 import '../formula_evaluator.dart';
@@ -46,6 +48,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
   set formula(FormulaInterface newFormula) {
     _formula = newFormula;
+    GlobalVariables variables = GetIt.instance.get<GlobalVariables>();
 
     // Initialize controllers and units with listeners
     for (final input in formula.input) {
@@ -55,7 +58,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _selectedValues[input.name] = input.values!.first;
       } else {
         // free string or numeric expression
-        _inputControllers[input.name] = DartCodeController(isString: input.unit == "string");
+        _inputControllers[input.name] = DartCodeController(isString: input.unit == "string", aditionalKeywords: variables.variableNames() );
         _inputControllers[input.name]!.addListener(_evaluateFormula);
       }
     }
