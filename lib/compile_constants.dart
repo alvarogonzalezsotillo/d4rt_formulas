@@ -46,6 +46,11 @@ class CompileConstants {
     return _generatedCompileConstants?["release"] ?? "no release info";
   }
 
+  static String homePage() {
+    _checkInit();
+    return _generatedCompileConstants?["homePage"] ?? "no home page";
+  }
+  
   static bool isDebugBuild() {
     return kDebugMode;
   }

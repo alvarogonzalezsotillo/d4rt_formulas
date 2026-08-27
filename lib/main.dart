@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:d4rt_formulas/database/formulas_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/link.dart' show FollowLink, Link;
 
 import 'ai/calculator_tab.dart';
 import 'ai/formula_list.dart';
@@ -79,17 +81,37 @@ class _CorpusLoaderState extends State<CorpusLoader> {
   void _handleAbout() {
     final corpus = GetIt.instance.get<Corpus>();
     final aboutInfo = [
+      ['Home page', CompileConstants.homePage()],
       ['Release', CompileConstants.release()],
       ['Build timestamp', CompileConstants.buildTimestamp()],
       ['Build host', CompileConstants.buildHost()],
       ['Corpus backend', CompileConstants.isDatabaseBackend() ? FormulasDatabase.underlyingStorage() : "Memory"],
       ['# of formulas', corpus.getFormulas().length ],
-      ['# of units', corpus.getUnits().length ]
+      ['# of units', corpus.getUnits().length ],
       
     ];
 
     final defaultFontSize = Theme.of(context) .textTheme .bodyMedium ?.fontSize ?? 14;
     final smallFontSize = defaultFontSize - 2;
+
+    Widget toCell(int column, String s ){
+      final text = Text(
+            s,
+            style: TextStyle(fontSize: (column == 0 ? defaultFontSize: smallFontSize) )
+          );
+
+      final uri = Uri.tryParse(s);
+      if( uri != null && uri.hasScheme ){
+        return Link(
+          uri: uri,
+          builder: (BuildContext context, FollowLink? followLink) => InkWell(
+            onTap: followLink,
+            child: text,
+          ),
+        );
+      }
+      return text;
+    }
     
     showDialog<void>(
       context: context,
@@ -115,15 +137,12 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                     final cell = cellO.toString();
                     return Padding(
                       padding: const EdgeInsets.all(2),
-                      child: Text(
-                        cell,
-                        style: TextStyle(fontSize: (index == 0 ? defaultFontSize: smallFontSize) )
-                      ),
+                      child: toCell(index, cell),
                     );
                   }).toList(),
                 );
-              }).toList(),
-            ),
+              }).toList() 
+           ),
           ),
           actions: [
             TextButton(

@@ -11,6 +11,7 @@ echo "Ejecutando $0 en directorio $(pwd)"
 OUTPUT_FILE="assets/compile_constants.d4rt"
 COMMIT_HASH=$(git rev-parse HEAD)
 COMMIT=${COMMIT_HASH:0:7}
+HOMEPAGE="https://github.com/alvarogonzalezsotillo/d4rt_formulas"
 if [ ${GITHUB_REF+x} ]
 then
     TAG=${GITHUB_REF#refs/tags/}-$COMMIT
@@ -25,6 +26,7 @@ fi
     printf '  "buildHost":"%s",\n' "$(uname -a)"
     printf '  "release":"%s",\n' "$TAG"
     printf '  "buildTimestamp":"%s",\n' "$(date --utc)"
+    printf '  "homePage":"%s",\n' "$HOMEPAGE" 
     printf "}\n"
 } > "$OUTPUT_FILE"
 
