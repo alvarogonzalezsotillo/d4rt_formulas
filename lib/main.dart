@@ -20,7 +20,6 @@ import 'service_locator.dart';
 import 'compile_constants.dart';
 import 'variables.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -28,15 +27,15 @@ void main() async {
   setupLocator();
 
   await CompileConstants.init();
-  print( "release: ${CompileConstants.release()}" );
-  print( "build timestamp: ${CompileConstants.buildTimestamp()}" );
-  print( "build host: ${CompileConstants.buildHost()}" );
+  print("release: ${CompileConstants.release()}");
+  print("build timestamp: ${CompileConstants.buildTimestamp()}");
+  print("build host: ${CompileConstants.buildHost()}");
 
   var corpusFuture = loadCorpusFromDatabaseOrAssets();
 
   await loadGlobalVariablesFromDatabase();
 
-  runApp( MyApp(corpusFuture));
+  runApp(MyApp(corpusFuture));
 }
 
 final GlobalKey<_CorpusLoaderState> corpusLoaderKey = GlobalKey<_CorpusLoaderState>();
@@ -48,13 +47,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.transparent,
-            brightness: MediaQuery.platformBrightnessOf(context)
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.transparent, brightness: MediaQuery.platformBrightnessOf(context)),
       ),
       home: CorpusLoader(corpusFuture),
     );
@@ -86,33 +82,26 @@ class _CorpusLoaderState extends State<CorpusLoader> {
       ['Build timestamp', CompileConstants.buildTimestamp()],
       ['Build host', CompileConstants.buildHost()],
       ['Corpus backend', CompileConstants.isDatabaseBackend() ? FormulasDatabase.underlyingStorage() : "Memory"],
-      ['# of formulas', corpus.getFormulas().length ],
-      ['# of units', corpus.getUnits().length ],
-      
+      ['# of formulas', corpus.getFormulas().length],
+      ['# of units', corpus.getUnits().length],
     ];
 
-    final defaultFontSize = Theme.of(context) .textTheme .bodyMedium ?.fontSize ?? 14;
+    final defaultFontSize = Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14;
     final smallFontSize = defaultFontSize - 2;
 
-    Widget toCell(int column, String s ){
-      final text = Text(
-            s,
-            style: TextStyle(fontSize: (column == 0 ? defaultFontSize: smallFontSize) )
-          );
+    Widget toCell(int column, String s) {
+      final text = Text(s, style: TextStyle(fontSize: (column == 0 ? defaultFontSize : smallFontSize)));
 
       final uri = Uri.tryParse(s);
-      if( uri != null && uri.hasScheme ){
+      if (uri != null && uri.hasScheme) {
         return Link(
           uri: uri,
-          builder: (BuildContext context, FollowLink? followLink) => InkWell(
-            onTap: followLink,
-            child: text,
-          ),
+          builder: (BuildContext context, FollowLink? followLink) => InkWell(onTap: followLink, child: text),
         );
       }
       return text;
     }
-    
+
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -126,58 +115,38 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                 bottom: BorderSide(color: Colors.grey.shade300),
                 horizontalInside: BorderSide(color: Colors.grey.shade300),
               ),
-              columnWidths: {
-                0: IntrinsicColumnWidth(),
-                1: FlexColumnWidth(),
-              },
+              columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
               children: aboutInfo.map<TableRow>((row) {
                 return TableRow(
-                  children: row.indexed.map<Padding>( ((int, Object) entry) {
+                  children: row.indexed.map<Padding>(((int, Object) entry) {
                     final (int index, Object cellO) = entry;
                     final cell = cellO.toString();
-                    return Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: toCell(index, cell),
-                    );
+                    return Padding(padding: const EdgeInsets.all(2), child: toCell(index, cell));
                   }).toList(),
                 );
-              }).toList() 
-           ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
+              }).toList(),
             ),
-          ],
-
+          ),
+          actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
         );
       },
     );
   }
 
-  void _handleCalculator(){
-    final calculator =  MaterialPageRoute(
+  void _handleCalculator() {
+    final calculator = MaterialPageRoute(
       builder: (context) => Scaffold(
         appBar: AppBar(title: const Text('Calculator')),
         body: CalculatorTab(),
-      )
+      ),
     );
 
     Navigator.push(context, calculator);
   }
-  
+
   void _handleImport() {
     _corpusFuture.then((corpus) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              ImportFromTextScreen(
-                corpus: corpus,
-              ),
-        ),
-      ).then((result) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ImportFromTextScreen(corpus: corpus))).then((result) {
         setState(() {
           // Refresh the list when returning from import
         });
@@ -185,15 +154,13 @@ class _CorpusLoaderState extends State<CorpusLoader> {
     });
   }
 
-  static Widget _iconButton( IconData icon, String text, VoidCallback? cb ){
+  static Widget _iconButton(IconData icon, String text, [VoidCallback? cb]) {
     return TextButton(
       onPressed: cb,
-      child: Column(
-        children: [SizedBox(height: 8), Icon(icon), Text(text, maxLines: null) ], 
-      ),
+      child: Column(children: [SizedBox(height: 8), Icon(icon), Text(text, maxLines: null)]),
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Corpus>(
@@ -219,21 +186,36 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                   ],
                 ),
                 actions: [
-                  _iconButton(Icons.calculate_outlined, "Calculator",_handleCalculator ),
-                  _iconButton(Icons.library_add, "Import text", _handleImport ),
-                  _iconButton(Icons.info_outlined, "About",_handleAbout ),
+                  _iconButton(Icons.calculate_outlined, "Calculator", _handleCalculator),
+                  PopupMenuButton(
+                    child: _iconButton( Icons.menu, "More"),
+                    //color: Color.fromARGB(0,255,255,255),
+                    //iconColor:Color.fromARGB(0,255,255,255),
+                    tooltip: 'More options',
+                    onSelected: (value) {
+                      if (value == 'about') {
+                        _handleAbout();
+                      } else if (value == 'import') {
+                        _handleImport();
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'import',
+                        child: Row(children: [Icon(Icons.library_add), SizedBox(width: 8), Text("Import formulas/units", maxLines: null)]),
+                      ),
+                      PopupMenuItem(
+                        value: 'about',
+                        child: Row(children: [Icon(Icons.info_outlined), SizedBox(width: 8), Text("About", maxLines: null)]),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               body: TabBarView(
                 children: [
-                  FormulaList(
-                    corpus: snapshot.data!,
-                    onImport: _handleImport,
-                  ),
-                  UnitList(
-                    corpus: snapshot.data!,
-                    onImport: _handleImport,
-                  ),
+                  FormulaList(corpus: snapshot.data!, onImport: _handleImport),
+                  UnitList(corpus: snapshot.data!, onImport: _handleImport),
                 ],
               ),
             ),
@@ -246,15 +228,13 @@ class _CorpusLoaderState extends State<CorpusLoader> {
 
   void _registerCorpusInstance(Corpus corpus) {
     var existingCorpus = GetIt.instance.isRegistered<Corpus>() ? GetIt.instance.get<Corpus>() : null;
-    if (existingCorpus == null ) {
-      print( "Registering corpus in GetIt for the first time." );
+    if (existingCorpus == null) {
+      print("Registering corpus in GetIt for the first time.");
       GetIt.instance.registerSingleton<Corpus>(corpus);
-    }
-    else if( existingCorpus == corpus ){
-      print( "The corpus was already registered and is the same instance, no need to re-register." );
-    }
-    else if( existingCorpus != corpus ){
-      throw Exception( "The corpus was already registered but is a different instance. This should not happen." );
+    } else if (existingCorpus == corpus) {
+      print("The corpus was already registered and is the same instance, no need to re-register.");
+    } else if (existingCorpus != corpus) {
+      throw Exception("The corpus was already registered but is a different instance. This should not happen.");
     }
   }
 }
@@ -266,11 +246,11 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
   }
 
   final database = getDatabase();
-  
+
   try {
     // Try to load from database first
     final dbElements = await database.loadCorpusElements();
-    
+
     if (dbElements.isEmpty) {
       // Database is empty, load default corpus and save to database
       final defaultCorpus = await createDefaultCorpus();
@@ -278,9 +258,9 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
       final elements = <models.FormulaElement>[];
       elements.addAll(defaultCorpus.allUnits().cast<models.FormulaElement>());
       elements.addAll(defaultCorpus.getFormulas().cast<models.FormulaElement>());
-      
+
       await database.saveCorpusElements(elements);
-      
+
       return defaultCorpus;
     } else {
       // Load corpus from database elements
@@ -290,7 +270,7 @@ Future<Corpus> loadCorpusFromDatabaseOrAssets() async {
     }
   } catch (e, st) {
     // If there's an error loading from database, fall back to default corpus
-    errorHandler.notify(e,st);
+    errorHandler.notify(e, st);
     return createDefaultCorpus();
   }
 }
@@ -310,28 +290,26 @@ Future<void> loadGlobalVariablesFromDatabase() async {
   }
 }
 
-
 /// Shows a dialog to ask user if they want to use the default corpus
 Future<bool> showUseDefaultCorpusDialog(BuildContext context) async {
   return await showDialog<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Empty Database'),
-        content: const Text('The database is empty. Would you like to load the default corpus?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false), // Don't use default corpus
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true), // Use default corpus
-            child: const Text('Yes'),
-          ),
-        ],
-      );
-    },
-  ) ?? false; // Default to false if dialog is dismissed
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Empty Database'),
+            content: const Text('The database is empty. Would you like to load the default corpus?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false), // Don't use default corpus
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true), // Use default corpus
+                child: const Text('Yes'),
+              ),
+            ],
+          );
+        },
+      ) ??
+      false; // Default to false if dialog is dismissed
 }
-
-
