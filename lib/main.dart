@@ -157,7 +157,12 @@ class _CorpusLoaderState extends State<CorpusLoader> {
   static Widget _iconButton(IconData icon, String text, [VoidCallback? cb]) {
     return TextButton(
       onPressed: cb,
-      child: Column(children: [SizedBox(height: 8), Icon(icon), Text(text, maxLines: null)]),
+      child: Column(
+        children: [
+          SizedBox(height: 8),
+          Icon(icon),
+          Text(text, maxLines: null, textScaler: TextScaler.linear(0.7),)]
+      ),
     );
   }
 
