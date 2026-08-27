@@ -49,8 +49,10 @@ class FunctionResult extends FormulaResult {
   final InterpretedFunction value;
   final String code;
 
+  String getArgumentsString() => code.substring(0,code.indexOf(')')+1);
+  
   const FunctionResult(this.value, this.code);
-  @override String toVisibleString() => code.substring(0,code.indexOf(')')+1);
+  @override String toVisibleString() => "Function ${getArgumentsString()}";
 }
 
 class NumberResult extends FormulaResult {

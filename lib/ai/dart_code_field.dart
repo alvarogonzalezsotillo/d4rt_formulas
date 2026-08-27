@@ -115,11 +115,12 @@ class _DartCodeFieldState extends State<DartCodeField> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final gutterStyle = widget.showLineNumbers ? GutterStyle(showLineNumbers: true) : GutterStyle.none;
     final codeField = CodeField(
       controller: widget.controller,
-      decoration: BoxDecoration(border: Border.all()),
+      decoration: BoxDecoration(border: Border.all(color: theme.dividerColor) ),
       gutterStyle: gutterStyle,
       textStyle: const TextStyle(fontFamily: 'RobotoMono', fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"]),
     );
@@ -137,7 +138,7 @@ class _DartCodeFieldState extends State<DartCodeField> {
               child: Text(
                 _errorText!,
                 key: _errorKey,
-                style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                style: TextStyle(color: theme.colorScheme.error, fontSize: 12),
               ),
             ),
         ],

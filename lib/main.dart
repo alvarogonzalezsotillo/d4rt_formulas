@@ -156,6 +156,17 @@ class _CorpusLoaderState extends State<CorpusLoader> {
     );
   }
 
+  void _handleCalculator(){
+    final calculator =  MaterialPageRoute(
+      builder: (context) => Scaffold(
+        appBar: AppBar(title: const Text('Calculator')),
+        body: CalculatorTab(),
+      )
+    );
+
+    Navigator.push(context, calculator);
+  }
+  
   void _handleImport() {
     _corpusFuture.then((corpus) {
       Navigator.push(
@@ -174,6 +185,15 @@ class _CorpusLoaderState extends State<CorpusLoader> {
     });
   }
 
+  static Widget _iconButton( IconData icon, String text, VoidCallback? cb ){
+    return TextButton(
+      onPressed: cb,
+      child: Column(
+        children: [SizedBox(height: 8), Icon(icon), Text(text, maxLines: null) ], 
+      ),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Corpus>(
@@ -188,7 +208,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
           _registerCorpusInstance(corpus);
 
           return DefaultTabController(
-            length: 3,
+            length: 2,
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('D4rt Formulas'),
@@ -196,20 +216,12 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                   tabs: [
                     Tab(text: 'Formulas'),
                     Tab(text: 'Units'),
-                    Tab(text: 'Calculator'),
                   ],
                 ),
                 actions: [
-                  IconButton(
-                    icon: const Icon(Icons.library_add),
-                    tooltip: 'Import formulas',
-                    onPressed: _handleImport,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.info_outline),
-                    tooltip: 'About',
-                    onPressed: _handleAbout,
-                  ),
+                  _iconButton(Icons.calculate_outlined, "Calculator",_handleCalculator ),
+                  _iconButton(Icons.library_add, "Import text", _handleImport ),
+                  _iconButton(Icons.info_outlined, "About",_handleAbout ),
                 ],
               ),
               body: TabBarView(
@@ -222,7 +234,6 @@ class _CorpusLoaderState extends State<CorpusLoader> {
                     corpus: snapshot.data!,
                     onImport: _handleImport,
                   ),
-                  const CalculatorTab(),
                 ],
               ),
             ),

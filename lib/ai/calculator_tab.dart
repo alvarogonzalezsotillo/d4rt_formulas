@@ -141,7 +141,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
     entry.inputController.addListener(() => _onInputChanged(entry));
     final index = entry.index;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: rowMargin/3),
       child: Row(
         children: [
           SizedBox(
@@ -170,7 +170,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   Widget _buildOutputRow(_CalculatorEntry entry) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: rowMargin/3),
       child: Row(
         children: [
           const SizedBox(width: variableWidth + rowMargin),
