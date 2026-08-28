@@ -136,7 +136,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
   void _handleCalculator() {
     final calculator = MaterialPageRoute(
       builder: (context) => Scaffold(
-        appBar: AppBar(title: const Text('Calculator')),
+        appBar: AppBar( title: const Text('D4rt calculator') ),
         body: CalculatorTab(),
       ),
     );
@@ -161,7 +161,11 @@ class _CorpusLoaderState extends State<CorpusLoader> {
         children: [
           SizedBox(height: 8),
           Icon(icon),
-          Text(text, maxLines: null, textScaler: TextScaler.linear(0.7),)]
+          Text(text,
+            maxLines: null,
+            //textScaler: TextScaler.linear(0.7),
+          ),
+        ]
       ),
     );
   }
@@ -184,6 +188,7 @@ class _CorpusLoaderState extends State<CorpusLoader> {
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('D4rt Formulas'),
+                toolbarHeight: kToolbarHeight + 8,
                 bottom: const TabBar(
                   tabs: [
                     Tab(text: 'Formulas'),
