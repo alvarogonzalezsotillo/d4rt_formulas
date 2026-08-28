@@ -33,6 +33,7 @@ void main() {
       'double backslashes': r'a\\b',
       'backslash before quote': r'weird \" case',
       'triple double quotes': 'has """ inside',
+      'one double quote': '"',
       'triple single quotes': "has ''' inside",
       'only triple single quotes': "it'''s",
       'both triple quotes': 'has """ and \'\'\' inside',

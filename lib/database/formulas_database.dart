@@ -1,5 +1,32 @@
 import 'package:drift/drift.dart';
 
+/*
+TODO: migrate to driftDatabase, drop NativeDatabase
+The future-proof upgrade to sqlite3 v3 + drift_flutter is not possible with the current project's dependency graph.
+
+Why
+d4rt (even the latest 0.2.4) pins analyzer: ^8.4.0. That forces drift_dev to a version that requires sqlite3 < 3.0.0. Since drift_flutter requires sqlite3: ^3.0.0, they're mutually incompatible:
+
+snippet ⧉
+
+d4rt_formulas depends on both sqlite3 ^3.0.0 and drift_dev any, version solving failed.
+
+
+What remains
+The project stays on the sqlite3 v2 line, which needs sqlite3_flutter_libs to bundle the native .so. The fix remains the 0.5.42 pin (the last version that actually bundles libsqlite3.so for Android; 0.6.0+eol is a do-nothing stub that causes your error).
+
+
+yaml ⧉
+
+sqlite3_flutter_libs: 0.5.42
+
+Path forward (what unblocks the real upgrade)
+The future-proof migration requires d4rt to drop its analyzer: ^8.4.0 pin (support analyzer ≥13). Once a d4rt release does that, you'd:
+
+1. flutter pub add sqlite3:^3.0.0 drift_flutter (remove sqlite3_flutter_libs)
+2. Replace the NativeDatabase.createInBackground / WasmDatabase.open calls with driftDatabase(name: ...) in formulas_database_native.dart / _web.dart
+*/
+
 import 'formulas_database_unsupported.dart'
 if (dart.library.html) 'formulas_database_web.dart'
 if (dart.library.ffi) 'formulas_database_native.dart';

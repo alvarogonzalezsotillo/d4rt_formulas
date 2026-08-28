@@ -44,7 +44,9 @@ dependencies:
   url_launcher:
   uuid:
   drift: 
-  sqlite3_flutter_libs:
+  sqlite3:
+  sqlite3_flutter_libs: 0.5.42 # TODO: migrate to driftDatabase, drop NativeDatabase, d4rt is the problem, maybe dart_eval
+
   path_provider: 
   path: 
   get_it:
