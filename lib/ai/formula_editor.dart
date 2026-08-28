@@ -13,7 +13,6 @@ import 'formula_screen.dart';
 import 'unit_dropdown.dart';
 import '../compile_constants.dart';
 
-
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/languages/dart.dart';
@@ -84,13 +83,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
   void _addInputVariable() {
     setState(() {
-      _inputVariables.add(
-        _InputVariableRowData(
-          nameController: TextEditingController(text: 'var${_inputVariables.length + 1}'),
-          unit: null,
-          values: null,
-        ),
-      );
+      _inputVariables.add(_InputVariableRowData(nameController: TextEditingController(text: 'var${_inputVariables.length + 1}'), unit: null, values: null));
     });
   }
 
@@ -163,9 +156,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
     try {
       final input = <VariableSpec>[];
       for (final variable in _inputVariables) {
-        input.add(
-          VariableSpec(name: variable.nameController.text.trim(), unit: variable.unit, values: variable.values),
-        );
+        input.add(VariableSpec(name: variable.nameController.text.trim(), unit: variable.unit, values: variable.values));
       }
 
       final output = VariableSpec(name: _outputVariable.nameController.text.trim(), unit: _outputVariable.unit);
@@ -197,10 +188,14 @@ class _FormulaEditorState extends State<FormulaEditor> {
       // Update corpus in memory
       widget.corpus.updateFormula(formula);
 
-      if (CompileConstants.isDatabaseBackend() ) {
+      if (CompileConstants.isDatabaseBackend()) {
         // Update database
+        print("SAVEFORMULA: saving...c");
+        
         final database = getDatabase();
         final updated = await database.updateFormula(formula);
+
+        print("SAVEFORMULA: $updated");
 
         if (!updated) {
           // If formula wasn't found (e.g., name changed), add it as new
@@ -212,12 +207,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
       widget.onSave?.call(formula);
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Formula "${formula.name}" saved successfully!'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Formula "${formula.name}" saved successfully!'), backgroundColor: Theme.of(context).colorScheme.primary));
     } catch (e, stack) {
       print('Error saving formula: $e\n$stack');
       _showErrorDialog('Error saving formula: $e');
@@ -234,19 +224,12 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
     try {
       // Create a copy with a new UUID
-      final formulaCopy = Formula(
-        name: '${formula.name} (Copy)',
-        description: formula.description,
-        input: formula.input,
-        output: formula.output,
-        d4rtCode: formula.d4rtCode,
-        tags: formula.tags,
-      );
+      final formulaCopy = Formula(name: '${formula.name} (Copy)', description: formula.description, input: formula.input, output: formula.output, d4rtCode: formula.d4rtCode, tags: formula.tags);
 
       // Add to corpus
       widget.corpus.addFormula(formulaCopy);
 
-      if (CompileConstants.isDatabaseBackend() ) {
+      if (CompileConstants.isDatabaseBackend()) {
         // Add to database
         await getDatabase().addFormula(formulaCopy);
       }
@@ -255,12 +238,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
       widget.onSave?.call(formulaCopy);
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Formula "${formulaCopy.name}" saved successfully!'),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Formula "${formulaCopy.name}" saved successfully!'), backgroundColor: Theme.of(context).colorScheme.primary));
 
       // Navigate back to the formula list with the new formula
       Navigator.pop(context, formulaCopy);
@@ -327,11 +305,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
   Widget _buildNameSection() {
     return TextFormField(
       controller: _nameController,
-      decoration: const InputDecoration(
-        labelText: 'Formula Name',
-        border: OutlineInputBorder(),
-        prefixIcon: Icon(Icons.title),
-      ),
+      decoration: const InputDecoration(labelText: 'Formula Name', border: OutlineInputBorder(), prefixIcon: Icon(Icons.title)),
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
           return 'Name is required';
@@ -356,17 +330,9 @@ class _FormulaEditorState extends State<FormulaEditor> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (_isPreviewVisible)
-                      TextButton.icon(
-                        icon: const Icon(Icons.visibility_off),
-                        label: const Text('Hide Preview'),
-                        onPressed: _hidePreview,
-                      )
+                      TextButton.icon(icon: const Icon(Icons.visibility_off), label: const Text('Hide Preview'), onPressed: _hidePreview)
                     else
-                      TextButton.icon(
-                        icon: const Icon(Icons.visibility),
-                        label: const Text('Preview'),
-                        onPressed: _showPreview,
-                      ),
+                      TextButton.icon(icon: const Icon(Icons.visibility), label: const Text('Preview'), onPressed: _showPreview),
                   ],
                 ),
               ],
@@ -375,10 +341,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
             if (_isPreviewVisible) ...[
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceVariant, borderRadius: BorderRadius.circular(8)),
                 child: Markdown(
                   data: _descriptionController.text,
                   shrinkWrap: true,
@@ -390,10 +353,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
             ],
             TextFormField(
               controller: _descriptionController,
-              decoration: const InputDecoration(
-                hintText: 'Enter formula description (supports Markdown and LaTeX)',
-                border: OutlineInputBorder(),
-              ),
+              decoration: const InputDecoration(hintText: 'Enter formula description (supports Markdown and LaTeX)', border: OutlineInputBorder()),
               maxLines: 5,
             ),
           ],
@@ -417,11 +377,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
               return _buildInputVariableRow(index, variable);
             }).toList(),
             const SizedBox(height: 8),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.add),
-              label: const Text('Add Input Variable'),
-              onPressed: _addInputVariable,
-            ),
+            ElevatedButton.icon(icon: const Icon(Icons.add), label: const Text('Add Input Variable'), onPressed: _addInputVariable),
           ],
         ),
       ),
@@ -451,18 +407,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: _getBaseUnit(variable.unit),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Base unit",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                    ),
+                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Base unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
-                      const DropdownMenuItem<String?>(
-                        value: null,
-                         child: Text('None', style: TextStyle(fontSize: 11)),
-                      ),
+                      const DropdownMenuItem<String?>(value: null, child: Text('None', style: TextStyle(fontSize: 11))),
                       ..._getAllBaseUnits().map((baseUnit) {
                         return DropdownMenuItem<String?>(
                           value: baseUnit,
@@ -484,27 +433,16 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: variable.unit,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Unit",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                    ),
+                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
-                      const DropdownMenuItem<String?>(
-                        value: null,
-                        child: Text('None', style: TextStyle(fontSize: 10)),
-                      ),
+                      const DropdownMenuItem<String?>(value: null, child: Text('None', style: TextStyle(fontSize: 10))),
                       ..._getDerivedUnits(variable.unit).map((unit) {
                         final unitSpec = widget.corpus.getUnit(unit);
                         return DropdownMenuItem<String?>(
                           value: unit,
-                          child: Text(
-                            '${unitSpec.symbol}',
-                            style: const TextStyle(fontSize: 10),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          child: Text('${unitSpec.symbol}', style: const TextStyle(fontSize: 10), overflow: TextOverflow.ellipsis),
                         );
                       }).toList(),
                     ],
@@ -556,18 +494,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: _getBaseUnit(_outputVariable.unit),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Base unit",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                    ),
+                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Base unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
-                      const DropdownMenuItem<String?>(
-                        value: null,
-                        child: Text('None', style: TextStyle(fontSize: 11)),
-                      ),
+                      const DropdownMenuItem<String?>(value: null, child: Text('None', style: TextStyle(fontSize: 11))),
                       ..._getAllBaseUnits().map((baseUnit) {
                         return DropdownMenuItem<String?>(
                           value: baseUnit,
@@ -589,27 +520,16 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: _outputVariable.unit,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Unit",
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                    ),
+                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
-                      const DropdownMenuItem<String?>(
-                        value: null,
-                        child: Text('None', style: TextStyle(fontSize: 10)),
-                      ),
+                      const DropdownMenuItem<String?>(value: null, child: Text('None', style: TextStyle(fontSize: 10))),
                       ..._getDerivedUnits(_outputVariable.unit).map((unit) {
                         final unitSpec = widget.corpus.getUnit(unit);
                         return DropdownMenuItem<String?>(
                           value: unit,
-                          child: Text(
-                            '${unitSpec.symbol}',
-                            style: const TextStyle(fontSize: 10),
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          child: Text('${unitSpec.symbol}', style: const TextStyle(fontSize: 10), overflow: TextOverflow.ellipsis),
                         );
                       }).toList(),
                     ],
@@ -641,11 +561,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
               constraints: const BoxConstraints(minHeight: 200),
               child: CodeTheme(
                 data: CodeThemeData(styles: monokaiSublimeTheme),
-                child: SingleChildScrollView(
-                  child: DartCodeField(
-                    controller: _d4rtCodeController,
-                  ),
-                ),
+                child: SingleChildScrollView(child: DartCodeField(controller: _d4rtCodeController)),
               ),
             ),
           ],

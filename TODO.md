@@ -53,6 +53,12 @@
   - _prettyPrintSet(Set s, int indent)
   - _prettyPrintArray(dynamic[] a, int indent)
   - _prettyPrintRawString(String s, int indent): Use _prettyPrintRawString when the string contains newlines, $, backlash...
+- [R] Fix all the SetUtils.prettyPrint errors reported by test/set_utils_test.dart:
+  - Strings containing \r can only round-trip d4rt when escaped (raw strings normalize line endings)
+  - Strings ending in a backslash cannot be emitted raw (ambiguous closing delimiter)
+  - Content abutting the raw delimiter (leading/trailing quote) or containing both """ and ''' falls back to an escaped string
+  - The lone-quote and "both triple quotes" branches produced invalid, unquoted literals
+  - All 38 tests in test/set_utils_test.dart pass; linux and web builds succeed
 - [X] Add a field to Formula: UUID.
   - A constructor without UUID will generate a new random UUID. A constructor with UUID will use the provided UUID.
   - The field should be used in database and everywhere instead of the name. The name is not unique anymore, but the UUID is.

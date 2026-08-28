@@ -1,4 +1,3 @@
-
 import 'package:d4rt/d4rt.dart';
 
 import 'formula_models.dart';
@@ -30,7 +29,6 @@ abstract class SetUtils {
     final buffer = StringBuffer();
     buffer.write("main(){ return $arrayStringLiteral; }");
     final code = buffer.toString();
-
     final List<Object?> list = d4rt.execute(source: code);
 
     return list;
@@ -43,15 +41,8 @@ abstract class SetUtils {
 
   /// Escapes a string for use inside a regular double-quoted Dart literal.
   static String _escapePrettyPrintString(String s) {
-    return s
-        .replaceAll(r'\', r'\\')
-        .replaceAll(r'$', r'\$')
-        .replaceAll('"', r'\"')
-        .replaceAll('\n', r'\n')
-        .replaceAll('\r', r'\r')
-        .replaceAll('\t', r'\t');
+    return s.replaceAll(r'\', r'\\').replaceAll(r'$', r'\$').replaceAll('"', r'\"').replaceAll('\n', r'\n').replaceAll('\r', r'\r').replaceAll('\t', r'\t');
   }
-  
 
   /// Parses corpus elements from an array string literal.
   /// Determines if each element is a formula or a unit and converts accordingly.
@@ -63,8 +54,7 @@ abstract class SetUtils {
       if (element is Map<Object?, Object?>) {
         if (element.containsKey('d4rtCode')) {
           result.add(Formula.fromSet(element));
-        } else
-        if (element.containsKey('name') && element.containsKey('symbol')) {
+        } else if (element.containsKey('name') && element.containsKey('symbol')) {
           result.add(UnitSpec.fromSet(element));
         } else {
           throw ArgumentError('Unknown element type: $element');
@@ -80,7 +70,7 @@ abstract class SetUtils {
   /// Pretty prints a dynamic value (Set, Array, string or number) as a Dart literal.
   /// Uses JSON-like formatting but for Dart language, with proper indentation.
   static String prettyPrint(dynamic value, {int indent = 0}) {
-    if (value   is String) {
+    if (value is String) {
       return _prettyPrintString(value);
     } else if (value is num) {
       return _prettyPrintNumber(value);
@@ -98,11 +88,7 @@ abstract class SetUtils {
   /// Pretty prints a simple string, escaping special characters if needed.
   static String _prettyPrintString(String s) {
     // Check if the string needs raw string formatting (newlines, $, backslashes, quotes)
-    final needsRawString = s.contains('\n') ||
-        s.contains('\r') ||
-        s.contains(r'$') ||
-        s.contains(r'\') ||
-        s.contains('"');
+    final needsRawString = s.contains('\n') || s.contains('\r') || s.contains(r'$') || s.contains(r'\') || s.contains('"');
 
     if (needsRawString) {
       final raw = _prettyPrintRawString(s);
@@ -115,7 +101,6 @@ abstract class SetUtils {
     return '"${_escapePrettyPrintString(s)}"';
     //'
   }
-
 
   /// Pretty prints a number.
   static String _prettyPrintNumber(num n) {
@@ -157,27 +142,44 @@ abstract class SetUtils {
     final indentStr = '  ' * indent;
     final innerIndent = '  ' * (indent + 1);
 
-    final entries = m.entries.map((e) {
-      final key = prettyPrint(e.key, indent: indent + 1);
-      final value = prettyPrint(e.value, indent: indent + 1);
-      return '$innerIndent$key: $value';
-    }).join(',\n');
+    final entries = m.entries
+        .map((e) {
+          final key = prettyPrint(e.key, indent: indent + 1);
+          final value = prettyPrint(e.value, indent: indent + 1);
+          return '$innerIndent$key: $value';
+        })
+        .join(',\n');
 
     return '{\n$entries\n$indentStr}';
   }
 
   /// Pretty prints a raw string (for strings containing newlines, $, backslashes, etc.)
-  /// Uses Dart's raw string syntax r"""..."""
-  static String _prettyPrintRawString(String s) {
-    if( s == '"'){
-      return "'\"";
+  /// Uses Dart's raw string syntax r"""...""" or r'''...''' when the content can be
+  /// represented losslessly. Returns null when it cannot, so the caller falls back
+  /// to an escaped string literal.
+  static String? _prettyPrintRawString(String s) {
+    // d4rt normalizes raw string line endings, so \r must be escaped instead.
+    if (s.contains('\r')) {
+      return null;
     }
-    if( s.contains('"""') && s.contains("'''") ){
-      return escapeD4rtString(s);
+    // A trailing backslash right before the closing delimiter is ambiguous.
+    if (s.endsWith(r'\')) {
+      return null;
     }
-    if( s.contains('"""') ){
+    if (_rawCompatible(s, '"""')) {
+      return 'r"""$s"""';
+    }
+    if (_rawCompatible(s, "'''")) {
       return "r'''$s'''";
     }
-    return 'r"""$s"""';
+    return null;
+  }
+
+  /// Whether [s] can be used verbatim inside the raw triple-quoted literal
+  /// delimited by [delimiter]: the delimiter must not occur in the content and
+  /// no [delimiter[0]] quote may abut the delimiter at the edges.
+  static bool _rawCompatible(String s, String delimiter) {
+    final quote = delimiter[0];
+    return !s.contains(delimiter) && !s.startsWith(quote) && !s.endsWith(quote);
   }
 }
