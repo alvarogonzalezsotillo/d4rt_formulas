@@ -1,6 +1,6 @@
 {
   "buildHost":"Linux alvaro-thinkpad 7.0.12-101.fc43.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Jun 11 01:32:26 UTC 2026 x86_64 GNU/Linux",
-  "release":"release-f9d8e72",
-  "buildTimestamp":"jue 27 ago 2026 12:18:22 UTC",
+  "release":"release-1f4fdbf",
+  "buildTimestamp":"vie 28 ago 2026 06:34:00 UTC",
   "homePage":"https://github.com/alvarogonzalezsotillo/d4rt_formulas",
 }
