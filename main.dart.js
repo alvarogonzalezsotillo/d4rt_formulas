@@ -199860,7 +199860,7 @@
     call$1(context) {
       var _null = null;
       type$.BuildContext._as(context);
-      return A.Scaffold$(A.AppBar$(_null, _null, B.Text_2mr, _null), new A.CalculatorTab(_null));
+      return A.Scaffold$(A.AppBar$(_null, _null, B.Text_hzP, _null), new A.CalculatorTab(_null));
     },
     $signature: 533
   };
@@ -365428,7 +365428,6 @@
     B.TextStyle_oSE = new A.TextStyle(true, B.Color_vnR, null, ".AppleSystemUIFont", null, null, null, null, null, null, null, null, null, null, null, null, null, B.TextDecoration_00, null, null, null, "blackRedwoodCity labelMedium", null, null, null, null);
     B.TextStyle_3Ap = new A.TextStyle(true, B.Color_vnR, null, ".AppleSystemUIFont", null, null, null, null, null, null, null, null, null, null, null, null, null, B.TextDecoration_00, null, null, null, "blackRedwoodCity labelSmall", null, null, null, null);
     B.TextTheme_wwF = new A.TextTheme(B.TextStyle_TA0, B.TextStyle_CxI, B.TextStyle_TA00, B.TextStyle_bij, B.TextStyle_7QZ, B.TextStyle_93C, B.TextStyle_J1A, B.TextStyle_aA2, B.TextStyle_LNV, B.TextStyle_kXv, B.TextStyle_2Hp, B.TextStyle_4to, B.TextStyle_jWb, B.TextStyle_oSE, B.TextStyle_3Ap);
-    B.Text_2mr = new A.Text("Calculator", null, null, null, null, null, null, null, null, null, null);
     B.Text_3yk = new A.Text("Code (unit -> base):", null, B.TextStyle_TJs, null, null, null, null, null, null, null, null);
     B.Text_GIp = new A.Text("This widget should not appear. It means one of FlutterMath's AST nodes forgot to handle the case for TransparentNodes", null, null, null, null, null, null, null, null, null, null);
     B.Text_HKj = new A.Text("Is base unit?", null, null, null, null, null, null, null, null, null, null);
@@ -365451,6 +365450,7 @@
     B.Text_dnh = new A.Text("Input Variables", null, B.TextStyle_K7C, null, null, null, null, null, null, null, null);
     B.Text_gUa = new A.Text("D4rt Formulas", null, null, null, null, null, null, null, null, null, null);
     B.Text_hhb = new A.Text("Edit Unit", null, null, null, null, null, null, null, null, null, null);
+    B.Text_hzP = new A.Text("D4rt calculator", null, null, null, null, null, null, null, null, null, null);
     B.Text_jpb = new A.Text("Edit Formula", null, null, null, null, null, null, null, null, null, null);
     B.Text_k9L = new A.Text("Description (Markdown)", null, B.TextStyle_K7C, null, null, null, null, null, null, null, null);
     B.Text_nrC = new A.Text("Factor", null, null, null, null, null, null, null, null, null, null);
