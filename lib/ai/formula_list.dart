@@ -16,11 +16,7 @@ class FormulaList extends StatefulWidget {
   final Corpus corpus;
   final VoidCallback? onImport;
 
-  const FormulaList({
-    super.key,
-    required this.corpus,
-    this.onImport,
-  });
+  const FormulaList({super.key, required this.corpus, this.onImport});
 
   @override
   State<FormulaList> createState() => _FormulaListState();
@@ -29,24 +25,18 @@ class FormulaList extends StatefulWidget {
     final corpus = GetIt.instance.get<Corpus>();
     final dependencies = corpus.withDependencies(formula);
     final dependenciesAsMap = dependencies.map((f) => f.toMap()).toList();
-    for( final f in dependenciesAsMap ){
+    for (final f in dependenciesAsMap) {
       f.remove("uuid");
     }
     return SetUtils.prettyPrint(dependenciesAsMap);
   }
-
 
   static void shareFormula(Formula formula) async {
     try {
       final exportString = _formulaAndDependenciesToExportStringLiteral(formula);
 
       // Share the string
-      await share_plus.SharePlus.instance.share(
-        share_plus.ShareParams(
-          text: exportString,
-          subject: 'Sharing formula: ${formula.name}',
-        ),
-      );
+      await share_plus.SharePlus.instance.share(share_plus.ShareParams(text: exportString, subject: 'Sharing formula: ${formula.name}'));
     } catch (e, st) {
       errorHandler.notify(e, st);
     }
@@ -60,17 +50,11 @@ class FormulaList extends StatefulWidget {
       await Clipboard.setData(ClipboardData(text: exportString));
 
       // Show a snackbar to confirm
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Formula and dependencies copied to clipboard'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Formula and dependencies copied to clipboard'), duration: Duration(seconds: 2)));
     } catch (e, st) {
       errorHandler.notify(e, st);
     }
   }
-
 }
 
 class _FormulaListState extends State<FormulaList> {
@@ -96,15 +80,18 @@ class _FormulaListState extends State<FormulaList> {
   }
 
   List<Formula> get _filteredFormulas {
-    if (_searchQuery.isEmpty) return widget.corpus.getFormulas();
+    List<Formula> _impl() {
+      if (_searchQuery.isEmpty) return widget.corpus.getFormulas();
 
-    return widget.corpus.getFormulas().where((formula) {
-      final nameMatch = formula.name.toLowerCase().contains(_searchQuery);
-      final tagMatch = formula.tags.any((tag) => tag.toLowerCase().contains(_searchQuery));
-      return nameMatch || tagMatch;
-    }).toList();
+      return widget.corpus.getFormulas().where((formula) {
+        final nameMatch = formula.name.toLowerCase().contains(_searchQuery);
+        final tagMatch = formula.tags.any((tag) => tag.toLowerCase().contains(_searchQuery));
+        return nameMatch || tagMatch;
+      }).toList();
+    }
+
+    return _impl()..sort((Formula f1, Formula f2) => f1.name.compareTo(f2.name));
   }
-
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -126,7 +113,6 @@ class _FormulaListState extends State<FormulaList> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -135,12 +121,7 @@ class _FormulaListState extends State<FormulaList> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             controller: _searchController,
-            decoration: const InputDecoration(
-              labelText: 'Search formulas',
-              hintText: 'Search by name or tag...',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
-            ),
+            decoration: const InputDecoration(labelText: 'Search formulas', hintText: 'Search by name or tag...', prefixIcon: Icon(Icons.search), border: OutlineInputBorder()),
           ),
         ),
         Expanded(
@@ -150,9 +131,7 @@ class _FormulaListState extends State<FormulaList> {
               final formula = _filteredFormulas[index];
               return ListTile(
                 title: Text(formula.name),
-                subtitle: formula.tags.isNotEmpty
-                    ? Text('Tags: ${formula.tags.join(', ')}')
-                    : null,
+                subtitle: formula.tags.isNotEmpty ? Text('Tags: ${formula.tags.join(', ')}') : null,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -166,7 +145,7 @@ class _FormulaListState extends State<FormulaList> {
                       builder: (context) => FormulaScreen(
                         formula: formula,
                         corpus: widget.corpus,
-                        onSave: (formula){
+                        onSave: (formula) {
                           setState(() {
                             // Refresh the list when returning from the formula screen
                           });

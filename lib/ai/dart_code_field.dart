@@ -103,7 +103,6 @@ class _DartCodeFieldState extends State<DartCodeField> {
 
   void _validate() {
     if (widget.validator != null) {
-      print("DART validate");
       setState(_runValidator);
     }
   }
