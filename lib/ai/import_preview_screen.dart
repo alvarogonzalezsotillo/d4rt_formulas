@@ -4,13 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:d4rt_formulas/corpus.dart';
 import 'package:d4rt_formulas/ai/formula_editor.dart';
-import 'package:d4rt_formulas/services/import_service.dart';
 import 'package:d4rt_formulas/service_locator.dart';
-import 'package:d4rt_formulas/main.dart';
-
-import 'package:flutter_code_editor/flutter_code_editor.dart';
-import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:highlight/languages/dart.dart';
 
 import '../compile_constants.dart';
 

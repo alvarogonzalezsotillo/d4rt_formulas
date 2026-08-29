@@ -8,14 +8,11 @@ import '../formula_models.dart';
 import '../corpus.dart';
 import '../database/database_service.dart';
 import '../service_locator.dart';
-import '../main.dart';
 import 'formula_screen.dart';
-import 'unit_dropdown.dart';
 import '../compile_constants.dart';
 
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:highlight/languages/dart.dart';
 
 /// A screen for editing a Formula's properties including name, description,
 /// input/output variables, and d4rt code.

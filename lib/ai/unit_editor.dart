@@ -1,20 +1,13 @@
 import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown_plus_latex/flutter_markdown_plus_latex.dart';
-import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:markdown/markdown.dart' as markdown;
 import '../formula_models.dart';
 import '../corpus.dart';
-import '../database/database_service.dart';
 import '../service_locator.dart';
-import '../main.dart';
-import 'unit_dropdown.dart';
 import '../compile_constants.dart';
 
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/monokai-sublime.dart';
-import 'package:highlight/languages/dart.dart';
 
 /// Editor for UnitSpec similar in style to FormulaEditor.
 class UnitEditor extends StatefulWidget {

@@ -5,12 +5,10 @@ import 'package:d4rt_formulas/value_formatter.dart';
 import 'package:d4rt_formulas/variables.dart';
 import 'package:get_it/get_it.dart';
 
-import 'calculator_state.dart';
 import 'formula_models.dart';
 import 'error_handler.dart';
 import 'd4rt_bridge.dart';
 
-import 'package:d4rt/src/module_loader.dart';
 import 'package:d4rt/src/stdlib/core/list.dart';
 
 /// Exception thrown when formula evaluation fails

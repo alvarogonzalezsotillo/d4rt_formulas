@@ -1,11 +1,7 @@
 import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 import '../calculator_state.dart';
-import '../formula_evaluator.dart';
-import '../value_formatter.dart';
-import 'd4rt_editing_controller.dart';
 
 class _CalculatorEntry {
   final int index;

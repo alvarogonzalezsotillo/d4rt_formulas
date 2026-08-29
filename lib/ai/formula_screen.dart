@@ -13,7 +13,6 @@ import '../corpus.dart';
 import '../error_handler.dart';
 import '../service_locator.dart';
 import '../value_formatter.dart';
-import 'd4rt_editing_controller.dart';
 import 'formula_list.dart';
 import 'unit_dropdown.dart';
 import 'formula_editor.dart';

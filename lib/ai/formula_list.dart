@@ -7,10 +7,6 @@ import '../corpus.dart';
 import '../set_utils.dart';
 import 'formula_screen.dart';
 import 'package:share_plus/share_plus.dart' as share_plus;
-import 'formula_editor.dart';
-import 'package:share_plus/share_plus.dart';
-import 'import_preview_screen.dart';
-import '../services/import_service.dart';
 
 class FormulaList extends StatefulWidget {
   final Corpus corpus;
