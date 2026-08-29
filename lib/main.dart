@@ -291,7 +291,7 @@ Future<void> loadGlobalVariablesFromDatabase() async {
     final globals = GetIt.instance<GlobalVariables>();
     globals.loadFromMap(data);
     globals.enablePersistence((map) async {
-      await database.saveAllGlobalVariables(map);
+        await database.saveAllGlobalVariables(map);
     });
   } catch (e, st) {
     errorHandler.notify(e, st);

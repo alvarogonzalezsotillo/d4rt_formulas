@@ -2,6 +2,7 @@ import 'package:d4rt_formulas/debounced_executor.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:d4rt_formulas/set_utils.dart';
 
+
 class GlobalVariables {
   Map<K, V> map<K, V>(MapEntry<K, V> convert(String key, FormulaResult value)) {
     return _map.map(convert);
@@ -9,12 +10,12 @@ class GlobalVariables {
 
   final Map<String, FormulaResult> _map = {};
   DebouncedExecutor? _persister;
+  Future<void> Function(Map<String, String>)? _persist;
 
   void enablePersistence(Future<void> Function(Map<String, String>) onSave) {
     _persister?.dispose();
-    _persister = DebouncedExecutor(() async {
-      await onSave(toMap());
-    });
+    _persister = DebouncedExecutor();
+    _persist = onSave;
   }
 
   void disablePersistence() {
@@ -32,12 +33,12 @@ class GlobalVariables {
 
   void operator []=(String variableName, FormulaResult value) {
     _map[variableName] = value;
-    _persister?.requestPersist();
+    _persister?.request(()=>_persist!(toMap()));
   }
 
   FormulaResult? deleteKey(String variableName) {
     final result = _map.remove(variableName);
-    _persister?.requestPersist();
+    _persister?.request(()=>_persist!(toMap()));
     return result;
   }
 

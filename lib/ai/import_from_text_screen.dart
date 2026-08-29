@@ -2,8 +2,6 @@ import 'package:d4rt_formulas/ai/dart_code_field.dart';
 import 'package:d4rt_formulas/corpus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_code_editor/flutter_code_editor.dart';
-import 'package:flutter_highlight/themes/monokai-sublime.dart';
 
 import '../services/import_service.dart';
 import 'import_preview_screen.dart';
@@ -86,12 +84,9 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
       body: Column(
         children: [
           Expanded(
-            child: CodeTheme(
-              data: CodeThemeData(styles: monokaiSublimeTheme),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(child: DartCodeField(controller: _codeController, showLineNumbers: true)),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(child: DartCodeField(controller: _codeController, showLineNumbers: true)),
             ),
           ),
           Padding(
