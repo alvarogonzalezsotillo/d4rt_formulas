@@ -17,17 +17,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(AlertDialog), findsOneWidget);
-    expect(
-      find.text('Release: ${CompileConstants.release()}'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Build timestamp: ${CompileConstants.buildTimestamp()}'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Build host: ${CompileConstants.buildHost()}'),
-      findsOneWidget,
-    );
+    expect(find.text('Release: ${CompileConstants.release()}'), findsOneWidget);
+    expect(find.text('Build timestamp: ${CompileConstants.buildTimestamp()}'), findsOneWidget);
+    expect(find.text('Build host: ${CompileConstants.buildHost()}'), findsOneWidget);
   });
 }

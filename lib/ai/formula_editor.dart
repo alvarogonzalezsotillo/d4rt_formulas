@@ -83,7 +83,9 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
   void _addInputVariable() {
     setState(() {
-      _inputVariables.add(_InputVariableRowData(nameController: TextEditingController(text: 'var${_inputVariables.length + 1}'), unit: null, values: null));
+      _inputVariables.add(
+        _InputVariableRowData(nameController: TextEditingController(text: 'var${_inputVariables.length + 1}'), unit: null, values: null),
+      );
     });
   }
 
@@ -191,7 +193,7 @@ class _FormulaEditorState extends State<FormulaEditor> {
       if (CompileConstants.isDatabaseBackend()) {
         // Update database
         print("SAVEFORMULA: saving...c");
-        
+
         final database = getDatabase();
         final updated = await database.updateFormula(formula);
 
@@ -207,7 +209,9 @@ class _FormulaEditorState extends State<FormulaEditor> {
       widget.onSave?.call(formula);
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Formula "${formula.name}" saved successfully!'), backgroundColor: Theme.of(context).colorScheme.primary));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Formula "${formula.name}" saved successfully!'), backgroundColor: Theme.of(context).colorScheme.primary),
+      );
     } catch (e, stack) {
       print('Error saving formula: $e\n$stack');
       _showErrorDialog('Error saving formula: $e');
@@ -224,7 +228,14 @@ class _FormulaEditorState extends State<FormulaEditor> {
 
     try {
       // Create a copy with a new UUID
-      final formulaCopy = Formula(name: '${formula.name} (Copy)', description: formula.description, input: formula.input, output: formula.output, d4rtCode: formula.d4rtCode, tags: formula.tags);
+      final formulaCopy = Formula(
+        name: '${formula.name} (Copy)',
+        description: formula.description,
+        input: formula.input,
+        output: formula.output,
+        d4rtCode: formula.d4rtCode,
+        tags: formula.tags,
+      );
 
       // Add to corpus
       widget.corpus.addFormula(formulaCopy);
@@ -238,7 +249,12 @@ class _FormulaEditorState extends State<FormulaEditor> {
       widget.onSave?.call(formulaCopy);
 
       // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Formula "${formulaCopy.name}" saved successfully!'), backgroundColor: Theme.of(context).colorScheme.primary));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Formula "${formulaCopy.name}" saved successfully!'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+      );
 
       // Navigate back to the formula list with the new formula
       Navigator.pop(context, formulaCopy);
@@ -353,7 +369,10 @@ class _FormulaEditorState extends State<FormulaEditor> {
             ],
             TextFormField(
               controller: _descriptionController,
-              decoration: const InputDecoration(hintText: 'Enter formula description (supports Markdown and LaTeX)', border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                hintText: 'Enter formula description (supports Markdown and LaTeX)',
+                border: OutlineInputBorder(),
+              ),
               maxLines: 5,
             ),
           ],
@@ -407,7 +426,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: _getBaseUnit(variable.unit),
-                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Base unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Base unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
@@ -433,7 +456,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: variable.unit,
-                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
@@ -494,7 +521,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: _getBaseUnit(_outputVariable.unit),
-                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Base unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Base unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [
@@ -520,7 +551,11 @@ class _FormulaEditorState extends State<FormulaEditor> {
                     isDense: true,
                     isExpanded: true,
                     value: _outputVariable.unit,
-                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Unit", contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Unit",
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
                     dropdownColor: Theme.of(context).colorScheme.surface,
                     menuMaxHeight: 300,
                     items: [

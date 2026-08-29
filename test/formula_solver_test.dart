@@ -4,32 +4,24 @@ import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 void main() {
-
-  group("Formulas", (){
-
+  group("Formulas", () {
     test("Solve x^2 formula", () {
       final formula = Formula(
         name: 'Test x^2',
-        input: [
-          VariableSpec(name: 'x', unit: 'scalar'),
-        ],
+        input: [VariableSpec(name: 'x', unit: 'scalar')],
         output: VariableSpec(name: 'y', unit: 'scalar'),
         d4rtCode: 'y = x*x;',
       );
 
       var solution = formulaSolver(formula, "x", {"y": 25}, maxDelta: 1e-10);
-      expect( solution, closeTo(5, 1e-10));
+      expect(solution, closeTo(5, 1e-10));
     });
-
 
     test("Solve x formula", () {
       final formula = Formula(
         name: 'Test x',
-        input: [
-          VariableSpec(name: 'x', unit: 'scalar'),
-        ],
+        input: [VariableSpec(name: 'x', unit: 'scalar')],
         output: VariableSpec(name: 'y', unit: 'scalar'),
         d4rtCode: 'y = x;',
       );
@@ -46,7 +38,6 @@ void main() {
       expect(root, closeTo(0, 0.1));
     });
 
-
     test("Solve (x-1000)^2", () {
       Number f(Number x) => (x - 1000) * (x - 1000);
       var root = functionSolver(f, hint: 10, step: 1, maxTries: 1000);
@@ -56,8 +47,7 @@ void main() {
     test("Solve x^2 + 1", () {
       Number f(Number x) => x * x + 1;
 
-      expect(() => functionSolver(f, hint: 10, step: 1),
-          throwsA(isA<NoSolutionException>()));
+      expect(() => functionSolver(f, hint: 10, step: 1), throwsA(isA<NoSolutionException>()));
     });
 
     test("Solve (x-2)(x-10", () {

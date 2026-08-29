@@ -41,7 +41,13 @@ abstract class SetUtils {
 
   /// Escapes a string for use inside a regular double-quoted Dart literal.
   static String _escapePrettyPrintString(String s) {
-    return s.replaceAll(r'\', r'\\').replaceAll(r'$', r'\$').replaceAll('"', r'\"').replaceAll('\n', r'\n').replaceAll('\r', r'\r').replaceAll('\t', r'\t');
+    return s
+        .replaceAll(r'\', r'\\')
+        .replaceAll(r'$', r'\$')
+        .replaceAll('"', r'\"')
+        .replaceAll('\n', r'\n')
+        .replaceAll('\r', r'\r')
+        .replaceAll('\t', r'\t');
   }
 
   /// Parses corpus elements from an array string literal.

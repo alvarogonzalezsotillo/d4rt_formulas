@@ -14,7 +14,8 @@ class _CalculatorEntry {
   final TextEditingController outputController = TextEditingController();
 
   // TODO: Update aditionalKeywords when adding or removing globalVariables
-  _CalculatorEntry({required this.index, this.aditionalKeywords = const [] }): inputController = DartCodeController(aditionalKeywords: aditionalKeywords);
+  _CalculatorEntry({required this.index, this.aditionalKeywords = const []})
+    : inputController = DartCodeController(aditionalKeywords: aditionalKeywords);
 }
 
 class CalculatorTab extends StatefulWidget {
@@ -141,7 +142,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
     entry.inputController.addListener(() => _onInputChanged(entry));
     final index = entry.index;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: rowMargin/3),
+      padding: const EdgeInsets.symmetric(vertical: rowMargin / 3),
       child: Row(
         children: [
           SizedBox(
@@ -170,7 +171,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   Widget _buildOutputRow(_CalculatorEntry entry) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: rowMargin/3),
+      padding: const EdgeInsets.symmetric(vertical: rowMargin / 3),
       child: Row(
         children: [
           const SizedBox(width: variableWidth + rowMargin),

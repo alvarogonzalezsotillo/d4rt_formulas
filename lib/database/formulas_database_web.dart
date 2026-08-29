@@ -1,10 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 
-String openConnectionStorage(){
+String openConnectionStorage() {
   return "Browser storage";
 }
-
 
 LazyDatabase openConnection() {
   return LazyDatabase(() async {
@@ -15,6 +14,5 @@ LazyDatabase openConnection() {
     );
 
     return db.resolvedExecutor;
-
   });
 }

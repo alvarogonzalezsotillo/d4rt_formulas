@@ -18,12 +18,10 @@ class CalculatorState {
 
   String getInput(int index) => (_variables[inputName(index)] as StringResult).value;
 
-
   void setAnswer(int index, FormulaResult value) {
     _variables[outputName(index)] = value;
   }
 
-  
   void removeAnswer(int index) {
     _variables.deleteKey(outputName(index));
   }

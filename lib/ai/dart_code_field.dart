@@ -7,10 +7,26 @@ import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/highlight.dart';
 import 'package:highlight/languages/dart.dart';
 
-
 // older option: D4rtEditingController
 class DartCodeController extends CodeController {
-  static final defaultAditionalKeywords = ["acos(", "asin(", "atan(", "atan2(", "cos(", "e", "exp(", "log(", "max(", "min(", "pi", "pow(", "sin(", "sqrt(", "sqrt2(", "tan("];
+  static final defaultAditionalKeywords = [
+    "acos(",
+    "asin(",
+    "atan(",
+    "atan2(",
+    "cos(",
+    "e",
+    "exp(",
+    "log(",
+    "max(",
+    "min(",
+    "pi",
+    "pow(",
+    "sin(",
+    "sqrt(",
+    "sqrt2(",
+    "tan(",
+  ];
   DartCodeController({super.text, this.isString = false, List<String> aditionalKeywords = const []}) : super(language: dart) {
     autocompleter.setCustomWords(defaultAditionalKeywords + aditionalKeywords);
   }
@@ -54,7 +70,6 @@ class DartCodeController extends CodeController {
 
 // older option: D4rtEditingTextField
 class DartCodeField extends StatefulWidget {
-
   final DartCodeController controller;
 
   final bool showLineNumbers;
@@ -119,9 +134,12 @@ class _DartCodeFieldState extends State<DartCodeField> {
     final gutterStyle = widget.showLineNumbers ? GutterStyle(showLineNumbers: true) : GutterStyle.none;
     final codeField = CodeField(
       controller: widget.controller,
-      decoration: BoxDecoration(border: Border.all(color: theme.dividerColor) ),
+      decoration: BoxDecoration(border: Border.all(color: theme.dividerColor)),
       gutterStyle: gutterStyle,
-      textStyle: const TextStyle(fontFamily: 'RobotoMono', fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"]),
+      textStyle: const TextStyle(
+        fontFamily: 'RobotoMono',
+        fontFamilyFallback: ["monospace", "Liberation Mono", "Roboto mono", "Courier New", "Courier", "Consolas", "Menlo"],
+      ),
     );
     return CodeTheme(
       data: CodeThemeData(styles: isDark ? monokaiSublimeTheme : githubTheme),

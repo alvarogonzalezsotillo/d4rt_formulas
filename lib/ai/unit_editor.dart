@@ -107,13 +107,19 @@ class _UnitEditorState extends State<UnitEditor> {
           _showErrorDialog('Both conversion code snippets are required');
           return;
         }
-        newUnit = UnitSpec(name: name, baseUnit: _baseUnit ?? 'scalar', symbol: symbol, codeFromUnitToBase: toBase, codeFromBaseToUnit: fromBase);
+        newUnit = UnitSpec(
+          name: name,
+          baseUnit: _baseUnit ?? 'scalar',
+          symbol: symbol,
+          codeFromUnitToBase: toBase,
+          codeFromBaseToUnit: fromBase,
+        );
       }
 
       // Update corpus
       widget.corpus.updateUnit(newUnit);
 
-      if (CompileConstants.isDatabaseBackend() ) {
+      if (CompileConstants.isDatabaseBackend()) {
         // Persist to DB
         final database = getDatabase();
         final existing = await database.getFormulaElementByUuid(newUnit.uuid);
@@ -126,9 +132,9 @@ class _UnitEditorState extends State<UnitEditor> {
 
       widget.onSave?.call(newUnit);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unit "${newUnit.name}" saved'), backgroundColor: Theme.of(context).colorScheme.primary),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Unit "${newUnit.name}" saved'), backgroundColor: Theme.of(context).colorScheme.primary));
 
       Navigator.of(context).pop(newUnit);
     } catch (e, st) {
@@ -162,9 +168,7 @@ class _UnitEditorState extends State<UnitEditor> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Unit'),
-        actions: [
-          IconButton(icon: const Icon(Icons.save), onPressed: _saveUnit, tooltip: 'Save'),
-        ],
+        actions: [IconButton(icon: const Icon(Icons.save), onPressed: _saveUnit, tooltip: 'Save')],
       ),
       body: Form(
         key: _formKey,
@@ -225,7 +229,7 @@ class _UnitEditorState extends State<UnitEditor> {
                                 },
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -247,7 +251,7 @@ class _UnitEditorState extends State<UnitEditor> {
                             label: const Text('Factor'),
 
                             selected: _useFactor,
-                            onSelected:  _isBase ? null : (s) => setState(() => _useFactor = true),
+                            onSelected: _isBase ? null : (s) => setState(() => _useFactor = true),
                           ),
                           const SizedBox(width: 8),
                           ChoiceChip(

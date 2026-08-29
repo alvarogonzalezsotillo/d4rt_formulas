@@ -13,11 +13,11 @@ import '../services/import_service.dart';
 import 'formula_list.dart';
 import '../corpus.dart';
 import '../defaults/default_corpus.dart';
-import '../formula_models.dart' as models;import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import '../formula_models.dart' as models;
+import 'package:flutter_highlight/themes/monokai-sublime.dart';
 import 'package:highlight/languages/dart.dart';
 
 import 'import_preview_screen.dart';
-
 
 /// Screen to import formula elements from text
 class ImportFromTextScreen extends StatefulWidget {
@@ -47,14 +47,10 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
       if (clipboardData?.text != null) {
         _codeController.text = clipboardData!.text!;
       } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Clipboard is empty'), backgroundColor: Colors.orange));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Clipboard is empty'), backgroundColor: Colors.orange));
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error pasting from clipboard: $e'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error pasting from clipboard: $e'), backgroundColor: Colors.red));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -63,9 +59,9 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
   Future<void> _import() async {
     final text = _codeController.fullText;
     if (text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter or paste formula text'), backgroundColor: Colors.orange),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please enter or paste formula text'), backgroundColor: Colors.orange));
       return;
     }
 
@@ -88,9 +84,7 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
         Navigator.pop(context, true);
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error parsing text: $e'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error parsing text: $e'), backgroundColor: Colors.red));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -107,7 +101,7 @@ class _ImportFromTextScreenState extends State<ImportFromTextScreen> {
               data: CodeThemeData(styles: monokaiSublimeTheme),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(child: DartCodeField(controller: _codeController, showLineNumbers: true,)),
+                child: SingleChildScrollView(child: DartCodeField(controller: _codeController, showLineNumbers: true)),
               ),
             ),
           ),

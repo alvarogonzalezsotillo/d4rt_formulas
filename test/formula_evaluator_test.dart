@@ -125,7 +125,6 @@ void main() {
     });
 
     group('Error handling', () {
-
       test('throws exception for missing input variables', () {
         final formula = Formula(
           name: 'Test formula',
@@ -158,7 +157,6 @@ void main() {
           throwsA(isA<FormulaEvaluationException>()),
         );
       });
-
     });
 
     group('Utility methods', () {
@@ -173,19 +171,16 @@ void main() {
         expect(formula.output.name, 'force');
       });
 
-      test(
-        'getOutputVariableMagnitude returns the output variable magnitude',
-        () {
-          final formula = Formula(
-            name: 'Test',
-            input: [VariableSpec(name: 'x', unit: 'scalar')],
-            output: VariableSpec(name: 'force', unit: 'Newton'),
-            d4rtCode: 'force = x;',
-          );
+      test('getOutputVariableMagnitude returns the output variable magnitude', () {
+        final formula = Formula(
+          name: 'Test',
+          input: [VariableSpec(name: 'x', unit: 'scalar')],
+          output: VariableSpec(name: 'force', unit: 'Newton'),
+          d4rtCode: 'force = x;',
+        );
 
-          expect(formula.output.unit, 'Newton');
-        },
-      );
+        expect(formula.output.unit, 'Newton');
+      });
 
       test('utility methods work correctly with valid formulas', () {
         final validFormula = Formula(
@@ -198,7 +193,6 @@ void main() {
         expect(validFormula.output.name, 'result');
         expect(validFormula.output.unit, 'Newton');
       });
-
     });
 
     group('Data types', () {

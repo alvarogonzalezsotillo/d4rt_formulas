@@ -2,13 +2,12 @@
 class ErrorHandler {
   /// Singleton instance of ErrorHandler
   static final ErrorHandler _instance = ErrorHandler._internal();
-  
+
   factory ErrorHandler() => _instance;
   ErrorHandler._internal();
 
   /// Callback function to handle errors - can be overridden for custom behavior
   void Function(Object error, [StackTrace? stackTrace])? onError;
-
 
   // TODO: SET A DEFAULT ONERROR LIKE
   //     ScaffoldMessenger.of(context).showSnackBar(
@@ -18,7 +17,6 @@ class ErrorHandler {
   //      ),
   //    );
   //  }
-
 
   /// Notifies the error handler of an exception
   void notify(Object error, [StackTrace? stackTrace]) {

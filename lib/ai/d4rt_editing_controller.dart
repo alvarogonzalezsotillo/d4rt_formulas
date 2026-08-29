@@ -24,7 +24,6 @@ class D4rtEditingValidator {
   }
 }
 
-
 // other option: DartCodeField
 class D4rtEditingTextField extends TextFormField {
   D4rtEditingTextField({super.controller, super.validator})

@@ -14,7 +14,6 @@ import 'package:highlight/languages/dart.dart';
 
 import '../compile_constants.dart';
 
-
 /// Screen to preview and import formula elements
 class ImportPreviewScreen extends StatefulWidget {
   final List<FormulaElement> elements;
@@ -76,7 +75,7 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     try {
       widget.corpus.loadFormulaElements(selectedElements, true);
 
-      if (CompileConstants.isDatabaseBackend() ) {
+      if (CompileConstants.isDatabaseBackend()) {
         // Save imported elements to the database
         final database = getDatabase();
         for (final element in selectedElements) {
@@ -91,19 +90,14 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
         }
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Imported ${selectedElements.length} element(s) successfully'),
-          backgroundColor: Colors.green,
-        ),
-      );
-
-      Navigator.pop(context, true);
-    } catch (e,st) {
-      errorHandler.notify('Error importing formula elements: $e', st);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error importing: $e'), backgroundColor: Colors.red));
+      ).showSnackBar(SnackBar(content: Text('Imported ${selectedElements.length} element(s) successfully'), backgroundColor: Colors.green));
+
+      Navigator.pop(context, true);
+    } catch (e, st) {
+      errorHandler.notify('Error importing formula elements: $e', st);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error importing: $e'), backgroundColor: Colors.red));
     }
   }
 
@@ -222,4 +216,3 @@ class _ImportPreviewScreenState extends State<ImportPreviewScreen> {
     );
   }
 }
-

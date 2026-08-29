@@ -12,7 +12,7 @@ class GlobalVariables {
 
   void enablePersistence(Future<void> Function(Map<String, String>) onSave) {
     _persister?.dispose();
-    _persister = DebouncedExecutor( () async {
+    _persister = DebouncedExecutor(() async {
       await onSave(toMap());
     });
   }
@@ -72,9 +72,7 @@ class GlobalVariables {
   String d4rtDeclarations([List<String>? includedVariables]) {
     List<T> sorted<T>(List<T> l) => l..sort();
 
-    final variables = includedVariables != null
-        ? sorted(List.from(includedVariables))
-        : variableNames();
+    final variables = includedVariables != null ? sorted(List.from(includedVariables)) : variableNames();
     final declarations = variables.map((name) {
       if (!containsKey(name)) {
         throw ArgumentError("Variable not exists: $name");

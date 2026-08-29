@@ -9,17 +9,17 @@ typedef Number = double;
 
 String _generateUuidV4() => Uuid().v4();
 
-String? _stripMargin(String? s){
-  if (s == null ){
+String? _stripMargin(String? s) {
+  if (s == null) {
     return null;
   }
   final lines = s.split("\n");
   final nonEmptyLines = lines.where((line) => line.trim().isNotEmpty).toList();
-  if( nonEmptyLines.length == 0 ){
+  if (nonEmptyLines.length == 0) {
     return "";
   }
-  final marginLength = nonEmptyLines.map( (line) => line.length - line.trimLeft().length).reduce((a, b) => a < b ? a : b);
-  final ret = lines.map( (line) => line.substring( min(marginLength,line.length) ) ).join("\n");
+  final marginLength = nonEmptyLines.map((line) => line.length - line.trimLeft().length).reduce((a, b) => a < b ? a : b);
+  final ret = lines.map((line) => line.substring(min(marginLength, line.length))).join("\n");
   return ret;
 }
 
@@ -74,13 +74,13 @@ class UnitSpec extends FormulaElement {
     String symbol = SetUtils.stringValue(theSet, "symbol");
 
     if (theSet.containsKey("isBase")) {
-      if( theSet["baseUnit"] != null  ){
+      if (theSet["baseUnit"] != null) {
         throw ArgumentError("A unit can't be both base and have a base unit");
       }
-      if( theSet["factor"] != null  ){
+      if (theSet["factor"] != null) {
         throw ArgumentError("A unit can't be both base and have a factor");
       }
-      if( theSet["fromBase"] != null || theSet["toBase"] != null ){
+      if (theSet["fromBase"] != null || theSet["toBase"] != null) {
         throw ArgumentError("A unit can't be both base and have code converters");
       }
 
@@ -122,21 +122,17 @@ class UnitSpec extends FormulaElement {
   }
 }
 
-class VariableSpec{
+class VariableSpec {
   final String name;
   final String? unit;
   final List<dynamic>? values;
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      if (unit != null) 'unit': unit,
-      if (values != null) 'values': List.from(values!, growable: false),
-    };
+    return {'name': name, if (unit != null) 'unit': unit, if (values != null) 'values': List.from(values!, growable: false)};
   }
 
-  VariableSpec({required this.name, this.unit, this.values}){
+  VariableSpec({required this.name, this.unit, this.values}) {
     validate();
   }
 
@@ -187,12 +183,12 @@ abstract class FormulaInterface {
 
   Formula get originalFormula;
 
-  static Formula getRootFormula( FormulaInterface fi ){
-    if( fi is DerivedFormula ){
-       return getRootFormula(fi.originalFormula);
+  static Formula getRootFormula(FormulaInterface fi) {
+    if (fi is DerivedFormula) {
+      return getRootFormula(fi.originalFormula);
     }
-    if( fi is Formula ){
-       return fi as Formula;
+    if (fi is Formula) {
+      return fi as Formula;
     }
     throw ArgumentError("Is not a known Formula subclass: ${fi} ${fi.runtimeType}");
   }
@@ -230,21 +226,20 @@ class DerivedFormula implements FormulaInterface {
   late List<VariableSpec> _input;
   late VariableSpec _output;
 
-  static bool isDerivable(Formula f){
-    return f.input.every( (vs) => vs.unit != "string") && f.output.unit != "string";
+  static bool isDerivable(Formula f) {
+    return f.input.every((vs) => vs.unit != "string") && f.output.unit != "string";
   }
 
   DerivedFormula({required this.outputName, required this.originalFormula}) {
-
-
-    if( !isDerivable(originalFormula) ){
+    if (!isDerivable(originalFormula)) {
       throw ArgumentError(
-          "Derived formulas are not supported for formulas with string inputs, because we can't solve for them. Original formula: ${originalFormula.toString()}");
+        "Derived formulas are not supported for formulas with string inputs, because we can't solve for them. Original formula: ${originalFormula.toString()}",
+      );
     }
     _init();
   }
 
-  void _init(){
+  void _init() {
     var newInput = List<VariableSpec>.from(originalFormula.input).where((v) => v.name != outputName).toList();
     newInput.add(originalFormula.output);
     _input = newInput.toList(growable: false);
@@ -295,7 +290,8 @@ class Formula extends FormulaElement implements FormulaInterface {
     required this.output,
     required this.d4rtCode,
     this.tags = const [],
-  }) : uuid = uuid ?? _generateUuidV4(), description = _stripMargin(description ?? "") {
+  }) : uuid = uuid ?? _generateUuidV4(),
+       description = _stripMargin(description ?? "") {
     validate();
   }
 
@@ -310,8 +306,7 @@ class Formula extends FormulaElement implements FormulaInterface {
       'Formula(uuid: $uuid, name: $name, description: $description, input: $input, output: $output, d4rtCode: $d4rtCode, tags: $tags)';
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is Formula && runtimeType == other.runtimeType && uuid == other.uuid;
+  bool operator ==(Object other) => identical(this, other) || other is Formula && runtimeType == other.runtimeType && uuid == other.uuid;
 
   @override
   int get hashCode => uuid.hashCode;
@@ -367,14 +362,6 @@ class Formula extends FormulaElement implements FormulaInterface {
     VariableSpec output = parseVar(outputSet);
     String d4rtCode = SetUtils.stringValue(theSet, "d4rtCode");
 
-    return Formula(
-      uuid: uuid,
-      name: name,
-      description: description,
-      tags: tags,
-      input: input,
-      output: output,
-      d4rtCode: d4rtCode,
-    );
+    return Formula(uuid: uuid, name: name, description: description, tags: tags, input: input, output: output, d4rtCode: d4rtCode);
   }
 }

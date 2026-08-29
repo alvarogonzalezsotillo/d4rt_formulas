@@ -17,29 +17,15 @@ void main() {
   });
 
   group('CalculatorTab', () {
-    testWidgets('shows initial empty input with label input1',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
+    testWidgets('shows initial empty input with label input1', (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: CalculatorTab())));
 
       expect(find.text('input1'), findsOneWidget);
       expect(find.text('ans1'), findsNothing);
     });
 
-    testWidgets('shows output and next input when user types expression',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
+    testWidgets('shows output and next input when user types expression', (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: CalculatorTab())));
 
       await tester.enterText(find.byKey(const Key('input1')), '1 + 2');
       await tester.pumpAndSettle();
@@ -48,15 +34,8 @@ void main() {
       expect(find.text('input2'), findsOneWidget);
     });
 
-    testWidgets('removes output when input becomes empty',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
+    testWidgets('removes output when input becomes empty', (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: CalculatorTab())));
 
       await tester.enterText(find.byKey(const Key('input1')), '1 + 2');
       await tester.pumpAndSettle();
@@ -67,15 +46,8 @@ void main() {
       expect(find.text('ans1'), findsNothing);
     });
 
-    testWidgets('supports multiple inputs and outputs',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
+    testWidgets('supports multiple inputs and outputs', (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: CalculatorTab())));
 
       await tester.enterText(find.byKey(const Key('input1')), '10');
       await tester.pumpAndSettle();
@@ -87,15 +59,8 @@ void main() {
       expect(find.byKey(const Key('input3')), findsOneWidget);
     });
 
-    testWidgets('always keeps an empty input at the end',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CalculatorTab(),
-          ),
-        ),
-      );
+    testWidgets('always keeps an empty input at the end', (WidgetTester tester) async {
+      await tester.pumpWidget(const MaterialApp(home: Scaffold(body: CalculatorTab())));
 
       await tester.enterText(find.byKey(const Key('input1')), '1');
       await tester.pumpAndSettle();
@@ -109,6 +74,5 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('input4')), findsNothing);
     });
-
   });
 }

@@ -2,8 +2,7 @@ import 'package:test/test.dart';
 import 'package:d4rt/d4rt.dart';
 import 'dart:math' as Math;
 
-void main(){
-
+void main() {
   test('Access to Math', () {
     final completeSource = """
         import  'dart:math';

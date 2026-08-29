@@ -50,7 +50,9 @@ class FormulaList extends StatefulWidget {
       await Clipboard.setData(ClipboardData(text: exportString));
 
       // Show a snackbar to confirm
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Formula and dependencies copied to clipboard'), duration: Duration(seconds: 2)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Formula and dependencies copied to clipboard'), duration: Duration(seconds: 2)));
     } catch (e, st) {
       errorHandler.notify(e, st);
     }
@@ -121,7 +123,12 @@ class _FormulaListState extends State<FormulaList> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             controller: _searchController,
-            decoration: const InputDecoration(labelText: 'Search formulas', hintText: 'Search by name or tag...', prefixIcon: Icon(Icons.search), border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+              labelText: 'Search formulas',
+              hintText: 'Search by name or tag...',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(),
+            ),
           ),
         ),
         Expanded(

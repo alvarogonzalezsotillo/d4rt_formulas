@@ -22,7 +22,7 @@ class _Multimap<K, V> extends DelegatingMap<K, List<V>> {
   }
 }
 
-class Corpus{
+class Corpus {
   final _Multimap<String, Formula> _tags = _Multimap.create();
   // Map formulas by uuid
   final Map<String, Formula> _allFormulas = {};
@@ -33,34 +33,34 @@ class Corpus{
         throw ArgumentError("Duplicate formula:${formula}");
       }
 
-      if( checkUnits ){
-        for( final inputVar in formula.input + [formula.output] ){
-          if( inputVar.unit != null && !_allUnits.containsKey(inputVar.unit) ){
-            throw ArgumentError( "Unit not found in formula ${formula.name}: ${inputVar.unit}");
+      if (checkUnits) {
+        for (final inputVar in formula.input + [formula.output]) {
+          if (inputVar.unit != null && !_allUnits.containsKey(inputVar.unit)) {
+            throw ArgumentError("Unit not found in formula ${formula.name}: ${inputVar.unit}");
           }
         }
       }
 
       _allFormulas[formula.uuid] = formula;
-      for( final tag in formula.tags ){
+      for (final tag in formula.tags) {
         _tags[tag]?.add(formula);
       }
     }
   }
 
-  List<Formula> getTagFormulas(String tag){
-    if( _tags[tag] == null ){
+  List<Formula> getTagFormulas(String tag) {
+    if (_tags[tag] == null) {
       return [];
     }
-    return _tags[tag]?.toList(growable:false) as List<Formula>;
+    return _tags[tag]?.toList(growable: false) as List<Formula>;
   }
 
-  List<Formula> getFormulas(){
-    return _allFormulas.values.toList(growable:false);
+  List<Formula> getFormulas() {
+    return _allFormulas.values.toList(growable: false);
   }
 
-  List<UnitSpec> getUnits(){
-    return _allUnits.values.toList(growable:false);
+  List<UnitSpec> getUnits() {
+    return _allUnits.values.toList(growable: false);
   }
 
   /// Returns first formula with the given name (preserves old API semantics).
@@ -98,13 +98,13 @@ class Corpus{
     if (!_allFormulas.containsKey(formula.uuid)) {
       throw ArgumentError("Formula not found: ${formula.uuid}");
     }
-    
+
     // Remove old tags
     final oldFormula = _allFormulas[formula.uuid]!;
     for (final tag in oldFormula.tags) {
       _tags[tag]?.removeWhere((f) => f.uuid == formula.uuid);
     }
-    
+
     // Update the formula
     _allFormulas[formula.uuid] = formula;
 
@@ -136,18 +136,17 @@ class Corpus{
     }
   }
 
-  List<String> unitsOfSameMagnitude(String? unit){
-    if( unit == null ){
+  List<String> unitsOfSameMagnitude(String? unit) {
+    if (unit == null) {
       return ["scalar"];
     }
     final base = getUnit(unit).baseUnit;
     return _baseToUnits[base] as List<String>;
   }
 
-
   UnitSpec getUnit(String unit) {
     if (!_allUnits.containsKey(unit)) {
-      print(  _allUnits.keys.join(",") );
+      print(_allUnits.keys.join(","));
       throw ArgumentError("Unit not found:$unit");
     }
     return _allUnits.get(unit);
@@ -199,25 +198,22 @@ class Corpus{
     return ret;
   }
 
-
-  Number _convertUsingCode(Number x, String code ){
+  Number _convertUsingCode(Number x, String code) {
     late String completeSourceExpression;
     late String completeSourceStatement;
     try {
       completeSourceExpression = _converterFromCodeStringAsExpression(x, code);
       final ret = _evaluate(completeSourceExpression);
       return ret;
-    }
-    catch(e1, stack1){
-      try{
+    } catch (e1, stack1) {
+      try {
         completeSourceStatement = _converterFromCodeStringAsStatement(x, code);
         final ret = _evaluate(completeSourceStatement);
         return ret;
-      }
-      catch( e2, stack2 ){
+      } catch (e2, stack2) {
         errorHandler.notify(e1.toString() + "\n" + completeSourceExpression, stack1);
         errorHandler.notify(e2.toString() + "\n" + completeSourceStatement, stack2);
-        throw FormulaEvaluationException( "Evaluation as statement and expression failed" );
+        throw FormulaEvaluationException("Evaluation as statement and expression failed");
       }
     }
   }
@@ -281,7 +277,7 @@ class Corpus{
       }
     }
 
-    if( element is Formula ) {
+    if (element is Formula) {
       // Process input variable units
       element.input.where((inputVar) => inputVar.unit != null).forEach((inputVar) {
         addUnitsAndBaseEquivalents(inputVar.unit);
@@ -300,5 +296,4 @@ class Corpus{
     }
     _allFormulas.remove(formula.uuid);
   }
-
 }

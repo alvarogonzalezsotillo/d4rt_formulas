@@ -18,11 +18,7 @@ class UnitList extends StatefulWidget {
   final Corpus corpus;
   final VoidCallback? onImport;
 
-  const UnitList({
-    super.key,
-    required this.corpus,
-    this.onImport,
-  });
+  const UnitList({super.key, required this.corpus, this.onImport});
 
   @override
   State<UnitList> createState() => _UnitListState();
@@ -31,7 +27,7 @@ class UnitList extends StatefulWidget {
     final corpus = GetIt.instance.get<Corpus>();
     final dependencies = corpus.withDependencies(unit);
     final dependenciesAsMap = dependencies.map((f) => f.toMap()).toList();
-    for( final f in dependenciesAsMap ){
+    for (final f in dependenciesAsMap) {
       f.remove("uuid");
     }
 
@@ -41,18 +37,12 @@ class UnitList extends StatefulWidget {
     return SetUtils.prettyPrint(map);
   }
 
-
   static void shareUnit(UnitSpec unit) async {
     try {
       final exportString = _unitToExportStringLiteral(unit);
 
       // Share the string
-      await share_plus.SharePlus.instance.share(
-        share_plus.ShareParams(
-          text: exportString,
-          subject: 'Sharing unit: ${unit.name}',
-        ),
-      );
+      await share_plus.SharePlus.instance.share(share_plus.ShareParams(text: exportString, subject: 'Sharing unit: ${unit.name}'));
     } catch (e, st) {
       errorHandler.notify(e, st);
     }
@@ -66,17 +56,13 @@ class UnitList extends StatefulWidget {
       await Clipboard.setData(ClipboardData(text: exportString));
 
       // Show a snackbar to confirm
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Unit and dependencies copied to clipboard'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Unit and dependencies copied to clipboard'), duration: Duration(seconds: 2)));
     } catch (e, st) {
       errorHandler.notify(e, st);
     }
   }
-
 }
 
 class _UnitListState extends State<UnitList> {
@@ -105,13 +91,14 @@ class _UnitListState extends State<UnitList> {
     var allUnits = widget.corpus.getUnits().sortedBy((u) => u.name.toLowerCase());
     if (_searchQuery.isEmpty) return allUnits;
 
-    return allUnits.where((unit){
-      final nameMatch = unit.name.toLowerCase().contains(_searchQuery);
-      final tagMatch = unit.symbol.toLowerCase().contains(_searchQuery);
-      return nameMatch || tagMatch;
-    }).toList(growable: false);
+    return allUnits
+        .where((unit) {
+          final nameMatch = unit.name.toLowerCase().contains(_searchQuery);
+          final tagMatch = unit.symbol.toLowerCase().contains(_searchQuery);
+          return nameMatch || tagMatch;
+        })
+        .toList(growable: false);
   }
-
 
   Widget build(BuildContext context) {
     return Column(
@@ -134,7 +121,7 @@ class _UnitListState extends State<UnitList> {
             itemBuilder: (context, index) {
               final unit = _filteredUnits[index];
               return ListTile(
-                title: Text(unit.name + " " + unit.symbol ),
+                title: Text(unit.name + " " + unit.symbol),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -148,7 +135,7 @@ class _UnitListState extends State<UnitList> {
                       builder: (context) => UnitEditor(
                         unit: unit,
                         corpus: widget.corpus,
-                        onSave: (unit){
+                        onSave: (unit) {
                           setState(() {
                             // Refresh the list when returning from the formula screen
                           });

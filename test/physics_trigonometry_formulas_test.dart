@@ -50,7 +50,7 @@ void main() {
       // Test with spring constant k=100 N/m and displacement x=0.5 m
       final result = evaluator.evaluate(formula, {
         'k': 100.0, // 100 N/m
-        'x': 0.5,   // 0.5 m
+        'x': 0.5, // 0.5 m
       });
 
       // F = -k * x = -100 * 0.5 = -50 N
@@ -65,8 +65,8 @@ void main() {
       // Test with m=10 kg, v=5 m/s, r=2 m
       final result = evaluator.evaluate(formula, {
         'm': 10.0, // 10 kg
-        'v': 5.0,  // 5 m/s
-        'r': 2.0,  // 2 m
+        'v': 5.0, // 5 m/s
+        'r': 2.0, // 2 m
       });
 
       // F = (m * v²) / r = (10 * 25) / 2 = 250 / 2 = 125 N
@@ -80,7 +80,7 @@ void main() {
 
       // Test with frequency f=50 Hz and wavelength λ=2 m
       final result = evaluator.evaluate(formula, {
-        'f': 50.0,    // 50 Hz
+        'f': 50.0, // 50 Hz
         'lambda': 2.0, // 2 m
       });
 

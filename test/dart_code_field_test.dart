@@ -12,8 +12,7 @@ Future<void> settle(WidgetTester tester) async {
 }
 
 void main() {
-  Widget buildField(DartCodeController controller,
-      {String? Function(String?)? validator}) {
+  Widget buildField(DartCodeController controller, {String? Function(String?)? validator}) {
     return MaterialApp(
       home: Scaffold(
         body: DartCodeField(controller: controller, validator: validator),
@@ -21,11 +20,10 @@ void main() {
     );
   }
 
-final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
+  final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
 
   group('DartCodeField validator', () {
-    testWidgets('shows no message when no validator is provided',
-        (tester) async {
+    testWidgets('shows no message when no validator is provided', (tester) async {
       final controller = DartCodeController(text: '1 + 1');
       await tester.pumpWidget(buildField(controller));
       await settle(tester);
@@ -33,11 +31,9 @@ final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
       expect(errorFinder, findsNothing);
     });
 
-    testWidgets('shows no message when validator returns null',
-        (tester) async {
+    testWidgets('shows no message when validator returns null', (tester) async {
       final controller = DartCodeController(text: '1 + 1');
-      await tester.pumpWidget(buildField(controller,
-          validator: (text) => text == null || text.isEmpty ? 'empty' : null));
+      await tester.pumpWidget(buildField(controller, validator: (text) => text == null || text.isEmpty ? 'empty' : null));
       await settle(tester);
 
       expect(errorFinder, findsNothing);
@@ -45,8 +41,7 @@ final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
 
     testWidgets('shows message when initial text is invalid', (tester) async {
       final controller = DartCodeController(text: '');
-      await tester.pumpWidget(buildField(controller,
-          validator: (text) => text == null || text.isEmpty ? 'empty' : null));
+      await tester.pumpWidget(buildField(controller, validator: (text) => text == null || text.isEmpty ? 'empty' : null));
       await settle(tester);
 
       expect(errorFinder, findsOneWidget);
@@ -56,8 +51,7 @@ final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
     testWidgets('shows message when text becomes invalid and hides it when '
         'valid again', (tester) async {
       final controller = DartCodeController(text: '1 + 1');
-      await tester.pumpWidget(buildField(controller,
-          validator: (text) => text == null || text.isEmpty ? 'empty' : null));
+      await tester.pumpWidget(buildField(controller, validator: (text) => text == null || text.isEmpty ? 'empty' : null));
       await settle(tester);
       expect(errorFinder, findsNothing);
 
@@ -73,8 +67,7 @@ final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
 
     testWidgets('message updates when the error changes', (tester) async {
       final controller = DartCodeController(text: '');
-      await tester.pumpWidget(buildField(controller,
-          validator: (text) => text == null || text.isEmpty ? 'empty' : 'bad'));
+      await tester.pumpWidget(buildField(controller, validator: (text) => text == null || text.isEmpty ? 'empty' : 'bad'));
       await settle(tester);
       expect(tester.widget<Text>(errorFinder).data, 'empty');
 
@@ -83,32 +76,32 @@ final errorFinder = find.byKey(const ValueKey('DartCodeFieldError'));
       expect(tester.widget<Text>(errorFinder).data, 'bad');
     });
 
-    testWidgets('revalidates with the new validator on widget update',
-        (tester) async {
+    testWidgets('revalidates with the new validator on widget update', (tester) async {
       final controller = DartCodeController(text: 'abc');
-      await tester.pumpWidget(buildField(controller,
-          validator: (text) => text!.contains('z') ? 'no z allowed' : null));
+      await tester.pumpWidget(buildField(controller, validator: (text) => text!.contains('z') ? 'no z allowed' : null));
       await settle(tester);
       expect(errorFinder, findsNothing);
 
-      await tester.pumpWidget(buildField(controller,
-          validator: (text) =>
-              text != null && RegExp(r'^[0-9+ ]+$').hasMatch(text)
-                  ? null
-                  : 'not a number'));
+      await tester.pumpWidget(
+        buildField(controller, validator: (text) => text != null && RegExp(r'^[0-9+ ]+$').hasMatch(text) ? null : 'not a number'),
+      );
       await settle(tester);
       expect(errorFinder, findsOneWidget);
       expect(tester.widget<Text>(errorFinder).data, 'not a number');
     });
 
-    testWidgets('validator receives the current controller text',
-        (tester) async {
+    testWidgets('validator receives the current controller text', (tester) async {
       var received = 'sentinel';
       final controller = DartCodeController(text: 'hello');
-      await tester.pumpWidget(buildField(controller, validator: (text) {
-        received = text!;
-        return null;
-      }));
+      await tester.pumpWidget(
+        buildField(
+          controller,
+          validator: (text) {
+            received = text!;
+            return null;
+          },
+        ),
+      );
       await settle(tester);
 
       expect(received, 'hello');

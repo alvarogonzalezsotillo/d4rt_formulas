@@ -5,9 +5,7 @@ import 'package:d4rt_formulas/set_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 
-
 void main() {
-
   TestWidgetsFlutterBinding.ensureInitialized();
 
   Future<Corpus> createTestCorpus() async {
@@ -15,7 +13,6 @@ void main() {
   }
 
   Future<Corpus> testCorpus = createTestCorpus();
-
 
   test("Parses unit", () {
     final setLiteral = {"name": "kilometer", "symbol": "km", "baseUnit": "meter", "factor": 1000};
@@ -31,37 +28,37 @@ void main() {
   test("From km to in", () async {
     final corpus = await testCorpus;
     final inches = corpus.convert(1, "kilometer", "inch");
-    expect( inches, closeTo(39370.078,0.001) );
+    expect(inches, closeTo(39370.078, 0.001));
   });
 
   test("From furlong to base", () async {
     final corpus = await testCorpus;
     final m = corpus.convert(1, "furlong", "meter");
-    expect(m,closeTo(201.168,0.001));
+    expect(m, closeTo(201.168, 0.001));
   });
 
   test("From base to furlong", () async {
     final corpus = await testCorpus;
     final m = corpus.convert(201.168, "meter", "furlong");
-    expect(m,closeTo(1,0.001));
+    expect(m, closeTo(1, 0.001));
   });
 
   test("From C to F", () async {
     final corpus = await testCorpus;
     final m = corpus.convert(37, "Celsius", "Fahrenheit");
-    expect(m,closeTo(98.6,0.001));
+    expect(m, closeTo(98.6, 0.001));
   });
 
   test("From K to F", () async {
     final corpus = await testCorpus;
     final m = corpus.convert(37, "Kelvin", "Fahrenheit");
-    expect(m,closeTo(-393.07,0.001));
+    expect(m, closeTo(-393.07, 0.001));
   });
 
   test("From C to K", () async {
     final corpus = await testCorpus;
     final m = corpus.convert(100, "Celsius", "Kelvin");
-    expect(m,closeTo(373.15,0.001));
+    expect(m, closeTo(373.15, 0.001));
   });
 
   test('Parses Newton\'s second law formula from set literal', () {
@@ -121,7 +118,7 @@ void main() {
       characters like "quotes" and \backslashes\ and some strange combinations \"'~()\\].""",
       input: [
         VariableSpec(name: 'x', unit: 'meter'),
-        VariableSpec(name: 'y', unit: 'second', values: ['1', '2', '3']) // Using strings to match D4RT parsing behavior
+        VariableSpec(name: 'y', unit: 'second', values: ['1', '2', '3']), // Using strings to match D4RT parsing behavior
       ],
       output: VariableSpec(name: 'result', unit: 'meter_per_second'),
       d4rtCode: 'result = x / y;',
@@ -147,12 +144,7 @@ void main() {
   });
 
   test('UnitSpec.toStringLiteral creates reversible string', () {
-    final originalUnit = UnitSpec(
-      name: "test_unit",
-      baseUnit: "base_unit",
-      symbol: "tu",
-      factorFromUnitToBase: 10.0,
-    );
+    final originalUnit = UnitSpec(name: "test_unit", baseUnit: "base_unit", symbol: "tu", factorFromUnitToBase: 10.0);
 
     final literal = originalUnit.toStringLiteral();
     final parsedList = SetUtils.parseD4rtLiteral('[${literal}]');
@@ -176,7 +168,7 @@ void main() {
         'Breathing': 'Strong, robust cry',
         'MuscleTone': 'Flexed arms/leg, resists extension',
         'Reflexes': 'Cry on stimulation',
-        'SkinColor': 'Pink'
+        'SkinColor': 'Pink',
       });
 
       expect(result, 'Score: 10 - Normal');
@@ -188,11 +180,11 @@ void main() {
       final evaluator = FormulaEvaluator();
 
       final result = evaluator.evaluate(formula, {
-        'HeartRate': '> 100 bpm',  // 2
-        'Breathing': 'Strong, robust cry',  // 2
-        'MuscleTone': 'Some',  // 1
-        'Reflexes': 'Grimace on aggressive stimulation',  // 1
-        'SkinColor': 'Blue extremities, pink body'  // 1
+        'HeartRate': '> 100 bpm', // 2
+        'Breathing': 'Strong, robust cry', // 2
+        'MuscleTone': 'Some', // 1
+        'Reflexes': 'Grimace on aggressive stimulation', // 1
+        'SkinColor': 'Blue extremities, pink body', // 1
       });
 
       expect(result, 'Score: 7 - Normal');
@@ -204,11 +196,11 @@ void main() {
       final evaluator = FormulaEvaluator();
 
       final result = evaluator.evaluate(formula, {
-        'HeartRate': '> 100 bpm',  // 2
-        'Breathing': 'Weak, irregular',  // 1
-        'MuscleTone': 'Some',  // 1
-        'Reflexes': 'Grimace on aggressive stimulation',  // 1
-        'SkinColor': 'Blue extremities, pink body'  // 1
+        'HeartRate': '> 100 bpm', // 2
+        'Breathing': 'Weak, irregular', // 1
+        'MuscleTone': 'Some', // 1
+        'Reflexes': 'Grimace on aggressive stimulation', // 1
+        'SkinColor': 'Blue extremities, pink body', // 1
       });
 
       expect(result, 'Score: 6 - Needs assistance');
@@ -220,11 +212,11 @@ void main() {
       final evaluator = FormulaEvaluator();
 
       final result = evaluator.evaluate(formula, {
-        'HeartRate': 'Absent',  // 0
-        'Breathing': 'Absent',  // 0
-        'MuscleTone': 'None',  // 0
-        'Reflexes': 'No response',  // 0
-        'SkinColor': 'Blue or pale'  // 0
+        'HeartRate': 'Absent', // 0
+        'Breathing': 'Absent', // 0
+        'MuscleTone': 'None', // 0
+        'Reflexes': 'No response', // 0
+        'SkinColor': 'Blue or pale', // 0
       });
 
       expect(result, 'Score: 0 - Critical condition');
@@ -235,13 +227,16 @@ void main() {
       final formula = corpus.getFormula("Apgar Score")!;
       final evaluator = FormulaEvaluator();
 
-      expect(() => evaluator.evaluate(formula, {
-        'HeartRate': 'Invalid Value',  // Not in allowed values
-        'Breathing': 'Absent',  // 0
-        'MuscleTone': 'None',  // 0
-        'Reflexes': 'No response',  // 0
-        'SkinColor': 'Blue or pale'  // 0
-      }), throwsA(isA<FormulaEvaluationException>()));
+      expect(
+        () => evaluator.evaluate(formula, {
+          'HeartRate': 'Invalid Value', // Not in allowed values
+          'Breathing': 'Absent', // 0
+          'MuscleTone': 'None', // 0
+          'Reflexes': 'No response', // 0
+          'SkinColor': 'Blue or pale', // 0
+        }),
+        throwsA(isA<FormulaEvaluationException>()),
+      );
     });
   });
 
@@ -285,6 +280,4 @@ void main() {
     final uniqueDependencies = dependencies.toSet();
     expect(dependencies.length, equals(uniqueDependencies.length));
   });
-
-
 }

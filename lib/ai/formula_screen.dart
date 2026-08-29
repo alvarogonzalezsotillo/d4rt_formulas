@@ -19,8 +19,6 @@ import 'unit_dropdown.dart';
 import 'formula_editor.dart';
 import '../compile_constants.dart';
 
-
-
 class FormulaScreen extends StatefulWidget {
   final FormulaInterface initialFormula;
   final Corpus corpus;
@@ -58,7 +56,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _selectedValues[input.name] = input.values!.first;
       } else {
         // free string or numeric expression
-        _inputControllers[input.name] = DartCodeController(isString: input.unit == "string", aditionalKeywords: variables.variableNames() );
+        _inputControllers[input.name] = DartCodeController(isString: input.unit == "string", aditionalKeywords: variables.variableNames());
         _inputControllers[input.name]!.addListener(_evaluateFormula);
       }
     }
@@ -235,7 +233,11 @@ class _FormulaScreenState extends State<FormulaScreen> {
                 );
 
                 // set up the AlertDialog
-                AlertDialog alert = AlertDialog(title: Text("Delete Formula"), content: Text("Please confirm deletion of formula ${formula.name}"), actions: [cancelButton, deleteButton]);
+                AlertDialog alert = AlertDialog(
+                  title: Text("Delete Formula"),
+                  content: Text("Please confirm deletion of formula ${formula.name}"),
+                  actions: [cancelButton, deleteButton],
+                );
                 return alert;
               }
 
@@ -273,7 +275,15 @@ class _FormulaScreenState extends State<FormulaScreen> {
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView(children: [_buildDescriptionSection(), _buildErrorSection(), _buildInputSection(), const SizedBox(height: 24), _buildOutputSection()]),
+          child: ListView(
+            children: [
+              _buildDescriptionSection(),
+              _buildErrorSection(),
+              _buildInputSection(),
+              const SizedBox(height: 24),
+              _buildOutputSection(),
+            ],
+          ),
         ),
       ),
     );
@@ -324,7 +334,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       child: ExpansionTile(
         title: Text(
           '⚠️ There was an error. Show details...',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onErrorContainer),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onErrorContainer),
         ),
         initiallyExpanded: _isErrorExpanded,
         onExpansionChanged: (bool expanded) {
@@ -495,7 +507,12 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
     // Check if the formula can be derived
     if (!DerivedFormula.isDerivable(rootFormula)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('This formula cannot be derived because it contains non number variables'), duration: Duration(seconds: 2)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This formula cannot be derived because it contains non number variables'),
+          duration: Duration(seconds: 2),
+        ),
+      );
       return;
     }
 

@@ -14,20 +14,12 @@ Future<Corpus> createDefaultCorpus() async {
 
   Future<List<String>> listUnitAssets() async {
     final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-    return assetManifest
-        .listAssets()
-        .where((s) => s.startsWith("assets/units/") && s.endsWith("d4rt.units"))
-        .toList();
+    return assetManifest.listAssets().where((s) => s.startsWith("assets/units/") && s.endsWith("d4rt.units")).toList();
   }
 
   Future<List<String>> listFormulaAssets() async {
     final assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-    return assetManifest
-        .listAssets()
-        .where(
-          (s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt.formulas"),
-        )
-        .toList();
+    return assetManifest.listAssets().where((s) => s.startsWith("assets/formulas/") && s.endsWith("d4rt.formulas")).toList();
   }
 
   Future<void> loadUnits() async {

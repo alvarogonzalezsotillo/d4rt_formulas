@@ -15,24 +15,23 @@ class ImportService {
   List<FormulaElement> parseSharedText(String text) {
     try {
       final List<Object?> list = SetUtils.parseD4rtLiteral(text);
-      
+
       final elements = <FormulaElement>[];
       for (final item in list) {
         if (item is Map) {
           // Try to parse as Formula first (has 'd4rtCode' field)
           if (item.containsKey('d4rtCode')) {
             elements.add(Formula.fromSet(item));
-          } 
+          }
           // Try to parse as UnitSpec (has 'name' and 'baseUnit' or 'isBase')
           else if (item.containsKey('name')) {
             elements.add(UnitSpec.fromSet(item));
-          }
-          else {
+          } else {
             throw ArgumentError('Unknown element type: $item');
           }
         }
       }
-      
+
       return elements;
     } catch (e, stack) {
       errorHandler.notify(e, stack);
@@ -47,7 +46,7 @@ class ImportService {
       if (!file.existsSync()) {
         throw FileSystemException('File not found', filePath);
       }
-      
+
       final content = file.readAsStringSync();
       return parseSharedText(content);
     } catch (e, stack) {

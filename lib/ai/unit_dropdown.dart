@@ -8,13 +8,7 @@ class UnitDropdown extends StatelessWidget {
   final String? selectedUnit;
   final ValueChanged<String?> onUnitChanged;
 
-  const UnitDropdown({
-    super.key,
-    required this.corpus,
-    required this.variable,
-    required this.selectedUnit,
-    required this.onUnitChanged,
-  });
+  const UnitDropdown({super.key, required this.corpus, required this.variable, required this.selectedUnit, required this.onUnitChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +19,8 @@ class UnitDropdown extends StatelessWidget {
       width: 50, // Constrain dropdown width
       child: DropdownButton<String>(
         value: selectedUnit ?? variable.unit,
-        selectedItemBuilder: (context) => availableUnits
-            .map((unit) => SizedBox(width: 50, child: Text(unit.symbol, overflow: TextOverflow.ellipsis)))
-            .toList(),
+        selectedItemBuilder: (context) =>
+            availableUnits.map((unit) => SizedBox(width: 50, child: Text(unit.symbol, overflow: TextOverflow.ellipsis))).toList(),
         icon: const Icon(Icons.arrow_drop_down),
         elevation: 16,
         style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14),
@@ -38,11 +31,7 @@ class UnitDropdown extends StatelessWidget {
             value: unit.name,
             child: SizedBox(
               width: 300, // Fixed width for all items
-              child: Text(
-                "${unit.symbol} - ${unit.name}",
-                style: const TextStyle(fontSize: 14),
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: Text("${unit.symbol} - ${unit.name}", style: const TextStyle(fontSize: 14), overflow: TextOverflow.ellipsis),
             ),
           );
         }).toList(),

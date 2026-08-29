@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 
 String? formatOutput(dynamic result) {
@@ -15,8 +13,8 @@ String? formatOutput(dynamic result) {
     while (endingWithZeroes.endsWith('0') && endingWithZeroes.contains('.')) {
       endingWithZeroes = endingWithZeroes.substring(0, endingWithZeroes.length - 1);
     }
-    if( endingWithZeroes.endsWith(".") ){
-      endingWithZeroes = endingWithZeroes.substring(0, endingWithZeroes.length -1 );
+    if (endingWithZeroes.endsWith(".")) {
+      endingWithZeroes = endingWithZeroes.substring(0, endingWithZeroes.length - 1);
     }
     return endingWithZeroes + exponent;
   }

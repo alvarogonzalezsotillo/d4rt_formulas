@@ -10,9 +10,7 @@ class CompileConstants {
 
   static Future<Map<String, String>> loadGeneratedCompileConstants() async {
     try {
-      String arrayStringLiteral = await loadResourceAsString(
-        "assets/compile_constants.d4rt",
-      );
+      String arrayStringLiteral = await loadResourceAsString("assets/compile_constants.d4rt");
       var read = SetUtils.parseD4rtLiteral("[$arrayStringLiteral]");
       print(read);
       var map = read[0] as Map;
@@ -50,15 +48,14 @@ class CompileConstants {
     _checkInit();
     return _generatedCompileConstants?["homePage"] ?? "no home page";
   }
-  
+
   static bool isDebugBuild() {
     return kDebugMode;
   }
 
   static String buildTimestamp() {
     _checkInit();
-    return _generatedCompileConstants?["buildTimestamp"] ??
-        "no build timestamp info";
+    return _generatedCompileConstants?["buildTimestamp"] ?? "no build timestamp info";
   }
 
   static bool isDatabaseBackend() {

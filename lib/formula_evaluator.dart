@@ -13,7 +13,6 @@ import 'd4rt_bridge.dart';
 import 'package:d4rt/src/module_loader.dart';
 import 'package:d4rt/src/stdlib/core/list.dart';
 
-
 /// Exception thrown when formula evaluation fails
 class FormulaEvaluationException implements Exception {
   final String message;
@@ -42,24 +41,27 @@ class StringResult extends FormulaResult {
   final String value;
 
   const StringResult(this.value);
-  @override String toVisibleString() => value;
+  @override
+  String toVisibleString() => value;
 }
 
 class FunctionResult extends FormulaResult {
   final InterpretedFunction value;
   final String code;
 
-  String getArgumentsString() => code.substring(0,code.indexOf(')')+1);
-  
+  String getArgumentsString() => code.substring(0, code.indexOf(')') + 1);
+
   const FunctionResult(this.value, this.code);
-  @override String toVisibleString() => "Function ${getArgumentsString()}";
+  @override
+  String toVisibleString() => "Function ${getArgumentsString()}";
 }
 
 class NumberResult extends FormulaResult {
   final Number value;
 
   const NumberResult(this.value);
-  @override String toVisibleString() => formatOutput(value)!;
+  @override
+  String toVisibleString() => formatOutput(value)!;
 }
 
 class FormulaEvaluator {
@@ -77,24 +79,24 @@ class FormulaEvaluator {
   }
 
   static void prepareInterpreter(D4rt interpreter) {
-
     // Workarround for https://github.com/kodjodevf/d4rt/issues/8
-    BridgedClass jsarrayDefinition(){
+    BridgedClass jsarrayDefinition() {
       BridgedClass listcore = ListCore.definition;
       return BridgedClass(
-        nativeNames: [ "List", "JSArray"],
+        nativeNames: ["List", "JSArray"],
         nativeType: listcore.nativeType,
         name: listcore.name,
-        typeParameterCount:  listcore.typeParameterCount,
+        typeParameterCount: listcore.typeParameterCount,
         staticMethods: listcore.staticMethods,
         methods: listcore.methods,
         getters: listcore.getters,
-        setters: listcore.setters
+        setters: listcore.setters,
       );
     }
+
     //interpreter._moduleLoader.globalEnvironment.defineBridge(jsarrayDefinition());
     interpreter.registerBridgedClass(jsarrayDefinition(), "package:fake_package/jsarray.dart");
-    
+
     final myMathDefinition = BridgedClass(
       nativeType: MyMath,
       name: 'MyMath',
@@ -142,7 +144,7 @@ class FormulaEvaluator {
       case String value:
         return StringResult(value);
       case InterpretedFunction value:
-        return FunctionResult(value,code);
+        return FunctionResult(value, code);
       default:
         throw FormulaEvaluationException("Unexpected result type: ${result.runtimeType} -- $result");
     }
@@ -152,8 +154,8 @@ class FormulaEvaluator {
     try {
       final vars = GetIt.instance<GlobalVariables>();
       return vars.d4rtDeclarations();
-    } catch (ex,st) {
-      errorHandler.notify(ex,st);
+    } catch (ex, st) {
+      errorHandler.notify(ex, st);
       return "";
     }
   }
@@ -336,7 +338,6 @@ Number formulaSolver(
   Number maxDelta = 0.01,
   int maxTries = 1000,
 }) {
-
   var formula = FormulaInterface.getRootFormula(formulaInterface);
 
   if (variableToSolve == formula.output.name) {
@@ -344,9 +345,7 @@ Number formulaSolver(
   }
 
   if (!formula.inputVarNames().contains(variableToSolve)) {
-    throw ArgumentError(
-      'Variable "$variableToSolve" is not an input or output variable of the formula "${formula.name}".',
-    );
+    throw ArgumentError('Variable "$variableToSolve" is not an input or output variable of the formula "${formula.name}".');
   }
 
   final modifiedInputValues = Map<String, dynamic>.from(fixedInputValues);
@@ -357,21 +356,13 @@ Number formulaSolver(
     if (result is Number) {
       return result;
     } else {
-      throw FormulaEvaluationException(
-        'Expected formula evaluation to return a number, but got: $result ${result.runtimeType}',
-      );
+      throw FormulaEvaluationException('Expected formula evaluation to return a number, but got: $result ${result.runtimeType}');
     }
   }
 
   var fixedFormulaOutput = fixedInputValues[formula.output.name];
 
-  return functionSolver(
-    (Number x) => f(x) - fixedFormulaOutput,
-    hint: hint,
-    step: step,
-    maxDelta: maxDelta,
-    maxTries: maxTries,
-  );
+  return functionSolver((Number x) => f(x) - fixedFormulaOutput, hint: hint, step: step, maxDelta: maxDelta, maxTries: maxTries);
 }
 
 class NoSolutionException implements Exception {
@@ -383,13 +374,7 @@ class NoSolutionException implements Exception {
   String toString() => 'NoSolutionException: $message';
 }
 
-Number functionSolver(
-  Number Function(Number) f, {
-  Number hint = 0,
-  Number step = 10,
-  Number maxDelta = 0.01,
-  int maxTries = 100,
-}) {
+Number functionSolver(Number Function(Number) f, {Number hint = 0, Number step = 10, Number maxDelta = 0.01, int maxTries = 100}) {
   Number sign(Number x) => switch (x) {
     > 0 => 1,
     < 0 => -1,
@@ -455,25 +440,26 @@ Number functionSolver(
       final Number y1 = f(x + dx);
       final Number y2 = f(x - dx);
       final Number deriv = (y1 - y2) / (2 * dx);
-      print( "numericalDerivative $deriv at x=$x: y1=$y1, y2=$y2, dx=$dx");
+      print("numericalDerivative $deriv at x=$x: y1=$y1, y2=$y2, dx=$dx");
       return deriv;
     }
+
     var ret = realNumericalDerivative(x);
-    if ( ret.abs() < 1e-12) {
+    if (ret.abs() < 1e-12) {
       // If derivative is too small, try a slightly modified x
-      ret = realNumericalDerivative(x+h);
+      ret = realNumericalDerivative(x + h);
     }
     return ret;
   }
 
-  Number searchNewton(){
+  Number searchNewton() {
     Number x = hint;
     final int maxNewtonIters = maxTries;
     int iter = 0;
 
     while (iter < maxNewtonIters) {
       final Number y = f(x);
-      print( "iter: $iter x: $x y: $y");
+      print("iter: $iter x: $x y: $y");
       if (y == 0 || y.abs() <= maxDelta) {
         return x;
       }
@@ -509,12 +495,10 @@ Number functionSolver(
     try {
       var approx = searchApproximately(hint, hint + step);
       return binarySearch(approx[0], approx[1]);
-    }
-    catch( e2 ){
+    } catch (e2) {
       errorHandler.notify(e1);
       errorHandler.notify(e2);
       throw NoSolutionException("Failed to find a root using both Newton-Raphson and approximate search: $e1 -- $e2");
     }
   }
-
 }

@@ -46,9 +46,13 @@ void main() {
       test("round trip: $name", () {
         final printed = SetUtils.prettyPrint(input);
         final result = evalLiteral(printed);
-        expect(result, equals(input),
-            reason: 'prettyPrint($input) => $printed is not a valid '
-                'Dart literal reproducing the original string');
+        expect(
+          result,
+          equals(input),
+          reason:
+              'prettyPrint($input) => $printed is not a valid '
+              'Dart literal reproducing the original string',
+        );
       });
     });
 
@@ -107,9 +111,13 @@ void main() {
       ];
       final printed = SetUtils.prettyPrint(value);
       final result = evalLiteral(printed);
-      expect(result, equals(value),
-          reason: 'prettyPrint($value) => $printed is not a valid '
-              'Dart literal reproducing the original value');
+      expect(
+        result,
+        equals(value),
+        reason:
+            'prettyPrint($value) => $printed is not a valid '
+            'Dart literal reproducing the original value',
+      );
     });
   });
 }

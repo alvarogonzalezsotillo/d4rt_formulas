@@ -24,7 +24,7 @@ include: package:lints/recommended.yaml
 
 
 formatter:
-  page_width: 200
+  page_width: 140
 
 
 # Uncomment the following section to specify additional rules.
