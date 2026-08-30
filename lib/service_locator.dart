@@ -8,6 +8,7 @@ GetIt locator = GetIt.instance;
 
 void setupLocator() {
   locator.registerSingleton<GlobalVariables>(GlobalVariables());
+  locator.registerSingleton(GlobalFunctionVariables());
 
   final useDatabase = CompileConstants.isDatabaseBackend();
   if (useDatabase) {

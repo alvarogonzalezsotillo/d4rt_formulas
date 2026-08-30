@@ -40,6 +40,8 @@ class _FormulaScreenState extends State<FormulaScreen> {
   late FormulaInterface _formula;
 
   FormulaInterface get formula => _formula;
+  String uuid() => formula.uuid;
+
   String? _errorMessage; // Track error message for expansion tile
   bool _isErrorExpanded = false; // Track error expansion state
 
@@ -60,9 +62,40 @@ class _FormulaScreenState extends State<FormulaScreen> {
       }
     }
     _selectedOutputUnit = formula.output.unit;
+
+    _initInputsFromGlobalVariables();
   }
 
-  void _initInputs(Map<String, dynamic> inputValues) {
+  void _initInputsFromGlobalVariables() {
+    final formulaVariables = locator.get<GlobalFunctionVariables>();
+    final Map<String, String?> variables = {};
+    for (final input in formula.input) {
+      variables[input.name] = formulaVariables.getValue(uuid(), input.name);
+    }
+    variables[formula.output.name] = formulaVariables.getValue(uuid(), formula.output.name);
+    _initInputs(variables);
+  }
+
+  void _updateInputsToGlobalVariables() {
+    final formulaVariables = locator.get<GlobalFunctionVariables>();
+    for (final input in formula.input) {
+      late final String? value;
+      if (input.isStringChoice()) {
+        value = _selectedValues[input.name];
+      } else {
+        value = _inputControllers[input.name]?.text;
+      }
+      formulaVariables.setValue(uuid(), input.name, value);
+    }
+  }
+
+  void _updateOutputToGlobalVariables() {
+    final formulaVariables = locator.get<GlobalFunctionVariables>();
+    final value = _result;
+    formulaVariables.setValue(uuid(), formula.output.name, value);
+  }
+
+  void _initInputs(Map<String, String?> inputValues) {
     for (final input in formula.input) {
       final savedValue = inputValues[input.name];
       if (savedValue == null) continue;
@@ -73,6 +106,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         _inputControllers[input.name]?.text = savedValue.toString();
       }
     }
+    _evaluateFormula();
   }
 
   @override
@@ -94,7 +128,13 @@ class _FormulaScreenState extends State<FormulaScreen> {
     super.dispose();
   }
 
+  void setResult(String? result) {
+    _updateOutputToGlobalVariables();
+    _result = result;
+  }
+
   void _evaluateFormula() {
+    _updateInputsToGlobalVariables();
     try {
       final inputValues = <String, dynamic>{};
       for (final input in formula.input) {
@@ -102,7 +142,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
         if (input.values != null && input.values!.isNotEmpty) {
           final selected = _selectedValues[input.name];
           if (selected == null) {
-            _result = "";
+            setResult("");
             return;
           }
           inputValues[input.name] = selected;
@@ -114,7 +154,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
 
         // numeric variable - must have controller
         if (val == null) {
-          _result = "";
+          setResult("");
           return;
         }
 
@@ -147,9 +187,9 @@ class _FormulaScreenState extends State<FormulaScreen> {
       String? unit = formula.output.unit;
       if (unit != null && result is Number) {
         final converted = widget.corpus.convert(result, unit, _selectedOutputUnit!);
-        _result = formatOutput(converted);
+        setResult(formatOutput(converted));
       } else {
-        _result = result?.toString();
+        setResult(result?.toString());
       }
 
       setState(() {
@@ -159,7 +199,7 @@ class _FormulaScreenState extends State<FormulaScreen> {
       errorHandler.notify(e, stack);
       setState(() {
         _errorMessage = e.toString();
-        _result = null;
+        setResult(null);
       });
     }
   }

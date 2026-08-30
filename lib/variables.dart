@@ -2,12 +2,42 @@ import 'package:d4rt_formulas/debounced_executor.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
 import 'package:d4rt_formulas/set_utils.dart';
 
+class GlobalFunctionVariables {
+  final Map<String, Map<String, String>> _map = {};
+  DebouncedExecutor? _persister;
+  Future<void> Function(String, Map<String, String>)? _persist;
 
-class GlobalVariables {
-  Map<K, V> map<K, V>(MapEntry<K, V> convert(String key, FormulaResult value)) {
-    return _map.map(convert);
+  void enablePersistence(Future<void> Function(String, Map<String, String>) onSave) {
+    _persister?.dispose();
+    _persister = DebouncedExecutor();
+    _persist = onSave;
   }
 
+  void disablePersistence() {
+    _persister?.dispose();
+    _persister = null;
+  }
+
+  String? getValue(String uuid, String variableName) {
+    return _map[uuid]?[variableName];
+  }
+
+  void setValue(String uuid, String variableName, String? value) {
+    final formulaVars = _map.putIfAbsent(uuid, () => {});
+    if (value != null) {
+      formulaVars[variableName] = value;
+    } else {
+      formulaVars.remove(variableName);
+    }
+  }
+
+  Map<String, String>? deleteFormula(String uuid) {
+    final result = _map.remove(uuid);
+    return result;
+  }
+}
+
+class GlobalVariables {
   final Map<String, FormulaResult> _map = {};
   DebouncedExecutor? _persister;
   Future<void> Function(Map<String, String>)? _persist;
@@ -33,12 +63,12 @@ class GlobalVariables {
 
   void operator []=(String variableName, FormulaResult value) {
     _map[variableName] = value;
-    _persister?.request(()=>_persist!(toMap()));
+    _persister?.request(() => _persist!(toMap()));
   }
 
   FormulaResult? deleteKey(String variableName) {
     final result = _map.remove(variableName);
-    _persister?.request(()=>_persist!(toMap()));
+    _persister?.request(() => _persist!(toMap()));
     return result;
   }
 

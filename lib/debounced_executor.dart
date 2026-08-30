@@ -6,7 +6,7 @@ class DebouncedExecutor {
 
   DebouncedExecutor({this.delay = const Duration(milliseconds: 500)});
 
-  void request( Future<void> fn() ) {
+  void request(Future<void> fn()) {
     _timer?.cancel();
     _timer = Timer(delay, () async {
       await fn();
