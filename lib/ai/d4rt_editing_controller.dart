@@ -4,22 +4,22 @@ import 'package:flutter/material.dart';
 import '../formula_evaluator.dart';
 
 class D4rtEditingValidator {
-  static (FormulaResult?, Object?) validateAsD4rtExpression(String text) {
+  static (FormulaResult?, Object?) validateAsD4rtExpression(String text, [bool Function(String)? variableFilter]) {
     try {
       if (text.trim().isEmpty) {
         return (null, null);
       }
-      return (FormulaEvaluator.evaluateExpression(text), null);
+      return (FormulaEvaluator.evaluateExpression(text, variableFilter: variableFilter), null);
     } catch (e, s) {
       return (null, e);
     }
   }
 
-  static (FormulaResult?, Object?) validateAsStringExpression(String text) {
+  static (FormulaResult?, Object?) validateAsStringExpression(String text, [bool Function(String)? variableFilter]) {
     try {
-      return (FormulaEvaluator.evaluateExpression('"$text"'), null);
+      return (FormulaEvaluator.evaluateExpression('"$text"', variableFilter: variableFilter), null);
     } catch (_) {
-      return (FormulaEvaluator.evaluateExpression("'$text'"), null);
+      return (FormulaEvaluator.evaluateExpression("'$text'", variableFilter: variableFilter), null);
     }
   }
 }
@@ -46,15 +46,21 @@ class D4rtEditingController extends TextEditingController {
 
   final bool isString;
 
+  bool Function(String)? _globalVariablesFilter;
+
   D4rtEditingController({super.text, this.isString = false});
+
+  void setGlobalVariablesFilter(bool Function(String)? filter) {
+    _globalVariablesFilter = filter;
+  }
 
   bool validate() {
     if (!isString) {
-      final (value, error) = D4rtEditingValidator.validateAsD4rtExpression(text);
+      final (value, error) = D4rtEditingValidator.validateAsD4rtExpression(text, _globalVariablesFilter);
       _setValue(value, error);
       return value != null;
     } else {
-      final (value, error) = D4rtEditingValidator.validateAsStringExpression(text);
+      final (value, error) = D4rtEditingValidator.validateAsStringExpression(text, _globalVariablesFilter);
       _setValue(value, error);
       return value != null;
     }

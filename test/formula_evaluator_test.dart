@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:d4rt_formulas/calculator_state.dart';
 import 'package:d4rt_formulas/formula_models.dart';
 import 'package:d4rt_formulas/formula_evaluator.dart';
+import 'package:d4rt_formulas/variables.dart';
 
 void main() {
   group('FormulaEvaluator', () {
@@ -225,14 +226,21 @@ void main() {
       late CalculatorState calculatorState;
 
       setUp(() {
+        if (GetIt.instance.isRegistered<GlobalVariables>()) {
+          GetIt.instance.unregister<GlobalVariables>();
+        }
         if (GetIt.instance.isRegistered<CalculatorState>()) {
           GetIt.instance.unregister<CalculatorState>();
         }
+        GetIt.instance.registerSingleton<GlobalVariables>(GlobalVariables());
         calculatorState = CalculatorState();
         GetIt.instance.registerSingleton<CalculatorState>(calculatorState);
       });
 
       tearDown(() {
+        if (GetIt.instance.isRegistered<GlobalVariables>()) {
+          GetIt.instance.unregister<GlobalVariables>();
+        }
         if (GetIt.instance.isRegistered<CalculatorState>()) {
           GetIt.instance.unregister<CalculatorState>();
         }
@@ -269,6 +277,28 @@ void main() {
         final result = FormulaEvaluator.evaluateExpression('1 + 2');
         expect(result, isA<NumberResult>());
         expect((result as NumberResult).value, 3.0);
+      });
+
+      test('evaluateExpression only exposes variables accepted by the filter', () {
+        calculatorState.setAnswer(1, NumberResult(10.0));
+        calculatorState.setAnswer(2, NumberResult(20.0));
+        calculatorState.setAnswer(3, NumberResult(30.0));
+
+        // Simulates _filterFor(3): only ans1 and ans2 are available
+        bool filter(String name) {
+          final match = RegExp(r'(\d+)$').firstMatch(name);
+          if (match == null) return true;
+          return int.parse(match.group(1)!) < 3;
+        }
+
+        final result = FormulaEvaluator.evaluateExpression('ans1 + ans2', null, filter);
+        expect(result, isA<NumberResult>());
+        expect((result as NumberResult).value, 30.0);
+
+        expect(
+          () => FormulaEvaluator.evaluateExpression('ans1 + ans2 + ans3', null, filter),
+          throwsA(isNot(isA<NumberResult>())),
+        );
       });
     });
   });

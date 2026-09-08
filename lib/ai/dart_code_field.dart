@@ -37,13 +37,19 @@ class DartCodeController extends CodeController {
 
   final bool isString;
 
+  bool Function(String)? _globalVariablesFilter;
+
+  void setGlobalVariablesFilter(bool Function(String)? filter) {
+    _globalVariablesFilter = filter;
+  }
+
   bool validate() {
     if (!isString) {
-      final (value, error) = D4rtEditingValidator.validateAsD4rtExpression(text);
+      final (value, error) = D4rtEditingValidator.validateAsD4rtExpression(text, _globalVariablesFilter);
       _setValue(value, error);
       return value != null;
     } else {
-      final (value, error) = D4rtEditingValidator.validateAsStringExpression(text);
+      final (value, error) = D4rtEditingValidator.validateAsStringExpression(text, _globalVariablesFilter);
       _setValue(value, error);
       return value != null;
     }

@@ -1,4 +1,5 @@
 import 'package:d4rt_formulas/ai/dart_code_field.dart';
+import 'package:d4rt_formulas/d4rt_formulas.dart';
 import 'package:d4rt_formulas/variables.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -11,9 +12,23 @@ class _CalculatorEntry {
   final DartCodeController inputController;
   final TextEditingController outputController = TextEditingController();
 
+  static final _numericSuffix = RegExp(CalculatorState.answerPrefix + r'ans(\d+)$');
+  static bool Function(String) _filterFor(int entryIndex) {
+    return (name) {
+      final match = _numericSuffix.firstMatch(name);
+      if (match == null) return true;
+      final variableIndex = int.parse(match.group(1)!);
+      return variableIndex < entryIndex;
+    };
+  }
+  
+
   // TODO: Update aditionalKeywords when adding or removing globalVariables
   _CalculatorEntry({required this.index, this.aditionalKeywords = const []})
-    : inputController = DartCodeController(aditionalKeywords: aditionalKeywords);
+    : inputController = DartCodeController(aditionalKeywords: aditionalKeywords){
+          inputController.setGlobalVariablesFilter(_filterFor(index));
+          inputController.validate();
+    }
 }
 
 class CalculatorTab extends StatefulWidget {
@@ -28,6 +43,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
 
   static const double variableWidth = 50;
   static const double rowMargin = 12;
+
 
   late final List<_CalculatorEntry> _entries;
   final CalculatorState _calculatorState = CalculatorState();
@@ -118,12 +134,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   void _updateEntryOutput(_CalculatorEntry entry) {
-    Map<String, FormulaResult> getGlobalVariablesForEntry() {
-      return GetIt.instance.get<GlobalVariables>();
-    }
-
     final inputController = entry.inputController;
-    inputController.setGlobalVariables(getGlobalVariablesForEntry(entry.index));
     final formatted = _getFormattedD4rtValue(inputController);
     entry.outputController.text = formatted ?? '';
 
@@ -212,7 +223,14 @@ class _CalculatorTabState extends State<CalculatorTab> {
       itemCount: _entries.length,
       itemBuilder: (context, index) {
         final entry = _entries[index];
-        return Column(children: [_buildInputRow(entry), _buildOutputRow(entry), Divider()]);
+        final hasInput = entry.inputController.text.trim().isNotEmpty;
+        return Column(
+          children: [
+            _buildInputRow(entry),
+            if (hasInput) _buildOutputRow(entry),
+            Divider(),
+          ],
+        );
       },
     );
   }

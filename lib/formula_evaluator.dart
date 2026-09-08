@@ -115,12 +115,12 @@ class FormulaEvaluator {
     registerD4rtBridgeBridges(interpreter);
   }
 
-  static FormulaResult evaluateExpression(String code, [D4rt? interpreter]) {
+  static FormulaResult evaluateExpression(String code, {D4rt? interpreter, bool Function(String)? variableFilter}) {
     final d4rtInterpreter = interpreter ?? createDefaultInterpreter();
     prepareInterpreter(d4rtInterpreter);
 
     // Inject calculator ansN variables and ans[] array
-    final ansDeclarations = _buildAnsDeclarations();
+    final ansDeclarations = _buildAnsDeclarations(variableFilter);
 
     final d4rtCode =
         """
@@ -148,10 +148,14 @@ class FormulaEvaluator {
     }
   }
 
-  static String _buildAnsDeclarations() {
+  static String _buildAnsDeclarations([bool Function(String)? variableFilter]) {
     try {
       final vars = GetIt.instance<GlobalVariables>();
-      return vars.d4rtDeclarations();
+      if (variableFilter == null) {
+        return vars.d4rtDeclarations();
+      }
+      final includedVariables = vars.variableNames().where(variableFilter).toList();
+      return vars.d4rtDeclarations(includedVariables);
     } catch (ex, st) {
       errorHandler.notify(ex, st);
       return "";
