@@ -1,5 +1,7 @@
 import 'package:d4rt_formulas/ai/dart_code_field.dart';
+import 'package:d4rt_formulas/variables.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../calculator_state.dart';
 
@@ -116,11 +118,17 @@ class _CalculatorTabState extends State<CalculatorTab> {
   }
 
   void _updateEntryOutput(_CalculatorEntry entry) {
-    final formatted = _getFormattedD4rtValue(entry.inputController);
+    Map<String, FormulaResult> getGlobalVariablesForEntry() {
+      return GetIt.instance.get<GlobalVariables>();
+    }
+
+    final inputController = entry.inputController;
+    inputController.setGlobalVariables(getGlobalVariablesForEntry(entry.index));
+    final formatted = _getFormattedD4rtValue(inputController);
     entry.outputController.text = formatted ?? '';
 
-    _calculatorState.setInput(entry.index, entry.inputController.text);
-    final d4rtValue = entry.inputController.d4rtValue;
+    _calculatorState.setInput(entry.index, inputController.text);
+    final d4rtValue = inputController.d4rtValue;
     if (d4rtValue != null) {
       _calculatorState.setAnswer(entry.index, d4rtValue);
     } else {

@@ -131,8 +131,10 @@ class _DartCodeFieldState extends State<DartCodeField> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final gutterStyle = widget.showLineNumbers ? GutterStyle(showLineNumbers: true) : GutterStyle.none;
+    final wrap = true;
     final codeField = CodeField(
       controller: widget.controller,
+      wrap: wrap,
       decoration: BoxDecoration(border: Border.all(color: theme.dividerColor)),
       gutterStyle: gutterStyle,
       textStyle: const TextStyle(
@@ -147,7 +149,6 @@ class _DartCodeFieldState extends State<DartCodeField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SingleChildScrollView(child: codeField),
-          //Divider(),
           if (_errorText != null)
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
