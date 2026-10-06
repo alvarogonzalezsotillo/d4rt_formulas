@@ -8,6 +8,9 @@
 
 This project uses dart language, and flutter framework. It leverages d4rt library to execute formulas.
 
-# Development guidelines
-If you are a contributor or an agent, please follow [CLAUDE.md](./CLAUDE.md) for development guidelines.
+# Development
+See [release.sh](release.sh) for hints to create a release. It can be used locally, or in a [github action](.github/workflows/release.yml).
+
+It is based in a [Makefile](Makefile) with containerized flutter.
+
 

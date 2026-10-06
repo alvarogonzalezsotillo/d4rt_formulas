@@ -11,7 +11,7 @@
 
 
 
-all: build-container clean-container build-builders build-linux-debug-container
+all: build-container clean-container build-builders generate-build-info build-linux-debug-container
 
 DATABASEFILE=~/.local/share/com.example.d4rt_formulas/d4rt_formulas/formulas.sqlite
 
@@ -25,6 +25,7 @@ clean:
 	[ -f $(DATABASEFILE) ] && rm $(DATABASEFILE) || true
 
 clean-container:
+	mkdir -p .build-container-cache
 	rm -r .build-container-cache
 	$(FLUTTERW) clean
 

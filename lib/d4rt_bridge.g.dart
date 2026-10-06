@@ -30,5 +30,8 @@ void registerD4rtBridgeBridges(D4rt interpreter) {
   // ignore: unused_local_variable
   const defaultUri = 'd4rt_bridge.dart';
 
-  interpreter.registerBridgedClass(d4rtBridgeImplBridge, 'package:formulas/runtime_bridge.dart');
+  interpreter.registerBridgedClass(
+    d4rtBridgeImplBridge,
+    'package:formulas/runtime_bridge.dart',
+  );
 }
