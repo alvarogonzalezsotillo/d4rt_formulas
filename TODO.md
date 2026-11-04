@@ -5,3 +5,4 @@
 
 
 # List of tasks
+- [ ] Change build container to https://github.com/gmeligio/flutter-docker-image, test with podman and docker

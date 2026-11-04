@@ -104,8 +104,7 @@ spi_options(){
 docker_options(){
     if [ "$DOCKER" = "podman" ]
     then
-        #printf " %s " "--userns=keep-id"
-        printf ""
+        printf " %s " "--userns=keep-id:uid=1001,gid=1001"
     else
         printf " %s " "--user $(id -u):$(id -g)"
     fi
