@@ -42,11 +42,14 @@ clean_build_cache(){
 build_image(){
     # docker doesnt support --progress=PLAIN
     local USERMAPING
+    local FORMAT
     if [ $DOCKER = 'docker' ]
     then
         USERMAPING="--build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g)"
+    else
+        FORMAT="--format docker"
     fi 
-    $DOCKER build $USERMAPING -t $IMAGE -f $DOCKERFILE .
+    $DOCKER build $FORMAT $USERMAPING -t $IMAGE -f $DOCKERFILE .
 }
 
 graphic_options(){

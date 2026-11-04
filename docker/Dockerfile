@@ -22,7 +22,7 @@ RUN ln -sf /usr/bin/ld.lld /usr/bin/ld
 # Only important in docker, maybe use acls for docker instead of user mapping
 ARG USER_ID
 ARG GROUP_ID
-RUN echo "Using UID: $USER_ID and GID: $GROUP_ID"
+RUN echo "Using UID: ${USER_ID:-no uid} and GID: ${GROUP_ID:-no gid}"
 
 USER $USER_ID:$GROUP_ID
 
